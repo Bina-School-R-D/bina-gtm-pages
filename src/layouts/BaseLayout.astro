@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Set true for internal / sales-enablement pages that must stay out of Google. */
+  noindex?: boolean;
+  /** Optional CTA shown on the right of the nav. Defaults to the main-site apply link. */
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+
+const {
+  title,
+  description,
+  noindex = false,
+  ctaHref = 'https://thebinaschool.com',
+  ctaLabel = 'Visit bina',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <nav class="sticky top-0 z-50 flex h-20 items-center justify-between bg-coal-black px-5 sm:px-10">
+      <a href="https://thebinaschool.com" aria-label="bina — home">
+        <img src="/images/navbar-logo.svg" alt="bina" class="h-9 w-auto" />
+      </a>
+      <a href={ctaHref} class="btn-bina !px-5 !py-2 text-sm sm:text-base">{ctaLabel}</a>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mt-20 bg-coal-black px-5 py-12 text-white sm:px-10">
+      <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
+        <img src="/images/footer-logo.svg" alt="bina" class="h-8 w-auto" />
+        <p class="text-sm text-white/80">
+          Questions? Email
+          <a href="mailto:hello@thebinaschool.com" class="font-bold text-bina-grass underline underline-offset-4">hello@thebinaschool.com</a>
+          ·
+          <a href="https://thebinaschool.com" class="font-bold text-bina-grass underline underline-offset-4">thebinaschool.com</a>
+        </p>
+        <slot name="footer-note" />
+      </div>
+    </footer>
+  </body>
+</html>

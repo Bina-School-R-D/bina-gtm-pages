@@ -1,0 +1,214 @@
+{
+  "programs": [
+    {
+      "s": "Alabama",
+      "prog": "CHOOSE Act",
+      "elig": "ok",
+      "eligText": "Universal (phasing in)",
+      "amount": "≈ $7,000 (private) · $2,000 homeschool",
+      "pay": "Marketplace",
+      "window": "Annual window (spring)",
+      "note": "Broad K–12 eligibility as the program expands. Online learning and curriculum are approved expense categories.",
+      "url": "https://www.google.com/search?q=Alabama+CHOOSE+Act+ESA+official"
+    },
+    {
+      "s": "Arizona",
+      "prog": "Empowerment Scholarship Account (ESA)",
+      "elig": "ok",
+      "eligText": "Universal — all K–12",
+      "amount": "≈ $7,000–$8,000 (more for special needs)",
+      "pay": "ClassWallet",
+      "window": "Rolling — no deadline; quarterly deposits",
+      "note": "One of the most flexible ESAs. “Tuition or fees for a nonpublic online learning program” is an explicitly approved expense — the category bina falls under.",
+      "url": "https://www.azed.gov/esa"
+    },
+    {
+      "s": "Arkansas",
+      "prog": "Children's Educational Freedom Account (LEARNS)",
+      "elig": "ok",
+      "eligText": "Universal (2025–26)",
+      "amount": "≈ 90% of state per-pupil funding",
+      "pay": "ClassWallet",
+      "window": "Annual window (spring/summer)",
+      "note": "Now open to all K–12 students. Online curriculum, courses, and tutoring are approved categories.",
+      "url": "https://www.google.com/search?q=Arkansas+Educational+Freedom+Account+LEARNS+ESA+official"
+    },
+    {
+      "s": "Florida",
+      "prog": "PEP · FES-EO · FES-UA",
+      "elig": "ok",
+      "eligText": "Universal (PEP/FES-EO) · disability (FES-UA)",
+      "amount": "≈ $8,000 (PEP) · ≈ $10,000 (FES-UA)",
+      "pay": "Step Up — EMA / MyScholarShop",
+      "window": "Application cycles through the year",
+      "note": "PEP is for students not enrolled full-time in a public/private school (ages 5+). Approved online tutoring and learning are purchased through the Step Up marketplace.",
+      "url": "https://www.stepupforstudents.org"
+    },
+    {
+      "s": "Georgia",
+      "prog": "Georgia Promise Scholarship",
+      "elig": "limit",
+      "eligText": "Income-based, zoned schools",
+      "amount": "≈ $6,500",
+      "pay": "Marketplace",
+      "window": "Annual window",
+      "note": "Targeted at students zoned for lower-performing schools and income thresholds. Confirm your zone and income qualify.",
+      "url": "https://www.google.com/search?q=Georgia+Promise+Scholarship+ESA+official"
+    },
+    {
+      "s": "Indiana",
+      "prog": "Education Scholarship Account (ESA)",
+      "elig": "limit",
+      "eligText": "Disability-based",
+      "amount": "Varies by need",
+      "pay": "ClassWallet",
+      "window": "Annual window",
+      "note": "For students with a qualifying disability. (Indiana also runs a separate private-school Choice voucher.)",
+      "url": "https://www.google.com/search?q=Indiana+Education+Scholarship+Account+ESA+Treasurer"
+    },
+    {
+      "s": "Iowa",
+      "prog": "Students First ESA",
+      "elig": "ok",
+      "eligText": "Universal — all K–12 (2025–26+)",
+      "amount": "≈ $8,148 (2026–27)",
+      "pay": "Odyssey",
+      "window": "Annual window (opens late spring)",
+      "note": "Now open to all resident K–12 students regardless of income. Managed on the Odyssey platform.",
+      "url": "https://educate.iowa.gov/pk-12/educational-choice/education-savings-accounts"
+    },
+    {
+      "s": "Louisiana",
+      "prog": "LA GATOR Scholarship",
+      "elig": "limit",
+      "eligText": "Phasing in by income",
+      "amount": "Tied to state per-pupil funding",
+      "pay": "Marketplace",
+      "window": "Annual window",
+      "note": "Rolling out in phases — income tiers are prioritized first. Confirm the current phase and your eligibility.",
+      "url": "https://www.google.com/search?q=LA+GATOR+Scholarship+Louisiana+ESA+official"
+    },
+    {
+      "s": "Mississippi",
+      "prog": "Education Scholarship Account (ESA)",
+      "elig": "limit",
+      "eligText": "Disability-based",
+      "amount": "≈ $7,000+",
+      "pay": "Reimbursement",
+      "window": "Annual window",
+      "note": "For students with a qualifying special-education need. Keep itemized receipts for approved expenses.",
+      "url": "https://www.google.com/search?q=Mississippi+Education+Scholarship+Account+ESA+official"
+    },
+    {
+      "s": "Missouri",
+      "prog": "MOScholars",
+      "elig": "limit",
+      "eligText": "Income / disability priority",
+      "amount": "≈ $6,375",
+      "pay": "ClassWallet",
+      "window": "Annual window",
+      "note": "Prioritizes lower-income students and students with disabilities. Funded via tax-credit contributions.",
+      "url": "https://www.google.com/search?q=MOScholars+Missouri+Treasurer+ESA+official"
+    },
+    {
+      "s": "Montana",
+      "prog": "Education Savings Account",
+      "elig": "limit",
+      "eligText": "Disability-based",
+      "amount": "Varies",
+      "pay": "Reimbursement",
+      "window": "Annual window",
+      "note": "For students with disabilities. Confirm current-year rules and approved expenses.",
+      "url": "https://www.google.com/search?q=Montana+Education+Savings+Account+special+needs+official"
+    },
+    {
+      "s": "New Hampshire",
+      "prog": "Education Freedom Account (EFA)",
+      "elig": "limit",
+      "eligText": "Income-based (≤350% FPL)",
+      "amount": "≈ $4,100+ (varies)",
+      "pay": "ClassWallet",
+      "window": "Annual window",
+      "note": "Eligibility is tied to household income. Online courses, tutoring, and curriculum are approved uses.",
+      "url": "https://www.google.com/search?q=New+Hampshire+Education+Freedom+Account+EFA+official"
+    },
+    {
+      "s": "North Carolina",
+      "prog": "ESA+ (Education Student Accounts)",
+      "elig": "limit",
+      "eligText": "Disability-based",
+      "amount": "≈ $9,000–$17,000",
+      "pay": "Reimbursement",
+      "window": "Annual window",
+      "note": "ESA+ is for students with disabilities. (NC also runs the separate income-based Opportunity Scholarship voucher.)",
+      "url": "https://k12.ncseaa.edu/the-education-student-accounts/"
+    },
+    {
+      "s": "South Carolina",
+      "prog": "Education Scholarship Trust Fund (ESTF)",
+      "elig": "check",
+      "eligText": "Income-phased — verify current status",
+      "amount": "≈ $6,000",
+      "pay": "Marketplace",
+      "window": "Annual window",
+      "note": "This program has faced legal challenges over how funds may be used — confirm the current-year status and approved expenses before relying on it.",
+      "url": "https://www.google.com/search?q=South+Carolina+Education+Scholarship+Trust+Fund+ESTF+official"
+    },
+    {
+      "s": "Tennessee",
+      "prog": "Education Freedom Scholarship / ESA",
+      "elig": "ok",
+      "eligText": "Expanding statewide",
+      "amount": "≈ $10,149 (2026–27)",
+      "pay": "Marketplace",
+      "window": "Annual window",
+      "note": "Expanding beyond the original ESA counties. Confirm your county/zone and the current-year amount.",
+      "url": "https://www.tn.gov/education/esa.html"
+    },
+    {
+      "s": "Texas",
+      "prog": "Education Freedom Accounts (TEFA)",
+      "elig": "ok",
+      "eligText": "Universal",
+      "amount": "$10,500 private/hybrid · $2,000 homeschool · up to $30,000 disability",
+      "pay": "State marketplace",
+      "window": "Deadline around July 15 — verify",
+      "note": "One of the largest programs in the country. Confirm your enrollment before the deadline; online learning is an approved category.",
+      "url": "https://www.google.com/search?q=Texas+Education+Freedom+Accounts+TEFA+official+apply"
+    },
+    {
+      "s": "Utah",
+      "prog": "Utah Fits All Scholarship",
+      "elig": "check",
+      "eligText": "Open to all, but selection-based (oversubscribed)",
+      "amount": "up to $8,000",
+      "pay": "Odyssey",
+      "window": "Annual window — apply early",
+      "note": "Demand exceeds funding, so awards are selected rather than guaranteed. Apply as early as the window opens.",
+      "url": "https://www.utahfitsall.org"
+    },
+    {
+      "s": "West Virginia",
+      "prog": "Hope Scholarship",
+      "elig": "ok",
+      "eligText": "Universal (broadening)",
+      "amount": "≈ $4,900 (varies)",
+      "pay": "Marketplace",
+      "window": "Annual window",
+      "note": "Broad eligibility for students leaving public school. Online learning, curriculum, and tutoring are approved uses.",
+      "url": "https://www.google.com/search?q=West+Virginia+Hope+Scholarship+ESA+official"
+    },
+    {
+      "s": "Wyoming",
+      "prog": "Steamboat Legacy Scholarship",
+      "elig": "check",
+      "eligText": "Broad — currently on legal hold",
+      "amount": "up to $6,000",
+      "pay": "Odyssey",
+      "window": "Verify — program status pending",
+      "note": "This program has been subject to a legal hold. Confirm whether it is active and accepting applications before planning around it.",
+      "url": "https://www.google.com/search?q=Wyoming+Steamboat+Legacy+Scholarship+ESA+status"
+    }
+  ],
+  "allStates": ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+}

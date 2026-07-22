@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* bina design tokens — extracted from thebinaschool.com (Tailwind v4) */
+/* Keep in sync with the main site. Re-extract if the site rebrands.   */
+/* ------------------------------------------------------------------ */
+@theme {
+  --font-display: "Rund Display", "Arial", sans-serif;
+  --font-sans: "Rund Text", "Arial", sans-serif;
+
+  /* Coal (text / surfaces) */
+  --color-coal-black: #000000;
+  --color-coal-1000: #262626;
+  --color-coal-900: #313131;
+
+  /* Chromatic accents (as used on the live site) */
+  --color-bina-grass: #03ecc5;
+  --color-bina-mint: #06e1bd;
+  --color-bina-yellow: #f7d928;
+  --color-bina-yellow-bright: #fcde2d;
+  --color-bina-purple: #b38cff;
+  --color-bina-pink: #fe48c2;
+  --color-bina-green: #03cb5b;
+  --color-bina-blue: #33afff;
+  --color-bina-red: #ff605b;
+  --color-bina-orange: #fe6c23;
+
+  /* Radii — the site leans on large, friendly corners */
+  --radius-card: 1.875rem; /* 30px cards */
+  --radius-cta: 1rem;
+}
+
+/* Rund Display — headings */
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
+
+/* Rund Text — body copy */
+@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-coal-1000 font-sans antialiased;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display font-bold text-coal-black;
+    text-wrap: balance;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* Primary CTA — exact behavior from the live site:
+     yellow → pink on hover → red on press, chunky black border */
+  .btn-bina {
+    @apply inline-flex items-center justify-center gap-2 cursor-pointer
+      rounded-2xl border-2 border-coal-black bg-bina-yellow text-coal-black
+      px-6 py-3 font-display font-bold no-underline
+      transition-colors duration-300 ease-out
+      hover:bg-bina-pink active:bg-bina-red;
+  }
+  .btn-bina-ghost {
+    @apply inline-flex items-center justify-center gap-2 cursor-pointer
+      rounded-2xl border-2 border-coal-black bg-white text-coal-black
+      px-6 py-3 font-display font-bold no-underline
+      transition-colors duration-300 ease-out
+      hover:bg-bina-grass active:bg-bina-mint;
+  }
+
+  /* Card — 30px corners, chunky border */
+  .card-bina {
+    @apply rounded-[1.875rem] border-2 border-coal-black bg-white;
+  }
+
+  /* Small pill (the site uses black pills with chromatic text) */
+  .pill-bina {
+    @apply inline-flex items-center rounded-full bg-coal-black px-4 py-1
+      font-display font-bold text-bina-pink;
+  }
+}
