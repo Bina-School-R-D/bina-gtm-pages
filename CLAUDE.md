@@ -1,6 +1,6 @@
 # CLAUDE.md — bina-gtm-pages
 
-Growth, marketing, and sales-enablement pages for bina, published at **https://pages.thebinaschool.com**.
+Growth, marketing, and sales-enablement pages for bina, published at **https://go.bina.school**.
 Akis and Lorraine describe the page they need; Claude Code builds it here.
 
 ## Stack
