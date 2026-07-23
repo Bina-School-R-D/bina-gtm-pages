@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import esaData from '../data/esa-states.json';
 
-const { programs, allStates } = esaData;
+const { programs } = esaData;
 
 // One high-level journey, shown once under the hero. The per-state tool fills in the detail.
 const journey = [
@@ -73,6 +73,10 @@ const dot = {
       </p>
 
       <div class="card-bina p-6 sm:p-8">
+        <p class="mb-4 text-sm text-coal-900">
+          Don't see your state? Only states with a program you can use for bina are listed. Many
+          states have none yet — but new ones launch most years, so check back.
+        </p>
         <label for="state" class="mb-3 block font-display text-lg font-bold">Which state do you live in?</label>
         <div class="relative">
           <select
@@ -84,9 +88,6 @@ const dot = {
           </select>
           <span class="pointer-events-none absolute right-5 top-1/2 h-3 w-3 -translate-y-[70%] rotate-45 border-b-2 border-r-2 border-coal-black"></span>
         </div>
-        <p class="mt-3 text-sm text-coal-900">
-          Don't see a program for your state? Many states have none yet — but new ones launch most years.
-        </p>
         <div id="result" class="mt-6 scroll-mt-24"></div>
       </div>
     </div>
@@ -96,19 +97,22 @@ const dot = {
     Program details reflect the latest information available to the bina team and are subject to change — your state's official program site is the final word.
   </p>
 
-  <script define:vars={{ programs, allStates }}>
+  <script define:vars={{ programs }}>
     const WEBSITE = 'https://thebinaschool.com';
 
     const byState = {};
     programs.forEach((d) => (byState[d.s] = d));
 
     const sel = document.getElementById('state');
-    allStates.forEach((name) => {
-      const o = document.createElement('option');
-      o.value = name;
-      o.textContent = byState[name] ? name : name + '  —  no program yet';
-      sel.appendChild(o);
-    });
+    programs
+      .map((d) => d.s)
+      .sort()
+      .forEach((name) => {
+        const o = document.createElement('option');
+        o.value = name;
+        o.textContent = name;
+        sel.appendChild(o);
+      });
 
     const CHIP = {
       bina: { label: 'with bina', cls: 'bg-bina-yellow' },
@@ -263,8 +267,27 @@ const dot = {
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    // Keep the URL in sync so a selected state can be shared and deep-linked.
+    function setUrl(name) {
+      const url = new URL(location.href);
+      if (name) url.searchParams.set('state', name);
+      else url.searchParams.delete('state');
+      history.replaceState(null, '', url);
+    }
+
     sel.addEventListener('change', function () {
       render(this.value);
+      setUrl(this.value);
     });
+
+    // Deep link: ?state=Arizona (case-insensitive) selects and renders on load.
+    const requested = new URLSearchParams(location.search).get('state');
+    if (requested) {
+      const match = programs.find((d) => d.s.toLowerCase() === requested.trim().toLowerCase());
+      if (match) {
+        sel.value = match.s;
+        render(match.s);
+      }
+    }
   </script>
 </BaseLayout>
