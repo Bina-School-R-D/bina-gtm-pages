@@ -43,7 +43,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <a href="https://thebinaschool.com" aria-label="bina — home">
         <img src="/images/navbar-logo.svg" alt="bina" class="h-9 w-auto" />
       </a>
-      <a href={ctaHref} class="btn-bina !px-5 !py-2 text-sm sm:text-base">{ctaLabel}</a>
+      <a
+        href={ctaHref}
+        class="inline-flex min-h-[clamp(2.75rem,3.24vw,4.25rem)] cursor-pointer items-center justify-center whitespace-nowrap rounded-[clamp(0.625rem,0.83vw,1rem)] border-2 border-coal-black bg-bina-yellow px-[clamp(1.25rem,1.6vw,2rem)] font-display text-[clamp(1rem,1.22vw,1.5rem)] font-bold text-coal-black no-underline transition-colors duration-300 ease-out hover:bg-bina-pink active:bg-bina-red"
+        >{ctaLabel}</a
+      >
     </nav>
 
     <main>

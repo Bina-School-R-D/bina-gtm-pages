@@ -20,13 +20,25 @@ Akis and Lorraine describe the page they need; Claude Code builds it here.
 
 The company name is always lowercase: `bina`, `bina school`, `thebinaschool.com`, `hello@thebinaschool.com`. Ages are **4–15**. Scan every page for capitalized `Bina` before shipping.
 
+## 🔴 Page philosophy — tools, not essays
+
+Pages are **interactive tools for families**, not long SEO pages. Short, task-focused, multi-step. The reader should feel they're doing a smooth process **with bina** — some steps just happen to occur on state/official websites. Plain language only: no jargon a newcomer wouldn't know ("universal eligibility", "award disbursement" → say who can apply, when money arrives). Assume the reader won't study any official website themselves.
+
 ## Adding a page
 
 1. Create `src/pages/<slug>.astro` wrapped in `BaseLayout` (props: `title`, `description`, `noindex` for internal/sales pages).
 2. Put page data (state tables, pricing, lists) in `src/data/<slug>.json` — never inline large datasets in markup.
 3. Interactivity: plain `<script>` in the page for simple widgets; add a framework island only if genuinely needed.
-4. Add the page to the directory list in `src/pages/index.astro` (the hub is noindexed).
+4. List the page in the table below.
 5. `pnpm build` must pass before committing.
+
+There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.mjs`).
+
+## Pages
+
+| URL | Purpose | Data source |
+|---|---|---|
+| `/esa` | ESA funding tool for parents — pick a state, get the exact bina + state steps | `src/data/esa-states.json`, synced from `bina-gtm/notes/ESA_State_Database.xlsx` (the team's ESA database — never invent numbers; update the xlsx-derived JSON instead) |
 
 ## Git workflow
 

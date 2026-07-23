@@ -7,6 +7,11 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://go.bina.school',
   trailingSlash: 'never',
+  // No homepage — the root bounces to the main site; old URLs stay alive.
+  redirects: {
+    '/': 'https://thebinaschool.com',
+    '/esa-guide': '/esa',
+  },
   vite: {
     plugins: [tailwindcss()],
   },
