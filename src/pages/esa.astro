@@ -99,6 +99,7 @@ const dot = {
 
   <script define:vars={{ programs, allStates, noProgramNotes }}>
     const WEBSITE = 'https://thebinaschool.com';
+    const EMAIL = 'admissions@thebinaschool.com';
 
     const byState = {};
     programs.forEach((d) => (byState[d.s] = d));
@@ -246,7 +247,7 @@ const dot = {
       if (kind === 'book')
         return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + WEBSITE + '">Book a call with bina →</a>';
       if (kind === 'notify')
-        return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="mailto:hello@thebinaschool.com?subject=' + encodeURIComponent(d.s + ' funding updates') + '">Email us about ' + esc(d.s) + ' →</a>';
+        return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent(d.s + ' funding updates') + '">Email us about ' + esc(d.s) + ' →</a>';
       return '';
     }
 
@@ -292,7 +293,7 @@ const dot = {
           '<p class="mt-2 text-sm text-coal-900">New programs launch every year — and plenty of bina families enroll privately in the meantime. Talk to us and we’ll flag you the moment ' + esc(name) + ' opens one.</p></div>' +
           '<div class="flex flex-wrap gap-3 border-t-2 border-coal-black bg-white px-6 py-5">' +
           '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
-          '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="mailto:hello@thebinaschool.com?subject=Funding%20options%20in%20' + encodeURIComponent(name) + '">Email us about funding</a>' +
+          '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="mailto:' + EMAIL + '?subject=Funding%20options%20in%20' + encodeURIComponent(name) + '">Email us about funding</a>' +
           '</div></div>';
         return;
       }
