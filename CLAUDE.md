@@ -49,4 +49,4 @@ There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.m
 ## Content rules
 
 - Factual claims about external programs (ESA amounts, deadlines, regulations) must carry a "verify with the official source" disclaimer and link to the official program.
-- CTA email is `hello@thebinaschool.com`; main-site links go to `https://thebinaschool.com`.
+- CTA email is `admissions@thebinaschool.com` — these pages talk to prospective and current families, so email CTAs go to admissions, not the general `hello@` inbox. Main-site links go to `https://thebinaschool.com`.
