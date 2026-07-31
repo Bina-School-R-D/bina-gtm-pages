@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import esaData from '../data/esa-states.json';
 
-const { programs } = esaData;
+const { programs, allStates, noProgramNotes } = esaData;
 
 // One high-level journey, shown once under the hero. The per-state tool fills in the detail.
 const journey = [
@@ -74,8 +74,8 @@ const dot = {
 
       <div class="card-bina p-6 sm:p-8">
         <p class="mb-4 text-sm text-coal-900">
-          Don't see your state? Only states with a program you can use for bina are listed. Many
-          states have none yet — but new ones launch most years, so check back.
+          Every state is listed — including the ones with no program yet, so you get a straight
+          answer either way. New programs launch most years, so it's worth checking back.
         </p>
         <label for="state" class="mb-3 block font-display text-lg font-bold">Which state do you live in?</label>
         <div class="relative">
@@ -97,15 +97,16 @@ const dot = {
     Program details reflect the latest information available to the bina team and are subject to change — your state's official program site is the final word.
   </p>
 
-  <script define:vars={{ programs }}>
+  <script define:vars={{ programs, allStates, noProgramNotes }}>
     const WEBSITE = 'https://thebinaschool.com';
 
     const byState = {};
     programs.forEach((d) => (byState[d.s] = d));
 
     const sel = document.getElementById('state');
-    programs
-      .map((d) => d.s)
+    // Every state is listed, so a family never has to guess whether silence means "no".
+    // States without a usable program get an honest answer instead of no answer.
+    Array.from(new Set(allStates.concat(programs.map((d) => d.s))))
       .sort()
       .forEach((name) => {
         const o = document.createElement('option');
@@ -122,14 +123,24 @@ const dot = {
 
     const BADGE = {
       approved: { label: '✓ bina is an approved provider', cls: 'bg-bina-grass' },
-      pending: { label: 'bina approval in progress', cls: 'bg-white' },
+      'approved-reimb': { label: '✓ Ready to use for bina', cls: 'bg-bina-grass' },
+      'coming-soon': { label: 'Coming soon', cls: 'bg-bina-orange' },
       exploring: { label: 'possible for some families — ask us', cls: 'bg-bina-blue' },
     };
 
     const PAY_FACT = {
       approved: 'Yes — the state pays bina directly from your account.',
-      pending: "Likely — bina's approval is being finalized; we confirm your exact route when you're approved.",
+      // Idaho-style: usable today, but the money reaches you rather than us.
+      'approved-reimb': 'You pay bina, then the state gets the money back to you — and we give you every receipt and document your claim needs.',
       exploring: "It depends on your approval — we'll know your route and handle it with you.",
+    };
+
+    // Third fact tile: "does the state pay bina" is the wrong question for a coming-soon
+    // state, so those show where bina's approval actually stands instead.
+    const FACT_LABELS = {
+      'coming-soon': ['Who the state funds', 'What it’s worth per child', 'Where bina stands'],
+      'approved-reimb': ['Who can apply', 'How much for bina', 'How the money works'],
+      default: ['Who can apply', 'How much for bina', 'Does the state pay bina directly?'],
     };
 
     function esc(t) {
@@ -148,6 +159,13 @@ const dot = {
           x: 'bina is an approved ' + d.prog + ' provider, so the state pays bina directly' + acct + " — nothing comes out of your pocket. If your award doesn't cover full tuition, you only pay the difference.",
         };
       }
+      if (d.status === 'approved-reimb') {
+        return {
+          w: 'both',
+          t: 'Pay bina, then claim it back',
+          x: 'You pay bina and claim it back through the ' + d.prog + '. We give you the itemized invoice, enrollment letter and accreditation details every time you need them, so your claim goes in clean and nothing gets held up over paperwork.',
+        };
+      }
       const acct = d.platform ? ' (from your ' + d.platform + ' account)' : '';
       return {
         w: 'both',
@@ -160,7 +178,44 @@ const dot = {
       };
     }
 
+    // Coming-soon states get an honest picture instead of a path we can't yet deliver:
+    // what the program is, what's in the way, what bina is doing, and what a family can do now.
+    function comingSoonSteps(d) {
+      const steps = [
+        { w: 'state', t: 'The funding is real and worth planning for', x: d.soonWhy, link: { url: d.officialUrl, label: 'See the ' + d.s + ' program ↗' } },
+      ];
+
+      // Skip the dates block where the program itself is on hold — there's nothing to diary.
+      if (d.applyWindow && !/^on hold/i.test(d.applyWindow))
+        steps.push({
+          w: 'state',
+          t: 'Keep the dates on your radar',
+          x: d.applyWindow + ' Applying keeps your state options open — and we’ll tell you straight the moment bina fits into them.',
+          link: { url: d.applyUrl, label: 'Apply on the ' + d.s + ' site ↗' },
+        });
+
+      steps.push(
+        { w: 'bina', t: 'What we’re doing about it', x: d.soonWork },
+        {
+          w: 'bina',
+          t: 'How ' + d.s + ' families join bina today',
+          x: 'Plenty of families choose bina without any state funding — small live classes of 6–8 with two teachers, and a real community your child belongs to. Book a call and we’ll be straight with you about timing, cost and exactly where the ' + d.prog + ' stands.',
+          cta: 'book',
+        },
+        {
+          w: 'bina',
+          t: 'Be first in line when ' + d.s + ' opens',
+          x: 'Send us one line saying you’re in ' + d.s + '. When this funding becomes usable at bina, you’ll hear from us before the next application window — not after it closes.',
+          cta: 'notify',
+        },
+      );
+
+      return [{ label: 'Where ' + d.s + ' stands today', steps: steps }];
+    }
+
     function buildSteps(d) {
+      if (d.status === 'coming-soon') return comingSoonSteps(d);
+
       const talk =
         d.status === 'exploring'
           ? { w: 'bina', t: 'Talk to bina first', x: "The " + d.prog + " isn't a guaranteed fit for online schools yet, but families do make it work. Book a call and we'll map whether it works for your family — before you spend anything.", cta: 'book' }
@@ -181,16 +236,21 @@ const dot = {
         x: "Finish admissions and pick a start date. Your bina admissions contact emails you everything your program needs — itemized invoice, enrollment letter, and accreditation details — and answers anything specific your state asks for. You won't have to figure the paperwork out alone.",
       };
 
-      return { before: [talk, apply, approved], after: [enroll, payStep(d)] };
+      return [
+        { label: 'Before you enroll — during bina admissions', steps: [talk, apply, approved] },
+        { label: 'After you enroll', steps: [enroll, payStep(d)] },
+      ];
     }
 
-    function ctaLink(kind) {
+    function ctaLink(kind, d) {
       if (kind === 'book')
         return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + WEBSITE + '">Book a call with bina →</a>';
+      if (kind === 'notify')
+        return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="mailto:hello@thebinaschool.com?subject=' + encodeURIComponent(d.s + ' funding updates') + '">Email us about ' + esc(d.s) + ' →</a>';
       return '';
     }
 
-    function stepRow(step, n) {
+    function stepRow(step, n, d) {
       const c = CHIP[step.w];
       const link = step.link
         ? '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + esc(step.link.url) + '" target="_blank" rel="noopener">' + esc(step.link.label) + '</a>'
@@ -202,7 +262,7 @@ const dot = {
         '<span class="mb-0.5 flex flex-wrap items-center gap-2"><strong class="font-display text-base">' + esc(step.t) + '</strong>' +
         '<span class="inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ' + c.cls + '">' + c.label + '</span></span>' +
         '<span class="block text-sm text-coal-900">' + esc(step.x) + '</span>' +
-        (step.cta ? ctaLink(step.cta) : '') +
+        (step.cta ? ctaLink(step.cta, d) : '') +
         link +
         '</span></li>'
       );
@@ -224,9 +284,11 @@ const dot = {
       }
       const d = byState[name];
       if (!d) {
+        const note = (noProgramNotes || {})[name];
         box.innerHTML =
           '<div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">' +
           '<div class="bg-bina-purple/20 px-6 py-5"><p class="font-display text-xl font-black">' + esc(name) + " doesn't have a program you can use for bina yet.</p>" +
+          (note ? '<p class="mt-2 text-sm font-bold text-coal-900">' + esc(note) + '</p>' : '') +
           '<p class="mt-2 text-sm text-coal-900">New programs launch every year — and plenty of bina families enroll privately in the meantime. Talk to us and we’ll flag you the moment ' + esc(name) + ' opens one.</p></div>' +
           '<div class="flex flex-wrap gap-3 border-t-2 border-coal-black bg-white px-6 py-5">' +
           '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
@@ -235,32 +297,35 @@ const dot = {
         return;
       }
       const b = BADGE[d.status];
-      const steps = buildSteps(d);
+      const soon = d.status === 'coming-soon';
+      const labels = FACT_LABELS[d.status] || FACT_LABELS.default;
       let n = 0;
-      const stepsHtml =
-        groupLabel('Before you enroll — during bina admissions') +
-        steps.before.map((s) => stepRow(s, ++n)).join('') +
-        groupLabel('After you enroll') +
-        steps.after.map((s) => stepRow(s, ++n)).join('');
+      const stepsHtml = buildSteps(d)
+        .map((g) => groupLabel(g.label) + g.steps.map((s) => stepRow(s, ++n, d)).join(''))
+        .join('');
       box.innerHTML =
         '<div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">' +
         '<div class="flex flex-wrap items-center justify-between gap-3 bg-bina-yellow px-6 py-5">' +
         '<div><p class="font-display text-2xl font-black">' + esc(d.s) + '</p>' +
         '<p class="text-sm font-bold text-coal-900">' + esc(d.prog) + '</p></div>' +
         '<span class="rounded-full border-2 border-coal-black px-4 py-1.5 font-display text-xs font-bold ' + b.cls + '">' + b.label + '</span></div>' +
+        (soon && d.soonIntro ? '<div class="border-t-2 border-coal-black bg-bina-orange/25 px-6 py-4 text-sm font-bold">' + esc(d.soonIntro) + '</div>' : '') +
         (d.special ? '<div class="border-t-2 border-coal-black bg-bina-orange/25 px-6 py-3 text-sm font-bold">⚠ ' + esc(d.special) + '</div>' : '') +
         '<div class="grid gap-px border-t-2 border-coal-black bg-coal-black sm:grid-cols-3">' +
-        fact('Who can apply', d.who) +
-        fact('How much for bina', d.howMuch) +
-        fact('Does the state pay bina directly?', PAY_FACT[d.status]) +
+        fact(labels[0], d.who) +
+        fact(labels[1], d.howMuch) +
+        fact(labels[2], soon ? d.standing : PAY_FACT[d.status]) +
         '</div>' +
         (d.boost ? '<div class="border-t-2 border-coal-black bg-bina-grass/25 px-6 py-3 text-sm font-bold">✓ ' + esc(d.boost) + '</div>' : '') +
         '<ul class="m-0 list-none p-0">' + stepsHtml + '</ul>' +
-        '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-sm text-coal-900">Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.</div>' +
+        (soon
+          ? '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-sm text-coal-900">We update this page the moment ' + esc(d.s) + '’s rules or bina’s status change — so what you read here is where things actually stand today.</div>'
+          : '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-sm text-coal-900">Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.</div>') +
         '<div class="flex flex-wrap items-center gap-3 border-t-2 border-coal-black bg-white px-6 py-5">' +
         '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
         '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="' + esc(d.officialUrl) + '" target="_blank" rel="noopener">' + esc(d.s) + ' program site ↗</a>' +
         '<a class="font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + esc(d.binaUrl) + '">bina’s ' + esc(d.s) + ' guide</a>' +
+        (soon ? ctaLink('notify', d).replace('mt-2 ', '') : '') +
         '</div>' +
         '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-xs text-coal-900/70">Numbers and deadlines change every year — the official ' + esc(d.prog) + ' site is the final word.</div>' +
         '</div>';
