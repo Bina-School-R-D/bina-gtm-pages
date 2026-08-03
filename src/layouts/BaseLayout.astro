@@ -9,6 +9,8 @@ interface Props {
   /** Optional CTA shown on the right of the nav. Defaults to the main-site apply link. */
   ctaHref?: string;
   ctaLabel?: string;
+  /** Drop the gap above the footer, for pages whose last section is already dark. */
+  flushFooter?: boolean;
 }
 
 const {
@@ -17,6 +19,7 @@ const {
   noindex = false,
   ctaHref = 'https://thebinaschool.com',
   ctaLabel = 'Visit bina',
+  flushFooter = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -54,7 +57,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
 
-    <footer class="mt-20 bg-coal-black px-5 py-12 text-white sm:px-10">
+    <footer
+      class:list={['bg-coal-black px-5 py-12 text-white sm:px-10', flushFooter ? 'mt-0' : 'mt-20']}
+    >
       <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
         <p class="text-sm text-white/80">
           <a href="https://thebinaschool.com/privacy" class="font-bold text-bina-grass underline underline-offset-4">Privacy</a>

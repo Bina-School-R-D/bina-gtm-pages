@@ -1,6 +1,6 @@
 {
-  "_provenance": "Aggregated from the bina STAR Results dashboard (Oct '25 \u2013 May '26), provided by the CSO. Aggregates only \u2014 no student-level data. Groups with N<10 suppressed per assessment methodology. Generated 2026-08-03.",
-  "year": "Oct '25 \u2013 May '26",
+  "_provenance": "Aggregated from the bina STAR Results dashboard (Oct '25 – May '26), provided by the CSO. Aggregates only — no student-level data. Groups with N<10 suppressed per assessment methodology. Generated 2026-08-03.",
+  "year": "Oct '25 – May '26",
   "headline": {
     "readGrowthAvg": 48,
     "mathGrowthAvg": 32,
@@ -39,6 +39,7 @@
   "levels": [
     {
       "level": "P1",
+      "ages": "5–6",
       "enrolled": 49,
       "readBenchAt": 13,
       "readBenchN": 15,
@@ -46,6 +47,7 @@
     },
     {
       "level": "P2",
+      "ages": "6–7",
       "enrolled": 35,
       "readBenchAt": 25,
       "readBenchN": 30,
@@ -53,6 +55,7 @@
     },
     {
       "level": "P3",
+      "ages": "7–8",
       "enrolled": 37,
       "readBenchAt": 22,
       "readBenchN": 35,
@@ -63,6 +66,7 @@
     },
     {
       "level": "P4",
+      "ages": "8–9",
       "enrolled": 40,
       "readBenchAt": 27,
       "readBenchN": 38,
@@ -73,6 +77,7 @@
     },
     {
       "level": "P5",
+      "ages": "9–10",
       "enrolled": 34,
       "readBenchAt": 19,
       "readBenchN": 34,
@@ -83,6 +88,7 @@
     },
     {
       "level": "P6",
+      "ages": "10–11",
       "enrolled": 24,
       "readBenchAt": 13,
       "readBenchN": 24,
@@ -93,6 +99,7 @@
     },
     {
       "level": "M1",
+      "ages": "11–12",
       "enrolled": 14,
       "readBenchAt": 11,
       "readBenchN": 14,
@@ -104,37 +111,29 @@
   ],
   "tenure": [
     {
-      "label": "3\u20136 months",
+      "label": "3–6 months",
       "n": 30,
       "readNceMean": 55.4,
       "aboveNational": 5.4
     },
     {
-      "label": "7\u201312 months",
+      "label": "7–12 months",
       "n": 82,
       "readNceMean": 57.1,
       "aboveNational": 7.1
     },
     {
-      "label": "1\u20132 years",
+      "label": "1–2 years",
       "n": 50,
       "readNceMean": 57.2,
       "aboveNational": 7.2
     },
     {
-      "label": "2\u20133 years",
+      "label": "2–3 years",
       "n": 11,
       "readNceMean": 60.7,
       "aboveNational": 10.7
     }
   ],
-  "deepDive": {
-    "readNceMean": 58.4,
-    "readNceN": 195,
-    "readTypicalPercentile": 64,
-    "mathNceMean": 50.0,
-    "mathNceN": 198,
-    "readNceGainAvg": 2.3,
-    "readNceGainN": 108
-  }
+  "_ageNote": "Level→age mapping inferred from thebinaschool.com (primary ages 4–11; middle school = Grades 6–8, so M1 = Grade 6). Confirm with the school team."
 }
