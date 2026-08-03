@@ -1,0 +1,140 @@
+{
+  "_provenance": "Aggregated from the bina STAR Results dashboard (Oct '25 \u2013 May '26), provided by the CSO. Aggregates only \u2014 no student-level data. Groups with N<10 suppressed per assessment methodology. Generated 2026-08-03.",
+  "year": "Oct '25 \u2013 May '26",
+  "headline": {
+    "readGrowthAvg": 48,
+    "mathGrowthAvg": 32,
+    "pairedN": 108,
+    "readGrewPct": 81,
+    "readAtAbovePct": 67,
+    "readAtAboveN": 195,
+    "enrolled": 238
+  },
+  "curves": {
+    "reading": {
+      "oct": {
+        "mean": 962,
+        "sd": 107,
+        "n": 108
+      },
+      "may": {
+        "mean": 1009,
+        "sd": 94,
+        "n": 108
+      }
+    },
+    "math": {
+      "oct": {
+        "mean": 949,
+        "sd": 89,
+        "n": 108
+      },
+      "may": {
+        "mean": 981,
+        "sd": 101,
+        "n": 108
+      }
+    }
+  },
+  "levels": [
+    {
+      "level": "P1",
+      "enrolled": 49,
+      "readBenchAt": 13,
+      "readBenchN": 15,
+      "readBenchPct": 87
+    },
+    {
+      "level": "P2",
+      "enrolled": 35,
+      "readBenchAt": 25,
+      "readBenchN": 30,
+      "readBenchPct": 83
+    },
+    {
+      "level": "P3",
+      "enrolled": 37,
+      "readBenchAt": 22,
+      "readBenchN": 35,
+      "readBenchPct": 63,
+      "readGrowthMedian": 16,
+      "readGrowthN": 17,
+      "readGrewPct": 76
+    },
+    {
+      "level": "P4",
+      "enrolled": 40,
+      "readBenchAt": 27,
+      "readBenchN": 38,
+      "readBenchPct": 71,
+      "readGrowthMedian": 56,
+      "readGrowthN": 30,
+      "readGrewPct": 87
+    },
+    {
+      "level": "P5",
+      "enrolled": 34,
+      "readBenchAt": 19,
+      "readBenchN": 34,
+      "readBenchPct": 56,
+      "readGrowthMedian": 29,
+      "readGrowthN": 23,
+      "readGrewPct": 74
+    },
+    {
+      "level": "P6",
+      "enrolled": 24,
+      "readBenchAt": 13,
+      "readBenchN": 24,
+      "readBenchPct": 54,
+      "readGrowthMedian": 30,
+      "readGrowthN": 18,
+      "readGrewPct": 78
+    },
+    {
+      "level": "M1",
+      "enrolled": 14,
+      "readBenchAt": 11,
+      "readBenchN": 14,
+      "readBenchPct": 79,
+      "readGrowthMedian": 37,
+      "readGrowthN": 10,
+      "readGrewPct": 90
+    }
+  ],
+  "tenure": [
+    {
+      "label": "3\u20136 months",
+      "n": 30,
+      "readNceMean": 55.4,
+      "aboveNational": 5.4
+    },
+    {
+      "label": "7\u201312 months",
+      "n": 82,
+      "readNceMean": 57.1,
+      "aboveNational": 7.1
+    },
+    {
+      "label": "1\u20132 years",
+      "n": 50,
+      "readNceMean": 57.2,
+      "aboveNational": 7.2
+    },
+    {
+      "label": "2\u20133 years",
+      "n": 11,
+      "readNceMean": 60.7,
+      "aboveNational": 10.7
+    }
+  ],
+  "deepDive": {
+    "readNceMean": 58.4,
+    "readNceN": 195,
+    "readTypicalPercentile": 64,
+    "mathNceMean": 50.0,
+    "mathNceN": 198,
+    "readNceGainAvg": 2.3,
+    "readNceGainN": 108
+  }
+}
