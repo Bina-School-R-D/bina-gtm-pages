@@ -2,7 +2,33 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import results from '../data/student-results.json';
 
-const { headline, curves, levels, tenure, deepDive, year } = results;
+const { headline, curves, levels, tenure, year } = results;
+
+const SITE = 'https://thebinaschool.com';
+
+// Plain-language explainers for the STAR section — the page's only jargon, defused.
+const explainers = [
+  {
+    q: 'What is STAR, and why does it matter?',
+    a: "STAR is an adaptive reading and math assessment by Renaissance Learning, normed on millions of U.S. students. Because it's built and scored by an outside company, the results aren't ours to bend — every number on this page comes from it.",
+    accent: 'bg-bina-grass',
+  },
+  {
+    q: 'What is a "scaled score"?',
+    a: 'A single number for what a student can do, on one continuous scale across all grades. It only goes up when ability goes up — which is why growth in scaled-score points is the cleanest way to show a year of learning.',
+    accent: 'bg-bina-yellow',
+  },
+  {
+    q: 'What is the "national benchmark"?',
+    a: 'Renaissance flags a student as at or above benchmark when they score in the top 60% of U.S. students for their grade (the 40th percentile or higher). It is the standard line schools use for "on track".',
+    accent: 'bg-bina-blue',
+  },
+  {
+    q: 'How we report these numbers',
+    a: `Growth figures cover the ${headline.pairedN} students assessed in both Oct '25 and May '26 at the same level. Spring standing covers everyone assessed in May. Groups with fewer than 10 students are never reported. All figures are school aggregates — no individual student data appears on this page.`,
+    accent: 'bg-bina-purple',
+  },
+];
 
 // ---- distribution curves (built at compile time — pure static SVG) ----
 // Chart colors validated for CVD separation on white: oct #33afff (bina-blue),
@@ -86,8 +112,7 @@ const tenureBars = tenure.map((b, i) => {
 <BaseLayout
   title="bina Student Results — Independently Measured"
   description="How much do bina students actually learn? See a year of reading and math growth, measured by the nationally normed Renaissance STAR assessment."
-  ctaHref="mailto:admissions@thebinaschool.com"
-  ctaLabel="Talk to admissions"
+  flushFooter={true}
 >
   <!-- hero -->
   <header class="bg-bina-grass">
@@ -241,21 +266,24 @@ const tenureBars = tenure.map((b, i) => {
       <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Your child's level</p>
       <h2 class="mb-3 text-3xl sm:text-4xl">See results for your child's age group</h2>
       <p class="mb-8 max-w-2xl text-coal-900">
-        Pick a level — P1 is our youngest primary group, M1 the start of middle school. Not sure
-        which fits your child? <a href="mailto:admissions@thebinaschool.com" class="font-bold underline underline-offset-4">Ask admissions</a> — it takes one email.
+        Pick your child's age group — P1 is our youngest primary group, M1 the start of middle
+        school. Not sure which one fits?
+        <a href={SITE} class="font-bold underline underline-offset-4">Visit bina to learn more</a>.
       </p>
 
       <div class="card-bina p-6 sm:p-8">
-        <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="School level">
+        <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="Your child's level">
           {
             levels.map((l, i) => (
               <button
                 type="button"
                 data-level={l.level}
                 aria-pressed={i === 0 ? 'true' : 'false'}
-                class="level-btn cursor-pointer rounded-full border-2 border-coal-black bg-white px-5 py-2 font-display font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
+                aria-label={`${l.level}, ages ${l.ages}`}
+                class="level-btn cursor-pointer rounded-2xl border-2 border-coal-black bg-white px-4 py-2 text-left font-display font-bold leading-tight transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
               >
                 {l.level}
+                <span class="block text-xs font-medium opacity-70">ages {l.ages}</span>
               </button>
             ))
           }
@@ -318,76 +346,58 @@ const tenureBars = tenure.map((b, i) => {
     </div>
   </section>
 
-  <!-- deep dive for data-minded parents -->
+  <!-- understanding STAR -->
   <section class="border-t-2 border-coal-black">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">For the data-minded</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">Want the full numbers? Here they are.</h2>
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Understanding STAR</p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">Who marks our homework?</h2>
       <p class="mb-8 max-w-2xl text-coal-900">
-        Some parents want the exact norm-referenced figures — we respect that. These use the
-        <strong>Normal Curve Equivalent (NCE)</strong> scale, where 50 is always the U.S. national
-        average.
+        Not us. Every number on this page comes from <strong>Renaissance STAR</strong> — an
+        independent assessment sat by millions of U.S. students. Here's what that means, and what
+        each term on this page actually says about a child.
       </p>
 
-      <div class="mb-8 grid gap-4 sm:grid-cols-3">
-        <div class="card-bina p-6">
-          <p class="font-display text-4xl font-black">{deepDive.readNceMean}</p>
-          <p class="mt-2 font-display font-bold">average reading NCE</p>
-          <p class="mt-1 text-sm text-coal-900">
-            vs. a national average of 50 — {deepDive.readNceN} students, spring '26
+      <div class="mb-6 grid gap-4 md:grid-cols-3">
+        <div class="card-bina flex flex-col gap-2 p-6">
+          <span class="pill-bina self-start text-xs">independent</span>
+          <p class="font-display text-lg font-bold">Built and scored outside bina</p>
+          <p class="text-sm text-coal-900">
+            Renaissance Learning sets the questions and the national comparisons — we can't tune
+            either.
           </p>
         </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-4xl font-black">~{deepDive.readTypicalPercentile}th</p>
-          <p class="mt-2 font-display font-bold">percentile — our typical reader</p>
-          <p class="mt-1 text-sm text-coal-900">
-            the median bina student reads better than roughly {deepDive.readTypicalPercentile} of
-            100 peers nationally
+        <div class="card-bina flex flex-col gap-2 p-6">
+          <span class="pill-bina self-start text-xs">adaptive</span>
+          <p class="font-display text-lg font-bold">It finds each child's real level</p>
+          <p class="text-sm text-coal-900">
+            Questions get harder or easier as a child answers, so the result reflects what they can
+            genuinely do.
           </p>
         </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-4xl font-black">{deepDive.mathNceMean}</p>
-          <p class="mt-2 font-display font-bold">average math NCE</p>
-          <p class="mt-1 text-sm text-coal-900">
-            in line with the national average of 50 — {deepDive.mathNceN} students, spring '26
+        <div class="card-bina flex flex-col gap-2 p-6">
+          <span class="pill-bina self-start text-xs">nationally normed</span>
+          <p class="font-display text-lg font-bold">Compared to U.S. peers, not to us</p>
+          <p class="text-sm text-coal-900">
+            "On track" means on track against the whole country's students in the same grade.
           </p>
         </div>
       </div>
 
       <div class="grid gap-3 sm:grid-cols-2">
-        <details class="card-bina p-5">
-          <summary class="cursor-pointer font-display font-bold">What is STAR, and why does it matter?</summary>
-          <p class="mt-2 text-sm text-coal-900">
-            STAR is an adaptive reading and math assessment by Renaissance Learning, normed on
-            millions of U.S. students. Because it's built and scored by an outside company, the
-            results aren't ours to bend — every number on this page comes from it.
-          </p>
-        </details>
-        <details class="card-bina p-5">
-          <summary class="cursor-pointer font-display font-bold">What's a "scaled score"?</summary>
-          <p class="mt-2 text-sm text-coal-900">
-            A single number for what a student can do, on one continuous scale across all grades. It
-            only goes up when ability goes up — which is why growth in scaled-score points is the
-            cleanest way to show a year of learning.
-          </p>
-        </details>
-        <details class="card-bina p-5">
-          <summary class="cursor-pointer font-display font-bold">What's the "national benchmark"?</summary>
-          <p class="mt-2 text-sm text-coal-900">
-            Renaissance flags a student as at or above benchmark when they score in the top 60% of
-            U.S. students for their grade (40th percentile or higher). It's the standard line schools
-            use for "on track".
-          </p>
-        </details>
-        <details class="card-bina p-5">
-          <summary class="cursor-pointer font-display font-bold">How we report (methodology)</summary>
-          <p class="mt-2 text-sm text-coal-900">
-            Growth figures cover the {headline.pairedN} students assessed in both Oct '25 and
-            May '26 at the same level. Spring standing covers everyone assessed in May. Groups with
-            fewer than 10 students are never reported. All figures are school aggregates — no
-            individual student data appears on this page.
-          </p>
-        </details>
+        {
+          explainers.map((e) => (
+            <details class="card-bina group overflow-hidden p-0">
+              <summary class="flex cursor-pointer items-center gap-3 p-5 font-display font-bold">
+                <span class={`h-8 w-2 flex-none rounded-full border-2 border-coal-black ${e.accent}`} />
+                <span class="flex-1">{e.q}</span>
+                <span class="flex-none font-display text-xl transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
+                  +
+                </span>
+              </summary>
+              <p class="border-t-2 border-coal-black/10 px-5 pb-5 pt-4 text-sm text-coal-900">{e.a}</p>
+            </details>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -399,12 +409,11 @@ const tenureBars = tenure.map((b, i) => {
         Curious what a year at bina could do for <span class="text-bina-grass">your child</span>?
       </h2>
       <p class="mx-auto mb-8 max-w-xl text-white/80">
-        Talk to our admissions team — they'll walk you through how we measure progress and what it
-        looks like for your child's age.
+        See how bina teaches, how we track every child's progress, and how to start — all on our
+        main site.
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <a href="mailto:admissions@thebinaschool.com" class="btn-bina text-lg">Talk to admissions</a>
-        <a href="https://thebinaschool.com" class="btn-bina-ghost text-lg">Visit thebinaschool.com</a>
+      <div class="flex justify-center">
+        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
       </div>
     </div>
   </section>
@@ -463,7 +472,7 @@ const tenureBars = tenure.map((b, i) => {
     }
   </style>
 
-  <script define:vars={{ levels }}>
+  <script define:vars={{ levels, SITE }}>
     // ---- count-up stat tiles ----
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const counters = document.querySelectorAll('[data-count]');
@@ -549,8 +558,8 @@ const tenureBars = tenure.map((b, i) => {
         <div class="grid gap-3 sm:grid-cols-3">${cards}</div>
         ${note}
         <p class="mt-4 text-sm text-coal-900">
-          Want to know what a typical week looks like for a ${l.level} student?
-          <a href="mailto:admissions@thebinaschool.com" class="font-bold underline underline-offset-4">Email admissions</a>.
+          Want to see what a typical week looks like for a ${l.level} student (ages ${l.ages})?
+          <a href="${SITE}" class="font-bold underline underline-offset-4">Visit bina to learn more</a>.
         </p>`;
       buttons.forEach((b) => b.setAttribute('aria-pressed', b.dataset.level === level ? 'true' : 'false'));
       const url = new URL(location);
