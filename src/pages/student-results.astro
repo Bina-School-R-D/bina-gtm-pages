@@ -1,0 +1,566 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import results from '../data/student-results.json';
+
+const { headline, curves, levels, tenure, deepDive, year } = results;
+
+// ---- distribution curves (built at compile time — pure static SVG) ----
+// Chart colors validated for CVD separation on white: oct #33afff (bina-blue),
+// may #03cb5b (bina-green); black 2px strokes + direct labels carry identity.
+const W = 640;
+const H = 230;
+const PAD = 14;
+
+function gaussianPath(mean, sd, xMin, xMax, yMax, close) {
+  const pts = [];
+  const steps = 90;
+  for (let i = 0; i <= steps; i++) {
+    const x = xMin + ((xMax - xMin) * i) / steps;
+    const y = Math.exp(-0.5 * ((x - mean) / sd) ** 2) / (sd * Math.sqrt(2 * Math.PI));
+    const px = PAD + ((x - xMin) / (xMax - xMin)) * (W - 2 * PAD);
+    const py = H - PAD - (y / yMax) * (H - 2 * PAD - 26);
+    pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+  }
+  const line = `M${pts.join(' L')}`;
+  return close ? `${line} L${W - PAD},${H - PAD} L${PAD},${H - PAD} Z` : line;
+}
+
+function xPos(x, xMin, xMax) {
+  return PAD + ((x - xMin) / (xMax - xMin)) * (W - 2 * PAD);
+}
+
+function buildCurveChart(subject) {
+  const { oct, may } = curves[subject];
+  const xMin = Math.min(oct.mean, may.mean) - 3 * Math.max(oct.sd, may.sd);
+  const xMax = Math.max(oct.mean, may.mean) + 3 * Math.max(oct.sd, may.sd);
+  const yMax = 1 / (Math.min(oct.sd, may.sd) * Math.sqrt(2 * Math.PI));
+  return {
+    octArea: gaussianPath(oct.mean, oct.sd, xMin, xMax, yMax, true),
+    octLine: gaussianPath(oct.mean, oct.sd, xMin, xMax, yMax, false),
+    mayArea: gaussianPath(may.mean, may.sd, xMin, xMax, yMax, true),
+    mayLine: gaussianPath(may.mean, may.sd, xMin, xMax, yMax, false),
+    octMeanX: xPos(oct.mean, xMin, xMax),
+    mayMeanX: xPos(may.mean, xMin, xMax),
+    oct,
+    may,
+  };
+}
+
+const charts = {
+  reading: buildCurveChart('reading'),
+  math: buildCurveChart('math'),
+};
+
+const curveCards = [
+  {
+    key: 'reading',
+    title: 'Reading',
+    growth: headline.readGrowthAvg,
+    accent: 'text-bina-green',
+  },
+  {
+    key: 'math',
+    title: 'Math',
+    growth: headline.mathGrowthAvg,
+    accent: 'text-bina-green',
+  },
+];
+
+// ---- tenure chart: bars measure distance ABOVE the national average (true zero baseline) ----
+const TW = 640;
+const TH = 240;
+const tMax = Math.max(...tenure.map((b) => b.aboveNational));
+const barW = 92;
+const gap = (TW - 60 - tenure.length * barW) / (tenure.length - 1);
+const tenureBars = tenure.map((b, i) => {
+  const h = (b.aboveNational / tMax) * (TH - 92);
+  return {
+    ...b,
+    x: 40 + i * (barW + gap),
+    y: TH - 44 - h,
+    h,
+  };
+});
+---
+
+<BaseLayout
+  title="bina Student Results — Independently Measured"
+  description="How much do bina students actually learn? See a year of reading and math growth, measured by the nationally normed Renaissance STAR assessment."
+  ctaHref="mailto:admissions@thebinaschool.com"
+  ctaLabel="Talk to admissions"
+>
+  <!-- hero -->
+  <header class="bg-bina-grass">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+      <p class="pill-bina mb-6 text-sm tracking-wide">student results · {year}</p>
+      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
+        How much do kids actually learn at
+        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">bina</span>?
+      </h1>
+      <p class="max-w-2xl text-lg text-coal-1000 sm:text-xl">
+        We don't grade our own homework. bina students (ages 4–15) sit
+        <strong>Renaissance STAR</strong> — an independent, nationally normed assessment used by
+        schools across the U.S. — so families can see real growth against real national benchmarks.
+        Here's what one school year looked like.
+      </p>
+    </div>
+  </header>
+
+  <!-- headline stats -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="card-bina p-6 stat-tile">
+          <p class="font-display text-5xl font-black text-coal-black">
+            +<span data-count={headline.readGrowthAvg}>0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">points of reading growth</p>
+          <p class="mt-1 text-sm text-coal-900">average per student in one school year¹</p>
+        </div>
+        <div class="card-bina p-6 stat-tile">
+          <p class="font-display text-5xl font-black text-coal-black">
+            +<span data-count={headline.mathGrowthAvg}>0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">points of math growth</p>
+          <p class="mt-1 text-sm text-coal-900">average per student in one school year¹</p>
+        </div>
+        <div class="card-bina p-6 stat-tile">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.readAtAbovePct}>0</span>%
+          </p>
+          <p class="mt-2 font-display font-bold">at or above the national reading benchmark</p>
+          <p class="mt-1 text-sm text-coal-900">of {headline.readAtAboveN} students assessed in spring '26</p>
+        </div>
+        <div class="card-bina p-6 stat-tile">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.readGrewPct}>0</span>%
+          </p>
+          <p class="mt-2 font-display font-bold">of students grew their reading score</p>
+          <p class="mt-1 text-sm text-coal-900">autumn to spring¹</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-coal-900">
+        ¹ STAR scaled-score points, Oct '25 → May '26, across the {headline.pairedN} students
+        assessed at both points at the same level.
+      </p>
+    </div>
+  </section>
+
+  <!-- distribution curves -->
+  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">One year of growth</p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">The whole school moved forward</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Each curve is the spread of student scores across the school. Watch the spring curve sit to
+        the right of autumn — that's a year of learning, in one picture.
+      </p>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        {
+          curveCards.map((c) => {
+            const ch = charts[c.key];
+            return (
+              <figure class="card-bina curve-card p-6">
+                <figcaption class="mb-1 flex items-baseline justify-between gap-3">
+                  <span class="font-display text-xl font-bold">{c.title}</span>
+                  <span class={`font-display text-xl font-black ${c.accent}`}>
+                    +{c.growth} pts avg growth
+                  </span>
+                </figcaption>
+                <p class="mb-3 text-sm text-coal-900">STAR scaled scores, {headline.pairedN} students</p>
+                <p class="mb-2 flex gap-5 font-display text-sm font-bold">
+                  <span class="inline-flex items-center gap-2">
+                    <span class="h-3.5 w-3.5 rounded-full border-2 border-coal-black bg-bina-blue"></span>
+                    Oct '25
+                  </span>
+                  <span class="inline-flex items-center gap-2">
+                    <span class="h-3.5 w-3.5 rounded-full border-2 border-coal-black bg-bina-green"></span>
+                    May '26
+                  </span>
+                </p>
+                <svg
+                  viewBox={`0 0 ${W} ${H}`}
+                  role="img"
+                  aria-label={`${c.title}: distribution of scores shifted right from October to May; average grew ${c.growth} points`}
+                  class="w-full"
+                >
+                  <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#000" stroke-width="2" />
+                  <g class="curve-oct">
+                    <path d={ch.octArea} fill="#33afff" fill-opacity="0.3" />
+                    <path d={ch.octLine} fill="none" stroke="#000" stroke-width="2" />
+                    <line x1={ch.octMeanX} y1={H - PAD} x2={ch.octMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                  </g>
+                  <g class="curve-may">
+                    <path d={ch.mayArea} fill="#03cb5b" fill-opacity="0.4" />
+                    <path d={ch.mayLine} fill="none" stroke="#000" stroke-width="2" />
+                    <line x1={ch.mayMeanX} y1={H - PAD} x2={ch.mayMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                  </g>
+                  <text x={ch.octMeanX - 8} y="30" text-anchor="end" class="chart-label">Oct '25</text>
+                  <text x={ch.mayMeanX + 8} y="30" text-anchor="start" class="chart-label">May '26</text>
+                </svg>
+                <details class="mt-3">
+                  <summary class="cursor-pointer font-display text-sm font-bold">See the numbers</summary>
+                  <table class="mt-2 w-full text-left text-sm">
+                    <thead>
+                      <tr class="border-b-2 border-coal-black font-display">
+                        <th class="py-1 pr-3">Point</th>
+                        <th class="py-1 pr-3">Average scaled score</th>
+                        <th class="py-1">Students</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-b border-coal-black/20">
+                        <td class="py-1 pr-3">Oct '25</td>
+                        <td class="py-1 pr-3">{ch.oct.mean}</td>
+                        <td class="py-1">{ch.oct.n}</td>
+                      </tr>
+                      <tr>
+                        <td class="py-1 pr-3">May '26</td>
+                        <td class="py-1 pr-3">{ch.may.mean}</td>
+                        <td class="py-1">{ch.may.n}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="mt-2 text-xs text-coal-900">
+                    Average growth (+{c.growth}) is the average of each student's own change, so it
+                    can differ slightly from subtracting the rounded averages above.
+                  </p>
+                </details>
+              </figure>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- per-level tool -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Your child's level</p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">See results for your child's age group</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Pick a level — P1 is our youngest primary group, M1 the start of middle school. Not sure
+        which fits your child? <a href="mailto:admissions@thebinaschool.com" class="font-bold underline underline-offset-4">Ask admissions</a> — it takes one email.
+      </p>
+
+      <div class="card-bina p-6 sm:p-8">
+        <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="School level">
+          {
+            levels.map((l, i) => (
+              <button
+                type="button"
+                data-level={l.level}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+                class="level-btn cursor-pointer rounded-full border-2 border-coal-black bg-white px-5 py-2 font-display font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
+              >
+                {l.level}
+              </button>
+            ))
+          }
+        </div>
+        <div id="level-result" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- tenure chart -->
+  <section class="border-t-2 border-coal-black bg-bina-purple/15">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Time with bina</p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">The longer at bina, the further ahead in reading</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Every group of bina students reads above the U.S. national average — and the gap widens the
+        longer they've been with us. Each bar shows how far a group sits <strong>above</strong> the
+        national average.
+      </p>
+
+      <figure class="card-bina p-6 sm:p-8">
+        <svg
+          viewBox={`0 0 ${TW} ${TH}`}
+          role="img"
+          aria-label="Reading scores above the national average, by time enrolled at bina — from 5.4 points above for newer students to 10.7 points above after 2–3 years"
+          class="w-full"
+        >
+          <line x1="20" y1={TH - 44} x2={TW - 20} y2={TH - 44} stroke="#000" stroke-width="2" />
+          <text x="24" y={TH - 26} class="chart-label-sm">national average reading level</text>
+          {
+            tenureBars.map((b) => (
+              <g class="tenure-bar">
+                <title>{`${b.label} at bina — ${b.n} students, average reading NCE ${b.readNceMean} (national average = 50)`}</title>
+                <rect
+                  x={b.x}
+                  y={b.y}
+                  width={barW}
+                  height={b.h}
+                  rx="6"
+                  fill="#03cb5b"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+                <text x={b.x + barW / 2} y={b.y - 10} text-anchor="middle" class="chart-label">
+                  +{b.aboveNational}
+                </text>
+                <text x={b.x + barW / 2} y={TH - 8} text-anchor="middle" class="chart-label-sm">
+                  {b.label}
+                </text>
+              </g>
+            ))
+          }
+        </svg>
+        <figcaption class="mt-4 text-sm text-coal-900">
+          Average reading score in NCE points above the U.S. national average (50), spring '26,
+          grouped by how long each student has been enrolled. Groups with fewer than 10 students
+          aren't shown — too small to report reliably.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- deep dive for data-minded parents -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">For the data-minded</p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">Want the full numbers? Here they are.</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Some parents want the exact norm-referenced figures — we respect that. These use the
+        <strong>Normal Curve Equivalent (NCE)</strong> scale, where 50 is always the U.S. national
+        average.
+      </p>
+
+      <div class="mb-8 grid gap-4 sm:grid-cols-3">
+        <div class="card-bina p-6">
+          <p class="font-display text-4xl font-black">{deepDive.readNceMean}</p>
+          <p class="mt-2 font-display font-bold">average reading NCE</p>
+          <p class="mt-1 text-sm text-coal-900">
+            vs. a national average of 50 — {deepDive.readNceN} students, spring '26
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-4xl font-black">~{deepDive.readTypicalPercentile}th</p>
+          <p class="mt-2 font-display font-bold">percentile — our typical reader</p>
+          <p class="mt-1 text-sm text-coal-900">
+            the median bina student reads better than roughly {deepDive.readTypicalPercentile} of
+            100 peers nationally
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-4xl font-black">{deepDive.mathNceMean}</p>
+          <p class="mt-2 font-display font-bold">average math NCE</p>
+          <p class="mt-1 text-sm text-coal-900">
+            in line with the national average of 50 — {deepDive.mathNceN} students, spring '26
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <details class="card-bina p-5">
+          <summary class="cursor-pointer font-display font-bold">What is STAR, and why does it matter?</summary>
+          <p class="mt-2 text-sm text-coal-900">
+            STAR is an adaptive reading and math assessment by Renaissance Learning, normed on
+            millions of U.S. students. Because it's built and scored by an outside company, the
+            results aren't ours to bend — every number on this page comes from it.
+          </p>
+        </details>
+        <details class="card-bina p-5">
+          <summary class="cursor-pointer font-display font-bold">What's a "scaled score"?</summary>
+          <p class="mt-2 text-sm text-coal-900">
+            A single number for what a student can do, on one continuous scale across all grades. It
+            only goes up when ability goes up — which is why growth in scaled-score points is the
+            cleanest way to show a year of learning.
+          </p>
+        </details>
+        <details class="card-bina p-5">
+          <summary class="cursor-pointer font-display font-bold">What's the "national benchmark"?</summary>
+          <p class="mt-2 text-sm text-coal-900">
+            Renaissance flags a student as at or above benchmark when they score in the top 60% of
+            U.S. students for their grade (40th percentile or higher). It's the standard line schools
+            use for "on track".
+          </p>
+        </details>
+        <details class="card-bina p-5">
+          <summary class="cursor-pointer font-display font-bold">How we report (methodology)</summary>
+          <p class="mt-2 text-sm text-coal-900">
+            Growth figures cover the {headline.pairedN} students assessed in both Oct '25 and
+            May '26 at the same level. Spring standing covers everyone assessed in May. Groups with
+            fewer than 10 students are never reported. All figures are school aggregates — no
+            individual student data appears on this page.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t-2 border-coal-black bg-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
+      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
+        Curious what a year at bina could do for <span class="text-bina-grass">your child</span>?
+      </h2>
+      <p class="mx-auto mb-8 max-w-xl text-white/80">
+        Talk to our admissions team — they'll walk you through how we measure progress and what it
+        looks like for your child's age.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="mailto:admissions@thebinaschool.com" class="btn-bina text-lg">Talk to admissions</a>
+        <a href="https://thebinaschool.com" class="btn-bina-ghost text-lg">Visit thebinaschool.com</a>
+      </div>
+    </div>
+  </section>
+
+  <p slot="footer-note" class="text-xs text-white/60">
+    Results reflect the {year} school year and are school-wide aggregates from Renaissance STAR
+    assessments. Individual results vary, and past results don't guarantee future ones. Learn more
+    about STAR at <a href="https://www.renaissance.com/products/star-assessments/" class="underline">renaissance.com</a>.
+  </p>
+
+  <style>
+    .chart-label {
+      font-family: 'Rund Display', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      fill: #000;
+    }
+    .chart-label-sm {
+      font-family: 'Rund Text', Arial, sans-serif;
+      font-size: 13px;
+      fill: #313131;
+    }
+    .tenure-bar rect,
+    .curve-oct,
+    .curve-may {
+      transition: opacity 0.2s ease-out;
+    }
+    .tenure-bar:hover rect {
+      fill: #f7d928;
+    }
+    /* scroll-in animation, curves rise one after the other */
+    .curve-card .curve-oct,
+    .curve-card .curve-may {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.7s ease-out,
+        transform 0.7s ease-out;
+    }
+    .curve-card.in .curve-oct {
+      opacity: 1;
+      transform: none;
+    }
+    .curve-card.in .curve-may {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.55s;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .curve-card .curve-oct,
+      .curve-card .curve-may {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script define:vars={{ levels }}>
+    // ---- count-up stat tiles ----
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const counters = document.querySelectorAll('[data-count]');
+    const runCount = (el) => {
+      const target = Number(el.dataset.count);
+      if (reduceMotion) {
+        el.textContent = target;
+        return;
+      }
+      const start = performance.now();
+      const dur = 1100;
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * eased);
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            io.unobserve(e.target);
+            if (e.target.classList.contains('curve-card')) {
+              e.target.classList.add('in');
+            } else {
+              e.target.querySelectorAll('[data-count]').forEach(runCount);
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+      document.querySelectorAll('.stat-tile, .curve-card').forEach((el) => io.observe(el));
+    } else {
+      counters.forEach((el) => (el.textContent = el.dataset.count));
+      document.querySelectorAll('.curve-card').forEach((el) => el.classList.add('in'));
+    }
+
+    // ---- level picker ----
+    const byLevel = {};
+    levels.forEach((l) => (byLevel[l.level] = l));
+    const buttons = document.querySelectorAll('.level-btn');
+    const result = document.getElementById('level-result');
+
+    function bigStat(value, label, note) {
+      return `
+        <div class="rounded-2xl border-2 border-coal-black bg-white p-5">
+          <p class="font-display text-4xl font-black">${value}</p>
+          <p class="mt-1 font-display font-bold">${label}</p>
+          <p class="mt-1 text-sm text-coal-900">${note}</p>
+        </div>`;
+    }
+
+    function render(level) {
+      const l = byLevel[level];
+      if (!l) return;
+      let cards =
+        bigStat(
+          `${l.readBenchPct}%`,
+          'at or above the national reading benchmark',
+          `${l.readBenchAt} of ${l.readBenchN} ${l.level} students assessed in spring '26`
+        );
+      if (l.readGrowthMedian != null) {
+        cards += bigStat(
+          `+${l.readGrowthMedian} pts`,
+          'typical reading growth in one year',
+          `median scaled-score change across the ${l.readGrowthN} ${l.level} students assessed autumn and spring`
+        );
+        cards += bigStat(
+          `${l.readGrewPct}%`,
+          'grew their reading score',
+          `autumn to spring, same group of ${l.readGrowthN} students`
+        );
+      }
+      const note =
+        l.readGrowthMedian == null
+          ? `<p class="mt-4 text-sm text-coal-900">Fewer than 10 ${l.level} students were assessed at both points of the year, so we don't report a growth figure — small groups aren't statistically reliable, and we'd rather show you less than stretch the truth.</p>`
+          : '';
+      result.innerHTML = `
+        <div class="grid gap-3 sm:grid-cols-3">${cards}</div>
+        ${note}
+        <p class="mt-4 text-sm text-coal-900">
+          Want to know what a typical week looks like for a ${l.level} student?
+          <a href="mailto:admissions@thebinaschool.com" class="font-bold underline underline-offset-4">Email admissions</a>.
+        </p>`;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', b.dataset.level === level ? 'true' : 'false'));
+      const url = new URL(location);
+      url.searchParams.set('level', level);
+      history.replaceState(null, '', url);
+    }
+
+    buttons.forEach((b) => b.addEventListener('click', () => render(b.dataset.level)));
+
+    const requested = new URLSearchParams(location.search).get('level');
+    render(byLevel[requested] ? requested : levels[0].level);
+  </script>
+</BaseLayout>
