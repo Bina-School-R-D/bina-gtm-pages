@@ -1,0 +1,294 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/book-adventure.json';
+
+const { campaign, intro, ageGroups } = data;
+
+// n8n "[S] A4. Campaign Intake" webhook — shared by every lead-gen campaign page.
+// The `campaign` field in the payload tells the workflow which page sent the lead.
+const WEBHOOK = 'https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake';
+
+const steps = [
+  { n: 1, label: 'The class' },
+  { n: 2, label: 'About you' },
+  { n: 3, label: 'Your child' },
+];
+---
+
+<BaseLayout
+  title="Book a bina Adventure — a live class for your child"
+  description="A 60-minute live group class where your child experiences bina firsthand — with a real teacher and learners their age. Pick an age group and a time."
+  noindex={true}
+>
+  <!-- hero -->
+  <header class="bg-bina-yellow">
+    <div class="mx-auto max-w-4xl px-5 py-14 sm:py-16">
+      <p class="pill-bina mb-6 text-sm tracking-wide">bina adventure · ages 4–15</p>
+      <h1 class="mb-4 max-w-2xl text-4xl font-black sm:text-5xl">
+        Book a bina
+        <span class="underline decoration-bina-pink decoration-8 underline-offset-4">Adventure</span>
+      </h1>
+      <p class="max-w-2xl text-lg text-coal-1000">
+        A live, 60-minute group class where your child experiences bina firsthand — no commitment,
+        just a real taste of how bina works.
+      </p>
+    </div>
+  </header>
+
+  <!-- booking tool -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-2xl px-5 py-12">
+      <!-- progress -->
+      <ol id="progress" class="mb-6 flex flex-wrap gap-2" aria-label="Booking steps">
+        {
+          steps.map((s) => (
+            <li
+              data-step-pill={s.n}
+              class="inline-flex items-center gap-2 rounded-full border-2 border-coal-black bg-white px-4 py-1.5 font-display text-xs font-bold transition-colors duration-200 data-[active]:bg-coal-black data-[active]:text-white"
+            >
+              <span>{s.n}</span> {s.label}
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="card-bina p-6 sm:p-10">
+        <!-- step 1 · intro -->
+        <div data-step="1">
+          <h2 class="mb-4 text-2xl sm:text-3xl">What is a bina Adventure class?</h2>
+          <p class="mb-4 text-coal-1000">{intro.whatItIs}</p>
+          <p class="mb-8 text-coal-1000">{intro.whyItMatters}</p>
+          <button type="button" data-next class="btn-bina w-full text-lg sm:w-auto">
+            Book your child's spot →
+          </button>
+        </div>
+
+        <!-- step 2 · contact -->
+        <form data-step="2" hidden novalidate>
+          <h2 class="mb-6 text-2xl sm:text-3xl">First, a bit about you</h2>
+
+          <label for="parent-name" class="mb-2 block font-display text-lg font-bold">Your name</label>
+          <input
+            id="parent-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            placeholder="First and last name"
+            class="input-bina mb-5"
+          />
+
+          <label for="parent-email" class="mb-2 block font-display text-lg font-bold">Your email</label>
+          <input
+            id="parent-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            placeholder="your@email.com"
+            class="input-bina mb-5"
+          />
+
+          <label for="parent-phone" class="mb-2 block font-display text-lg font-bold">
+            Your phone <span class="font-medium text-coal-900">(optional)</span>
+          </label>
+          <input
+            id="parent-phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+1 555 000 0000"
+            class="input-bina mb-2"
+          />
+          <p class="mb-6 text-sm text-coal-900">
+            By adding your phone number, you agree to receive SMS updates from bina school about
+            your class.
+          </p>
+
+          <!-- honeypot — humans never see it, bots fill it -->
+          <div class="absolute -left-[9999px] top-auto" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="btn-bina text-lg">Continue →</button>
+            <button type="button" data-back class="btn-bina-ghost !px-5 !py-2.5 text-sm">← Back</button>
+          </div>
+        </form>
+
+        <!-- step 3 · child + age group -->
+        <form data-step="3" hidden novalidate>
+          <h2 class="mb-6 text-2xl sm:text-3xl">Now, about your child</h2>
+
+          <label for="child-name" class="mb-2 block font-display text-lg font-bold">
+            Your child's first name
+          </label>
+          <input
+            id="child-name"
+            name="child_name"
+            type="text"
+            autocomplete="off"
+            required
+            class="input-bina mb-6"
+          />
+
+          <p class="mb-3 block font-display text-lg font-bold">Pick your child's age group</p>
+          <div class="mb-6 grid gap-2 sm:grid-cols-2" role="group" aria-label="Your child's age group">
+            {
+              ageGroups.map((g) => (
+                <button
+                  type="button"
+                  data-age={g.value}
+                  aria-pressed="false"
+                  class="age-btn flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-coal-black bg-white px-4 py-3 text-left font-display text-lg font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
+                >
+                  <span class={`h-6 w-2 flex-none rounded-full border-2 border-coal-black ${g.accent}`} />
+                  bina Adventure · {g.label}
+                </button>
+              ))
+            }
+          </div>
+
+          <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="btn-bina text-lg">Pick a class time →</button>
+            <button type="button" data-back class="btn-bina-ghost !px-5 !py-2.5 text-sm">← Back</button>
+          </div>
+          <p class="mt-4 text-sm text-coal-900">
+            Next you'll choose a date and time on our booking calendar.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <p slot="footer-note" class="text-xs text-white/60">
+    Questions? Write to
+    <a href="mailto:admissions@thebinaschool.com" class="underline">admissions@thebinaschool.com</a>.
+  </p>
+
+  <script define:vars={{ ageGroups, campaign, WEBHOOK }}>
+    const byAge = {};
+    ageGroups.forEach((g) => (byAge[g.value] = g));
+
+    const params = new URLSearchParams(location.search);
+    const state = {
+      name: (params.get('name') || '').trim(),
+      email: (params.get('email') || '').trim(),
+      phone: (params.get('phone') || '').trim(),
+      child_name: '',
+      age_group: '',
+    };
+
+    const panels = document.querySelectorAll('[data-step]');
+    const pills = document.querySelectorAll('[data-step-pill]');
+
+    function show(n) {
+      panels.forEach((p) => (p.hidden = p.dataset.step !== String(n)));
+      pills.forEach((pl) => {
+        if (Number(pl.dataset.stepPill) <= n) pl.setAttribute('data-active', '');
+        else pl.removeAttribute('data-active');
+      });
+      const card = document.querySelector('.card-bina');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function setError(form, msg) {
+      const el = form.querySelector('[data-error]');
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
+    }
+
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+    // ---- step 1 → 2 (or straight to 3 when contact came in the URL) ----
+    document.querySelector('[data-next]').addEventListener('click', () => {
+      if (state.name && emailOk(state.email)) show(3);
+      else show(2);
+    });
+
+    // ---- back buttons ----
+    document.querySelectorAll('[data-back]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const cur = Number(b.closest('[data-step]').dataset.step);
+        show(cur - 1);
+      })
+    );
+
+    // ---- step 2: contact ----
+    const contactForm = document.querySelector('form[data-step="2"]');
+    // form.elements — `form.name` is the form's own name attribute, not the input
+    const contact = contactForm.elements;
+    contact.name.value = state.name;
+    contact.email.value = state.email;
+    contact.phone.value = state.phone;
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      state.name = contact.name.value.trim();
+      state.email = contact.email.value.trim();
+      state.phone = contact.phone.value.trim();
+      if (!state.name) return setError(contactForm, 'Please add your name.');
+      if (!emailOk(state.email)) return setError(contactForm, 'Please add a valid email.');
+      setError(contactForm, '');
+      show(3);
+    });
+
+    // ---- step 3: child + age group → submit ----
+    const childForm = document.querySelector('form[data-step="3"]');
+    const ageButtons = childForm.querySelectorAll('.age-btn');
+    ageButtons.forEach((b) =>
+      b.addEventListener('click', () => {
+        state.age_group = b.dataset.age;
+        ageButtons.forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+        setError(childForm, '');
+      })
+    );
+
+    childForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      state.child_name = childForm.elements.child_name.value.trim();
+      if (!state.child_name) return setError(childForm, "Please add your child's first name.");
+      if (!byAge[state.age_group]) return setError(childForm, "Please pick your child's age group.");
+      setError(childForm, '');
+
+      const group = byAge[state.age_group];
+
+      // Capture the lead — fire-and-forget so the redirect never waits on it.
+      // text/plain keeps sendBeacon CORS-preflight-free; the workflow JSON-parses the body.
+      const honeypot = contact.website.value;
+      if (!honeypot) {
+        try {
+          const payload = {
+            campaign,
+            submission_id: `${campaign}-${crypto.randomUUID()}`,
+            name: state.name,
+            email: state.email,
+            phone: state.phone,
+            child_name: state.child_name,
+            age_group: state.age_group,
+            redirect_url: group.calUrl,
+            page_url: location.href.split('?')[0],
+            referrer: document.referrer || '',
+            utm_source: params.get('utm_source') || '',
+            utm_medium: params.get('utm_medium') || '',
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_content: params.get('utm_content') || '',
+            utm_term: params.get('utm_term') || '',
+          };
+          navigator.sendBeacon(WEBHOOK, new Blob([JSON.stringify(payload)], { type: 'text/plain' }));
+        } catch (_) {
+          /* capture is best-effort — booking must never break */
+        }
+      }
+
+      const url = `${group.calUrl}?name=${encodeURIComponent(state.name)}&email=${encodeURIComponent(state.email)}`;
+      location.assign(url);
+    });
+
+    show(1);
+  </script>
+</BaseLayout>

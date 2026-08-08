@@ -88,4 +88,12 @@
     @apply inline-flex items-center rounded-full bg-coal-black px-4 py-1
       font-display font-bold text-bina-pink;
   }
+
+  /* Form field — matches the ESA select; use on every campaign form */
+  .input-bina {
+    @apply w-full rounded-2xl border-2 border-coal-black bg-white px-4 py-4
+      font-display text-lg font-bold text-coal-black placeholder:font-medium
+      placeholder:text-coal-900/50
+      focus-visible:outline-4 focus-visible:outline-bina-pink;
+  }
 }

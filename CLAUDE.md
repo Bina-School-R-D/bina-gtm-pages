@@ -34,12 +34,26 @@ Pages are **interactive tools for families**, not long SEO pages. Short, task-fo
 
 There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.mjs`).
 
+## Campaign lead-gen pages — the standard pattern
+
+Ad-hoc lead-gen campaign forms (Tally replacements) are a **standard page type**, not one-offs. `/book-adventure` is the reference implementation. Every new campaign page follows it:
+
+1. Multi-step wizard in one `card-bina` (intro → contact → qualify → redirect), plain inline script, no framework island. Form fields use `.input-bina` (defined in `global.css`); access inputs via `form.elements` (`form.name` is the form's own attribute — a real bug otherwise).
+2. On final submit, `navigator.sendBeacon` posts the lead to the shared n8n **`[S] A4. Campaign Intake`** webhook (`https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake`) as a `text/plain` blob (avoids a CORS preflight; the workflow parses JSON from the raw body), then `location.assign`s the redirect — capture is fire-and-forget and must never block or break the redirect.
+3. Payload contract: `{ campaign, submission_id, name, email, phone, child_name, age_group, redirect_url, page_url, referrer, utm_* }`. `campaign` = the page slug; `submission_id` = `${campaign}-${crypto.randomUUID()}` (the workflow's dedupe key). New campaigns reuse the same webhook — a new page needs **zero** n8n changes.
+4. Anti-bot: off-screen honeypot input (`website`) — if filled, skip the beacon but still redirect.
+5. Contact prefill: `?name=&email=&phone=` URL params pre-fill and skip the contact step (parity with Tally hidden fields).
+6. Campaign pages are `noindex={true}`.
+
+The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it writes to Close (note + task, review-flagged lead creation for new emails, no opportunity/nurture) and posts to Slack `#growth-log`. Changing the payload contract means a PR in **both** repos.
+
 ## Pages
 
 | URL | Purpose | Data source |
 |---|---|---|
 | `/esa` | ESA funding tool for parents — pick a state, get the exact bina + state steps | `src/data/esa-states.json`, synced from `bina-gtm/notes/ESA_State_Database.xlsx` (the team's ESA database — never invent numbers; update the xlsx-derived JSON instead) |
 | `/student-results` | Academic-outcomes page for prospective parents — STAR results, growth curves, per-level picker. Every CTA points at thebinaschool.com (we want form submissions, not inbound email), so this page deliberately has no `mailto:` links. | `src/data/student-results.json`, aggregated from the CSO's STAR dashboard (Oct '25–May '26). Aggregates only, N<10 suppressed, no student names ever. Level→age labels are inferred, not from STAR — see `_ageNote`. |
+| `/book-adventure` | Campaign lead-gen page (replaces Tally `NpBVq0`) — book a bina Adventure class: intro → contact → child + age group → redirect to the age group's cal.com booking link with `?name=&email=`. Captures the lead via the Campaign Intake webhook (see pattern above). | `src/data/book-adventure.json` (copy + age-group → cal.com URL map, extracted from the Tally form config) |
 
 ## Git workflow
 
