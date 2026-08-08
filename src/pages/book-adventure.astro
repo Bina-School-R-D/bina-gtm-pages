@@ -115,7 +115,7 @@ const steps = [
 
           <div class="flex flex-wrap items-center gap-3">
             <button type="submit" class="btn-bina text-lg">Continue →</button>
-            <button type="button" data-back class="btn-bina-ghost !px-5 !py-2.5 text-sm">← Back</button>
+            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
           </div>
         </form>
 
@@ -146,7 +146,7 @@ const steps = [
                   class="age-btn flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-coal-black bg-white px-4 py-3 text-left font-display text-lg font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
                 >
                   <span class={`h-6 w-2 flex-none rounded-full border-2 border-coal-black ${g.accent}`} />
-                  bina Adventure · {g.label}
+                  {g.label}
                 </button>
               ))
             }
@@ -156,7 +156,7 @@ const steps = [
 
           <div class="flex flex-wrap items-center gap-3">
             <button type="submit" class="btn-bina text-lg">Pick a class time →</button>
-            <button type="button" data-back class="btn-bina-ghost !px-5 !py-2.5 text-sm">← Back</button>
+            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
           </div>
           <p class="mt-4 text-sm text-coal-900">
             Next you'll choose a date and time on our booking calendar.
