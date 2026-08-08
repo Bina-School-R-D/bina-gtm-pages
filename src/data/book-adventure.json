@@ -1,0 +1,33 @@
+{
+  "campaign": "book-adventure",
+  "intro": {
+    "whatItIs": "A 60-minute live group class where your child gets to experience bina firsthand. They'll join a class with one of our teachers, alongside other learners their age — learning, creating, and collaborating.",
+    "whyItMatters": "It's the best way to see if bina is the right fit for your family, without a commitment. Just a real taste of how bina works."
+  },
+  "ageGroups": [
+    {
+      "value": "4-5",
+      "label": "Ages 4–5",
+      "calUrl": "https://cal.com/team/the-bina-school/bina-adventure-group-4-5",
+      "accent": "bg-bina-grass"
+    },
+    {
+      "value": "6-8",
+      "label": "Ages 6–8",
+      "calUrl": "https://cal.com/team/the-bina-school/bina-adventure-group-6-8",
+      "accent": "bg-bina-yellow"
+    },
+    {
+      "value": "9-12",
+      "label": "Ages 9–12",
+      "calUrl": "https://cal.com/team/the-bina-school/bina-adventure-group-9-12",
+      "accent": "bg-bina-purple"
+    },
+    {
+      "value": "13-15",
+      "label": "Ages 13–15",
+      "calUrl": "https://cal.com/team/the-bina-school/bina-adventure-group-13-15",
+      "accent": "bg-bina-blue"
+    }
+  ]
+}
