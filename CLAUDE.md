@@ -3,6 +3,14 @@
 Growth, marketing, and sales-enablement pages for bina, published at **https://go.bina.school**.
 Akis and Lorraine describe the page they need; Claude Code builds it here.
 
+## 🔴 TOP RULE — reply in short bullets, never a wall of text
+
+- **Short bullets only.** No paragraphs, no prose blocks, no endless analysis. Outranks everything else here.
+- **Show an example, don't explain.** Proposing a page? Give the section list + the 5 headline numbers — not an essay about the narrative.
+- **Ceiling:** ~10 bullets normally, ~15 for a page-strategy answer. Over that, cut.
+- **Tables beat bullets** for stat lists, page inventories, and option comparisons — use them.
+- **Always end with:** actions I'll take + decisions I need from you. If neither, say "no action needed."
+
 ## Stack
 
 - Astro 6 + Tailwind CSS v4 (static output). Same stack as thebinaschool.com and headerpath-website.
