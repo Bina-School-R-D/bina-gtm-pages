@@ -32,6 +32,30 @@ The company name is always lowercase: `bina`, `bina school`, `thebinaschool.com`
 
 Pages are **interactive tools for families**, not long SEO pages. Short, task-focused, multi-step. The reader should feel they're doing a smooth process **with bina** — some steps just happen to occur on state/official websites. Plain language only: no jargon a newcomer wouldn't know ("universal eligibility", "award disbursement" → say who can apply, when money arrives). Assume the reader won't study any official website themselves.
 
+## 🔴 Audience rule — every page is built for three readers at once
+
+Every family-facing page must work for all three of these, at the same time. Assume the reader is one of them and never make the other two pay for it.
+
+| Reader | What they consume | What they must leave with |
+|---|---|---|
+| **Scanners** | The hero, 4–5 big numbers, and the section headings. Nothing else. | "This is a great school." Never a feeling that they missed the real point by not reading on. |
+| **Focused** | The above plus 2–3 lines under each heading. | The same belief, plus the reasoning behind it. |
+| **OCDers** | Every word, every expander, every source link, every footnote. | Total confidence that nothing is overstated. One loose claim loses them, and they're the ones who convert hardest. |
+
+**How that translates into markup:**
+
+- **Every heading and big-number label is a complete claim that stands alone.** A metric label is a failure. Write "Parents would send their friends here" (9.42), not "out of 10 on 'would you recommend'". Test: extract all `<h1>`/`<h2>`s and the tile headings into a flat list — it should read as a coherent argument on its own. If a number needs the paragraph beneath it to mean anything, the heading is wrong.
+- **Nothing essential below line 3 of any section.** Focused readers stop there. If a fact matters, it's in the heading or the first two lines.
+- **Detail goes in `<details>` expanders, figure captions, and the methodology section** — never in the main flow where it taxes the other two readers. Charts, correlation tables, per-option breakdowns and source caveats all belong there.
+- **Volunteer the caveat rather than hiding it.** Publishing our weakest score, the response rate, and the limits of a cited benchmark reads as more confident than omitting them, and it's the only thing that holds an OCDer.
+
+**The dual goal — both, or the page has failed:**
+
+1. **Believe this is a great school** — needs proof numbers: satisfaction, recommendation, outcomes, independent benchmarks.
+2. **Picture themselves inside it** — needs projection content: second-person copy ("your week as a bina parent"), families like theirs, what a normal Tuesday looks like.
+
+**Sort your stats by which goal they serve, and never let a projection stat open the page.** A projection stat describes who our families *are*; it says nothing about whether we're any good. `/family-survey` originally opened on "70% of our families have a child who doesn't fit a standard classroom" — true, and useless as proof, because a terrible school would report the same 70%. It only works chained to a quality number ("…and those are the families rating us 9.48 out of 10"). Lead with proof; use projection to make it personal.
+
 ## Adding a page
 
 1. Create `src/pages/<slug>.astro` wrapped in `BaseLayout` (props: `title`, `description`, `noindex` for internal/sales pages).
@@ -62,6 +86,7 @@ The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it wri
 | `/esa` | ESA funding tool for parents — pick a state, get the exact bina + state steps | `src/data/esa-states.json`, synced from `bina-gtm/notes/ESA_State_Database.xlsx` (the team's ESA database — never invent numbers; update the xlsx-derived JSON instead) |
 | `/student-results` | Academic-outcomes page for prospective parents — STAR results, growth curves, per-level picker. Every CTA points at thebinaschool.com (we want form submissions, not inbound email), so this page deliberately has no `mailto:` links. | `src/data/student-results.json`, aggregated from the CSO's STAR dashboard (Oct '25–May '26). Aggregates only, N<10 suppressed, no student names ever. Level→age labels are inferred, not from STAR — see `_ageNote`. |
 | `/book-adventure` | Campaign lead-gen page (replaces Tally `NpBVq0`) — book a bina Adventure class: intro → contact → child + age group → redirect to the age group's cal.com booking link with `?name=&email=`. Captures the lead via the Campaign Intake webhook (see pattern above). | `src/data/book-adventure.json` (copy + age-group → cal.com URL map, extracted from the Tally form config) |
+| `/family-survey` | Family-satisfaction page for prospective parents — what current families say about bina. **The reference implementation of the three-audience rule above**: read it before building any new proof-led page. Leads on the quality claim (9.42/10 recommendation, NPS 80), publishes all seven dimension scores including the weakest, and uses the "70% of our families don't fit a standard classroom" stat for projection only, chained to a quality number. | `src/data/family-survey.json`, from the Growth team's "Family Survey Results + Insights" deck. **Two separate surveys — whole-school n=103 and middle-school n=108 — that must never be combined or summed.** Aggregates only. `_openQuestions` in the JSON tracks unverified claims; read it before editing. NPS bands cited to ISM — the source publishes no "average school NPS", so never claim one. |
 
 ## Git workflow
 
@@ -73,3 +98,17 @@ The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it wri
 
 - Factual claims about external programs (ESA amounts, deadlines, regulations) must carry a "verify with the official source" disclaimer and link to the official program.
 - CTA email is `admissions@thebinaschool.com` — these pages talk to prospective and current families, so email CTAs go to admissions, not the general `hello@` inbox. Main-site links go to `https://thebinaschool.com`.
+
+### Publishing our own data (surveys, results, outcomes)
+
+The OCDer reader is the one we lose permanently if a number is soft, so pages built on bina's own data follow these:
+
+- **Never combine two different surveys or cohorts into one figure.** Label which survey every number came from, on the page itself.
+- **Charts get an honest axis.** Bars on a 0–10 rating run the full 0–10; no cropped baselines to inflate a gap. Put the weakest score in the same chart as the best.
+- **Disclose the response rate and self-selection bias** in the methodology section, not buried in the footer.
+- **Never state a formula you haven't verified.** If a metric's derivation is unconfirmed, use a metric you *can* describe (`/family-survey` swapped an unverifiable FSI 9.5 for overall satisfaction 9.48 — costing 0.02 and closing the hole) rather than shipping a plausible guess.
+- **Don't assert what a survey question measured** unless the wording is confirmed. Write copy that holds true either way.
+- **No causal claims from correlational data** ("clubs increase retention" when the source attributes it to engagement).
+- **Cite external benchmarks precisely, and only for what they actually say.** Include the sample size, link out, and never extrapolate a figure the source doesn't publish.
+- **Track unverified claims in an `_openQuestions` array** in the page's JSON so the next session sees them before editing.
+- No individual student or family data, ever. Aggregates only, and suppress groups too small to report.
