@@ -1,0 +1,740 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import survey from '../data/family-survey.json';
+
+const {
+  surveyA,
+  surveyB,
+  headline,
+  npsBenchmark,
+  fit,
+  dimensions,
+  involvement,
+  wishlist,
+  exams,
+  examNotes,
+  future,
+  asyncWork,
+} = survey;
+
+const SITE = 'https://thebinaschool.com';
+
+// ---- dimension bars: honest full 0–10 axis, no truncation ----
+const DW = 640;
+const DROW = 44;
+const DLABEL = 250;
+const DH = dimensions.length * DROW + 26;
+const dScaleMax = 10;
+const dBars = dimensions.map((d, i) => ({
+  ...d,
+  y: i * DROW + 4,
+  w: (d.score / dScaleMax) * (DW - DLABEL - 58),
+}));
+
+// ---- involvement bars: share of parents, 0–100 axis ----
+const IW = 640;
+const IROW = 40;
+const ILABEL = 262;
+const IH = involvement.length * IROW + 8;
+const iBars = involvement.map((v, i) => ({
+  ...v,
+  y: i * IROW + 4,
+  w: (v.pct / 100) * (IW - ILABEL - 52),
+}));
+
+// ---- "what matters for my child's future" — stacked single bar, sums to 100 ----
+const FW = 640;
+let fAcc = 0;
+const fSegs = future.map((f) => {
+  const x = (fAcc / 100) * FW;
+  fAcc += f.pct;
+  return { ...f, x, w: (f.pct / 100) * FW };
+});
+
+// Plain-language explainers — the page's only jargon, defused.
+const explainers = [
+  {
+    q: 'Who did you ask, and when?',
+    a: `We invited every bina family. ${surveyA.n} answered — a ${surveyA.responseRatePct}% response rate, which is high for a school survey. A separate survey of our middle-school parents drew ${surveyB.n} responses. The two are never mixed together on this page: each number below says which survey it came from.`,
+    accent: 'bg-bina-grass',
+  },
+  {
+    q: 'What is a Net Promoter Score?',
+    a: `It comes from one question: how likely are you to recommend us? It takes the share of enthusiastic families and subtracts the share of unhappy ones, so it can run anywhere from −100 to +100. On the widely used cross-industry scale, ${npsBenchmark.excellentFrom}–${npsBenchmark.worldClassFrom} is excellent and ${npsBenchmark.worldClassFrom}+ is world class. bina scores ${headline.nps}, and very few of our families fall into the unhappy group at all. One caveat we'd rather say ourselves: Independent School Management, who have benchmarked ${npsBenchmark.parentResponses.toLocaleString('en-US')} parent responses across ${npsBenchmark.schools} private schools, argue schools need their own grade-by-grade ranges rather than one universal pass mark — so no single number settles the question for any school.`,
+    accent: 'bg-bina-yellow',
+  },
+  {
+    q: 'What is the Family Satisfaction Index?',
+    a: "Our headline measure of how satisfied families are with bina overall, out of 10. Alongside it we ask families to rate seven specific parts of the school — from whether their child is learning to whether they feel heard — and we publish all seven below, including our weakest, rather than only the flattering ones.",
+    accent: 'bg-bina-blue',
+  },
+  {
+    q: 'What should I be sceptical about?',
+    a: 'Families who answer surveys tend to be the more engaged ones, so read these scores knowing that. These are averages across a whole school — no single family is average, and your experience would be your own. Every figure here is a school-wide aggregate; no individual family or child appears anywhere on this page.',
+    accent: 'bg-bina-purple',
+  },
+];
+---
+
+<BaseLayout
+  title="What bina Families Say — Our Family Survey Results"
+  description="We asked every bina family what they really think, and published all of it — including our lowest score. Satisfaction, joy, and what parents want next."
+  flushFooter={true}
+>
+  <!-- hero -->
+  <header class="bg-bina-grass">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+      <p class="pill-bina mb-6 text-sm tracking-wide">family survey · {surveyA.n} families</p>
+      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
+        We asked our families what they
+        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">really</span>
+        think.
+      </h1>
+      <p class="max-w-2xl text-lg text-coal-1000 sm:text-xl">
+        Then we published all of it — the scores we're proud of and the one we're not. If you're
+        weighing up an online school for a child who doesn't quite fit the usual mould, this page is
+        the most honest thing we can hand you: what {surveyA.n} families already here actually said.
+      </p>
+    </div>
+  </header>
+
+  <!-- the 70% hook -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-16">
+      <div class="grid items-center gap-8 lg:grid-cols-[auto_1fr]">
+        <div>
+          <p class="font-display text-7xl font-black leading-none text-coal-black sm:text-8xl">
+            <span data-count={fit.roundedPct} class="stat-tile-inline">0</span>%
+          </p>
+          <p class="mt-2 text-xs text-coal-900">
+            {fit.exactPct}% — {fit.informalPct}% said "some differences, nothing formal" and {
+              fit.formalPct
+            }% said their child needs support beyond standard education.
+          </p>
+        </div>
+        <div>
+          <h2 class="mb-3 text-3xl sm:text-4xl">
+            of bina families say their child doesn't learn the way a standard classroom expects
+          </h2>
+          <p class="max-w-2xl text-lg text-coal-900">
+            If that sounds like your child, you would not be the exception here. You'd be the norm.
+            Most families arrive at bina having already tried to make a room of thirty desks work for
+            a child it was never built for.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- headline stats -->
+  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        How they rate us
+      </p>
+      <h2 class="mb-8 text-3xl sm:text-4xl">And then this is what they said about being here</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="card-bina stat-tile p-6">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.recommendAvg} data-decimals="2">0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">out of 10 on "would you recommend bina"</p>
+          <p class="mt-1 text-sm text-coal-900">average across all {surveyA.n} families</p>
+        </div>
+        <div class="card-bina stat-tile p-6">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.fsi} data-decimals="1">0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">out of 10 overall — our Family Satisfaction Index</p>
+          <p class="mt-1 text-sm text-coal-900">how satisfied families are with bina, all in</p>
+        </div>
+        <div class="card-bina stat-tile p-6">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.joy} data-decimals="2">0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">out of 10 — "my child's experience is joyful"</p>
+          <p class="mt-1 text-sm text-coal-900">the score we care about most, and here's why ↓</p>
+        </div>
+        <div class="card-bina stat-tile p-6">
+          <p class="font-display text-5xl font-black text-coal-black">
+            <span data-count={headline.heard} data-decimals="2">0</span>
+          </p>
+          <p class="mt-2 font-display font-bold">out of 10 — "we feel heard by bina"</p>
+          <p class="mt-1 text-sm text-coal-900">our highest score of all</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-coal-900">
+        All four from the whole-school family survey — {surveyA.n} families, a {
+          surveyA.responseRatePct
+        }% response rate.
+      </p>
+    </div>
+  </section>
+
+  <!-- NPS humanised -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="card-bina overflow-hidden">
+        <div class="grid gap-0 md:grid-cols-[260px_1fr]">
+          <div class="flex flex-col items-center justify-center border-b-2 border-coal-black bg-coal-black p-8 md:border-b-0 md:border-r-2">
+            <p class="font-display text-6xl font-black text-bina-grass">{headline.nps}</p>
+            <p class="mt-2 text-center font-display font-bold text-white">
+              bina's Net Promoter Score
+            </p>
+          </div>
+          <div class="p-8">
+            <h2 class="mb-3 text-2xl sm:text-3xl">
+              Nobody outside a marketing team knows what that means. So:
+            </h2>
+            <p class="mb-4 text-coal-900">
+              Net Promoter Score is the one number companies use to ask "would you tell a friend
+              about us?" It takes the share of families who'd enthusiastically recommend you and
+              subtracts the share who wouldn't. It runs from −100 to +100.
+            </p>
+            <p class="mb-4 text-coal-900">
+              On the scale used across every industry, {npsBenchmark.excellentFrom}–{
+                npsBenchmark.worldClassFrom
+              } counts as excellent and
+              <strong class="text-coal-black"
+                >{npsBenchmark.worldClassFrom} and above is considered world class</strong
+              >. bina is at {headline.nps}. And barely any bina family sits in the unhappy group at
+              all.
+            </p>
+            <p class="mb-4 text-coal-900">
+              Schools are studied on this seriously. Independent School Management has benchmarked
+              <strong class="text-coal-black"
+                >{npsBenchmark.parentResponses.toLocaleString('en-US')} parent responses across {
+                  npsBenchmark.schools
+                } private schools</strong
+              >, alongside more than {npsBenchmark.students.toLocaleString('en-US')} students in
+              grades {npsBenchmark.studentGrades}. Their conclusion is worth knowing before you take
+              anyone's score at face value, ours included: schools need their own grade-by-grade
+              ranges rather than one universal pass mark. So read 80 as a strong signal, not a league
+              position — and
+              <a
+                href={npsBenchmark.sourceUrl}
+                rel="noopener"
+                class="font-bold text-coal-black underline underline-offset-4">check their research yourself</a
+              >.
+            </p>
+            <p class="text-coal-900">
+              Put in plainer words: our families rate us <strong class="text-coal-black"
+                >{headline.recommendAvg} out of 10</strong
+              > on whether they'd send another family our way.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- all six dimensions, including the low one -->
+  <section class="border-t-2 border-coal-black bg-bina-purple/15">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        Every score, not just the good ones
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">The full scorecard</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Seven things we ask every family to rate out of 10. The bars run the full width of the scale,
+        so nothing is exaggerated by a cropped axis. Our weakest score is at the bottom — we explain
+        it further down rather than hiding it.
+      </p>
+
+      <figure class="card-bina p-6 sm:p-8">
+        <svg
+          viewBox={`0 0 ${DW} ${DH}`}
+          role="img"
+          aria-label={`Family ratings out of 10: ${dimensions.map((d) => `${d.label} ${d.score}`).join('; ')}`}
+          class="w-full"
+        >
+          {
+            dBars.map((d) => (
+              <g class="dim-bar">
+                <text x="0" y={d.y + DROW / 2 - 6} class="chart-label-sm">
+                  {d.label}
+                </text>
+                <rect
+                  x={DLABEL}
+                  y={d.y + 4}
+                  width={DW - DLABEL - 58}
+                  height={DROW - 20}
+                  rx="6"
+                  fill="#000"
+                  fill-opacity="0.06"
+                />
+                <rect
+                  class="dim-fill"
+                  x={DLABEL}
+                  y={d.y + 4}
+                  width={d.w}
+                  height={DROW - 20}
+                  rx="6"
+                  fill={d.color}
+                  stroke="#000"
+                  stroke-width="2"
+                />
+                <text x={DW - 50} y={d.y + DROW / 2 - 5} class="chart-label">
+                  {d.score}
+                </text>
+              </g>
+            ))
+          }
+          <line
+            x1={DLABEL}
+            y1={dimensions.length * DROW + 2}
+            x2={DW - 58}
+            y2={dimensions.length * DROW + 2}
+            stroke="#000"
+            stroke-width="2"
+          />
+          <text x={DLABEL} y={DH - 4} class="chart-label-sm">0</text>
+          <text x={DW - 58} y={DH - 4} text-anchor="end" class="chart-label-sm">10</text>
+        </svg>
+        <figcaption class="mt-4 text-sm text-coal-900">
+          Whole-school family survey, {surveyA.n} families. "Would recommend bina" is the average
+          answer to the recommendation question; the {headline.nps} Net Promoter Score above is
+          calculated from the same question.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- feeling heard -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
+        <div>
+          <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+            Our highest score
+          </p>
+          <h2 class="mb-4 text-3xl sm:text-4xl">
+            The thing families rate highest is being <em>heard</em>
+          </h2>
+          <p class="mb-4 text-coal-900">
+            The honest fear about any online school is that you'll be handed a login and left alone —
+            a portal instead of a school, and nobody who knows your child's name.
+          </p>
+          <p class="text-coal-900">
+            Of the seven things we asked about, the one our families score highest is communication and
+            feeling heard, at <strong class="text-coal-black">{headline.heard} out of 10</strong>.
+            Higher than the learning. Higher than satisfaction overall. That is the opposite of what
+            parents expect us to be, and it is the part we'd most want you to test on a call.
+          </p>
+        </div>
+        <div class="card-bina bg-bina-grass/40 p-8">
+          <p class="font-display text-6xl font-black">{headline.heard}</p>
+          <p class="mt-2 font-display text-lg font-bold">Communication / feeling heard</p>
+          <p class="mt-4 text-sm text-coal-900">
+            Our top-rated dimension of seven. Whole-school survey, {surveyA.n} families.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- joy -->
+  <section class="border-t-2 border-coal-black bg-bina-pink/15">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        Why joy, of all things
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">A child who wants to log on learns more than one who doesn't</h2>
+      <p class="mb-8 max-w-3xl text-coal-900">
+        When we looked at what actually makes a bina family recommend us, joy beat everything else —
+        including how academically strong they think we are. Parents don't tell their friends about a
+        school because its curriculum is rigorous. They tell their friends because their kid is
+        happy. Our families rate their child's experience <strong class="text-coal-black"
+          >{headline.joy} out of 10</strong
+        > for joy.
+      </p>
+
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="card-bina p-6">
+          <span class="pill-bina mb-3 self-start text-xs">what parents want most</span>
+          <p class="font-display text-lg font-bold">Creativity beat academics — narrowly</p>
+          <p class="mt-2 text-sm text-coal-900">
+            Asked what matters most for their child's future, {future[0].pct}% of families chose
+            creativity and critical thinking, {future[1].pct}% chose strong academic foundations.
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <span class="pill-bina mb-3 self-start text-xs">and then</span>
+          <p class="font-display text-lg font-bold">Confidence, then adaptability</p>
+          <p class="mt-2 text-sm text-coal-900">
+            {future[2].pct}% put confidence and independence first; {future[3].pct}% chose
+            adaptability for a changing world.
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <span class="pill-bina mb-3 self-start text-xs">the takeaway</span>
+          <p class="font-display text-lg font-bold">Nearly 7 in 10 want more than test scores</p>
+          <p class="mt-2 text-sm text-coal-900">
+            Which is roughly the school we've tried to build: a place where results come out of a
+            child who's engaged, not out of pressure.
+          </p>
+        </div>
+      </div>
+
+      <figure class="card-bina mt-6 p-6 sm:p-8">
+        <figcaption class="mb-4 font-display font-bold">
+          "When you think about your child's future, what feels most important?"
+        </figcaption>
+        <svg
+          viewBox={`0 0 ${FW} 54`}
+          role="img"
+          aria-label={future.map((f) => `${f.label} ${f.pct}%`).join('; ')}
+          class="w-full"
+        >
+          {
+            fSegs.map((f) => (
+              <rect x={f.x} y="0" width={f.w} height="40" fill={f.color} stroke="#000" stroke-width="2" />
+            ))
+          }
+        </svg>
+        <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+          {
+            future.map((f) => (
+              <li class="flex items-center gap-2 text-sm">
+                <span
+                  class="h-3.5 w-3.5 flex-none rounded-full border-2 border-coal-black"
+                  style={`background:${f.color}`}
+                ></span>
+                <span class="font-display font-bold">{f.pct}%</span>
+                <span class="text-coal-900">{f.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 text-sm text-coal-900">
+          Whole-school family survey, {surveyA.n} families, one choice each.
+        </p>
+      </figure>
+    </div>
+  </section>
+
+  <!-- involvement: stay in the loop, don't become the teacher -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        Your part in it
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">You'll stay in the loop without becoming the teacher</h2>
+      <p class="mb-8 max-w-3xl text-coal-900">
+        The question every parent asks about online school is "does this mean I have to teach?" Our
+        middle-school parents answered it without being asked. <strong class="text-coal-black"
+          >{involvement[0].pct}% check their child's progress every single week</strong
+        > — because they can see it, any day they like. At a traditional school you'd get a report card
+        twice a year. But only {involvement[6].pct}% sit in on lessons. bina parents aren't teaching.
+        They're coaching, with the whole picture in front of them.
+      </p>
+
+      <figure class="card-bina p-6 sm:p-8">
+        <figcaption class="mb-4 font-display font-bold">
+          "How do you picture your involvement in your child's education?"
+        </figcaption>
+        <svg
+          viewBox={`0 0 ${IW} ${IH}`}
+          role="img"
+          aria-label={involvement.map((v) => `${v.label} ${v.pct}%`).join('; ')}
+          class="w-full"
+        >
+          {
+            iBars.map((v) => (
+              <g class="dim-bar">
+                <text x="0" y={v.y + IROW / 2 - 4} class="chart-label-sm">
+                  {v.label}
+                </text>
+                <rect
+                  class="dim-fill"
+                  x={ILABEL}
+                  y={v.y + 2}
+                  width={v.w}
+                  height={IROW - 18}
+                  rx="6"
+                  fill="#33afff"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+                <text x={v.w + ILABEL + 8} y={v.y + IROW / 2 - 3} class="chart-label">
+                  {v.pct}%
+                </text>
+              </g>
+            ))
+          }
+        </svg>
+        <figcaption class="mt-4 text-sm text-coal-900">
+          Middle-school parent survey, {surveyB.n} responses. Parents could pick more than one, so
+          these don't add up to 100%.
+        </figcaption>
+      </figure>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="card-bina bg-bina-blue/25 p-6">
+          <p class="font-display text-4xl font-black">{involvement[7].pct}%</p>
+          <p class="mt-2 font-display font-bold">say they'd stay hands-off</p>
+          <p class="mt-2 text-sm text-coal-900">
+            Which tells you something about the other families your child would be learning
+            alongside. Almost everyone here is paying attention.
+          </p>
+        </div>
+        <div class="card-bina bg-bina-blue/25 p-6">
+          <p class="font-display text-4xl font-black">{asyncWork.underFourHoursPct}%</p>
+          <p class="mt-2 font-display font-bold">want four hours of homework a week or less</p>
+          <p class="mt-2 text-sm text-coal-900">
+            The most common answer was {asyncWork.commonest}, chosen by {asyncWork.commonestPct}% of
+            parents. Involved, but not buried.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- the honest weak spot -->
+  <section class="border-t-2 border-coal-black bg-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-16">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-yellow">
+        Where we're not there yet
+      </p>
+      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
+        Our lowest score is <span class="text-bina-yellow">{dimensions[6].score}</span> — a sense of
+        belonging
+      </h2>
+      <div class="grid gap-8 lg:grid-cols-2">
+        <div>
+          <p class="mb-4 text-white/80">
+            It's the weakest number in the survey, and honestly, we're not surprised by it. A school
+            with no school gate is a hard place to build a community. There's no pickup line to stand
+            in, no coffee after assembly, no other parent you end up talking to every Tuesday because
+            you're always there at the same time.
+          </p>
+          <p class="mb-4 text-white/80">
+            It's the one thing a building gives you for free, and the one thing we have to actually
+            design. Everything else on this page we can do well from anywhere. This we've had to
+            learn the hard way, and {dimensions[6].score} out of 10 says we're not finished.
+          </p>
+          <p class="text-white/80">
+            So we asked families what they wanted instead of guessing. The top three answers were
+            in-person meetups and field trips, more project work, and more connection between the
+            kids. That's what we're building next. We'd rather show you this number now than have you
+            discover it in your second term.
+          </p>
+        </div>
+        <div>
+          <p class="mb-4 font-display font-bold text-white">
+            What families asked us for next
+          </p>
+          <ul class="space-y-3">
+            {
+              wishlist.map((w) => (
+                <li class="flex items-baseline gap-4 border-b border-white/15 pb-3">
+                  <span class="font-display text-2xl font-black text-bina-grass">{w.pct}%</span>
+                  <span class="text-white/80">{w.label}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-4 text-sm text-white/60">
+            Middle-school parent survey, {surveyB.n} responses, open-ended question — so these are
+            the themes families raised unprompted, not options we offered them. 27% left it blank.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- global / multi-pathway -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        Wherever you're heading
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">One school, and no single track out of it</h2>
+      <p class="mb-8 max-w-3xl text-coal-900">
+        We asked parents which exams they want their child prepared for, and the answers came back
+        from all over the world at once — SATs and APs alongside GCSEs, the IB and A-Levels. If
+        you're moving countries, or you simply don't know yet where your child will finish school,
+        that mix is the point. {examNotes.unsurePct}% of parents told us it's too early to say, and
+        we think that's a perfectly good answer.
+      </p>
+
+      <div class="card-bina overflow-x-auto p-6 sm:p-8">
+        <table class="w-full min-w-[26rem] text-left">
+          <thead>
+            <tr class="border-b-2 border-coal-black font-display">
+              <th class="py-2 pr-4">Exam</th>
+              <th class="py-2 pr-4">Where it's used</th>
+              <th class="py-2">Families who named it</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              exams.map((e) => (
+                <tr class="border-b border-coal-black/15">
+                  <td class="py-2 pr-4 font-display font-bold">{e.label}</td>
+                  <td class="py-2 pr-4 text-sm text-coal-900">{e.region}</td>
+                  <td class="py-2 font-display font-bold">{e.pct}%</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p class="mt-4 text-sm text-coal-900">
+          Middle-school parent survey, {surveyB.n} responses. {examNotes.note} A further {
+            examNotes.anyPct
+          }% said "whatever opens the most doors" and {examNotes.nonePct}% would rather we didn't
+          focus on standardised tests at all.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- methodology -->
+  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        How to read this page
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">Where these numbers came from</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        This is our own survey of our own families, so you should know exactly how it was run before
+        you decide how much it's worth.
+      </p>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {
+          explainers.map((e) => (
+            <details class="card-bina group overflow-hidden p-0">
+              <summary class="flex cursor-pointer items-center gap-3 p-5 font-display font-bold">
+                <span class={`h-8 w-2 flex-none rounded-full border-2 border-coal-black ${e.accent}`} />
+                <span class="flex-1">{e.q}</span>
+                <span
+                  class="flex-none font-display text-xl transition-transform duration-200 group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="border-t-2 border-coal-black/10 px-5 pb-5 pt-4 text-sm text-coal-900">{e.a}</p>
+            </details>
+          ))
+        }
+      </div>
+      <p class="mt-8 max-w-2xl text-coal-900">
+        Want the harder numbers instead — how much our students actually learn, marked by someone
+        other than us?
+        <a href="/student-results" class="font-bold underline underline-offset-4"
+          >See our independently measured student results</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t-2 border-coal-black bg-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
+      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
+        Come and be one of the families we ask <span class="text-bina-grass">next year</span>
+      </h2>
+      <p class="mx-auto mb-8 max-w-xl text-white/80">
+        See how bina teaches, meet the team, and find out whether we're right for your child — all on
+        our main site.
+      </p>
+      <div class="flex justify-center">
+        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+      </div>
+    </div>
+  </section>
+
+  <p slot="footer-note" class="text-xs text-white/60">
+    Figures come from bina's own family surveys — a whole-school survey of {surveyA.n} families ({
+      surveyA.responseRatePct
+    }% response rate) and a separate middle-school parent survey of {surveyB.n} responses. The two
+    are reported separately throughout and never combined. All figures are school-wide aggregates; no
+    individual family or student data is shown. Survey respondents are self-selecting and tend to be
+    more engaged than average, and individual experiences vary. Net Promoter Score bands and the
+    school benchmarking cited above come from {npsBenchmark.source} — verify them at
+    <a href={npsBenchmark.sourceUrl} rel="noopener" class="underline">isminc.com</a>. NPS® is a
+    registered trademark of Bain &amp; Company, Fred Reichheld and Satmetrix Systems.
+  </p>
+
+  <style>
+    .chart-label {
+      font-family: 'Rund Display', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      fill: #000;
+    }
+    .chart-label-sm {
+      font-family: 'Rund Text', Arial, sans-serif;
+      font-size: 13px;
+      fill: #313131;
+    }
+    .dim-fill {
+      transform-origin: left center;
+      transition: opacity 0.2s ease-out;
+    }
+    .dim-bar:hover .dim-fill {
+      opacity: 0.75;
+    }
+    /* bars grow from the left when scrolled into view */
+    figure .dim-fill {
+      transform: scaleX(0);
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    figure.in .dim-fill {
+      transform: scaleX(1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      figure .dim-fill {
+        transform: scaleX(1);
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    // ---- count-up stat tiles (supports decimal scores like 9.42) ----
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const runCount = (el: HTMLElement) => {
+      const target = Number(el.dataset.count);
+      const decimals = Number(el.dataset.decimals ?? 0);
+      const show = (v: number) => (el.textContent = v.toFixed(decimals));
+      if (reduceMotion) {
+        show(target);
+        return;
+      }
+      const start = performance.now();
+      const dur = 1100;
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / dur);
+        show(target * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const animated = document.querySelectorAll<HTMLElement>('.stat-tile, .stat-tile-inline, figure');
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            io.unobserve(e.target);
+            e.target.classList.add('in');
+            if (e.target.matches('[data-count]')) {
+              runCount(e.target as HTMLElement);
+            }
+            e.target.querySelectorAll<HTMLElement>('[data-count]').forEach(runCount);
+          });
+        },
+        { threshold: 0.3 }
+      );
+      animated.forEach((el) => io.observe(el));
+    } else {
+      animated.forEach((el) => el.classList.add('in'));
+      document.querySelectorAll<HTMLElement>('[data-count]').forEach(runCount);
+    }
+  </script>
+</BaseLayout>

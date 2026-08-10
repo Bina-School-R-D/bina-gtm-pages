@@ -1,0 +1,201 @@
+{
+  "_provenance": "Aggregated from 'Family Survey Results + Insights' (bina Growth, 2026). Two separate surveys, never combined: Survey A = whole-school family survey, n=103, 44% response rate. Survey B = middle-school parent survey, n=108 responses. All figures are aggregates — no individual family or student data appears on this page.",
+  "_openQuestions": [
+    "Survey field dates are not stated in the source deck — page currently says 'our most recent family survey' rather than naming a month. Add `window` once Sophie confirms.",
+    "RESOLVED for launch: the 'sense of belonging' section is deliberately written so it holds true whether the survey asked about the parent's or the child's belonging — it never says whose. An earlier draft asserted it was the parents (following the deck's own reading: 'Kids connecting does not equal parent feeling a sense of belonging') but that was unverified, so it was pulled before publishing. If Sophie confirms the question wording, the section can be made more specific and stronger.",
+    "NPS benchmark is now sourced to ISM (see `npsBenchmark`). Note what the source does NOT say: it gives no single 'average school NPS' figure, and ISM's own argument is that schools need grade-specific ranges rather than one universal number. The page therefore cites the cross-industry world-class band (70+) and uses ISM's sample sizes as a credibility note — it never claims 'the average school scores X'. Do not add that claim without a source that actually states it.",
+    "No parent quotes approved yet. A quotes section is the biggest remaining conversion lever.",
+    "The FSI (9.5) is NOT the average of the seven dimensions below — that average is 9.25. It sits right on top of the 'overall satisfaction' score (9.48), so the page describes it as the overall satisfaction measure rather than claiming a formula. Confirm how Sophie calculates FSI."
+  ],
+  "surveyA": {
+    "n": 103,
+    "responseRatePct": 44
+  },
+  "surveyB": {
+    "n": 108
+  },
+  "npsBenchmark": {
+    "excellentFrom": 50,
+    "worldClassFrom": 70,
+    "bandNote": "Cross-industry NPS bands as cited by ISM: 0–50 good, 50–70 excellent, 70–100 world class.",
+    "source": "Independent School Management (ISM), \"Net Promoter Score Surveys: Is My School's Score 'Good'?\", Ideas & Perspectives Vol. 47 No. 5, 1 May 2022",
+    "sourceUrl": "https://isminc.com/silver-sneak-peek/ip-475",
+    "parentResponses": 28477,
+    "schools": 95,
+    "students": 26000,
+    "studentGrades": "5–12",
+    "caveat": "ISM's own finding is that schools need grade-by-grade ranges rather than one universal number, and it publishes no single 'average school NPS'. Never write 'the average school scores 50' — the source does not say that."
+  },
+  "headline": {
+    "fsi": 9.5,
+    "nps": 80,
+    "recommendAvg": 9.42,
+    "joy": 9.53,
+    "heard": 9.55
+  },
+  "fit": {
+    "roundedPct": 70,
+    "exactPct": 69.9,
+    "formalPct": 31.1,
+    "informalPct": 38.8,
+    "typicalPct": 30.1
+  },
+  "dimensions": [
+    {
+      "label": "Communication / feeling heard",
+      "score": 9.55,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "A joyful experience",
+      "score": 9.53,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "Overall satisfaction",
+      "score": 9.48,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "Would recommend bina",
+      "score": 9.42,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "Meaningful learning & growth",
+      "score": 9.32,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "Trust in bina's decisions",
+      "score": 9.07,
+      "color": "#03cb5b"
+    },
+    {
+      "label": "Sense of belonging",
+      "score": 8.58,
+      "color": "#f7d928"
+    }
+  ],
+  "involvement": [
+    {
+      "label": "Review grades / reports weekly",
+      "pct": 65
+    },
+    {
+      "label": "Review homework weekly",
+      "pct": 59
+    },
+    {
+      "label": "Talk about learning every day",
+      "pct": 55
+    },
+    {
+      "label": "Review homework daily",
+      "pct": 51
+    },
+    {
+      "label": "Review grades / reports monthly",
+      "pct": 44
+    },
+    {
+      "label": "Talk about learning weekly",
+      "pct": 40
+    },
+    {
+      "label": "Sit in on lessons with their child",
+      "pct": 14
+    },
+    {
+      "label": "Stay hands-off / child-led",
+      "pct": 3
+    }
+  ],
+  "wishlist": [
+    {
+      "label": "In-person meetups & field trips",
+      "pct": 10
+    },
+    {
+      "label": "Project-based & independent project work",
+      "pct": 9
+    },
+    {
+      "label": "More social connection with other kids",
+      "pct": 9
+    },
+    {
+      "label": "More academic challenge",
+      "pct": 8
+    },
+    {
+      "label": "Entrepreneurship & real-world work",
+      "pct": 7
+    }
+  ],
+  "exams": [
+    {
+      "label": "SAT / PSAT / ACT",
+      "pct": 34,
+      "region": "United States"
+    },
+    {
+      "label": "AP exams",
+      "pct": 14,
+      "region": "United States"
+    },
+    {
+      "label": "GCSE",
+      "pct": 11,
+      "region": "United Kingdom"
+    },
+    {
+      "label": "IB / IB Diploma",
+      "pct": 8,
+      "region": "International"
+    },
+    {
+      "label": "A-Levels",
+      "pct": 6,
+      "region": "United Kingdom"
+    },
+    {
+      "label": "Regional exams (EQAO, VCE, Matric, NWEA)",
+      "pct": 6,
+      "region": "Canada, Australia, South Africa"
+    }
+  ],
+  "examNotes": {
+    "unsurePct": 21,
+    "anyPct": 8,
+    "nonePct": 7,
+    "note": "Parents often named more than one exam, so these are shares of families mentioning each — not exclusive choices."
+  },
+  "future": [
+    {
+      "label": "Creativity & critical thinking",
+      "pct": 32.0,
+      "color": "#f7d928"
+    },
+    {
+      "label": "Strong academic foundations",
+      "pct": 31.1,
+      "color": "#33afff"
+    },
+    {
+      "label": "Confidence & independence",
+      "pct": 25.2,
+      "color": "#ff6f4e"
+    },
+    {
+      "label": "Adaptability for a changing world",
+      "pct": 11.7,
+      "color": "#03cb5b"
+    }
+  ],
+  "asyncWork": {
+    "underFourHoursPct": 68,
+    "commonest": "4–5 hours a week (about an hour a day)",
+    "commonestPct": 40
+  }
+}
