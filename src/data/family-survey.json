@@ -2,10 +2,11 @@
   "_provenance": "Aggregated from 'Family Survey Results + Insights' (bina Growth, 2026). Two separate surveys, never combined: Survey A = whole-school family survey, n=103, 44% response rate. Survey B = middle-school parent survey, n=108 responses. All figures are aggregates — no individual family or student data appears on this page.",
   "_openQuestions": [
     "Survey field dates are not stated in the source deck — page currently says 'our most recent family survey' rather than naming a month. Add `window` once Sophie confirms.",
-    "RESOLVED for launch: the 'sense of belonging' section is deliberately written so it holds true whether the survey asked about the parent's or the child's belonging — it never says whose. An earlier draft asserted it was the parents (following the deck's own reading: 'Kids connecting does not equal parent feeling a sense of belonging') but that was unverified, so it was pulled before publishing. If Sophie confirms the question wording, the section can be made more specific and stronger.",
-    "NPS benchmark is now sourced to ISM (see `npsBenchmark`). Note what the source does NOT say: it gives no single 'average school NPS' figure, and ISM's own argument is that schools need grade-specific ranges rather than one universal number. The page therefore cites the cross-industry world-class band (70+) and uses ISM's sample sizes as a credibility note — it never claims 'the average school scores X'. Do not add that claim without a source that actually states it.",
+    "Hero claim derivation: 'more than 8 in 10 families give us a 9 or 10' is mathematically guaranteed — NPS (80) = %promoters − %detractors, so %promoters = 80 + %detractors ≥ 80%, and the source deck confirms detractors exist but are few. Do not change the hero to a claim about the 9.42 average being a count of families — 9.42/10 is an average rating, not a share.",
+    "Belonging section is deliberately written so it holds true whether the survey asked about the parent's or the child's belonging — it never says whose. If Sophie confirms the question wording, the section can be made more specific and stronger.",
+    "The '90%+ / every score above 9 within 12 months' target in the belonging section is a public commitment, directed by Akis on 2026-08-10. If the roadmap changes, this copy must change with it.",
     "No parent quotes approved yet. A quotes section is the biggest remaining conversion lever.",
-    "The FSI (9.5) is NOT the average of the seven dimensions below — that average is 9.25. It sits right on top of the 'overall satisfaction' score (9.48), so the page describes it as the overall satisfaction measure rather than claiming a formula. Confirm how Sophie calculates FSI."
+    "The FSI (9.5) is NOT the average of the seven dimensions below — that average is 9.25. It is deliberately unused on the page (see _fsiNote). Confirm how Sophie calculates FSI before ever reinstating it."
   ],
   "surveyA": {
     "n": 103,
@@ -15,16 +16,26 @@
     "n": 108
   },
   "npsBenchmark": {
-    "excellentFrom": 50,
     "worldClassFrom": 70,
-    "bandNote": "Cross-industry NPS bands as cited by ISM: 0–50 good, 50–70 excellent, 70–100 world class.",
+    "parentBands": [
+      { "label": "critical", "from": 0, "to": 15 },
+      { "label": "needs improvement", "from": 15, "to": 40 },
+      { "label": "good", "from": 40, "to": 55 },
+      { "label": "great", "from": 55, "to": 70 },
+      { "label": "world class", "from": 70, "to": 100 }
+    ],
+    "correlations": {
+      "tuitionValue": 0.66,
+      "reEnrollIntent": 0.29,
+      "parentCommunity": 0.27
+    },
     "source": "Independent School Management (ISM), \"Net Promoter Score Surveys: Is My School's Score 'Good'?\", Ideas & Perspectives Vol. 47 No. 5, 1 May 2022",
     "sourceUrl": "https://isminc.com/silver-sneak-peek/ip-475",
     "parentResponses": 28477,
     "schools": 95,
     "students": 26000,
     "studentGrades": "5–12",
-    "caveat": "ISM's own finding is that schools need grade-by-grade ranges rather than one universal number, and it publishes no single 'average school NPS'. Never write 'the average school scores 50' — the source does not say that."
+    "caveat": "Bands are ISM's PARENT-specific ranges (the article's Table 2) — critical <15, needs improvement 15–39, good 40–54, great 55–69, world class 70+. The full NPS scale runs −100 to +100; the page's band chart shows 0–100 and says so in the caption. ISM's student ranges differ sharply by grade and must never be used for parent claims. Do NOT cite ISM's 89%-stay-to-graduation finding without an explicit decision — it invites the bina-retention question we deliberately left off the page."
   },
   "headline": {
     "satisfaction": 9.48,
@@ -76,7 +87,7 @@
     {
       "label": "Sense of belonging",
       "score": 8.58,
-      "color": "#f7d928"
+      "color": "#03cb5b"
     }
   ],
   "involvement": [
