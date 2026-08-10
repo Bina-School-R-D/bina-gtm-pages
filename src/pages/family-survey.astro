@@ -46,6 +46,11 @@ const dBars = dimensions.map((d, i) => ({
 }));
 const dEightX = DLABEL + 0.8 * (DW - DLABEL - DRIGHT);
 
+// ---- recommendation donut: ring fills to the average score out of 10 ----
+const RING_R = 89;
+const ringCirc = 2 * Math.PI * RING_R;
+const ringDash = (headline.recommendAvg / 10) * ringCirc;
+
 // ---- "what matters most" — stacked single bar, sums to 100 ----
 const FW = 640;
 let fAcc = 0;
@@ -104,23 +109,43 @@ const explainers = [
   <section class="border-t-2 border-coal-black">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
       <h2 class="mb-8 text-3xl sm:text-4xl">How many parents recommend bina to others?</h2>
-      <div class="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-center">
-        <p class="font-display text-6xl font-black leading-none text-coal-black sm:text-7xl">
-          More than<br />8 in 10
-        </p>
+      <div class="grid gap-10 lg:grid-cols-[auto_1fr] lg:items-center">
+        <figure class="mx-auto w-56 sm:w-64">
+          <svg
+            viewBox="0 0 240 240"
+            role="img"
+            aria-label={`bina families rate us ${headline.recommendAvg} out of 10 on whether they would recommend bina`}
+            class="w-full"
+          >
+            <circle cx="120" cy="120" r={RING_R} fill="none" stroke="#000" stroke-opacity="0.07" stroke-width="22" />
+            <circle
+              class="donut-arc"
+              cx="120"
+              cy="120"
+              r={RING_R}
+              fill="none"
+              stroke="#03cb5b"
+              stroke-width="22"
+              stroke-dasharray={ringCirc.toFixed(1)}
+              transform="rotate(-90 120 120)"
+              style={`--ring-circ:${ringCirc.toFixed(1)};--ring-final:${(ringCirc - ringDash).toFixed(1)}`}
+            />
+            <circle cx="120" cy="120" r="100" fill="none" stroke="#000" stroke-width="2" />
+            <circle cx="120" cy="120" r="78" fill="none" stroke="#000" stroke-width="2" />
+            <text x="120" y="122" text-anchor="middle" class="donut-value">{headline.recommendAvg}</text>
+            <text x="120" y="148" text-anchor="middle" class="donut-unit">out of 10</text>
+          </svg>
+        </figure>
         <div>
           <p class="mb-4 text-lg text-coal-900">
             We asked every family the simplest question there is: would you recommend bina to another
-            family? Answering from 0 to 10, more than eight in ten gave us a
-            <strong class="text-coal-black">9 or a 10</strong>. The average answer was {
-              headline.recommendAvg
-            }/10, and hardly anyone answered low.
+            family? Answering from 0 to 10, the average came out at
+            <strong class="text-coal-black">{headline.recommendAvg}</strong>. More than eight in ten
+            families gave us a 9 or a 10, and hardly anyone answered low.
           </p>
           <p class="text-coal-900">
-            That's a Net Promoter Score of {headline.nps} — the standard measure schools use for this
-            question. What it means, and how it compares, is at the
-            <a href="#methodology" class="font-bold underline underline-offset-4">bottom of the page</a
-            >.
+            That works out to a Net Promoter Score of {headline.nps} — the standard measure schools use
+            for this question.
           </p>
         </div>
       </div>
@@ -204,10 +229,6 @@ const explainers = [
         <div>
           <p class="font-display text-7xl font-black leading-none text-coal-black sm:text-8xl">
             <span data-count={fit.roundedPct} class="stat-tile-inline">0</span>%
-          </p>
-          <p class="mt-2 max-w-xs text-xs text-coal-900">
-            {fit.exactPct}% exactly — some children who need additional support, and many families
-            who simply realised their child could learn better in a different environment.
           </p>
         </div>
         <div>
@@ -510,6 +531,25 @@ const explainers = [
       font-size: 13px;
       fill: #313131;
     }
+    .donut-value {
+      font-family: 'Rund Display', Arial, sans-serif;
+      font-weight: 900;
+      font-size: 54px;
+      fill: #000;
+    }
+    .donut-unit {
+      font-family: 'Rund Text', Arial, sans-serif;
+      font-size: 16px;
+      fill: #313131;
+    }
+    /* ring sweeps round to the score when scrolled into view */
+    .donut-arc {
+      stroke-dashoffset: var(--ring-circ);
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    figure.in .donut-arc {
+      stroke-dashoffset: var(--ring-final);
+    }
     .dim-fill {
       transform-origin: left center;
       transition: opacity 0.2s ease-out;
@@ -528,6 +568,10 @@ const explainers = [
     @media (prefers-reduced-motion: reduce) {
       figure .dim-fill {
         transform: scaleX(1);
+        transition: none;
+      }
+      .donut-arc {
+        stroke-dashoffset: var(--ring-final);
         transition: none;
       }
     }
