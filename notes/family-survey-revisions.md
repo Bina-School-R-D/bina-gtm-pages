@@ -157,6 +157,16 @@ Roughly: **80 out of 100 on the one question that matters** → ISM's parent sca
 
 ---
 
+# ROUND 3 FEEDBACK (2026-08-10, after round-2 shipped) — not yet implemented
+
+- Hero → general, no stats/numbers: "What bina families think about bina" type headline.
+- Scorecard section: remove the caption "'Would recommend bina' is the same question the 80 NPS is calculated from."
+- NPS section: nobody understands it. Reframe as "How many parents recommend bina to others?" — simple cool copy, cut the marketing jargon (bands, benchmarking language).
+- REMOVE: the "See how every parent answered" expander (full involvement chart).
+- REMOVE: the 68% homework strip.
+- Involvement: retitle "How involved are bina parents?" — the "Prefer to hand it to us? / Give us your kid, we do our thing" copy is aggressive tech-bro. Audience is mothers with busy lives: create belonging for lower involvement, never imply they care less.
+- RESTRUCTURE the whole page as a story: what do they say about us → how do they feel → which things we offer matter to them → where we excel → the plan for the one area not at 90% yet → what happens after bina → where the numbers came from.
+
 # BUILD PLAN — round 2 (approved feedback → implementation)
 
 New section order after the rebuild:
