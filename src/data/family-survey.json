@@ -27,7 +27,9 @@
     "caveat": "ISM's own finding is that schools need grade-by-grade ranges rather than one universal number, and it publishes no single 'average school NPS'. Never write 'the average school scores 50' — the source does not say that."
   },
   "headline": {
-    "fsi": 9.5,
+    "satisfaction": 9.48,
+    "_fsiUnused": 9.5,
+    "_fsiNote": "FSI (9.5) is deliberately NOT used on the page. It is not the mean of the seven dimensions (that is 9.25) and we cannot describe its formula honestly yet, so the page uses the overall satisfaction score (9.48) instead — which needs no explaining and costs 0.02. Reinstate FSI only once Sophie confirms how it is calculated.",
     "nps": 80,
     "recommendAvg": 9.42,
     "joy": 9.53,
