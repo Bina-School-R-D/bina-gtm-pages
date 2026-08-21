@@ -5,3 +5,9 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Source decks and exports dropped in the repo root while building a page —
+# the page's own data belongs in src/data/*.json, not the raw file.
+/*.pdf
+/*.xlsx
+/*.csv
