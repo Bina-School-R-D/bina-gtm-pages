@@ -1,25 +1,30 @@
 {
-  "_provenance": "Niche reviews copied verbatim from https://www.niche.com/k12/bina-claymont-de/reviews/ on 2026-08-21 (20 of the 21 reviews its own structured data reports). Site testimonials copied verbatim from thebinaschool.com on 2026-08-21. Nothing on this page is written by bina. Survey figures (recommendation average, NPS, sample size) are not duplicated here — the page imports them from family-survey.json so the two pages can never disagree. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows). This page renders only the 17 rows at '✅ Approved to Share'; the 30 'Needs Retrieval' and 10 'Needs Permission' rows are deliberately absent until Family Success clears them. 14 of the 17 approved rows are pull-quote excerpts of Niche reviews already published here in full, so they are recorded as notionExcerpts on the parent review rather than duplicated as cards.",
+  "_provenance": "Every quote is copied verbatim. Niche reviews read from https://www.niche.com/k12/bina-claymont-de/reviews/ (20 of the 21 its structured data reports) and Trustpilot reviews read from https://www.trustpilot.com/review/thebinaschool.com on 2026-08-21; the six remaining testimonials were copied from thebinaschool.com, where the families had already permissioned them. Nothing on this page is written by bina. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows); this page renders only the 17 rows at '✅ Approved to Share' plus the public reviews those rows were excerpted from, and never a '🔒 Needs Retrieval' or '🟡 Needs Permission' row. Survey figures are imported from family-survey.json.",
   "_openQuestions": [
-    "Only '✅ Approved to Share' rows from Notion may be published. 40 of the 57 rows (30 Needs Retrieval, 10 Needs Permission) are blocked and must not be added to this page without Family Success consent — several are exceptional (T-001, T-002, T-009, T-010, T-043).",
-    "The 20 full Niche reviews and the 6 site testimonials are Approved-class by SOP rule but are not individually logged as Notion rows — Notion holds 15 pull-quote excerpts of those same Niche reviews instead. If the registry should mirror the page 1:1, someone has to add ~26 Approved rows to Notion; that is a write into the team's database and has not been done.",
-    "The pull-quote 'My 4th grader finally loves school!!' is logged in Notion (T-007a) with Source = Niche, but the copy we actually observed sits on world-schools.com. Both are public and Approved; the card cites world-schools.com because that is where it was read.",
-    "Trustpilot (https://www.trustpilot.com/review/thebinaschool.com) is behind an AWS WAF challenge, so its score, review count and review text are NOT verified. The page links to it without asserting a number.",
-    "The Asana source list includes a public Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) that has not been read or logged in Notion. Not on the page.",
-    "The bina Facebook page shows 0 reviews / not yet rated, so Facebook is deliberately NOT listed as a review source.",
-    "Glassdoor is employee reviews. It is referenced only inside the wall's intro line, never as family social proof.",
+    "Only '✅ Approved to Share' Notion rows may be published. All 17 appear here: 2 as link cards (the LinkedIn article and the Instagram reel), 1 as the first hero pull quote (T-007a), and the other 14 inside the full public review each was excerpted from. The 40 blocked rows (30 Needs Retrieval, 10 Needs Permission) are absent and must stay absent until Family Success clears them.",
+    "Trustpilot shows a 4.2 TrustScore over 6 reviews while every visible review is 5 stars — TrustScore is Trustpilot's weighted score, not a mean, so never restate it as an average of the reviews shown.",
+    "Two Trustpilot reviews are the same families' Niche reviews cross-posted (Іван Бойченюк, and Алиса Сазонова's longer bilingual review). The Niche copies are already on the page, so the Trustpilot duplicates are deliberately not shown — do not add them as separate cards.",
+    "A seventh review on bina's Trustpilot page ('world best prop firm', GURLAL SINGH, 2026-03-20) is not about bina at all and is excluded. It is presumably why Trustpilot's own count and our card count differ; consider reporting it to Trustpilot.",
+    "The Asana source list's Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) is a parent asking 'Does anyone use Bina online school? Feedback?' — the one visible reply is about Australian homeschool registration, not bina. No testimonial content; further replies are behind a login.",
+    "Glassdoor (Working at bina, E5085999) blocks automated reading, so its employee reviews are not transcribed. It is referenced only in the wall intro, never as family social proof, and the 5 staff reviews on the page come from Niche.",
+    "The 20 full Niche reviews, 4 Trustpilot reviews and 6 site testimonials are Approved-class by SOP rule but are not individually logged as Notion rows. If the registry should mirror the page 1:1, ~30 Approved rows need adding to Notion — a write into the team's database, not done.",
+    "The bina Facebook page shows 0 reviews / not yet rated, so Facebook is not listed as a review source.",
+    "Niche's structured data reports reviewCount 21; 20 carry review text and are published here.",
+    "world-schools.com shows 5.0/5 from 5 reviews; four duplicate Niche reviews already on the page and the fifth is the same parent as Trustpilot's Sarah Schmirl review, which is published here in full instead.",
     "Niche lists bina as PK-6 / ages 4-12. bina serves ages 4-15. Do not repeat Niche's grade range on this page.",
     "Site testimonials carry first names but no dates, because thebinaschool.com publishes none.",
-    "Niche's structured data reports reviewCount 21; 20 render on the reviews page. Do not publish '21 reviews' as a count of quotes.",
-    "world-schools.com shows 5.0/5 from 5 reviews; four duplicate Niche reviews already on this page.",
-    "The 'Share your experience' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com (Trustpilot's standard write-a-review path), unconfirmed because Trustpilot blocks automated reading. Open it once in a browser.",
+    "The 'Leave a review' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com — Trustpilot's standard write-a-review path, still worth opening once in a browser to confirm.",
     "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes."
   ],
   "headline": {
     "nicheAvg": 5.0,
     "nicheCount": 20,
-    "parentCount": 22,
-    "staffCount": 5
+    "parentCount": 25,
+    "staffCount": 5,
+    "trustpilotScore": 4.2,
+    "trustpilotCount": 6,
+    "trustpilotPublished": 4,
+    "publicCount": 24
   },
   "sources": [
     {
@@ -33,10 +38,10 @@
     {
       "key": "trustpilot",
       "name": "Trustpilot",
-      "detail": "verified customer reviews",
-      "note": "we cannot delete a review here",
+      "detail": "4.2 out of 5 from 6 reviews",
+      "note": "verified reviewers, and we cannot delete one",
       "url": "https://www.trustpilot.com/review/thebinaschool.com",
-      "stat": null
+      "stat": "4.2 ★"
     },
     {
       "key": "instagram",
@@ -479,18 +484,66 @@
       ]
     },
     {
-      "id": "ws-01",
-      "author": null,
+      "id": "tp-01",
+      "author": "Sarah Schmirl",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": 5,
-      "date": "2024-07-01",
-      "source": "world-schools",
-      "body": "My 4th grader finally loves school!!",
+      "date": "2024-05-20",
+      "source": "trustpilot",
+      "title": "My 4th grader finally loves going to school!",
+      "country": "US",
+      "body": "We’ve tried a number of different learning/schooling methods.  None of them came as close as Bina to checking off all the boxes.  My daughter loves school, and her teacher and is excited to get up each morning for class. No more asking to skip school!",
       "themes": [
-        "switched"
+        "switched",
+        "academics"
       ],
       "notionId": "T-007a"
+    },
+    {
+      "id": "tp-02",
+      "author": "Jordan",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-21",
+      "source": "trustpilot",
+      "title": "We wholeheartedly recommend the bina school!",
+      "country": "IL",
+      "body": "Our family found bina when our then 7-year-old son needed something different than his in-person school was able to provide. From the very beginning, our family has felt supported by the whole staff of bina. The teachers and administrators are really accessible, and always happy to meet with us if we have any questions or concerns. Bina is able to adjust the curriculum to support our son's academic needs, while also nurturing him socially and emotionally. Early in this past school year, our family had to move halfway across the world very unexpectedly. One constant for us was that our son could continue attending bina, which was such a gift. Our son loves attending bina, and we love seeing him thrive in his school environment. Our family wholeheartedly recommends bina!",
+      "themes": [
+        "switched",
+        "travelling",
+        "sen"
+      ]
+    },
+    {
+      "id": "tp-03",
+      "author": "Amanda Davy",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-09",
+      "source": "trustpilot",
+      "title": "Could not be happier with bina…",
+      "country": "CA",
+      "body": "We could not be happier with bina school. Our daughter has been in bina for two years and is thriving. She absolutely loves and adores her teachers who are the nicest and most dedicated teachers we have come across. They have helped her so much with her reading and have a great system for engaging the students. Our daughter loves having classmates and teachers from all over the world.  The tools and resources they use make learning really fun and effective!",
+      "themes": [
+        "academics"
+      ]
+    },
+    {
+      "id": "tp-04",
+      "author": "Aba King",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2026-05-11",
+      "source": "trustpilot",
+      "title": "Helpful",
+      "country": "ET",
+      "body": "Helpful\nHonesty\nCommunity",
+      "themes": []
     }
   ],
   "registry": {

@@ -41,18 +41,23 @@ const glassdoor = sources.find((s) => s.key === 'glassdoor')!;
 
 const WORLD_SCHOOLS = 'https://world-schools.com/schools/bina-school/';
 
+const TRUSTPILOT = 'https://www.trustpilot.com/review/thebinaschool.com';
+
 const sourceUrl: Record<string, string> = {
   niche: NICHE,
+  trustpilot: TRUSTPILOT,
   site: SITE,
   'world-schools': WORLD_SCHOOLS,
 };
 const sourceInitial: Record<string, string> = {
   niche: 'N',
+  trustpilot: 'T',
   site: 'b',
   'world-schools': 'W',
 };
 const sourceVerb: Record<string, string> = {
   niche: 'Verified on Niche',
+  trustpilot: 'Verified on Trustpilot',
   site: 'Published on thebinaschool.com',
   'world-schools': 'Verified on world-schools.com',
 };
@@ -123,12 +128,12 @@ const monthYear = (iso: string | null) =>
 const explainers = [
   {
     q: 'Where did these reviews come from?',
-    a: `${headline.nicheCount} of them are copied word for word from bina's page on Niche, an independent US school-review site we have no control over — we cannot add, edit or delete anything there. The rest are families who gave us permission to quote them on our own site. Every card tells you which is which and links straight to the source so you can read it there instead. Trustpilot has reviews too — we link them rather than reprint them, so read those there.`,
+    a: `${headline.nicheCount} are copied word for word from bina's page on Niche and ${headline.trustpilotPublished} from our Trustpilot page — both independent sites where we cannot add, edit or delete anything. The other ${site.length} are families who gave us permission to quote them on our own site. Every card says which is which and links straight to the source so you can read it there instead.`,
     accent: 'bg-bina-grass',
   },
   {
     q: 'Did you edit any of them?',
-    a: 'No. Every quote is the complete review, including the typos, the emoji and the criticism. Long ones are collapsed to eight lines with a "read the rest" button, but nothing is cut. Some reviewers are anonymous because Niche publishes them that way — we do not know who they are either.',
+    a: `No. Every quote is the complete review, including the typos, the double spaces and the emoji. Long ones are collapsed to eight lines with a "read the rest" button, but nothing is cut. Some reviewers are anonymous because Niche publishes them that way — we do not know who they are either. We left three Trustpilot entries off: two are families whose Niche review is already here, and one is a review of a currency-trading firm that landed on our page by mistake.`,
     accent: 'bg-bina-yellow',
   },
   {
@@ -162,10 +167,10 @@ const explainers = [
         </span>
       </h1>
       <p class="mb-8 max-w-2xl text-lg text-coal-1000 sm:text-xl">
-        We didn't write a word of what follows. {headline.nicheCount + 1} of these reviews sit on
-        review sites where bina has no edit button; the other {site.length} are families who gave us
-        permission to quote them here. {headline.parentCount} parents, {headline.staffCount} of our
-        own teachers, nothing edited.
+        We didn't write a word of what follows. {headline.publicCount} of these reviews sit on Niche
+        and Trustpilot, where bina has no edit button; the other {site.length} are families who gave
+        us permission to quote them here. {headline.parentCount} parents, {headline.staffCount} of
+        our own teachers, nothing edited.
       </p>
 
       <div class="mb-3 flex flex-wrap gap-3">
@@ -200,9 +205,11 @@ const explainers = [
           </dd>
         </div>
         <div class="card-bina bg-white p-5">
-          <dt class="font-display text-3xl font-black sm:text-4xl">{surveyN}</dt>
+          <dt class="font-display text-3xl font-black sm:text-4xl">
+            {headline.trustpilotScore}<span class="text-xl">/5</span>
+          </dt>
           <dd class="mt-1 text-sm font-medium">
-            families also scored us privately, and we published every answer
+            our TrustScore on Trustpilot, from {headline.trustpilotCount} reviews
           </dd>
         </div>
       </dl>
@@ -387,12 +394,17 @@ const explainers = [
                     <span class="block text-xs text-coal-900">
                       {/* anonymous cards already say the role in the name line above */}
                       {r.author && r.roleLabel}
+                      {r.country && ` · ${r.country}`}
                       {r.author && when && ' · '}
                       {when}
                       {!r.author && !when && r.roleLabel}
                     </span>
                   </span>
                 </div>
+
+                {r.title && (
+                  <p class="mb-1 font-display font-bold text-coal-black">{r.title}</p>
+                )}
 
                 {r.rating && (
                   <p class="mb-2 text-sm tracking-widest text-coal-black" aria-label={`${r.rating} out of 5`}>
@@ -526,12 +538,18 @@ const explainers = [
       registry.needsPermission
     } awaiting a family's consent plus the {registry.needsRetrieval} not yet transcribed are not on
     this page. Reviews are copied verbatim and by hand — {headline.nicheCount} from
-    <a href={NICHE} rel="noopener" class="underline">bina's Niche page</a> (last checked 21 August
-    2026) and {site.length} from families who gave permission to be quoted on thebinaschool.com. This
-    page is not a live feed, so read the source for the current picture. Niche's own structured data
-    reports 21 reviews on that page; 20 carry review text and appear here. bina cannot add, edit or
-    remove reviews on Niche, Trustpilot or world-schools.com, and has never offered anything in
-    exchange for a review. Reviewers are self-selecting and their experiences are their own. Niche
+    <a href={NICHE} rel="noopener" class="underline">bina's Niche page</a>, {
+      headline.trustpilotPublished
+    } from <a href={TRUSTPILOT} rel="noopener" class="underline">bina's Trustpilot page</a> (both
+    last read 21 August 2026) and {site.length} from families who gave permission to be quoted on
+    thebinaschool.com. This page is not a live feed, so read the source for the current picture.
+    Niche reports 21 reviews, of which 20 carry review text. Trustpilot reports {
+      headline.trustpilotCount
+    } and a {headline.trustpilotScore} TrustScore — Trustpilot's own weighted score, not an average of
+    the reviews shown. Three Trustpilot entries are deliberately not reproduced: two are the same
+    families' Niche reviews cross-posted, and one is a review of an unrelated trading firm. bina
+    cannot add, edit or remove reviews on Niche, Trustpilot or world-schools.com, and has never
+    offered anything in exchange for a review. Reviewers are self-selecting and their experiences are their own. Niche
     lists bina as PK–6; bina teaches ages 4–15. The {recommendAvg}/10 and NPS {nps} figures come from
     bina's own survey of {surveyN} families, and the {npsTopBand}+ parent band is Independent School
     Management's, not ours — <a href="/family-survey" class="underline">
