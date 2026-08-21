@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
 
-const { headline, sources, filters, reviews, registry, pullQuotes, beyond } = data;
+const { headline, sources, filters, reviews, registry, beyond } = data;
 
 // Survey figures live in family-survey.json only, so the two pages can never disagree.
 const recommendAvg = survey.headline.recommendAvg;
@@ -19,9 +19,9 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
 
 /*
   Narrative order — the three-audience rule (CLAUDE.md):
-    hero (the claim + the proof numbers) -> where the reviews live (the links, high up,
-    because a sceptic wants to leave and check) -> the wall itself -> the survey numbers
-    behind the quotes -> what two parents made unprompted -> methodology expanders -> book a class.
+    hero (one claim, one CTA, no numbers) -> a one-row provider bar carrying each platform's score,
+    so a sceptic can leave and check in a single click -> the filtered wall -> what two parents made
+    unprompted -> methodology expanders -> the closing CTA.
 
   CTA ladder: same as the main site, because these pages stand in for it — every primary CTA is
   "Start your bina journey" to form.thebinaschool.com/new — nav and hero use the main site's exact
@@ -29,15 +29,11 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
   current URL onto that link so partner attribution survives. The review ask is for current families
   and is deliberately demoted to a text link in the hero plus one in-wall card.
 
-  Scanners get the h1, four tiles and the H2s, each a complete claim. Focused readers get
+  Scanners get the h1, the provider bar and the H2s, each a complete claim. Focused readers get
   two lines under each H2. Detail readers get the source cards, the per-card verify links
   and the methodology expanders. Nothing on this page is written by bina: every quote is
   copied whole from a site we do not control, or from a family who let us quote them.
 */
-
-// Sources shown as family social proof. Glassdoor is team-only and lives in the wall note.
-const familySources = sources.filter((s) => s.key !== 'glassdoor');
-const glassdoor = sources.find((s) => s.key === 'glassdoor')!;
 
 const WORLD_SCHOOLS = 'https://world-schools.com/schools/bina-school/';
 
@@ -156,147 +152,64 @@ const explainers = [
   description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
 >
-  <!-- hero: the claim, the proof, and the way out to the sources -->
+  <!-- hero: one claim, one line, one CTA -->
   <header class="bg-bina-purple/25">
-    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
-      <p class="pill-bina mb-6 text-sm tracking-wide">wall of love</p>
-      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
-        Every review of bina on Niche is
-        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">
-          5 out of 5
-        </span>
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
+      <p class="pill-bina mb-6 text-sm tracking-wide">reviews</p>
+      <h1 class="mb-5 max-w-3xl text-5xl font-black sm:text-7xl">
+        What parents say
+        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">about bina</span>
       </h1>
-      <p class="mb-8 max-w-2xl text-lg text-coal-1000 sm:text-xl">
-        We didn't write a word of what follows. {headline.publicCount} of these reviews sit on Niche
-        and Trustpilot, where bina has no edit button; the other {site.length} are families who gave
-        us permission to quote them here. {headline.parentCount} parents, {headline.staffCount} of
-        our own teachers, nothing edited.
+      <p class="mb-8 max-w-xl text-lg text-coal-1000 sm:text-xl">
+        Their words, not ours — every one of them copied whole from a site we don't control.
       </p>
-
-      <div class="mb-3 flex flex-wrap gap-3">
-        <a href={JOURNEY} class="btn-bina text-lg">Start your bina journey →</a>
-        <a href={SITE} class="btn-bina-ghost text-lg">Visit bina</a>
-      </div>
-      <p class="mb-10 text-sm font-medium text-coal-1000">
-        Tell us about your child and we'll show you the school these families are describing. Already
-        a bina family?{' '}
-        <a href={TRUSTPILOT_WRITE} rel="noopener" class="font-bold underline underline-offset-4"
-          >Leave a review</a
-        >.
-      </p>
-
-      <dl class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div class="card-bina bg-white p-5">
-          <dt class="font-display text-3xl font-black sm:text-4xl">5.0<span class="text-xl">/5</span></dt>
-          <dd class="mt-1 text-sm font-medium">
-            on Niche — every single review, no exceptions
-          </dd>
-        </div>
-        <div class="card-bina bg-bina-grass/40 p-5">
-          <dt class="font-display text-3xl font-black sm:text-4xl">{recommendAvg}<span class="text-xl">/10</span></dt>
-          <dd class="mt-1 text-sm font-medium">
-            parents would send their friends here
-          </dd>
-        </div>
-        <div class="card-bina bg-bina-yellow/40 p-5">
-          <dt class="font-display text-3xl font-black sm:text-4xl">{nps}</dt>
-          <dd class="mt-1 text-sm font-medium">
-            our parent NPS — {npsTopBand}+ is the top band for school parents
-          </dd>
-        </div>
-        <div class="card-bina bg-white p-5">
-          <dt class="font-display text-3xl font-black sm:text-4xl">
-            {headline.trustpilotScore}<span class="text-xl">/5</span>
-          </dt>
-          <dd class="mt-1 text-sm font-medium">
-            our TrustScore on Trustpilot, from {headline.trustpilotCount} reviews
-          </dd>
-        </div>
-      </dl>
+      <a href={JOURNEY} class="btn-bina text-lg">Start your bina journey →</a>
     </div>
   </header>
 
-  <!-- pull-quote band: the three strongest approved lines, in the biggest type on the page -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-[100rem] px-5 py-12 sm:py-14">
-      <ul class="grid gap-5 lg:grid-cols-3">
-        {
-          pullQuotes.map((q) => (
-            <li>
-              <figure class:list={['card-bina flex h-full flex-col p-7 sm:p-8', q.tint]}>
-                <blockquote class="font-display text-2xl font-bold leading-tight text-coal-black sm:text-3xl">
-                  &ldquo;{q.text}&rdquo;
-                </blockquote>
-                <figcaption class="mt-5 text-sm font-medium text-coal-1000">
-                  {q.attribution} ·{' '}
-                  <a
-                    href={sourceUrl[q.source]}
-                    rel="noopener"
-                    class="font-display font-bold text-coal-black underline underline-offset-4"
-                  >
-                    {q.source === 'niche' ? 'read it on Niche' : 'read it on world-schools.com'}
-                  </a>
-                </figcaption>
-              </figure>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- the links, high up: a sceptic wants to leave and check -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
-      <h2 class="mb-3 text-3xl sm:text-4xl">Go and read us somewhere we can't edit a word</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        These are every place bina is reviewed. We have no ability to remove a review on any of them,
-        and we've never offered anything in exchange for one.
-      </p>
-
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          familySources.map((s) => (
-            <li>
-              <a
-                href={s.url}
-                rel="noopener"
-                class="card-bina group flex h-full flex-col p-6 no-underline transition-colors duration-300 hover:bg-bina-yellow"
+  <!-- mid-page provider bar: where the reviews live, one row, scores on the way past -->
+  <nav aria-label="Where bina is reviewed" class="border-y-2 border-coal-black bg-white">
+    <ul class="mx-auto flex max-w-[100rem] overflow-x-auto">
+      {
+        sources.map((src) => (
+          <li class="flex-1 shrink-0 border-r-2 border-coal-black last:border-r-0">
+            <a
+              href={src.url}
+              rel="noopener"
+              class="group flex h-full min-w-[12rem] items-center gap-3 px-5 py-5 no-underline transition-colors duration-300 hover:bg-bina-yellow"
+            >
+              <span
+                aria-hidden="true"
+                class:list={[
+                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display text-xs font-bold text-coal-black',
+                  src.markColor,
+                ]}
               >
-                <span class="mb-1 flex items-baseline justify-between gap-3">
-                  <span class="font-display text-xl font-bold text-coal-black">{s.name}</span>
-                  {s.stat && (
-                    <span class="pill-bina shrink-0 text-sm text-bina-grass">{s.stat}</span>
-                  )}
+                {src.mark}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate font-display font-bold text-coal-black">
+                  {src.barLabel}
                 </span>
-                <span class="mb-4 block font-medium text-coal-1000">{s.detail}</span>
-                <span class="mt-auto block text-sm text-coal-900">{s.note}</span>
-                <span class="mt-3 block font-display font-bold text-coal-black">
-                  Read it there
-                  <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+                {src.barStat && (
+                  <span class="block text-xs font-medium text-coal-900">{src.barStat}</span>
+                )}
+              </span>
+              <span
+                aria-hidden="true"
+                class="font-display font-bold text-coal-black transition-transform group-hover:translate-x-1"
+                >→</span
+              >
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 
   <!-- the wall -->
-  <section class="border-t-2 border-coal-black bg-bina-purple/10">
-    <div class="mx-auto max-w-[100rem] px-5 py-14 sm:py-16">
-      <h2 class="mb-3 text-3xl sm:text-4xl">
-        Read the {reviews.length} reviews in full, exactly as they were written
-      </h2>
-      <p class="mb-8 max-w-3xl text-coal-900">
-        Nothing is trimmed, corrected or reordered to flatter us. Filter to the families who look
-        like yours — and if it's the team's view you want,
-        <a href={glassdoor.url} rel="noopener" class="font-bold underline underline-offset-4">
-          bina is on Glassdoor
-        </a> too.
-      </p>
-
+  <section class="bg-bina-purple/10">
+    <div class="mx-auto max-w-[100rem] px-5 py-10 sm:py-12">
       <div
         id="review-filters"
         class="mb-8 flex flex-wrap gap-2"
