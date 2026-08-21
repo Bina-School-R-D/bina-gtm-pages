@@ -50,10 +50,12 @@ const sourceUrl: Record<string, string> = {
    about working here rather than being a family here. */
 const BAR = ['niche', 'trustpilot', 'world-schools', 'survey'];
 const barSources = BAR.map((key) => sources.find((src) => src.key === key)!);
-const barLogo: Record<string, string> = {
+const sourceLogo: Record<string, string> = {
   niche: '/images/logos/niche.svg',
   trustpilot: '/images/logos/trustpilot.svg',
   'world-schools': '/images/logos/world-schools.svg',
+  site: '/images/logos/bina.svg',
+  survey: '/images/logos/bina.svg',
 };
 
 const sourceInitial: Record<string, string> = {
@@ -186,12 +188,13 @@ const explainers = [
           <li class="flex-1 shrink-0 border-r-2 border-coal-black last:border-r-0">
             <a
               href={src.url}
-              rel="noopener"
+              target="_blank"
+              rel="noopener noreferrer"
               class="group flex h-full min-w-[12rem] items-center gap-3 px-5 py-5 no-underline transition-colors duration-300 hover:bg-bina-yellow"
             >
-              {barLogo[src.key] ? (
+              {sourceLogo[src.key] ? (
                 <img
-                  src={barLogo[src.key]}
+                  src={sourceLogo[src.key]}
                   alt=""
                   width="32"
                   height="32"
@@ -217,11 +220,20 @@ const explainers = [
                   <span class="block text-xs font-medium text-coal-900">{src.barStat}</span>
                 )}
               </span>
-              <span
+              <svg
                 aria-hidden="true"
-                class="font-display font-bold text-coal-black transition-transform group-hover:translate-x-1"
-                >→</span
+                viewBox="0 0 24 24"
+                class="h-4 w-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
+                <path d="M14 4h6v6M20 4 10.5 13.5" />
+                <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+              </svg>
+              <span class="sr-only">(opens in a new tab)</span>
             </a>
           </li>
         ))
@@ -231,7 +243,7 @@ const explainers = [
 
   <!-- the wall -->
   <section class="bg-bina-purple/10">
-    <div class="mx-auto max-w-[100rem] px-5 py-10 sm:py-12">
+    <div class="mx-auto max-w-[96rem] px-6 py-10 sm:px-10 sm:py-12">
       <div
         id="review-filters"
         class="mb-8 flex flex-wrap gap-2"
@@ -264,12 +276,11 @@ const explainers = [
               if (item.at === 0) {
                 return (
                   <div class="wall-cell card-bina flex flex-col bg-bina-yellow p-6">
-                    <p class="mb-2 font-display text-xl font-bold text-coal-black">
+                    <p class="mb-2 font-display text-lg font-bold text-coal-black">
                       Already a bina family?
                     </p>
-                    <p class="mb-4 text-coal-1000">
-                      Two minutes of your honest opinion is what the next family reads before they
-                      dare to switch schools.
+                    <p class="mb-4 text-sm text-coal-1000">
+                      Your honest opinion is what the next family reads before they dare to switch.
                     </p>
                     <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-ghost mt-auto self-start">
                       Write a review
@@ -280,12 +291,11 @@ const explainers = [
               if (item.at === 2) {
                 return (
                   <div class="wall-cell card-bina flex flex-col bg-bina-grass/40 p-6">
-                    <p class="mb-2 font-display text-xl font-bold text-coal-black">
+                    <p class="mb-2 font-display text-lg font-bold text-coal-black">
                       Reading about it only goes so far.
                     </p>
-                    <p class="mb-4 text-coal-1000">
-                      Tell us about your child, meet the teachers, and see whether every family on
-                      this page is right about us.
+                    <p class="mb-4 text-sm text-coal-1000">
+                      Tell us about your child and see whether these families are right about us.
                     </p>
                     <a href={JOURNEY} class="btn-bina mt-auto self-start">Start your bina journey →</a>
                   </div>
@@ -293,12 +303,11 @@ const explainers = [
               }
               return (
                 <div class="wall-cell card-bina flex flex-col bg-coal-black p-6">
-                  <p class="mb-2 font-display text-xl font-bold text-white">
+                  <p class="mb-2 font-display text-lg font-bold text-white">
                     Stories are one thing. Scores are another.
                   </p>
-                  <p class="mb-4 text-white/80">
-                    We asked all {surveyN} families to rate us out of 10 on seven things, then
-                    published every score — including our worst one.
+                  <p class="mb-4 text-sm text-white/80">
+                    {surveyN} families rated us out of 10. We published every score, worst included.
                   </p>
                   <a href="/family-survey" class="btn-bina mt-auto self-start">See the scores</a>
                 </div>
@@ -314,23 +323,27 @@ const explainers = [
 
             return (
               <article
-                class:list={['review-card wall-cell card-bina flex flex-col p-6', tint]}
+                class:list={[
+                  'review-card wall-cell card-bina relative flex flex-col px-7 py-5',
+                  tint,
+                ]}
                 data-role={r.role}
                 data-themes={r.themes.join(' ')}
               >
-                <div class="mb-3 flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-coal-black bg-white font-display font-bold text-coal-black"
-                  >
-                    {initial}
-                  </span>
-                  <span class="min-w-0">
-                    <span class="block truncate font-display font-bold text-coal-black">
+                <div class="mb-2 flex items-center gap-2.5">
+                  <img
+                    src={sourceLogo[r.source]}
+                    alt=""
+                    width="26"
+                    height="26"
+                    class="h-[1.625rem] w-[1.625rem] shrink-0"
+                    loading="lazy"
+                  />
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate font-display text-sm font-bold text-coal-black">
                       {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                     </span>
-                    <span class="block text-xs text-coal-900">
-                      {/* anonymous cards already say the role in the name line above */}
+                    <span class="block truncate text-[0.7rem] leading-tight text-coal-900">
                       {r.author && r.roleLabel}
                       {r.country && ` · ${r.country}`}
                       {r.author && when && ' · '}
@@ -340,34 +353,51 @@ const explainers = [
                   </span>
                 </div>
 
-                {r.title && (
-                  <p class="mb-1 font-display font-bold text-coal-black">{r.title}</p>
-                )}
+                <p class="mb-2 flex flex-wrap items-center gap-x-2 text-[0.7rem]">
+                  <a
+                    href={sourceUrl[r.source]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 font-display font-bold text-coal-black underline underline-offset-2"
+                  >
+                    {sourceVerb[r.source]}
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      class="h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M14 4h6v6M20 4 10.5 13.5" />
+                      <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+                    </svg>
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
+                  {r.rating && (
+                    <span class="tracking-widest text-coal-black" aria-label={`${r.rating} out of 5`}>
+                      <span aria-hidden="true">★★★★★</span>
+                    </span>
+                  )}
+                </p>
 
-                {r.rating && (
-                  <p class="mb-2 text-sm tracking-widest text-coal-black" aria-label={`${r.rating} out of 5`}>
-                    <span aria-hidden="true">★★★★★</span>
+                {r.title && (
+                  <p class="mb-1 truncate font-display text-sm font-bold text-coal-black">
+                    {r.title}
                   </p>
                 )}
 
-                <div class="review-body min-h-0 flex-1 text-coal-1000">
+                <div class="review-body text-sm text-coal-1000">
                   {paras.map((p) => (
-                    <p class="mb-2 last:mb-0 whitespace-pre-line">{p}</p>
+                    <p class="mb-1.5 last:mb-0 whitespace-pre-line">{p}</p>
                   ))}
                 </div>
 
-                <p class="review-foot mt-3 flex items-center justify-between gap-3 border-t-2 border-coal-black/15 pt-3 text-xs">
-                  <a
-                    href={sourceUrl[r.source]}
-                    rel="noopener"
-                    class="font-display font-bold text-coal-black underline underline-offset-4"
-                  >
-                    {sourceVerb[r.source]} →
-                  </a>
-                  <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
-                    See more…
-                  </button>
-                </p>
+                <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
+                  See more…
+                </button>
 
                 <dialog id={`dlg-${r.id}`} class="review-dialog card-bina">
                   <div class="p-6 sm:p-8">
@@ -555,6 +585,7 @@ const explainers = [
       .review-body {
         mask-image: none !important;
         -webkit-mask-image: none !important;
+        max-height: none !important;
         overflow: visible !important;
       }
     </style>
@@ -563,32 +594,38 @@ const explainers = [
   <style>
     /* Every cell in the wall is the same height, so the grid stays a grid. */
     .wall-cell {
-      height: 24rem;
+      height: 12.5rem;
     }
     @media (min-width: 640px) {
       .wall-cell {
-        height: 25rem;
+        height: 13rem;
       }
     }
 
-    /* A clipped review fades out towards the bottom edge instead of stopping dead. */
+    /* Three lines of review: two solid, the third fading out to nothing. */
     .review-body {
+      line-height: 1.6;
+      max-height: 4.8em;
       overflow: hidden;
     }
     .review-body.is-faded {
-      -webkit-mask-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
-      mask-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 66%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0, #000 66%, transparent 100%);
     }
 
+    /* "See more" sits on top of the fade, bottom-right of the card. */
     .review-more {
+      position: absolute;
+      right: 1.25rem;
+      bottom: 0.9rem;
       cursor: pointer;
       border: 2px solid #000;
       border-radius: 9999px;
       background: #fff;
-      padding: 0.15rem 0.7rem;
+      padding: 0.1rem 0.65rem;
       font-family: 'Rund Display', Arial, sans-serif;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #000;
       white-space: nowrap;
       transition: background-color 0.2s ease-out;
