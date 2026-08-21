@@ -3,6 +3,7 @@
   "_openQuestions": [
     "Only '✅ Approved to Share' Notion rows may be published. All 17 appear here: 2 as link cards (the LinkedIn article and the Instagram reel), 1 as the first hero pull quote (T-007a), and the other 14 inside the full public review each was excerpted from. The 40 blocked rows (30 Needs Retrieval, 10 Needs Permission) are absent and must stay absent until Family Success clears them.",
     "Trustpilot shows a 4.2 TrustScore over 6 reviews while every visible review is 5 stars — TrustScore is Trustpilot's weighted score, not a mean, so never restate it as an average of the reviews shown.",
+    "T-007a's exact registry wording ('My 4th grader finally loves school!!') is no longer displayed after the pull-quote band was removed. The same parent's full review is published in full from Trustpilot (Sarah Schmirl, 2024-05-20), so the row is represented but not quoted verbatim.",
     "Two Trustpilot reviews are the same families' Niche reviews cross-posted (Іван Бойченюк, and Алиса Сазонова's longer bilingual review). The Niche copies are already on the page, so the Trustpilot duplicates are deliberately not shown — do not add them as separate cards.",
     "A seventh review on bina's Trustpilot page ('world best prop firm', GURLAL SINGH, 2026-03-20) is not about bina at all and is excluded. It is presumably why Trustpilot's own count and our card count differ; consider reporting it to Trustpilot.",
     "The Asana source list's Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) is a parent asking 'Does anyone use Bina online school? Feedback?' — the one visible reply is about Australian homeschool registration, not bina. No testimonial content; further replies are behind a login.",
@@ -14,7 +15,8 @@
     "Niche lists bina as PK-6 / ages 4-12. bina serves ages 4-15. Do not repeat Niche's grade range on this page.",
     "Site testimonials carry first names but no dates, because thebinaschool.com publishes none.",
     "The 'Leave a review' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com — Trustpilot's standard write-a-review path, still worth opening once in a browser to confirm.",
-    "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes."
+    "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes.",
+    "The mid-page provider bar uses typographic wordmarks plus a coloured initial, not the platforms' real logos — no third-party brand assets are embedded. Swap in official SVGs only if the team obtains them from each brand's asset page."
   ],
   "headline": {
     "nicheAvg": 5.0,
@@ -33,7 +35,11 @@
       "detail": "5.0 out of 5, every review 5 stars",
       "note": "independent US school-review site",
       "url": "https://www.niche.com/k12/bina-claymont-de/reviews/",
-      "stat": "5.0 ★"
+      "stat": "5.0 ★",
+      "mark": "N",
+      "markColor": "bg-bina-grass",
+      "barLabel": "Niche",
+      "barStat": "5.0"
     },
     {
       "key": "trustpilot",
@@ -41,15 +47,11 @@
       "detail": "4.2 out of 5 from 6 reviews",
       "note": "verified reviewers, and we cannot delete one",
       "url": "https://www.trustpilot.com/review/thebinaschool.com",
-      "stat": "4.2 ★"
-    },
-    {
-      "key": "instagram",
-      "name": "Instagram + LinkedIn",
-      "detail": "parents posting about bina on their own accounts",
-      "note": "their words, their feeds",
-      "url": "https://www.instagram.com/thebinaschool/",
-      "stat": null
+      "stat": "4.2 ★",
+      "mark": "T",
+      "markColor": "bg-bina-green",
+      "barLabel": "Trustpilot",
+      "barStat": "4.2"
     },
     {
       "key": "world-schools",
@@ -57,23 +59,23 @@
       "detail": "5.0 out of 5 from 5 reviews",
       "note": "international school directory",
       "url": "https://world-schools.com/schools/bina-school/",
-      "stat": "5.0 ★"
+      "stat": "5.0 ★",
+      "mark": "W",
+      "markColor": "bg-bina-blue",
+      "barLabel": "world-schools",
+      "barStat": "5.0"
     },
     {
-      "key": "site",
-      "name": "thebinaschool.com",
-      "detail": "families who let us quote them",
-      "note": "the only source we host ourselves",
-      "url": "https://thebinaschool.com",
-      "stat": null
-    },
-    {
-      "key": "survey",
-      "name": "Our family survey",
-      "detail": "103 families scored us out of 10",
-      "note": "published in full, weakest score included",
-      "url": "/family-survey",
-      "stat": "9.42"
+      "key": "instagram",
+      "name": "Instagram + LinkedIn",
+      "detail": "parents posting about bina on their own accounts",
+      "note": "their words, their feeds",
+      "url": "https://www.instagram.com/thebinaschool/",
+      "stat": null,
+      "mark": "IG",
+      "markColor": "bg-bina-pink",
+      "barLabel": "Instagram + LinkedIn",
+      "barStat": null
     },
     {
       "key": "glassdoor",
@@ -81,7 +83,35 @@
       "detail": "what it is like to work here",
       "note": "team reviews, not family reviews",
       "url": "https://www.glassdoor.com/Overview/Working-at-bina-EI_IE5085999.11,15.htm",
-      "stat": null
+      "stat": null,
+      "mark": "G",
+      "markColor": "bg-bina-orange",
+      "barLabel": "Glassdoor",
+      "barStat": "the team"
+    },
+    {
+      "key": "survey",
+      "name": "Our family survey",
+      "detail": "103 families scored us out of 10",
+      "note": "published in full, weakest score included",
+      "url": "/family-survey",
+      "stat": "9.42",
+      "mark": "★",
+      "markColor": "bg-bina-purple",
+      "barLabel": "Our family survey",
+      "barStat": "9.42/10"
+    },
+    {
+      "key": "site",
+      "name": "thebinaschool.com",
+      "detail": "families who let us quote them",
+      "note": "the only source we host ourselves",
+      "url": "https://thebinaschool.com",
+      "stat": null,
+      "mark": "b",
+      "markColor": "bg-bina-yellow",
+      "barLabel": "thebinaschool.com",
+      "barStat": null
     }
   ],
   "filters": [
@@ -557,29 +587,6 @@
     "rule": "Only rows with Status '✅ Approved to Share' may appear on this page. Public-platform reviews start Approved; anything captured in Slack, Telegram, Seesaw or Zoom needs the family's written consent from Family Success first. Never publish a 🔒 Needs Retrieval or 🟡 Needs Permission row.",
     "pageScope": "Everything rendered on /reviews is Approved-class under the SOP: the SOP puts any public review platform (Niche, Trustpilot, LinkedIn, Instagram) at '✅ Approved to Share' automatically, and the six thebinaschool.com testimonials were permissioned before they were published there. No '🔒 Needs Retrieval' or '🟡 Needs Permission' row is rendered, quoted, paraphrased or hinted at."
   },
-  "pullQuotes": [
-    {
-      "notionId": "T-007a",
-      "text": "My 4th grader finally loves school!!",
-      "attribution": "bina parent",
-      "source": "world-schools",
-      "tint": "bg-bina-yellow"
-    },
-    {
-      "notionId": "T-049",
-      "text": "Our 6-year-old loves her teachers and classmates and is learning so much better than when she was in traditional school.",
-      "attribution": "bina parent",
-      "source": "niche",
-      "tint": "bg-bina-grass"
-    },
-    {
-      "notionId": "T-048",
-      "text": "Thankful to Bina I can raise my daughter near family in Brazil, travel to work in the US, and travel Europe with her by my side while getting excellent education!",
-      "attribution": "bina parent",
-      "source": "niche",
-      "tint": "bg-bina-purple"
-    }
-  ],
   "beyond": [
     {
       "notionId": "T-016",
