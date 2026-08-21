@@ -2,6 +2,7 @@
   "_provenance": "Niche reviews copied verbatim from https://www.niche.com/k12/bina-claymont-de/reviews/ on 2026-08-21 (20 of the 21 reviews its own structured data reports). Site testimonials copied verbatim from thebinaschool.com on 2026-08-21. Nothing on this page is written by bina. Survey figures (recommendation average, NPS, sample size) are not duplicated here — the page imports them from family-survey.json so the two pages can never disagree. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows). This page renders only the 17 rows at '✅ Approved to Share'; the 30 'Needs Retrieval' and 10 'Needs Permission' rows are deliberately absent until Family Success clears them. 14 of the 17 approved rows are pull-quote excerpts of Niche reviews already published here in full, so they are recorded as notionExcerpts on the parent review rather than duplicated as cards.",
   "_openQuestions": [
     "Only '✅ Approved to Share' rows from Notion may be published. 40 of the 57 rows (30 Needs Retrieval, 10 Needs Permission) are blocked and must not be added to this page without Family Success consent — several are exceptional (T-001, T-002, T-009, T-010, T-043).",
+    "The 20 full Niche reviews and the 6 site testimonials are Approved-class by SOP rule but are not individually logged as Notion rows — Notion holds 15 pull-quote excerpts of those same Niche reviews instead. If the registry should mirror the page 1:1, someone has to add ~26 Approved rows to Notion; that is a write into the team's database and has not been done.",
     "The pull-quote 'My 4th grader finally loves school!!' is logged in Notion (T-007a) with Source = Niche, but the copy we actually observed sits on world-schools.com. Both are public and Approved; the card cites world-schools.com because that is where it was read.",
     "Trustpilot (https://www.trustpilot.com/review/thebinaschool.com) is behind an AWS WAF challenge, so its score, review count and review text are NOT verified. The page links to it without asserting a number.",
     "The Asana source list includes a public Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) that has not been read or logged in Notion. Not on the page.",
@@ -500,7 +501,8 @@
     "needsRetrieval": 30,
     "needsPermission": 10,
     "declined": 0,
-    "rule": "Only rows with Status '✅ Approved to Share' may appear on this page. Public-platform reviews start Approved; anything captured in Slack, Telegram, Seesaw or Zoom needs the family's written consent from Family Success first. Never publish a 🔒 Needs Retrieval or 🟡 Needs Permission row."
+    "rule": "Only rows with Status '✅ Approved to Share' may appear on this page. Public-platform reviews start Approved; anything captured in Slack, Telegram, Seesaw or Zoom needs the family's written consent from Family Success first. Never publish a 🔒 Needs Retrieval or 🟡 Needs Permission row.",
+    "pageScope": "Everything rendered on /reviews is Approved-class under the SOP: the SOP puts any public review platform (Niche, Trustpilot, LinkedIn, Instagram) at '✅ Approved to Share' automatically, and the six thebinaschool.com testimonials were permissioned before they were published there. No '🔒 Needs Retrieval' or '🟡 Needs Permission' row is rendered, quoted, paraphrased or hinted at."
   },
   "pullQuotes": [
     {
@@ -542,5 +544,21 @@
       "cta": "Watch the reel",
       "url": "https://www.instagram.com/reel/DQrWLA9jXyY/"
     }
-  ]
+  ],
+  "cta": {
+    "primary": {
+      "label": "Book a bina Adventure class",
+      "href": "/book-adventure",
+      "note": "60 minutes, live, no commitment"
+    },
+    "secondary": {
+      "label": "Visit bina",
+      "href": "https://thebinaschool.com"
+    },
+    "currentFamilies": {
+      "label": "Write a review",
+      "href": "https://www.trustpilot.com/evaluate/thebinaschool.com"
+    },
+    "rule": "The page's audience is prospective parents, so every primary CTA is the Adventure class (captured through the campaign intake webhook). The review ask targets current families and stays a text link plus one in-wall card."
+  }
 }
