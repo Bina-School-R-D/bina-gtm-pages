@@ -12,6 +12,8 @@ const surveyN = survey.surveyA.n;
 const npsTopBand = survey.npsBenchmark.worldClassFrom;
 
 const SITE = 'https://thebinaschool.com';
+/* Same conversion CTA as the main site — these pages stand in for it. */
+const JOURNEY = 'https://form.thebinaschool.com/new';
 const NICHE = 'https://www.niche.com/k12/bina-claymont-de/reviews/';
 const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com';
 
@@ -21,9 +23,11 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
     because a sceptic wants to leave and check) -> the wall itself -> the survey numbers
     behind the quotes -> what two parents made unprompted -> methodology expanders -> book a class.
 
-  CTA ladder: the page is read by prospective parents, so every primary CTA is "book an Adventure
-  class" (/book-adventure, which captures the lead through the campaign webhook). The review ask is
-  for current families and is deliberately demoted to a text link in the hero plus one in-wall card.
+  CTA ladder: same as the main site, because these pages stand in for it — every primary CTA is
+  "Start your bina journey" to form.thebinaschool.com/new — nav and hero use the main site's exact
+  wording, and the closing block reuses its "Begin now". BaseLayout forwards any ?ref= on the
+  current URL onto that link so partner attribution survives. The review ask is for current families
+  and is deliberately demoted to a text link in the hero plus one in-wall card.
 
   Scanners get the h1, four tiles and the H2s, each a complete claim. Focused readers get
   two lines under each H2. Detail readers get the source cards, the per-card verify links
@@ -141,8 +145,8 @@ const explainers = [
 ---
 
 <BaseLayout
-  ctaHref="/book-adventure"
-  ctaLabel="Book a class"
+  ctaHref={JOURNEY}
+  ctaLabel="Start your bina journey"
   title="bina Reviews — What Families Actually Say About Us"
   description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
@@ -165,11 +169,12 @@ const explainers = [
       </p>
 
       <div class="mb-3 flex flex-wrap gap-3">
-        <a href="/book-adventure" class="btn-bina text-lg">Book a bina Adventure class</a>
+        <a href={JOURNEY} class="btn-bina text-lg">Start your bina journey →</a>
         <a href={SITE} class="btn-bina-ghost text-lg">Visit bina</a>
       </div>
       <p class="mb-10 text-sm font-medium text-coal-1000">
-        60 minutes, live, no commitment — your child sits in a real class. Already a bina family?{' '}
+        Tell us about your child and we'll show you the school these families are describing. Already
+        a bina family?{' '}
         <a href={TRUSTPILOT_WRITE} rel="noopener" class="font-bold underline underline-offset-4"
           >Leave a review</a
         >.
@@ -334,10 +339,10 @@ const explainers = [
                       Reading about it only goes so far.
                     </p>
                     <p class="mb-4 text-coal-1000">
-                      Put your child in a real bina class for 60 minutes and see what these families
-                      are describing. No commitment.
+                      Tell us about your child, meet the teachers, and see whether every family on
+                      this page is right about us.
                     </p>
-                    <a href="/book-adventure" class="btn-bina">Book an Adventure class</a>
+                    <a href={JOURNEY} class="btn-bina">Start your bina journey →</a>
                   </div>
                 );
               }
@@ -496,14 +501,14 @@ const explainers = [
   <section class="border-t-2 border-coal-black bg-coal-black">
     <div class="mx-auto max-w-4xl px-5 py-16 text-center">
       <h2 class="mb-4 text-3xl text-white sm:text-4xl">
-        Read all you like — then go and <span class="text-bina-grass">watch a class</span>
+        Read all you like — then come and <span class="text-bina-grass">see for yourself</span>
       </h2>
       <p class="mx-auto mb-8 max-w-xl text-white/80">
-        Book a bina Adventure — 60 minutes, live, with children your child's age — and decide for
-        yourself whether the reviews hold up.
+        Tell us about your child. We'll show you how bina teaches, introduce the teachers these
+        families keep naming, and let you decide whether the reviews hold up.
       </p>
       <div class="flex flex-wrap justify-center gap-3">
-        <a href="/book-adventure" class="btn-bina text-lg">Book a bina Adventure class</a>
+        <a href={JOURNEY} class="btn-bina text-lg">Begin now →</a>
         <a href={SITE} class="btn-bina-ghost text-lg">Visit bina</a>
       </div>
       <p class="mt-6 text-sm text-white/70">

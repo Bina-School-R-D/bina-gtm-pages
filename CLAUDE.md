@@ -98,6 +98,7 @@ The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it wri
 ## Content rules
 
 - Factual claims about external programs (ESA amounts, deadlines, regulations) must carry a "verify with the official source" disclaimer and link to the official program.
+- **Primary CTA on every family-facing page is the main site's own CTA — `Start your bina journey →` to `https://form.thebinaschool.com/new`.** These pages stand in for thebinaschool.com, so the conversion action must match it exactly; don't invent a page-specific one. `BaseLayout` keeps any `?ref=` from the current URL for 365 days and appends it to every `form.thebinaschool.com` link, mirroring the partner-attribution snippet on the main site (`bina-gtm/notes/partner-program-technical-plan.md` §4). `localStorage` is per-origin, so partner links that should attribute through go.bina.school must carry `?ref=` on the go.bina.school URL itself.
 - CTA email is `admissions@thebinaschool.com` — these pages talk to prospective and current families, so email CTAs go to admissions, not the general `hello@` inbox. Main-site links go to `https://thebinaschool.com`.
 
 ### Publishing our own data (surveys, results, outcomes)

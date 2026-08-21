@@ -69,5 +69,48 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <slot name="footer-note" />
       </div>
     </footer>
+
+    <script>
+      /* Partner attribution, mirroring the snippet installed on thebinaschool.com: keep any
+         ?ref= for a year and append it to every form.thebinaschool.com link. localStorage is
+         per-origin, so this only carries a ref that arrived on go.bina.school itself. */
+      (function () {
+        var KEY = 'bina_ref';
+        var KEY_TS = 'bina_ref_ts';
+        var MAX_DAYS = 365;
+        try {
+          var fromUrl = new URLSearchParams(window.location.search).get('ref');
+          if (fromUrl) {
+            localStorage.setItem(KEY, fromUrl);
+            localStorage.setItem(KEY_TS, String(Date.now()));
+          }
+          var stored = localStorage.getItem(KEY);
+          var ts = localStorage.getItem(KEY_TS);
+          if (stored && ts && (Date.now() - parseInt(ts, 10)) / 86400000 > MAX_DAYS) {
+            localStorage.removeItem(KEY);
+            localStorage.removeItem(KEY_TS);
+            stored = null;
+          }
+          if (!stored) return;
+          document.addEventListener(
+            'click',
+            function (e) {
+              var link = e.target instanceof Element ? e.target.closest('a') : null;
+              if (!link) return;
+              var href = link.getAttribute('href') || '';
+              if (href.indexOf('form.thebinaschool.com') === -1 || href.indexOf('ref=') !== -1)
+                return;
+              link.setAttribute(
+                'href',
+                href + (href.indexOf('?') === -1 ? '?' : '&') + 'ref=' + encodeURIComponent(stored)
+              );
+            },
+            true
+          );
+        } catch (err) {
+          /* private mode / storage disabled — attribution is best-effort, never blocking */
+        }
+      })();
+    </script>
   </body>
 </html>
