@@ -72,11 +72,16 @@ const sourceVerb: Record<string, string> = {
 const niche = reviews.filter((r) => r.source === 'niche');
 const site = reviews.filter((r) => r.source === 'site');
 
-// Spread the short reviews through the long ones — three long, one short — so no masonry
+// Reviews signed with a real name — the ones the reviewer published under their own name on a
+// platform we don't control — lead the wall, because a name earns trust faster than an initial.
+const named = reviews.filter((r) => r.author && !r.fullNameWithheld);
+const unnamed = reviews.filter((r) => !r.author || r.fullNameWithheld);
+
+// Within the rest, spread the short reviews through the long ones — three long, one short — so no
 // column ends up carrying every 1,000-character review while its neighbour runs dry.
-const short = reviews.filter((r) => r.body.length <= 520);
-const long = reviews.filter((r) => r.body.length > 520);
-const ordered: typeof reviews = [];
+const short = unnamed.filter((r) => r.body.length <= 520);
+const long = unnamed.filter((r) => r.body.length > 520);
+const ordered: typeof reviews = [...named];
 let si = 0;
 let li = 0;
 while (si < short.length || li < long.length) {
