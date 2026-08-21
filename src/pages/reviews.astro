@@ -45,9 +45,16 @@ const sourceUrl: Record<string, string> = {
   site: SITE,
   'world-schools': WORLD_SCHOOLS,
 };
-/* thebinaschool.com is not an independent review site, so it stays out of the provider bar —
-   the six testimonials from it still carry their own "Published on thebinaschool.com" link. */
-const barSources = sources.filter((src) => src.key !== 'site');
+/* The bar carries the three review platforms plus our own survey. thebinaschool.com is not an
+   independent site, Instagram/LinkedIn live in their own section further down, and Glassdoor is
+   about working here rather than being a family here. */
+const BAR = ['niche', 'trustpilot', 'world-schools', 'survey'];
+const barSources = BAR.map((key) => sources.find((src) => src.key === key)!);
+const barLogo: Record<string, string> = {
+  niche: '/images/logos/niche.svg',
+  trustpilot: '/images/logos/trustpilot.svg',
+  'world-schools': '/images/logos/world-schools.svg',
+};
 
 const sourceInitial: Record<string, string> = {
   niche: 'N',
@@ -182,15 +189,26 @@ const explainers = [
               rel="noopener"
               class="group flex h-full min-w-[12rem] items-center gap-3 px-5 py-5 no-underline transition-colors duration-300 hover:bg-bina-yellow"
             >
-              <span
-                aria-hidden="true"
-                class:list={[
-                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display text-xs font-bold text-coal-black',
-                  src.markColor,
-                ]}
-              >
-                {src.mark}
-              </span>
+              {barLogo[src.key] ? (
+                <img
+                  src={barLogo[src.key]}
+                  alt=""
+                  width="32"
+                  height="32"
+                  class="h-8 w-8 shrink-0"
+                  loading="lazy"
+                />
+              ) : (
+                <span
+                  aria-hidden="true"
+                  class:list={[
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display text-xs font-bold text-coal-black',
+                    src.markColor,
+                  ]}
+                >
+                  {src.mark}
+                </span>
+              )}
               <span class="min-w-0 flex-1">
                 <span class="block truncate font-display font-bold text-coal-black">
                   {src.barLabel}
@@ -236,13 +254,16 @@ const explainers = [
         }
       </div>
 
-      <div id="review-wall" class="columns-1 gap-5 md:columns-2 xl:columns-3 2xl:columns-4">
+      <div
+        id="review-wall"
+        class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+      >
         {
           wall.map((item) => {
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class="card-bina mb-5 break-inside-avoid bg-bina-yellow p-6">
+                  <div class="wall-cell card-bina flex flex-col bg-bina-yellow p-6">
                     <p class="mb-2 font-display text-xl font-bold text-coal-black">
                       Already a bina family?
                     </p>
@@ -250,7 +271,7 @@ const explainers = [
                       Two minutes of your honest opinion is what the next family reads before they
                       dare to switch schools.
                     </p>
-                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-ghost">
+                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-ghost mt-auto self-start">
                       Write a review
                     </a>
                   </div>
@@ -258,7 +279,7 @@ const explainers = [
               }
               if (item.at === 2) {
                 return (
-                  <div class="card-bina mb-5 break-inside-avoid bg-bina-grass/40 p-6">
+                  <div class="wall-cell card-bina flex flex-col bg-bina-grass/40 p-6">
                     <p class="mb-2 font-display text-xl font-bold text-coal-black">
                       Reading about it only goes so far.
                     </p>
@@ -266,12 +287,12 @@ const explainers = [
                       Tell us about your child, meet the teachers, and see whether every family on
                       this page is right about us.
                     </p>
-                    <a href={JOURNEY} class="btn-bina">Start your bina journey →</a>
+                    <a href={JOURNEY} class="btn-bina mt-auto self-start">Start your bina journey →</a>
                   </div>
                 );
               }
               return (
-                <div class="card-bina mb-5 break-inside-avoid bg-coal-black p-6">
+                <div class="wall-cell card-bina flex flex-col bg-coal-black p-6">
                   <p class="mb-2 font-display text-xl font-bold text-white">
                     Stories are one thing. Scores are another.
                   </p>
@@ -279,7 +300,7 @@ const explainers = [
                     We asked all {surveyN} families to rate us out of 10 on seven things, then
                     published every score — including our worst one.
                   </p>
-                  <a href="/family-survey" class="btn-bina">See the scores</a>
+                  <a href="/family-survey" class="btn-bina mt-auto self-start">See the scores</a>
                 </div>
               );
             }
@@ -293,7 +314,7 @@ const explainers = [
 
             return (
               <article
-                class:list={['review-card card-bina mb-5 break-inside-avoid p-6', tint]}
+                class:list={['review-card wall-cell card-bina flex flex-col p-6', tint]}
                 data-role={r.role}
                 data-themes={r.themes.join(' ')}
               >
@@ -329,13 +350,13 @@ const explainers = [
                   </p>
                 )}
 
-                <div class="review-body is-clamped text-coal-1000">
+                <div class="review-body min-h-0 flex-1 text-coal-1000">
                   {paras.map((p) => (
                     <p class="mb-2 last:mb-0 whitespace-pre-line">{p}</p>
                   ))}
                 </div>
 
-                <p class="mt-4 border-t-2 border-coal-black/15 pt-3 text-xs">
+                <p class="review-foot mt-3 flex items-center justify-between gap-3 border-t-2 border-coal-black/15 pt-3 text-xs">
                   <a
                     href={sourceUrl[r.source]}
                     rel="noopener"
@@ -343,7 +364,58 @@ const explainers = [
                   >
                     {sourceVerb[r.source]} →
                   </a>
+                  <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
+                    See more…
+                  </button>
                 </p>
+
+                <dialog id={`dlg-${r.id}`} class="review-dialog card-bina">
+                  <div class="p-6 sm:p-8">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                      <span>
+                        <span class="block font-display text-lg font-bold text-coal-black">
+                          {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
+                        </span>
+                        <span class="block text-xs text-coal-900">
+                          {r.roleLabel}
+                          {r.country && ` · ${r.country}`}
+                          {when && ` · ${when}`}
+                        </span>
+                      </span>
+                      <button
+                        type="button"
+                        class="dialog-close shrink-0 cursor-pointer rounded-full border-2 border-coal-black bg-white px-3 py-1 font-display text-sm font-bold text-coal-black transition-colors hover:bg-bina-pink"
+                        aria-label="Close"
+                        >Close</button
+                      >
+                    </div>
+                    {r.title && (
+                      <p class="mb-1 font-display text-xl font-bold text-coal-black">{r.title}</p>
+                    )}
+                    {r.rating && (
+                      <p
+                        class="mb-3 text-sm tracking-widest text-coal-black"
+                        aria-label={`${r.rating} out of 5`}
+                      >
+                        <span aria-hidden="true">★★★★★</span>
+                      </p>
+                    )}
+                    <div class="text-coal-1000">
+                      {paras.map((p) => (
+                        <p class="mb-3 last:mb-0 whitespace-pre-line">{p}</p>
+                      ))}
+                    </div>
+                    <p class="mt-5 text-xs">
+                      <a
+                        href={sourceUrl[r.source]}
+                        rel="noopener"
+                        class="font-display font-bold text-coal-black underline underline-offset-4"
+                      >
+                        {sourceVerb[r.source]} →
+                      </a>
+                    </p>
+                  </div>
+                </dialog>
               </article>
             );
           })
@@ -474,57 +546,90 @@ const explainers = [
     >. NPS® is a registered trademark of Bain &amp; Company, Fred Reichheld and Satmetrix Systems.
   </p>
 
-  <!-- With JS off the clamp is lifted entirely, so no review is ever unreachable. -->
+  <!-- With JS off, cards grow to fit and nothing is faded, so no review is ever unreachable. -->
   <noscript>
     <style>
-      .review-body.is-clamped {
-        display: block !important;
+      .wall-cell {
+        height: auto !important;
+      }
+      .review-body {
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
         overflow: visible !important;
       }
     </style>
   </noscript>
 
   <style>
-    /* Long reviews render collapsed to eight lines; the script lifts the clamp on the short
-       ones and adds the "read the rest" button only where text is actually cut off. */
-    .review-body.is-clamped {
-      display: -webkit-box;
-      -webkit-line-clamp: 8;
-      -webkit-box-orient: vertical;
+    /* Every cell in the wall is the same height, so the grid stays a grid. */
+    .wall-cell {
+      height: 24rem;
+    }
+    @media (min-width: 640px) {
+      .wall-cell {
+        height: 25rem;
+      }
+    }
+
+    /* A clipped review fades out towards the bottom edge instead of stopping dead. */
+    .review-body {
       overflow: hidden;
     }
+    .review-body.is-faded {
+      -webkit-mask-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
+    }
+
     .review-more {
-      margin-top: 0.5rem;
+      cursor: pointer;
+      border: 2px solid #000;
+      border-radius: 9999px;
+      background: #fff;
+      padding: 0.15rem 0.7rem;
       font-family: 'Rund Display', Arial, sans-serif;
       font-weight: 700;
-      font-size: 0.875rem;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      cursor: pointer;
-      background: none;
-      border: 0;
-      padding: 0;
+      font-size: 0.75rem;
       color: #000;
+      white-space: nowrap;
+      transition: background-color 0.2s ease-out;
+    }
+    .review-more:hover {
+      background: #f7d928;
+    }
+
+    /* The full review, in a native dialog — no library, Esc and backdrop close for free. */
+    .review-dialog {
+      width: min(38rem, calc(100vw - 2.5rem));
+      max-height: min(80vh, 44rem);
+      overflow-y: auto;
+      padding: 0;
+      background: #fff;
+    }
+    .review-dialog::backdrop {
+      background: rgb(0 0 0 / 0.55);
     }
   </style>
 
   <script>
-    // 1. Reviews render clamped. Unclamp the short ones, and only add a "read the rest"
-    //    button where the text is genuinely cut off.
-    document.querySelectorAll<HTMLElement>('.review-body').forEach((body) => {
-      if (body.scrollHeight <= body.clientHeight + 2) {
-        body.classList.remove('is-clamped');
-        return;
+    // 1. Cards are a fixed height. Where a review overflows, fade it out and offer the full text
+    //    in a dialog; where it fits, leave it completely alone.
+    document.querySelectorAll<HTMLElement>('.review-card').forEach((card) => {
+      const body = card.querySelector<HTMLElement>('.review-body');
+      const btn = card.querySelector<HTMLButtonElement>('.review-more');
+      const dialog = card.querySelector<HTMLDialogElement>('.review-dialog');
+      if (!body || !btn || !dialog) return;
+
+      if (body.scrollHeight > body.clientHeight + 2) {
+        body.classList.add('is-faded');
+        btn.classList.remove('hidden');
       }
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'review-more';
-      btn.textContent = 'Read the rest';
-      btn.addEventListener('click', () => {
-        const open = body.classList.toggle('is-clamped');
-        btn.textContent = open ? 'Read the rest' : 'Show less';
+
+      btn.addEventListener('click', () => dialog.showModal());
+      dialog.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());
+      // click on the backdrop (i.e. outside the panel) closes it too
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
       });
-      body.after(btn);
     });
 
     // 2. Filter pills — one active at a time, counts already rendered server-side.
