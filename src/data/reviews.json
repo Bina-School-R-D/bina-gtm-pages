@@ -604,24 +604,18 @@
   ],
   "cta": {
     "primary": {
-      "label": "Start your bina journey →",
-      "href": "https://form.thebinaschool.com/new",
-      "note": "Same CTA as thebinaschool.com — go.bina.school pages stand in for the main site, so the conversion action must match it exactly."
+      "label": "Visit bina",
+      "href": "https://thebinaschool.com",
+      "note": "Same CTA as /esa and /student-results — these pages hand the enquiry to the main site rather than running their own form."
     },
     "secondary": {
-      "label": "Visit bina",
-      "href": "https://thebinaschool.com"
+      "label": "See the family survey",
+      "href": "/family-survey"
     },
     "currentFamilies": {
       "label": "Write a review",
       "href": "https://www.trustpilot.com/evaluate/thebinaschool.com"
     },
-    "attribution": "BaseLayout keeps any ?ref= from the current URL for 365 days and appends it to every form.thebinaschool.com link, mirroring the snippet installed on the main site. localStorage is per-origin, so a ref stored on thebinaschool.com cannot be read here — partner links that should attribute through go.bina.school must carry ?ref= on the go.bina.school URL itself.",
-    "rule": "Primary CTA is the journey form in the nav, hero, one in-wall card and the closing section. The review ask targets current families only and stays a text link plus one in-wall card. /family-survey stays a secondary text link.",
-    "closing": {
-      "label": "Begin now →",
-      "href": "https://form.thebinaschool.com/new",
-      "note": "thebinaschool.com uses 'Begin now' in its footer CTA; mirrored here."
-    }
+    "rule": "Primary CTA is Visit bina in the nav (BaseLayout default), hero, one in-wall cell and the closing section. The review ask targets current families only and stays a text link plus one in-wall cell."
   }
 }

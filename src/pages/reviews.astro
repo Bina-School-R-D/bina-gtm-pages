@@ -12,8 +12,6 @@ const surveyN = survey.surveyA.n;
 const npsTopBand = survey.npsBenchmark.worldClassFrom;
 
 const SITE = 'https://thebinaschool.com';
-/* Same conversion CTA as the main site — these pages stand in for it. */
-const JOURNEY = 'https://form.thebinaschool.com/new';
 const NICHE = 'https://www.niche.com/k12/bina-claymont-de/reviews/';
 const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com';
 
@@ -24,11 +22,9 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
     things parents made unprompted -> the closing CTA. Provenance, exclusions and the caveats live
     in the footer note.
 
-  CTA ladder: same as the main site, because these pages stand in for it — every primary CTA is
-  "Start your bina journey" to form.thebinaschool.com/new — nav and hero use the main site's exact
-  wording, and the closing block reuses its "Begin now". BaseLayout forwards any ?ref= on the
-  current URL onto that link so partner attribution survives. The review ask is for current families
-  and is deliberately demoted to a text link in the hero plus one in-wall card.
+  CTA ladder: "Visit bina" to thebinaschool.com, the same as /esa and /student-results — we want
+  the main site to take the enquiry. The review ask is for current families and is deliberately
+  demoted to a text link in the hero plus one in-wall card.
 
   Scanners get the h1, the provider bar and the H2s, each a complete claim. Focused readers get
   two lines under each H2. Detail readers get the source cards, the per-card verify links
@@ -144,8 +140,6 @@ const monthYear = (iso: string | null) =>
 ---
 
 <BaseLayout
-  ctaHref={JOURNEY}
-  ctaLabel="Start your bina journey"
   title="bina Reviews — What Families Actually Say About Us"
   description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
@@ -161,7 +155,7 @@ const monthYear = (iso: string | null) =>
       <p class="mb-8 max-w-xl text-lg text-coal-1000 sm:text-xl">
         Their words, not ours — every one of them copied whole from a site we don't control.
       </p>
-      <a href={JOURNEY} class="btn-bina text-lg">Start your bina journey →</a>
+      <a href={SITE} class="btn-bina text-lg">Visit bina</a>
     </div>
   </header>
 
@@ -338,9 +332,9 @@ const monthYear = (iso: string | null) =>
                       Reading about it only goes so far.
                     </p>
                     <p class="mb-4 text-sm text-coal-1000">
-                      Tell us about your child and see whether these families are right about us.
+                      See how bina teaches and whether these families are right about us.
                     </p>
-                    <a href={JOURNEY} class="btn-bina mt-auto self-start">Start your bina journey →</a>
+                    <a href={SITE} class="btn-bina mt-auto self-start">Visit bina</a>
                   </div>
                 );
               }
@@ -509,19 +503,14 @@ const monthYear = (iso: string | null) =>
         Read all you like — then come and <span class="text-bina-grass">see for yourself</span>
       </h2>
       <p class="mx-auto mb-8 max-w-xl text-white/80">
-        Tell us about your child. We'll show you how bina teaches, introduce the teachers these
-        families keep naming, and let you decide whether the reviews hold up.
+        See how bina teaches, meet the teachers these families keep naming, and decide for yourself
+        whether the reviews hold up.
       </p>
       <div class="flex flex-wrap justify-center gap-3">
-        <a href={JOURNEY} class="btn-bina text-lg">Begin now →</a>
-        <a href={SITE} class="btn-bina-ghost text-lg">Visit bina</a>
+        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+        <a href="/family-survey" class="btn-bina-ghost text-lg">See the family survey</a>
       </div>
-      <p class="mt-6 text-sm text-white/70">
-        Prefer numbers to stories?{' '}
-        <a href="/family-survey" class="font-bold text-bina-grass underline underline-offset-4"
-          >Read the family survey</a
-        > — all seven scores, including our weakest.
-      </p>
+
     </div>
   </section>
 
