@@ -1,0 +1,623 @@
+{
+  "_provenance": "Every quote is copied verbatim. Niche reviews read from https://www.niche.com/k12/bina-claymont-de/reviews/ (20 of the 21 its structured data reports) and Trustpilot reviews read from https://www.trustpilot.com/review/thebinaschool.com on 2026-08-21; the six remaining testimonials were copied from thebinaschool.com, where the families had already permissioned them. Nothing on this page is written by bina. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows); this page renders only the 17 rows at '✅ Approved to Share' plus the public reviews those rows were excerpted from, and never a '🔒 Needs Retrieval' or '🟡 Needs Permission' row. Survey figures are imported from family-survey.json.",
+  "_openQuestions": [
+    "Only '✅ Approved to Share' Notion rows may be published. All 17 appear here: 2 as link cards (the LinkedIn article and the Instagram reel), 1 as the first hero pull quote (T-007a), and the other 14 inside the full public review each was excerpted from. The 40 blocked rows (30 Needs Retrieval, 10 Needs Permission) are absent and must stay absent until Family Success clears them.",
+    "Trustpilot shows a 4.2 TrustScore over 6 reviews while every visible review is 5 stars — TrustScore is Trustpilot's weighted score, not a mean, so never restate it as an average of the reviews shown.",
+    "Two Trustpilot reviews are the same families' Niche reviews cross-posted (Іван Бойченюк, and Алиса Сазонова's longer bilingual review). The Niche copies are already on the page, so the Trustpilot duplicates are deliberately not shown — do not add them as separate cards.",
+    "A seventh review on bina's Trustpilot page ('world best prop firm', GURLAL SINGH, 2026-03-20) is not about bina at all and is excluded. It is presumably why Trustpilot's own count and our card count differ; consider reporting it to Trustpilot.",
+    "The Asana source list's Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) is a parent asking 'Does anyone use Bina online school? Feedback?' — the one visible reply is about Australian homeschool registration, not bina. No testimonial content; further replies are behind a login.",
+    "Glassdoor (Working at bina, E5085999) blocks automated reading, so its employee reviews are not transcribed. It is referenced only in the wall intro, never as family social proof, and the 5 staff reviews on the page come from Niche.",
+    "The 20 full Niche reviews, 4 Trustpilot reviews and 6 site testimonials are Approved-class by SOP rule but are not individually logged as Notion rows. If the registry should mirror the page 1:1, ~30 Approved rows need adding to Notion — a write into the team's database, not done.",
+    "The bina Facebook page shows 0 reviews / not yet rated, so Facebook is not listed as a review source.",
+    "Niche's structured data reports reviewCount 21; 20 carry review text and are published here.",
+    "world-schools.com shows 5.0/5 from 5 reviews; four duplicate Niche reviews already on the page and the fifth is the same parent as Trustpilot's Sarah Schmirl review, which is published here in full instead.",
+    "Niche lists bina as PK-6 / ages 4-12. bina serves ages 4-15. Do not repeat Niche's grade range on this page.",
+    "Site testimonials carry first names but no dates, because thebinaschool.com publishes none.",
+    "The 'Leave a review' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com — Trustpilot's standard write-a-review path, still worth opening once in a browser to confirm.",
+    "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes."
+  ],
+  "headline": {
+    "nicheAvg": 5.0,
+    "nicheCount": 20,
+    "parentCount": 25,
+    "staffCount": 5,
+    "trustpilotScore": 4.2,
+    "trustpilotCount": 6,
+    "trustpilotPublished": 4,
+    "publicCount": 24
+  },
+  "sources": [
+    {
+      "key": "niche",
+      "name": "Niche",
+      "detail": "5.0 out of 5, every review 5 stars",
+      "note": "independent US school-review site",
+      "url": "https://www.niche.com/k12/bina-claymont-de/reviews/",
+      "stat": "5.0 ★"
+    },
+    {
+      "key": "trustpilot",
+      "name": "Trustpilot",
+      "detail": "4.2 out of 5 from 6 reviews",
+      "note": "verified reviewers, and we cannot delete one",
+      "url": "https://www.trustpilot.com/review/thebinaschool.com",
+      "stat": "4.2 ★"
+    },
+    {
+      "key": "instagram",
+      "name": "Instagram + LinkedIn",
+      "detail": "parents posting about bina on their own accounts",
+      "note": "their words, their feeds",
+      "url": "https://www.instagram.com/thebinaschool/",
+      "stat": null
+    },
+    {
+      "key": "world-schools",
+      "name": "world-schools.com",
+      "detail": "5.0 out of 5 from 5 reviews",
+      "note": "international school directory",
+      "url": "https://world-schools.com/schools/bina-school/",
+      "stat": "5.0 ★"
+    },
+    {
+      "key": "site",
+      "name": "thebinaschool.com",
+      "detail": "families who let us quote them",
+      "note": "the only source we host ourselves",
+      "url": "https://thebinaschool.com",
+      "stat": null
+    },
+    {
+      "key": "survey",
+      "name": "Our family survey",
+      "detail": "103 families scored us out of 10",
+      "note": "published in full, weakest score included",
+      "url": "/family-survey",
+      "stat": "9.42"
+    },
+    {
+      "key": "glassdoor",
+      "name": "Glassdoor",
+      "detail": "what it is like to work here",
+      "note": "team reviews, not family reviews",
+      "url": "https://www.glassdoor.com/Overview/Working-at-bina-EI_IE5085999.11,15.htm",
+      "stat": null
+    }
+  ],
+  "filters": [
+    {
+      "key": "all",
+      "label": "everything"
+    },
+    {
+      "key": "parent",
+      "label": "parents",
+      "type": "role"
+    },
+    {
+      "key": "staff",
+      "label": "teachers & team",
+      "type": "role"
+    },
+    {
+      "key": "sen",
+      "label": "neurodivergent kids",
+      "type": "theme"
+    },
+    {
+      "key": "switched",
+      "label": "left another school",
+      "type": "theme"
+    },
+    {
+      "key": "travelling",
+      "label": "families who travel",
+      "type": "theme"
+    },
+    {
+      "key": "early-years",
+      "label": "ages 4-6",
+      "type": "theme"
+    },
+    {
+      "key": "small-classes",
+      "label": "small classes",
+      "type": "theme"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "niche-01",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-10-25",
+      "source": "niche",
+      "body": "We are having a great experience with bina since day one. \n\nOur family love the environment, the teachers, the curriculum and how things flow so well into our routine. We have an open channel with the entire school. We receive feedbacks and updates frequently. \n\nWe travel with some frequency and we work from home so bina fits perfectly with our lifestyle. \nOur daughter is learning much more than when she was in a regular school.",
+      "themes": [
+        "travelling",
+        "switched"
+      ]
+    },
+    {
+      "id": "niche-02",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-10-09",
+      "source": "niche",
+      "body": "What caught our attention was small class sizes, focus on whole child development, and being able to travel while our daughter still learns. One discovery call and two bina adventures later, we joined the bina family.\nbina is our daughter’s only experience of school, and we couldn’t wish for a better reference point for her learning journey. \n\nWe absolutely love our bina experience so far. Our daughter is in class with peers up to three years older than her (because bina focuses on ability, not age). We have seen her confidence, ability to express her natural curiosity, and her engagement with peers really blossom. bina's core values, systems, and processes all align beautifully with what matters to us. We are looking forward to many more biomes on this exciting learning journey.\n\nAs two professionals with experience working within education systems, we know how rare and special bina’s approach is. For us, bina is the ecosystem where our child will not only thrive but truly flourish.",
+      "themes": [
+        "ability",
+        "small-classes"
+      ]
+    },
+    {
+      "id": "niche-03",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-09-08",
+      "source": "niche",
+      "body": "Bina has been an absolute game changer for our family. We have twin boys who both attend and are absolutely thriving after coming from a program that wasn’t meeting all of their needs. Bina has been 10/10 with communication, cirriculum , and overall school culture. I could not be more grateful for the hard work of the entire team to make the program what it is. Our family is very proud to be at Bina!",
+      "themes": [
+        "switched"
+      ]
+    },
+    {
+      "id": "niche-04",
+      "author": null,
+      "role": "staff",
+      "roleLabel": "bina team member",
+      "rating": 5,
+      "date": "2025-08-09",
+      "source": "niche",
+      "body": "I work at bina in a non-teaching role and it’s the best place I’ve ever worked. There are quirks related to the fast-growing and fully remote nature of the company, but the team is genuinely invested in the students and the mission. I’ve never encountered an organization so understanding of difference and receptive to feedback (even negative), there is a feeling that we are working together to make things better. I’m planning to work at bina for at least 5 years to see where the company goes and I’m proud to say that the teaching team is the best I’ve ever seen, all dedicated to their unique students in distinct and meaningful ways. Can’t say enough good, it’s just the right place for educators who care about kids and meeting them where they are.",
+      "themes": []
+    },
+    {
+      "id": "niche-05",
+      "author": null,
+      "role": "staff",
+      "roleLabel": "bina team member",
+      "rating": 5,
+      "date": "2025-08-08",
+      "source": "niche",
+      "body": "bina is a truly exceptional place to work. The healthy work culture is unlike any I've experienced; the entire team genuinely believes in our mission and our students. This passion directly translates to an outstanding learning environment.\n\nbina understands that education isn't a one-size-fits-all model. It offers families the flexibility they need without compromising on the quality of education. Students benefit from smaller class sizes, which allows for more individualized attention, enabling teachers to provide targeted interventions or enrichment opportunities. This personalized approach ensures every student's needs are met. The virtual model allows students to learn from anywhere—be it home or while traveling—giving them access to quality education and resources globally. bina is a flexible, high-quality partner for modern families.",
+      "themes": []
+    },
+    {
+      "id": "niche-06",
+      "author": null,
+      "role": "staff",
+      "roleLabel": "bina team member",
+      "rating": 5,
+      "date": "2025-08-08",
+      "source": "niche",
+      "body": "I have been working at bina for over a year now and I am drinking the coolaid :) This is by far one of the coolest, most innovative, dynamic schools i've worked with. The team is phenomenal, knowledgable, non-authoritarian and just good vibes overall! I'm in it for the long run :) The overall community (teachers, admin, parents and mostly kiddos) is what makes bina special. I am honored to be working alongside all of these beautiful people.",
+      "themes": []
+    },
+    {
+      "id": "niche-07",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-07-22",
+      "source": "niche",
+      "body": "Studying at Bina isn't just about traditional education; it's, first and foremost, about the care, support, and love you can only feel in a true family. It’s about genuine children's laughter, a real interest in discovering new things, and even tears – but only because it’s time for holidays. Bina is about true friendship, equality, and respect. It's about teamwork, helping each other, and a sincere desire to make newcomers feel at home. It’s powered by people passionate about what they do – a wonderful team of teachers and managers who become friends to the children. They create unforgettable moments. My daughter talks about them with such excitement and sparkle in her eyes, as if she's just met Santa Claus. This happens after every lesson, every day at school…\nThese aren't just my words; it’s what I've heard from my daughter, read in her emotions, and seen in her eyes. And children's eyes don't lie. When they're filled with happiness, you, as a parent, will feel it too. Thanks, Bina!",
+      "themes": []
+    },
+    {
+      "id": "niche-08",
+      "author": null,
+      "role": "staff",
+      "roleLabel": "bina team member",
+      "rating": 5,
+      "date": "2025-07-21",
+      "source": "niche",
+      "body": "Working at bina has been such a rewarding experience. I’ve worked in international schools in different parts of the world, but I can honestly say bina stands out for its genuine commitment to both children and their families. What’s struck me most is how intentional everything is — from the way learning is designed around hands-on projects that really engage the students, to how technology is thoughtfully used to support individual learning needs. I’ve seen kiddos thrive here who might have been overlooked in a more traditional setup.\n\nEvery day at bina reminds me why I chose education — it’s about connecting with each child as an individual and helping them grow in their own unique way. Being part of a team that genuinely cares about making a difference for every student is both inspiring and deeply fulfilling. It’s a privilege to work with a team who love what they do and put their whole hearts into it!",
+      "themes": []
+    },
+    {
+      "id": "niche-09",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-07-16",
+      "source": "niche",
+      "body": "We highly recommend Bina! \n\nOur son is neurodivergent and was struggling in the traditional schooling system (even though he attended a private school where he received great accommodations). \n\nWe found Bina online when we were researching homeschooling options. \nWe are so happy we went with Bina instead. \n\nOur child has completely blossomed at Bina. And now that he is graduating, he is sad school is ending (when before we would have tears every morning before attending physical school)!\n\nOur son's work ethic has greatly improved. He is more social, more organized and amazes us with his critical thinking skills. \n\nIt's all thanks to the great environment created at Bina: the teachers are wonderful. The other kids are kind, encouraging and great friends to my son. Even though the school in online, they have managed to create a great sense of community. \n\nI would recommend this school to any parent wanting their kids to reach their full potential!!",
+      "themes": [
+        "sen",
+        "switched"
+      ]
+    },
+    {
+      "id": "niche-10",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-01-27",
+      "source": "niche",
+      "body": "We couldn’t be happier with our experience at BINA School! The teachers are incredibly caring, attentive, and dedicated to each child's growth and success. The curriculum is thoughtfully designed to nurture a love for learning while fostering creativity and confidence. My child looks forward to attending school daily and is excited to share everything they’ve learned. The warm, supportive community and emphasis on individual development truly set BINA apart. We’re so grateful to be part of this amazing school!",
+      "themes": []
+    },
+    {
+      "id": "niche-11",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2025-01-27",
+      "source": "niche",
+      "body": "Bina is fantastic!! Our 6 year old looks forward to school every single day. Worth every single penny!  Bina's marketing and the Admissions staff is impressive. We asked many many questions before we decided to enroll and they were patient, kind and extremely responsive. When we made our decision to enroll, the process was easy and very well organized.  The teachers and staff are WONDERFUL! The curriculum and schedule are excellent - well balanced and tailored to each age group. Plenty of breaks, movement, crafts, focused learning, opportunity for socializing and building friendships and community. The growth we have seen in our child since starting bina is obvious and impressive. Massive leaps in reading, writing, math skills, creativity, social skills (and there was no lack of social skills before bina!), sense of responsibility and so much more.  bina is helping our child grow and learn in ways we couldn't have imagined. We HIGHLY recommend bina!!",
+      "themes": [
+        "early-years",
+        "academics"
+      ]
+    },
+    {
+      "id": "niche-12",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-11-20",
+      "source": "niche",
+      "body": "I don't often write reviews, but was compelled to after witnessing my child's early experiences of Bina. We have never encountered a more responsive, articulate, enthusiastic and compassionate group of educators in our family's many different educational experiences (including both public and private options). Bina is a forward-thinking, sensitive, and thoughtful environment for children to learn within. It is clearly attracting educators that are passionate about learning and about creating an atmosphere of conversation versus antiquated authority. Bina is about mutual understanding instead of rigid hierarchy.\n\nFor kids that might be neurodiverse, that might have trauma from terrible schooling experiences, that might be very bright but have never felt understood before, I cannot recommend Bina strongly enough. Bina educators' approaches to children that might have additional needs, including IEPs, is to actually read and incorporate the recommendations of the IEP.",
+      "themes": [
+        "sen",
+        "switched"
+      ]
+    },
+    {
+      "id": "niche-13",
+      "author": null,
+      "role": "staff",
+      "roleLabel": "bina team member",
+      "rating": 5,
+      "date": "2024-07-24",
+      "source": "niche",
+      "body": "Working at bina has been a dream come true! I'm thrilled to be part of a school that prioritizes both parents and children. The dedication to supporting each child's learning journey is truly phenomenal. I feel fortunate to be surrounded by such a passionate, international team of educators. Finding a school where every teacher truly loves their work and gives their all is rare. It's invigorating to be on a team that constantly strives for improvement.",
+      "themes": []
+    },
+    {
+      "id": "niche-14",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-24",
+      "source": "niche",
+      "body": "Two years ago, I realized that homeschooling my daughter alone was going to be my biggest challenge . So I found Bina!\nTheir commitment to excellent tailored education to all students is admirable. The Master teachers and all staff members are overly qualified and express genuine care and love to each student. \nThe curriculum is broad and covers all areas in a very intuitive, playful and creative ways! Literacy, math, arts, robotics and more importantly for me at this stage, the social emotional learning is the key to our incredible experience at Bina. \nThe weekly updates on her development, the micro detailed quarterly assessments, the instant replies to any of my messages, the effort to keep the parents involved, not only in their classroom, but with each other, creates a very respectful, loving family environment to all! \nThankful to Bina I can raise my daughter near family in Brazil, travel to work in the US and travel Europe with her by my side while getting excellent education!",
+      "themes": [
+        "travelling",
+        "switched",
+        "academics"
+      ],
+      "notionExcerpts": [
+        "T-047",
+        "T-048",
+        "T-007f"
+      ]
+    },
+    {
+      "id": "niche-15",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-18",
+      "source": "niche",
+      "body": "Bina has been a total game changer for us. Our 4 year old daughter loves it, and she’s learning so much. The teachers are amazing, and the schedule is thoughtfully designed to incorporate lots of screen breaks and movement / activities. Bina allows us to continue travelling without worrying about interrupting our daughter’s education. It gives us flexibility, while providing our daughter with stability and consistency. Highly recommend!",
+      "themes": [
+        "early-years",
+        "travelling"
+      ],
+      "notionExcerpts": [
+        "T-050",
+        "T-007i",
+        "T-007j"
+      ]
+    },
+    {
+      "id": "niche-16",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-09",
+      "source": "niche",
+      "body": "We are so happy that found bina for our daughter. She now loves going to school and is excited to learn! The teachers at bina are incredible and really cater to each child's needs since there are such small class sizes.  The online tools that they use are great for engaging students and really help them learn. Classes are always organized with great projects that the kids are always excited about.",
+      "themes": [
+        "small-classes"
+      ],
+      "notionExcerpts": [
+        "T-007b",
+        "T-007d"
+      ]
+    },
+    {
+      "id": "niche-17",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-06-26",
+      "source": "niche",
+      "body": "Bina keeps kids engaged with plenty of breaks, perfect for my 5-year-old. Daily activities are well-organized and engaging. Initially, we had to assist with the computer, but our son became independent within weeks. The teachers are exceptional, knowledgeable, and genuinely care about each student's progress, providing personalized attention.\nThe curriculum is well-rounded, fostering a love for learning. Bina offers extracurricular activities that encourage creativity, critical thinking, and teamwork, helping our child develop new interests and skills.\nCommunication is excellent, with regular updates, meetings, and quick responses via Telegram groups with teachers and staff. We can meet with teachers as needed, and Bina tailors education to each child.\nBina School excels in providing a well-rounded education, nurturing personal development, and fostering a strong sense of community. We are incredibly grateful for its positive impact on our child's education and development.",
+      "themes": [
+        "early-years",
+        "academics"
+      ],
+      "notionExcerpts": [
+        "T-007g",
+        "T-007h"
+      ]
+    },
+    {
+      "id": "niche-18",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-23",
+      "source": "niche",
+      "body": "I think Bina is one the best online school for children. For me, as father, the most important is my kid's feelings, her happiness to visit school, her bright eyes and smile when she tells me about her day in Bina. She likes lessons and even during her weekend she looks forward to come back to Bina.",
+      "themes": [],
+      "notionExcerpts": [
+        "T-046"
+      ]
+    },
+    {
+      "id": "niche-19",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-21",
+      "source": "niche",
+      "body": "When we were looking for an online school for our daughter, it was important to find a place with an individualized approach to each child. Our choice fell on Bina School, and we were not mistaken. The incredible care for the children is evident in everything. Our daughter is thrilled with the interesting projects. She has come to love reading books, learned to work in a team, and is making progress thanks to the attentive teachers. The focus on the child’s emotional well-being is paramount.\n\nAlthough our child did not know any English before joining Bina, after six months, we have a bilingual child who doesn’t notice whether she watches cartoons in her native language or English. But most importantly, we are delighted with how eagerly our daughter runs to her lessons and how many positive emotions she shares after classes.\n\nThis school has been a true revelation for us, and we are immensely grateful for its contribution to our daughter’s development. BINA ONE LOVE ❤️",
+      "themes": [
+        "academics"
+      ],
+      "notionExcerpts": [
+        "T-007e",
+        "T-007c"
+      ]
+    },
+    {
+      "id": "niche-20",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-20",
+      "source": "niche",
+      "body": "We could not be happier with bina school. Our 6 year old loves her teachers and classmates and is learning so much better than when she was in traditional school.  It is great for her to have classmates and teachers from all over the world.  The tools and resources they use make learning really fun for our daughter.",
+      "themes": [
+        "early-years",
+        "switched"
+      ],
+      "notionExcerpts": [
+        "T-049"
+      ]
+    },
+    {
+      "id": "site-01",
+      "author": "Amina",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "bina has been a blessing for our family, it keeps me closely involved in my son's learning while giving him structure, confidence, and a nurturing school community that shares our values.",
+      "themes": []
+    },
+    {
+      "id": "site-02",
+      "author": "Makeda & Steve",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "We were exhausted and losing connection. Since joining bina, our daughter is calm, confident, and learning joyfully and no more after-school tantrums.",
+      "themes": [
+        "switched"
+      ]
+    },
+    {
+      "id": "site-03",
+      "author": "Lorena",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "My daughter's passion for learning and friendships has grown tremendously. The teachers at bina nurture her independence, confidence, and emotional awareness beautifully.",
+      "themes": []
+    },
+    {
+      "id": "site-04",
+      "author": "Amanda",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "bina has been a bright spot for our family. The small, live classes and caring teachers helped our children grow in confidence, learning, and connection.",
+      "themes": [
+        "small-classes"
+      ]
+    },
+    {
+      "id": "site-05",
+      "author": "Mo & Ayo",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "Small classes, whole-child focus, and ability-based learning have helped our daughter's confidence and curiosity blossom. With bina, she thrives and our family flourishes.",
+      "themes": [
+        "ability",
+        "small-classes"
+      ]
+    },
+    {
+      "id": "site-06",
+      "author": "Mary Kate",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": null,
+      "date": null,
+      "source": "site",
+      "body": "After years of searching for 'a better way' in virtual education, I finally found it with bina, where my boys are seen, supported, and thriving every day.",
+      "themes": [
+        "switched"
+      ]
+    },
+    {
+      "id": "tp-01",
+      "author": "Sarah Schmirl",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-20",
+      "source": "trustpilot",
+      "title": "My 4th grader finally loves going to school!",
+      "country": "US",
+      "body": "We’ve tried a number of different learning/schooling methods.  None of them came as close as Bina to checking off all the boxes.  My daughter loves school, and her teacher and is excited to get up each morning for class. No more asking to skip school!",
+      "themes": [
+        "switched",
+        "academics"
+      ],
+      "notionId": "T-007a"
+    },
+    {
+      "id": "tp-02",
+      "author": "Jordan",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-05-21",
+      "source": "trustpilot",
+      "title": "We wholeheartedly recommend the bina school!",
+      "country": "IL",
+      "body": "Our family found bina when our then 7-year-old son needed something different than his in-person school was able to provide. From the very beginning, our family has felt supported by the whole staff of bina. The teachers and administrators are really accessible, and always happy to meet with us if we have any questions or concerns. Bina is able to adjust the curriculum to support our son's academic needs, while also nurturing him socially and emotionally. Early in this past school year, our family had to move halfway across the world very unexpectedly. One constant for us was that our son could continue attending bina, which was such a gift. Our son loves attending bina, and we love seeing him thrive in his school environment. Our family wholeheartedly recommends bina!",
+      "themes": [
+        "switched",
+        "travelling",
+        "sen"
+      ]
+    },
+    {
+      "id": "tp-03",
+      "author": "Amanda Davy",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-09",
+      "source": "trustpilot",
+      "title": "Could not be happier with bina…",
+      "country": "CA",
+      "body": "We could not be happier with bina school. Our daughter has been in bina for two years and is thriving. She absolutely loves and adores her teachers who are the nicest and most dedicated teachers we have come across. They have helped her so much with her reading and have a great system for engaging the students. Our daughter loves having classmates and teachers from all over the world.  The tools and resources they use make learning really fun and effective!",
+      "themes": [
+        "academics"
+      ]
+    },
+    {
+      "id": "tp-04",
+      "author": "Aba King",
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2026-05-11",
+      "source": "trustpilot",
+      "title": "Helpful",
+      "country": "ET",
+      "body": "Helpful\nHonesty\nCommunity",
+      "themes": []
+    }
+  ],
+  "registry": {
+    "name": "Testimonial Management System v2 (Notion)",
+    "url": "https://app.notion.com/p/thebinaschool/Testimonial-Management-System-v2-3b9a520a69f381f59129f18525247a25",
+    "total": 57,
+    "approved": 17,
+    "needsRetrieval": 30,
+    "needsPermission": 10,
+    "declined": 0,
+    "rule": "Only rows with Status '✅ Approved to Share' may appear on this page. Public-platform reviews start Approved; anything captured in Slack, Telegram, Seesaw or Zoom needs the family's written consent from Family Success first. Never publish a 🔒 Needs Retrieval or 🟡 Needs Permission row.",
+    "pageScope": "Everything rendered on /reviews is Approved-class under the SOP: the SOP puts any public review platform (Niche, Trustpilot, LinkedIn, Instagram) at '✅ Approved to Share' automatically, and the six thebinaschool.com testimonials were permissioned before they were published there. No '🔒 Needs Retrieval' or '🟡 Needs Permission' row is rendered, quoted, paraphrased or hinted at."
+  },
+  "pullQuotes": [
+    {
+      "notionId": "T-007a",
+      "text": "My 4th grader finally loves school!!",
+      "attribution": "bina parent",
+      "source": "world-schools",
+      "tint": "bg-bina-yellow"
+    },
+    {
+      "notionId": "T-049",
+      "text": "Our 6-year-old loves her teachers and classmates and is learning so much better than when she was in traditional school.",
+      "attribution": "bina parent",
+      "source": "niche",
+      "tint": "bg-bina-grass"
+    },
+    {
+      "notionId": "T-048",
+      "text": "Thankful to Bina I can raise my daughter near family in Brazil, travel to work in the US, and travel Europe with her by my side while getting excellent education!",
+      "attribution": "bina parent",
+      "source": "niche",
+      "tint": "bg-bina-purple"
+    }
+  ],
+  "beyond": [
+    {
+      "notionId": "T-016",
+      "kind": "A parent wrote the case for us, in public",
+      "title": "Seven Theory-Informed Reasons This Alternative Education Route Makes Sense",
+      "detail": "A bina parent who is also a psychologist published a full, evidence-informed article about choosing bina. We asked for a newsletter quote; she wrote this instead.",
+      "cta": "Read it on LinkedIn",
+      "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/"
+    },
+    {
+      "notionId": "T-015",
+      "kind": "A parent filmed what clubs did for her son",
+      "title": "MaryKate on what bina's clubs have meant for Cash",
+      "detail": "Posted to her own Instagram, unprompted, and left public.",
+      "cta": "Watch the reel",
+      "url": "https://www.instagram.com/reel/DQrWLA9jXyY/"
+    }
+  ],
+  "cta": {
+    "primary": {
+      "label": "Start your bina journey →",
+      "href": "https://form.thebinaschool.com/new",
+      "note": "Same CTA as thebinaschool.com — go.bina.school pages stand in for the main site, so the conversion action must match it exactly."
+    },
+    "secondary": {
+      "label": "Visit bina",
+      "href": "https://thebinaschool.com"
+    },
+    "currentFamilies": {
+      "label": "Write a review",
+      "href": "https://www.trustpilot.com/evaluate/thebinaschool.com"
+    },
+    "attribution": "BaseLayout keeps any ?ref= from the current URL for 365 days and appends it to every form.thebinaschool.com link, mirroring the snippet installed on the main site. localStorage is per-origin, so a ref stored on thebinaschool.com cannot be read here — partner links that should attribute through go.bina.school must carry ?ref= on the go.bina.school URL itself.",
+    "rule": "Primary CTA is the journey form in the nav, hero, one in-wall card and the closing section. The review ask targets current families only and stays a text link plus one in-wall card. /family-survey stays a secondary text link.",
+    "closing": {
+      "label": "Begin now →",
+      "href": "https://form.thebinaschool.com/new",
+      "note": "thebinaschool.com uses 'Begin now' in its footer CTA; mirrored here."
+    }
+  }
+}
