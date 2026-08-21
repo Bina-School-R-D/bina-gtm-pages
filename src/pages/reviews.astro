@@ -1,0 +1,492 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/reviews.json';
+import survey from '../data/family-survey.json';
+
+const { headline, sources, filters, reviews } = data;
+
+// Survey figures live in family-survey.json only, so the two pages can never disagree.
+const recommendAvg = survey.headline.recommendAvg;
+const nps = survey.headline.nps;
+const surveyN = survey.surveyA.n;
+const npsTopBand = survey.npsBenchmark.worldClassFrom;
+
+const SITE = 'https://thebinaschool.com';
+const NICHE = 'https://www.niche.com/k12/bina-claymont-de/reviews/';
+const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com';
+
+/*
+  Narrative order — the three-audience rule (CLAUDE.md):
+    hero (the claim + the proof numbers) -> where the reviews live (the links, high up,
+    because a sceptic wants to leave and check) -> the wall itself -> the survey numbers
+    behind the quotes -> add yours / visit bina -> methodology expanders.
+
+  Scanners get the h1, four tiles and the H2s, each a complete claim. Focused readers get
+  two lines under each H2. Detail readers get the source cards, the per-card verify links
+  and the methodology expanders. Nothing on this page is written by bina: every quote is
+  copied whole from a site we do not control, or from a family who let us quote them.
+*/
+
+// Sources shown as family social proof. Glassdoor is team-only and lives in the wall note.
+const familySources = sources.filter((s) => s.key !== 'glassdoor');
+const glassdoor = sources.find((s) => s.key === 'glassdoor')!;
+
+const sourceUrl: Record<string, string> = {
+  niche: NICHE,
+  site: SITE,
+};
+
+// Counts per filter pill — a pill that would show nothing never renders.
+const filterCounts = Object.fromEntries(
+  filters.map((f) => [
+    f.key,
+    f.key === 'all'
+      ? reviews.length
+      : f.type === 'role'
+        ? reviews.filter((r) => r.role === f.key).length
+        : reviews.filter((r) => r.themes.includes(f.key)).length,
+  ])
+);
+const pills = filters.filter((f) => filterCounts[f.key] > 0);
+
+const niche = reviews.filter((r) => r.source === 'niche');
+const site = reviews.filter((r) => r.source === 'site');
+
+// Spread the short reviews through the long ones — three long, one short — so no masonry
+// column ends up carrying every 1,000-character review while its neighbour runs dry.
+const short = reviews.filter((r) => r.body.length <= 520);
+const long = reviews.filter((r) => r.body.length > 520);
+const ordered: typeof reviews = [];
+let si = 0;
+let li = 0;
+while (si < short.length || li < long.length) {
+  for (let k = 0; k < 3 && li < long.length; k++) ordered.push(long[li++]);
+  if (si < short.length) ordered.push(short[si++]);
+}
+
+// Two in-wall cards, placed where a reader is warm but not finished.
+type WallItem = { kind: 'review'; review: (typeof reviews)[number] } | { kind: 'cta'; at: number };
+const wall: WallItem[] = [];
+ordered.forEach((review, i) => {
+  if (i === 5) wall.push({ kind: 'cta', at: 0 });
+  if (i === 17) wall.push({ kind: 'cta', at: 1 });
+  wall.push({ kind: 'review', review });
+});
+
+// Chromatic tints, cycled. Literal classes so Tailwind picks them up.
+const tints = [
+  'bg-white',
+  'bg-bina-grass/25',
+  'bg-white',
+  'bg-bina-yellow/30',
+  'bg-bina-blue/20',
+  'bg-white',
+  'bg-bina-purple/20',
+  'bg-bina-pink/15',
+  'bg-white',
+  'bg-bina-green/20',
+  'bg-bina-orange/15',
+  'bg-white',
+];
+
+const monthYear = (iso: string | null) =>
+  iso
+    ? new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      })
+    : null;
+
+const explainers = [
+  {
+    q: 'Where did these reviews come from?',
+    a: `${headline.nicheCount} of them are copied word for word from bina's page on Niche, an independent US school-review site we have no control over — we cannot add, edit or delete anything there. The rest are families who gave us permission to quote them on our own site. Every card tells you which is which and links straight to the source so you can read it there instead.`,
+    accent: 'bg-bina-grass',
+  },
+  {
+    q: 'Did you edit any of them?',
+    a: 'No. Every quote is the complete review, including the typos, the emoji and the criticism. Long ones are collapsed to eight lines with a "read the rest" button, but nothing is cut. Some reviewers are anonymous because Niche publishes them that way — we do not know who they are either.',
+    accent: 'bg-bina-yellow',
+  },
+  {
+    q: 'Which reviews did you leave out?',
+    a: 'None that we found. There are five reviews on the world-schools.com directory, four of which are the same reviews already on this page, and one we have not yet copied across. Our Facebook page has no reviews at all. Trustpilot has reviews we have linked but not reproduced here, so read those on Trustpilot directly rather than taking our summary of them.',
+    accent: 'bg-bina-blue',
+  },
+  {
+    q: 'What should I be sceptical about?',
+    a: 'Parents who write reviews are rarely the neutral middle — happy and unhappy families both write more than everyone else, and ours skew happy. This is 26 reviews, not a survey, so treat it as stories rather than statistics; the scored survey of 103 families is the statistics, and it is linked above. Five of the reviews are written by bina staff and are labelled as such — they tell you what it is like to work here, not what it is like to be a family here.',
+    accent: 'bg-bina-purple',
+  },
+];
+---
+
+<BaseLayout
+  title="bina Reviews — What Families Actually Say About Us"
+  description="Every review of bina, in one place: 20 verbatim parent and teacher reviews from Niche, plus links to every independent site where families rate us."
+  flushFooter={true}
+>
+  <!-- hero: the claim, the proof, and the way out to the sources -->
+  <header class="bg-bina-purple/25">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+      <p class="pill-bina mb-6 text-sm tracking-wide">wall of love</p>
+      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
+        Every review of bina on Niche is
+        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">
+          5 out of 5
+        </span>
+      </h1>
+      <p class="mb-8 max-w-2xl text-lg text-coal-1000 sm:text-xl">
+        We didn't write a word of what follows. {headline.nicheCount} of them sit on Niche, where
+        families rate schools and bina has no edit button; the other {site.length} are families who
+        gave us permission to quote them. {headline.parentCount} parents, {headline.staffCount} of
+        our own teachers, nothing edited.
+      </p>
+
+      <div class="mb-10 flex flex-wrap gap-3">
+        <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina text-lg">Share your experience</a>
+        <a href={SITE} class="btn-bina-ghost text-lg">Visit bina</a>
+      </div>
+
+      <dl class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div class="card-bina bg-white p-5">
+          <dt class="font-display text-3xl font-black sm:text-4xl">5.0<span class="text-xl">/5</span></dt>
+          <dd class="mt-1 text-sm font-medium">
+            on Niche — every single review, no exceptions
+          </dd>
+        </div>
+        <div class="card-bina bg-bina-grass/40 p-5">
+          <dt class="font-display text-3xl font-black sm:text-4xl">{recommendAvg}<span class="text-xl">/10</span></dt>
+          <dd class="mt-1 text-sm font-medium">
+            parents would send their friends here
+          </dd>
+        </div>
+        <div class="card-bina bg-bina-yellow/40 p-5">
+          <dt class="font-display text-3xl font-black sm:text-4xl">{nps}</dt>
+          <dd class="mt-1 text-sm font-medium">
+            our parent NPS — {npsTopBand}+ is the top band for school parents
+          </dd>
+        </div>
+        <div class="card-bina bg-white p-5">
+          <dt class="font-display text-3xl font-black sm:text-4xl">{surveyN}</dt>
+          <dd class="mt-1 text-sm font-medium">
+            families also scored us privately, and we published every answer
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- the links, high up: a sceptic wants to leave and check -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
+      <h2 class="mb-3 text-3xl sm:text-4xl">Go and read us somewhere we can't edit a word</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        These are every place bina is reviewed. We have no ability to remove a review on any of them,
+        and we've never offered anything in exchange for one.
+      </p>
+
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          familySources.map((s) => (
+            <li>
+              <a
+                href={s.url}
+                rel="noopener"
+                class="card-bina group flex h-full flex-col p-6 no-underline transition-colors duration-300 hover:bg-bina-yellow"
+              >
+                <span class="mb-1 flex items-baseline justify-between gap-3">
+                  <span class="font-display text-xl font-bold text-coal-black">{s.name}</span>
+                  {s.stat && (
+                    <span class="pill-bina shrink-0 text-sm text-bina-grass">{s.stat}</span>
+                  )}
+                </span>
+                <span class="mb-4 block font-medium text-coal-1000">{s.detail}</span>
+                <span class="mt-auto block text-sm text-coal-900">{s.note}</span>
+                <span class="mt-3 block font-display font-bold text-coal-black">
+                  Read it there
+                  <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- the wall -->
+  <section class="border-t-2 border-coal-black bg-bina-purple/10">
+    <div class="mx-auto max-w-[100rem] px-5 py-14 sm:py-16">
+      <h2 class="mb-3 text-3xl sm:text-4xl">
+        Read the {reviews.length} reviews in full, exactly as they were written
+      </h2>
+      <p class="mb-8 max-w-3xl text-coal-900">
+        Nothing is trimmed, corrected or reordered to flatter us. Filter to the families who look
+        like yours — and if it's the team's view you want,
+        <a href={glassdoor.url} rel="noopener" class="font-bold underline underline-offset-4">
+          bina is on Glassdoor
+        </a> too.
+      </p>
+
+      <div
+        id="review-filters"
+        class="mb-8 flex flex-wrap gap-2"
+        role="group"
+        aria-label="Filter reviews"
+      >
+        {
+          pills.map((f, i) => (
+            <button
+              type="button"
+              class="filter-pill cursor-pointer rounded-full border-2 border-coal-black bg-white px-4 py-2 font-display text-sm font-bold text-coal-black transition-colors duration-200 hover:bg-bina-grass aria-pressed:bg-coal-black aria-pressed:text-bina-yellow"
+              data-filter={f.key}
+              data-type={f.type ?? 'all'}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+            >
+              {f.label}
+              <span class="ml-1 font-normal opacity-60">{filterCounts[f.key]}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div id="review-wall" class="columns-1 gap-5 md:columns-2 xl:columns-3 2xl:columns-4">
+        {
+          wall.map((item) => {
+            if (item.kind === 'cta') {
+              return item.at === 0 ? (
+                <div class="card-bina mb-5 break-inside-avoid bg-bina-yellow p-6">
+                  <p class="mb-2 font-display text-xl font-bold text-coal-black">
+                    Already a bina family?
+                  </p>
+                  <p class="mb-4 text-coal-1000">
+                    Two minutes of your honest opinion is what the next family reads before they dare
+                    to switch schools.
+                  </p>
+                  <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-ghost">Write a review</a>
+                </div>
+              ) : (
+                <div class="card-bina mb-5 break-inside-avoid bg-coal-black p-6">
+                  <p class="mb-2 font-display text-xl font-bold text-white">
+                    Stories are one thing. Scores are another.
+                  </p>
+                  <p class="mb-4 text-white/80">
+                    We asked all {surveyN} families to rate us out of 10 on seven things,
+                    then published every score — including our worst one.
+                  </p>
+                  <a href="/family-survey" class="btn-bina">See the scores</a>
+                </div>
+              );
+            }
+
+            const r = item.review;
+            const i = ordered.indexOf(r);
+            const tint = tints[i % tints.length];
+            const initial = r.author ? r.author.charAt(0) : r.source === 'niche' ? 'N' : 'b';
+            const when = monthYear(r.date);
+            const paras = r.body.split('\n\n').filter(Boolean);
+
+            return (
+              <article
+                class:list={['review-card card-bina mb-5 break-inside-avoid p-6', tint]}
+                data-role={r.role}
+                data-themes={r.themes.join(' ')}
+              >
+                <div class="mb-3 flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-coal-black bg-white font-display font-bold text-coal-black"
+                  >
+                    {initial}
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block truncate font-display font-bold text-coal-black">
+                      {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
+                    </span>
+                    <span class="block text-xs text-coal-900">
+                      {/* anonymous cards already say the role in the name line above */}
+                      {r.author && r.roleLabel}
+                      {r.author && when && ' · '}
+                      {when}
+                      {!r.author && !when && r.roleLabel}
+                    </span>
+                  </span>
+                </div>
+
+                {r.rating && (
+                  <p class="mb-2 text-sm tracking-widest text-coal-black" aria-label={`${r.rating} out of 5`}>
+                    <span aria-hidden="true">★★★★★</span>
+                  </p>
+                )}
+
+                <div class="review-body is-clamped text-coal-1000">
+                  {paras.map((p) => (
+                    <p class="mb-2 last:mb-0 whitespace-pre-line">{p}</p>
+                  ))}
+                </div>
+
+                <p class="mt-4 border-t-2 border-coal-black/15 pt-3 text-xs">
+                  <a
+                    href={sourceUrl[r.source]}
+                    rel="noopener"
+                    class="font-display font-bold text-coal-black underline underline-offset-4"
+                  >
+                    {r.source === 'niche' ? 'Verified on Niche' : 'Published on thebinaschool.com'} →
+                  </a>
+                </p>
+              </article>
+            );
+          })
+        }
+      </div>
+
+      <p id="review-empty" class="hidden pt-4 font-display font-bold">
+        No reviews mention that yet. Try another filter.
+      </p>
+    </div>
+  </section>
+
+  <!-- methodology, for the reader who trusts nothing -->
+  <section id="how-we-built-this" class="border-t-2 border-coal-black bg-bina-yellow/20">
+    <div class="mx-auto max-w-4xl px-5 py-14 sm:py-16">
+      <h2 class="mb-3 text-3xl sm:text-4xl">Nothing here was written, edited or paid for by bina</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Here's exactly where each review came from, what we left out, and what you should hold
+        against us.
+      </p>
+      <div class="space-y-4">
+        {
+          explainers.map((e) => (
+            <details class="card-bina group overflow-hidden bg-white p-0">
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 p-6 font-display text-lg font-bold text-coal-black"
+              >
+                {e.q}
+                <span
+                  class:list={[
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display transition-transform duration-300 group-open:rotate-45',
+                    e.accent,
+                  ]}
+                  aria-hidden="true">+</span
+                >
+              </summary>
+              <p class="px-6 pb-6 text-coal-1000">{e.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t-2 border-coal-black bg-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
+      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
+        The families above all started with one <span class="text-bina-grass">conversation</span>
+      </h2>
+      <p class="mx-auto mb-8 max-w-xl text-white/80">
+        Meet the teachers, sit in on a class, and decide for yourself whether the reviews hold up.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+        <a href="/family-survey" class="btn-bina-ghost text-lg">See the family survey</a>
+      </div>
+    </div>
+  </section>
+
+  <p slot="footer-note" class="text-xs text-white/60">
+    Reviews are copied verbatim and by hand — {headline.nicheCount} from
+    <a href={NICHE} rel="noopener" class="underline">bina's Niche page</a> (last checked 21 August
+    2026) and {site.length} from families who gave permission to be quoted on thebinaschool.com. This
+    page is not a live feed, so read the source for the current picture. Niche's own structured data
+    reports 21 reviews on that page; 20 carry review text and appear here. bina cannot add, edit or
+    remove reviews on Niche, Trustpilot or world-schools.com, and has never offered anything in
+    exchange for a review. Reviewers are self-selecting and their experiences are their own. Niche
+    lists bina as PK–6; bina teaches ages 4–15. The {recommendAvg}/10 and NPS {nps} figures come from
+    bina's own survey of {surveyN} families, and the {npsTopBand}+ parent band is Independent School
+    Management's, not ours — <a href="/family-survey" class="underline">
+      method, sources and every score here</a
+    >. NPS® is a registered trademark of Bain &amp; Company, Fred Reichheld and Satmetrix Systems.
+  </p>
+
+  <!-- With JS off the clamp is lifted entirely, so no review is ever unreachable. -->
+  <noscript>
+    <style>
+      .review-body.is-clamped {
+        display: block !important;
+        overflow: visible !important;
+      }
+    </style>
+  </noscript>
+
+  <style>
+    /* Long reviews render collapsed to eight lines; the script lifts the clamp on the short
+       ones and adds the "read the rest" button only where text is actually cut off. */
+    .review-body.is-clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 8;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .review-more {
+      margin-top: 0.5rem;
+      font-family: 'Rund Display', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor: pointer;
+      background: none;
+      border: 0;
+      padding: 0;
+      color: #000;
+    }
+  </style>
+
+  <script>
+    // 1. Reviews render clamped. Unclamp the short ones, and only add a "read the rest"
+    //    button where the text is genuinely cut off.
+    document.querySelectorAll<HTMLElement>('.review-body').forEach((body) => {
+      if (body.scrollHeight <= body.clientHeight + 2) {
+        body.classList.remove('is-clamped');
+        return;
+      }
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'review-more';
+      btn.textContent = 'Read the rest';
+      btn.addEventListener('click', () => {
+        const open = body.classList.toggle('is-clamped');
+        btn.textContent = open ? 'Read the rest' : 'Show less';
+      });
+      body.after(btn);
+    });
+
+    // 2. Filter pills — one active at a time, counts already rendered server-side.
+    const wall = document.getElementById('review-wall');
+    const empty = document.getElementById('review-empty');
+    const pills = document.querySelectorAll<HTMLButtonElement>('#review-filters .filter-pill');
+    const cards = wall ? Array.from(wall.querySelectorAll<HTMLElement>('.review-card')) : [];
+
+    pills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        const key = pill.dataset.filter ?? 'all';
+        const type = pill.dataset.type ?? 'all';
+        pills.forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
+
+        let shown = 0;
+        cards.forEach((card) => {
+          const match =
+            key === 'all' ||
+            (type === 'role' && card.dataset.role === key) ||
+            (type === 'theme' && (card.dataset.themes ?? '').split(' ').includes(key));
+          card.classList.toggle('hidden', !match);
+          if (match) shown++;
+        });
+        empty?.classList.toggle('hidden', shown > 0);
+      });
+    });
+  </script>
+</BaseLayout>
