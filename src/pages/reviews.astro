@@ -17,8 +17,8 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
 
 /*
   Narrative order — the three-audience rule (CLAUDE.md):
-    hero (one claim, one CTA, no numbers) -> a one-row provider bar carrying each platform's score,
-    so a sceptic can leave and check in a single click -> the filtered wall, opening with the two
+    hero (one claim, one CTA, and the platform pills carrying each score underneath it, so a
+    sceptic can leave and check in a single click) -> the filtered wall, opening with the two
     things parents made unprompted -> the closing CTA. Provenance, exclusions and the caveats live
     in the footer note.
 
@@ -156,68 +156,65 @@ const monthYear = (iso: string | null) =>
         Their words, not ours — every one of them copied whole from a site we don't control.
       </p>
       <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+
+      <nav aria-label="Where bina is reviewed" class="mt-8">
+        <ul class="flex flex-wrap items-center gap-2">
+          {
+            barSources.map((src) => (
+              <li>
+                <a
+                  href={src.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-coal-black bg-white px-3 py-1.5 font-display text-xs font-bold text-coal-black no-underline transition-colors duration-200 hover:bg-bina-yellow"
+                >
+                  {sourceLogo[src.key] ? (
+                    <img
+                      src={sourceLogo[src.key]}
+                      alt=""
+                      width="18"
+                      height="18"
+                      class="h-[1.125rem] w-[1.125rem] shrink-0"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      class:list={[
+                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full border-2 border-coal-black text-[0.55rem]',
+                        src.markColor,
+                      ]}
+                    >
+                      {src.mark}
+                    </span>
+                  )}
+                  <span>{src.barLabel}</span>
+                  {src.barStat && <span class="font-normal text-coal-900">{src.barStat}</span>}
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    class="h-3 w-3 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M14 4h6v6M20 4 10.5 13.5" />
+                    <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+                  </svg>
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- where the reviews live: compact pills, so the row wraps instead of scrolling on a phone -->
-  <nav aria-label="Where bina is reviewed" class="border-y-2 border-coal-black bg-white">
-    <div class="mx-auto max-w-[96rem] px-6 py-3 sm:px-10">
-      <ul class="flex flex-wrap items-center gap-2">
-        {
-          barSources.map((src) => (
-            <li>
-              <a
-                href={src.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 rounded-full border-2 border-coal-black bg-white px-3 py-1.5 font-display text-xs font-bold text-coal-black no-underline transition-colors duration-200 hover:bg-bina-yellow"
-              >
-                {sourceLogo[src.key] ? (
-                  <img
-                    src={sourceLogo[src.key]}
-                    alt=""
-                    width="18"
-                    height="18"
-                    class="h-[1.125rem] w-[1.125rem] shrink-0"
-                    loading="lazy"
-                  />
-                ) : (
-                  <span
-                    aria-hidden="true"
-                    class:list={[
-                      'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full border-2 border-coal-black text-[0.55rem]',
-                      src.markColor,
-                    ]}
-                  >
-                    {src.mark}
-                  </span>
-                )}
-                <span>{src.barLabel}</span>
-                {src.barStat && <span class="font-normal text-coal-900">{src.barStat}</span>}
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  class="h-3 w-3 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M14 4h6v6M20 4 10.5 13.5" />
-                  <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
-                </svg>
-                <span class="sr-only">(opens in a new tab)</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </nav>
-
   <!-- the wall -->
-  <section class="bg-bina-purple/10">
+  <section class="border-t-2 border-coal-black bg-bina-purple/10">
     <div class="mx-auto max-w-[96rem] px-6 py-10 sm:px-10 sm:py-12">
       <div
         id="review-filters"
@@ -504,6 +501,7 @@ const monthYear = (iso: string | null) =>
       </p>
       <div class="flex flex-wrap justify-center gap-3">
         <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+
         <a href="/family-survey" class="btn-bina-ghost text-lg">See the family survey</a>
       </div>
 
