@@ -20,8 +20,9 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
 /*
   Narrative order — the three-audience rule (CLAUDE.md):
     hero (one claim, one CTA, no numbers) -> a one-row provider bar carrying each platform's score,
-    so a sceptic can leave and check in a single click -> the filtered wall -> what two parents made
-    unprompted -> methodology expanders -> the closing CTA.
+    so a sceptic can leave and check in a single click -> the filtered wall, opening with the two
+    things parents made unprompted -> the closing CTA. Provenance, exclusions and the caveats live
+    in the footer note.
 
   CTA ladder: same as the main site, because these pages stand in for it — every primary CTA is
   "Start your bina journey" to form.thebinaschool.com/new — nav and hero use the main site's exact
@@ -100,8 +101,14 @@ while (si < short.length || li < long.length) {
 }
 
 // Two in-wall cards, placed where a reader is warm but not finished.
-type WallItem = { kind: 'review'; review: (typeof reviews)[number] } | { kind: 'cta'; at: number };
+type WallItem =
+  | { kind: 'review'; review: (typeof reviews)[number] }
+  | { kind: 'cta'; at: number }
+  | { kind: 'feature'; item: (typeof beyond)[number] };
 const wall: WallItem[] = [];
+// The article and the reel open the wall and stay put under every filter — they are the two
+// things a parent made unprompted, and neither is a review, so neither is counted as one.
+beyond.forEach((item) => wall.push({ kind: 'feature', item }));
 ordered.forEach((review, i) => {
   if (i === 5) wall.push({ kind: 'cta', at: 0 });
   if (i === 13) wall.push({ kind: 'cta', at: 2 });
@@ -134,28 +141,6 @@ const monthYear = (iso: string | null) =>
       })
     : null;
 
-const explainers = [
-  {
-    q: 'Where did these reviews come from?',
-    a: `${headline.nicheCount} are copied word for word from bina's page on Niche and ${headline.trustpilotPublished} from our Trustpilot page — both independent sites where we cannot add, edit or delete anything. The other ${site.length} are families who gave us permission to quote them on our own site. Every card says which is which and links straight to the source so you can read it there instead.`,
-    accent: 'bg-bina-grass',
-  },
-  {
-    q: 'Did you edit any of them?',
-    a: `No. Every quote is the complete review, including the typos, the double spaces and the emoji. Long ones are collapsed to eight lines with a "read the rest" button, but nothing is cut. Some reviewers are anonymous because Niche publishes them that way — we do not know who they are either. We left three Trustpilot entries off: two are families whose Niche review is already here, and one is a review of a currency-trading firm that landed on our page by mistake.`,
-    accent: 'bg-bina-yellow',
-  },
-  {
-    q: 'Are you only showing the good ones?',
-    a: `We keep a log of every kind word a family or child has said about bina — ${registry.total} entries so far, from public reviews, from messages to teachers, from things said out loud in class. Only ${registry.approved} of them are on this page, and not because the rest are bad: ${registry.needsPermission} are waiting on a family to say yes to being quoted, and ${registry.needsRetrieval} are still sitting in a screenshot or a video that nobody has typed up. Nothing has been declined. If a family has not given permission, their words stay off this page however good they are — which is exactly why the ones here are all public reviews.`,
-    accent: 'bg-bina-blue',
-  },
-  {
-    q: 'What should I be sceptical about?',
-    a: `Parents who write reviews are rarely the neutral middle — happy and unhappy families both write more than everyone else, and ours skew happy. This is ${reviews.length} reviews, not a survey, so treat it as stories rather than statistics; the scored survey of ${surveyN} families is the statistics, and it is linked above. ${headline.staffCount} of the reviews are written by bina staff and are labelled as such — they tell you what it is like to work here, not what it is like to be a family here.`,
-    accent: 'bg-bina-purple',
-  },
-];
 ---
 
 <BaseLayout
@@ -272,6 +257,64 @@ const explainers = [
       >
         {
           wall.map((item) => {
+            if (item.kind === 'feature') {
+              const f = item.item;
+              return (
+                <a
+                  href={f.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    'wall-cell card-bina relative flex flex-col px-7 py-5 no-underline',
+                    f.tint,
+                  ]}
+                >
+                  <div class="mb-2 flex shrink-0 items-center gap-2.5">
+                    <img
+                      src={f.logo}
+                      alt=""
+                      width="26"
+                      height="26"
+                      class="h-[1.625rem] w-[1.625rem] shrink-0"
+                      loading="lazy"
+                    />
+                    <span class="min-w-0 flex-1">
+                      <span class="block truncate font-display text-sm font-bold text-coal-black">
+                        {f.who}
+                      </span>
+                      <span class="block truncate text-[0.7rem] leading-tight text-coal-900">
+                        {f.platform}
+                      </span>
+                    </span>
+                  </div>
+
+                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-[0.7rem] font-display font-bold text-coal-black underline underline-offset-2">
+                    {f.cta}
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      class="h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M14 4h6v6M20 4 10.5 13.5" />
+                      <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+                    </svg>
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </p>
+
+                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-sm font-bold text-coal-black">
+                    {f.title}
+                  </p>
+
+                  <div class="review-body min-h-0 text-sm text-coal-1000">{f.detail}</div>
+                </a>
+              );
+            }
+
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
@@ -330,7 +373,7 @@ const explainers = [
                 data-role={r.role}
                 data-themes={r.themes.join(' ')}
               >
-                <div class="mb-2 flex items-center gap-2.5">
+                <div class="mb-2 flex shrink-0 items-center gap-2.5">
                   <img
                     src={sourceLogo[r.source]}
                     alt=""
@@ -353,7 +396,7 @@ const explainers = [
                   </span>
                 </div>
 
-                <p class="mb-2 flex flex-wrap items-center gap-x-2 text-[0.7rem]">
+                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-[0.7rem]">
                   <a
                     href={sourceUrl[r.source]}
                     target="_blank"
@@ -384,12 +427,12 @@ const explainers = [
                 </p>
 
                 {r.title && (
-                  <p class="mb-1 truncate font-display text-sm font-bold text-coal-black">
+                  <p class="mb-1 shrink-0 truncate font-display text-sm font-bold text-coal-black">
                     {r.title}
                   </p>
                 )}
 
-                <div class="review-body text-sm text-coal-1000">
+                <div class="review-body min-h-0 text-sm text-coal-1000">
                   {paras.map((p) => (
                     <p class="mb-1.5 last:mb-0 whitespace-pre-line">{p}</p>
                   ))}
@@ -458,75 +501,6 @@ const explainers = [
     </div>
   </section>
 
-
-  <!-- approved public content that is not a quote: an article and a reel -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
-      <h2 class="mb-3 text-3xl sm:text-4xl">Two parents didn't stop at a review</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Nobody asked them for either of these. They made them, published them on their own accounts,
-        and left them up.
-      </p>
-      <ul class="grid gap-4 md:grid-cols-2">
-        {
-          beyond.map((b, i) => (
-            <li>
-              <a
-                href={b.url}
-                rel="noopener"
-                class:list={[
-                  'card-bina group flex h-full flex-col p-6 no-underline transition-colors duration-300 sm:p-7',
-                  i === 0 ? 'bg-bina-blue/20 hover:bg-bina-blue/40' : 'bg-bina-pink/15 hover:bg-bina-pink/30',
-                ]}
-              >
-                <span class="mb-2 block font-display text-xs font-bold uppercase tracking-widest text-coal-900">
-                  {b.kind}
-                </span>
-                <span class="mb-3 block font-display text-xl font-bold text-coal-black">{b.title}</span>
-                <span class="mb-5 block text-coal-1000">{b.detail}</span>
-                <span class="mt-auto block font-display font-bold text-coal-black">
-                  {b.cta}
-                  <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- methodology, for the reader who trusts nothing -->
-  <section id="how-we-built-this" class="border-t-2 border-coal-black bg-bina-yellow/20">
-    <div class="mx-auto max-w-4xl px-5 py-14 sm:py-16">
-      <h2 class="mb-3 text-3xl sm:text-4xl">Nothing here was written, edited or paid for by bina</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Here's exactly where each review came from, what we left out, and what you should hold
-        against us.
-      </p>
-      <div class="space-y-4">
-        {
-          explainers.map((e) => (
-            <details class="card-bina group overflow-hidden bg-white p-0">
-              <summary
-                class="flex cursor-pointer list-none items-center justify-between gap-4 p-6 font-display text-lg font-bold text-coal-black"
-              >
-                {e.q}
-                <span
-                  class:list={[
-                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display transition-transform duration-300 group-open:rotate-45',
-                    e.accent,
-                  ]}
-                  aria-hidden="true">+</span
-                >
-              </summary>
-              <p class="px-6 pb-6 text-coal-1000">{e.a}</p>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </section>
 
   <!-- CTA -->
   <section class="border-t-2 border-coal-black bg-coal-black">
@@ -650,16 +624,17 @@ const explainers = [
   <script>
     // 1. Cards are a fixed height. Where a review overflows, fade it out and offer the full text
     //    in a dialog; where it fits, leave it completely alone.
+    document.querySelectorAll<HTMLElement>('.review-body').forEach((body) => {
+      if (body.scrollHeight > body.clientHeight + 2) body.classList.add('is-faded');
+    });
+
     document.querySelectorAll<HTMLElement>('.review-card').forEach((card) => {
       const body = card.querySelector<HTMLElement>('.review-body');
       const btn = card.querySelector<HTMLButtonElement>('.review-more');
       const dialog = card.querySelector<HTMLDialogElement>('.review-dialog');
       if (!body || !btn || !dialog) return;
 
-      if (body.scrollHeight > body.clientHeight + 2) {
-        body.classList.add('is-faded');
-        btn.classList.remove('hidden');
-      }
+      if (body.classList.contains('is-faded')) btn.classList.remove('hidden');
 
       btn.addEventListener('click', () => dialog.showModal());
       dialog.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());

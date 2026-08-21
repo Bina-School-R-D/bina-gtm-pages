@@ -16,7 +16,8 @@
     "Site testimonials carry first names but no dates, because thebinaschool.com publishes none.",
     "The 'Leave a review' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com — Trustpilot's standard write-a-review path, still worth opening once in a browser to confirm.",
     "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes.",
-    "The mid-page provider bar uses typographic wordmarks plus a coloured initial, not the platforms' real logos — no third-party brand assets are embedded. Swap in official SVGs only if the team obtains them from each brand's asset page."
+    "The mid-page provider bar uses typographic wordmarks plus a coloured initial, not the platforms' real logos — no third-party brand assets are embedded. Swap in official SVGs only if the team obtains them from each brand's asset page.",
+    "The two Approved non-quote rows (T-016 LinkedIn article, T-015 Instagram reel) are pinned as the first two cells of the wall and stay visible under every filter. They are not counted in the review totals, because an article and a reel are not reviews."
   ],
   "headline": {
     "nicheAvg": 5.0,
@@ -582,7 +583,11 @@
       "title": "Seven Theory-Informed Reasons This Alternative Education Route Makes Sense",
       "detail": "A bina parent who is also a psychologist published a full, evidence-informed article about choosing bina. We asked for a newsletter quote; she wrote this instead.",
       "cta": "Read it on LinkedIn",
-      "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/"
+      "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/",
+      "who": "A bina parent",
+      "platform": "LinkedIn · she is also a psychologist",
+      "logo": "/images/logos/linkedin.svg",
+      "tint": "bg-bina-blue/20"
     },
     {
       "notionId": "T-015",
@@ -590,7 +595,11 @@
       "title": "MaryKate on what bina's clubs have meant for Cash",
       "detail": "Posted to her own Instagram, unprompted, and left public.",
       "cta": "Watch the reel",
-      "url": "https://www.instagram.com/reel/DQrWLA9jXyY/"
+      "url": "https://www.instagram.com/reel/DQrWLA9jXyY/",
+      "who": "MaryKate",
+      "platform": "Instagram · bina parent",
+      "logo": "/images/logos/instagram.svg",
+      "tint": "bg-bina-pink/15"
     }
   ],
   "cta": {
