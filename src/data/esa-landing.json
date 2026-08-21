@@ -1,0 +1,236 @@
+{
+  "_provenance": "Sales copy for the paid-search ESA landing pages (/esa/<state>). Program facts (amounts, windows, platforms, portals) are NOT stored here — they are read from esa-states.json, which is synced from bina-gtm/notes/ESA_State_Database.xlsx. Tuition figures are copied from https://thebinaschool.com/tuition (published, 2026-08-21). School facts (ages, class cap, hours, accreditations, clubs) are copied from thebinaschool.com. Proof numbers are imported from family-survey.json, student-results.json and reviews.json — never re-typed here.",
+  "_openQuestions": [
+    "STATUS CONFLICT — three sources disagree on where bina is live. Akis (Slack + Google Ads call, 2026-08-07): approved in Arizona, Idaho, Utah, New Hampshire, Wyoming. esa-states.json (the team's ESA database): Arizona + Utah approved, Idaho approved-as-reimbursement, New Hampshire application pending, Wyoming vendor-approved but course listings unfinished. thebinaschool.com homepage: Utah, Arizona, Wyoming only. These pages follow esa-states.json, the narrowest and most specific source. Confirm the real status per state, then update esa-states.json first.",
+    "thebinaschool.com says ESA funding 'covers tuition in full' for Utah, Arizona and Wyoming. It does not: the largest base award in those states is $8,000 against $10,769 yearly tuition. These pages publish the remainder instead. The homepage line should be corrected.",
+    "Application windows: only Arizona is open year-round. Utah's 2026-27 window closed (next opens spring), Idaho's second 2026 window closed 2026-08-15, Wyoming's closed end of July. Copy on those pages sells the school now and lines the family up for the next window — confirm that is the intent before paid traffic is pointed at them.",
+    "Class size: the main site says 'never more than 12 in a class'; /esa already publishes 'small live classes of 6-8 with two teachers'; the Google Ads copy says 'typical class size 7-8 kids'. These pages publish 6-8 with two teachers, capped at 12 — the union of what we already say. Confirm with the CSO.",
+    "The $8,000 (Utah) / $7,000-$8,000 (Arizona) figures are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount."
+  ],
+  "school": {
+    "tuitionYearly": 10769,
+    "tuitionQuarterly": 11580,
+    "monthlyYearly": 897,
+    "monthlyQuarterly": 965,
+    "siblingDiscount": 1500,
+    "tuitionUrl": "https://thebinaschool.com/tuition",
+    "ages": "4 to 15",
+    "classCap": 12,
+    "day": "5 hours a day, 5 days a week, about 200 school days a year",
+    "accreditations": [
+      "Cognia accredited",
+      "Registered online Cambridge International School",
+      "CIS member school"
+    ],
+    "features": [
+      {
+        "eyebrow": "Small classes",
+        "title": "Your child is known by name, not managed in a crowd",
+        "body": "Classes of six to eight children with two teachers in the room, and never more than 12. Educators who know what your child needs next, and tell you every week."
+      },
+      {
+        "eyebrow": "A real school day",
+        "title": "A full day with rhythm, not a pile of worksheets",
+        "body": "Live classes, adventures, clubs and passion projects — 5 hours a day, 5 days a week, about 200 days a year."
+      },
+      {
+        "eyebrow": "Credentials",
+        "title": "Qualifications that travel with your child",
+        "body": "Cognia accredited, a registered online Cambridge International School, and a CIS member — drawing on Cambridge, UK, US and Australian standards."
+      },
+      {
+        "eyebrow": "Community",
+        "title": "Your child makes friends here, from day one",
+        "body": "Classmates across the world, 40+ clubs, and families who meet up and travel together."
+      },
+      {
+        "eyebrow": "Support",
+        "title": "One team that knows your family by name",
+        "body": "A Family Success concierge for every family, plus educational psychology when you need it — included, not billed extra."
+      },
+      {
+        "eyebrow": "Progress",
+        "title": "You can see exactly where your child stands",
+        "body": "Weekly snapshots of what they have mastered and what comes next, plus twice-yearly STAR assessments against US national benchmarks."
+      }
+    ],
+    "dayInLife": [
+      {
+        "time": "Morning",
+        "what": "Breakfast at home, no commute, no packed lunch, no 7am panic."
+      },
+      {
+        "time": "Class starts",
+        "what": "Live with the same small group and the same teachers, on a schedule that fits your time zone."
+      },
+      {
+        "time": "Midday",
+        "what": "Adventures, clubs and project work — the part children tell you about at dinner."
+      },
+      {
+        "time": "Early afternoon",
+        "what": "School wraps. The rest of the day belongs to your family."
+      },
+      {
+        "time": "Anytime",
+        "what": "You are close enough to see the learning happen, without becoming the teacher."
+      }
+    ]
+  },
+  "faq": [
+    {
+      "q": "Is bina a homeschool program or a school?",
+      "a": "A school. Your child has a class, a timetable, certified teachers and report cards — the same structure as an in-person school, delivered live online. Most state programs list us under online or nonpublic schooling rather than homeschool curriculum, and we tell you exactly which category applies in your state before you apply."
+    },
+    {
+      "q": "What if my state approves me for less than the full amount?",
+      "a": "You pay the difference. We show you the number before you commit, and we offer quarterly and yearly plans plus $1,500 off per additional child, so the gap is a monthly figure you can plan around."
+    },
+    {
+      "q": "What if my application is turned down, or the window has closed?",
+      "a": "You are not stuck with a school you never chose. Families join bina and pay directly while an application is pending, and we time your start around your funding date once it is confirmed. Nothing about enrolling forces you to wait for the state."
+    },
+    {
+      "q": "My child is neurodivergent or has an IEP. Does that change anything?",
+      "a": "Often in your favour — several states fund more per child for special needs. On our side, small classes and a Family Success team are the whole point; parents of neurodivergent children are a large share of our families, and they say so in the reviews on this page."
+    },
+    {
+      "q": "Can I use ESA money for bina alongside other things?",
+      "a": "That depends on your state's rules and your award, not on us. Tuition for an online school is an approved category in the states listed here; whether there is room left over for other purchases is a question for your state's handbook, and we will point you at the exact page."
+    },
+    {
+      "q": "We live in a state that isn't listed. Can we still join?",
+      "a": "Yes — families join bina from all over the world without any state funding. And new programs are approved most years: our state-by-state ESA tool shows where every US state stands today, including the states with no program at all."
+    }
+  ],
+  "reviewIds": [
+    "niche-09",
+    "niche-16",
+    "niche-02"
+  ],
+  "states": [
+    {
+      "slug": "arizona",
+      "state": "Arizona",
+      "tier": "funded",
+      "esaMin": 7000,
+      "esaMax": 8000,
+      "pill": "Arizona ESA · bina is an approved provider",
+      "h1": "Your Arizona ESA pays for bina",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. Arizona's Empowerment Scholarship Account is built to pay for exactly this, and bina is an approved provider.",
+      "gate": [
+        "bina is an approved Arizona ESA provider",
+        "$7,000–$8,000 per child, per year",
+        "You spend it through ClassWallet"
+      ],
+      "coverTitle": "Arizona's own handbook approves what bina is",
+      "coverBody": "The ESA handbook lists “tuition or fees for a nonpublic online learning program” as an approved expense — the exact category bina sits in. You are not hoping a reviewer stretches a rule.",
+      "timingTitle": "Arizona is open all year, and the date you sign moves your money",
+      "timingBody": "Applications run year-round, with funding quarters starting Jun 1, Sep 1, Dec 1 and Mar 1. Your quarter is set by your contract-signing date, so signing with bina earlier puts you in an earlier funding quarter.",
+      "seoTitle": "ESA-Approved Online School in Arizona | bina",
+      "seoDesc": "bina is an approved Arizona ESA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Use your $7,000–$8,000 ESA toward tuition."
+    },
+    {
+      "slug": "utah",
+      "state": "Utah",
+      "tier": "funded",
+      "esaMin": 8000,
+      "esaMax": 8000,
+      "pill": "Utah Fits All · bina is an approved provider",
+      "h1": "Your Utah Fits All scholarship pays for bina",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. Utah Fits All awards $8,000 per child, and bina is an approved provider you can spend it with through Odyssey.",
+      "gate": [
+        "bina is an approved Utah Fits All provider",
+        "$8,000 per child, per year",
+        "You spend it through Odyssey"
+      ],
+      "coverTitle": "$8,000 covers most of a bina year",
+      "coverBody": "Utah pays the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina.",
+      "timingTitle": "Awards are limited, and the current window has closed",
+      "timingBody": "New students apply between Apr 1 and May 1, awards are announced Jun 16, and you accept by Jun 30. Not everyone who applies is funded, so we plan your bina start around your notification date — and families who don't want to lose a year start now and apply at the next window.",
+      "seoTitle": "Utah Fits All Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition."
+    },
+    {
+      "slug": "idaho",
+      "state": "Idaho",
+      "tier": "reimbursed",
+      "esaMin": 5000,
+      "esaMax": 5000,
+      "pill": "Idaho Parental Choice Tax Credit · bina qualifies",
+      "h1": "Idaho refunds up to $5,000 of your bina tuition",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. Idaho's Parental Choice Tax Credit pays families back for nonpublic school tuition, and bina tuition qualifies.",
+      "gate": [
+        "bina tuition qualifies for the credit",
+        "Up to $5,000 per child ($7,500 for special needs)",
+        "Paid to you — as a refund or an advance"
+      ],
+      "coverTitle": "This one is a refund, not a wallet",
+      "coverBody": "Idaho does not pay bina directly. You enrol, you pay tuition, you submit the receipts — and the state returns up to $5,000 per child as a refundable credit or an advance payment. We produce the receipts you need without you having to ask twice.",
+      "timingTitle": "The 2026 window has closed — the school decision doesn't have to wait",
+      "timingBody": "The second 2026 window ran to Aug 15. Families joining now enrol and pay directly, and we get you documented for the next window the day it is announced. Because the credit is claimed on receipts, starting earlier does not cost you eligibility.",
+      "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
+      "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition."
+    },
+    {
+      "slug": "wyoming",
+      "state": "Wyoming",
+      "tier": "vendor-pending",
+      "esaMin": 7000,
+      "esaMax": 7000,
+      "pill": "Wyoming Steamboat Legacy · bina is an approved vendor",
+      "h1": "bina is an approved Wyoming ESA vendor",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. You can find us in Wyoming's approved vendor list today. One step is still outstanding, and we would rather you read it here than discover it at the checkout.",
+      "gate": [
+        "bina is in Wyoming's approved vendor list",
+        "$7,000 per child, per year (+$1,750 rollover when you renew)",
+        "Funds land in your Odyssey account"
+      ],
+      "coverTitle": "Approved as a vendor — course listings still going up",
+      "coverBody": "The Steamboat Legacy Scholarship pays into your Odyssey account and bina is a registered provider. What is not finished is our course listings, and the program releases funds against those listings — so Wyoming families cannot check out with bina yet. We are uploading them now and will email you the day it is done.",
+      "timingTitle": "This year's window has closed; families are still starting",
+      "timingBody": "The application window opened Jul 6 and ran to the end of July, with eligibility verified by end of July and funds in your Odyssey account by Sep 1. Families who want bina this year enrol and pay directly, and we line your funding up for the next cycle.",
+      "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is an approved Wyoming vendor for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer."
+    },
+    {
+      "slug": "new-hampshire",
+      "state": "New Hampshire",
+      "tier": "application-pending",
+      "esaMin": 5000,
+      "esaMax": 5000,
+      "pill": "New Hampshire EFA · bina's application is with the state",
+      "h1": "New Hampshire families: bina's EFA application is in, and not yet approved",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. Our Education Freedom Account application is with the state and we are waiting on their decision. Here is exactly where that stands.",
+      "gate": [
+        "Our EFA application is submitted, not yet approved",
+        "About $5,000 per child, per year once listed",
+        "The EFA runs through ClassWallet"
+      ],
+      "coverTitle": "We will not tell you we're approved before we are",
+      "coverBody": "New Hampshire's EFA is rolling, pays in four installments, and runs through ClassWallet — a good fit for how bina bills, once we are listed. Until the state decides, New Hampshire families join bina and pay directly, and we email you the moment the approval lands.",
+      "timingTitle": "Rolling program, with document deadlines",
+      "timingBody": "The EFA accepts applications year-round; documents in by Jul 1 clear the Jul 15 funding deadline. Decisions take about 30 days, or up to two months if the state asks for more paperwork, and funds arrive in September, November, January and April.",
+      "seoTitle": "New Hampshire EFA and bina Online School | bina",
+      "seoDesc": "Where bina's New Hampshire Education Freedom Account application stands, and how New Hampshire families join our live online school for ages 4 to 15."
+    }
+  ],
+  "tierCopy": {
+    "funded": {
+      "label": "Funded",
+      "note": "Your state puts the money in an account you spend with bina."
+    },
+    "reimbursed": {
+      "label": "Reimbursed",
+      "note": "You pay bina, then the state pays you back against the receipts."
+    },
+    "vendor-pending": {
+      "label": "Vendor approved · listings pending",
+      "note": "bina is in the state's vendor list; you cannot spend funds with us yet."
+    },
+    "application-pending": {
+      "label": "Application pending",
+      "note": "bina has applied. Until the state decides, families pay directly."
+    }
+  }
+}

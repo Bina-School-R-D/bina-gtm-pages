@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import esaData from '../data/esa-states.json';
+import landing from '../data/esa-landing.json';
 
 const { programs, allStates, noProgramNotes } = esaData;
+
+// States that also have a paid-search landing page at /esa/<slug>: the tool links across to
+// it so a family who came here for the process can still read the case for the school.
+const landingSlugs = Object.fromEntries(landing.states.map((st) => [st.state, st.slug]));
 
 // One high-level journey, shown once under the hero. The per-state tool fills in the detail.
 const journey = [
@@ -97,7 +102,7 @@ const dot = {
     Program details reflect the latest information available to the bina team and are subject to change — your state's official program site is the final word.
   </p>
 
-  <script define:vars={{ programs, allStates, noProgramNotes }}>
+  <script define:vars={{ programs, allStates, noProgramNotes, landingSlugs }}>
     const WEBSITE = 'https://thebinaschool.com';
     const EMAIL = 'admissions@thebinaschool.com';
 
@@ -326,6 +331,9 @@ const dot = {
         '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
         '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="' + esc(d.officialUrl) + '" target="_blank" rel="noopener">' + esc(d.s) + ' program site ↗</a>' +
         '<a class="font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + esc(d.binaUrl) + '">bina’s ' + esc(d.s) + ' guide</a>' +
+        (landingSlugs[d.s]
+          ? '<a class="font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="/esa/' + landingSlugs[d.s] + '">bina for ' + esc(d.s) + ' families →</a>'
+          : '') +
         (soon ? ctaLink('notify', d).replace('mt-2 ', '') : '') +
         '</div>' +
         '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-xs text-coal-900/70">Numbers and deadlines change every year — the official ' + esc(d.prog) + ' site is the final word.</div>' +
