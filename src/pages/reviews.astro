@@ -45,6 +45,10 @@ const sourceUrl: Record<string, string> = {
   site: SITE,
   'world-schools': WORLD_SCHOOLS,
 };
+/* thebinaschool.com is not an independent review site, so it stays out of the provider bar —
+   the six testimonials from it still carry their own "Published on thebinaschool.com" link. */
+const barSources = sources.filter((src) => src.key !== 'site');
+
 const sourceInitial: Record<string, string> = {
   niche: 'N',
   trustpilot: 'T',
@@ -171,7 +175,7 @@ const explainers = [
   <nav aria-label="Where bina is reviewed" class="border-y-2 border-coal-black bg-white">
     <ul class="mx-auto flex max-w-[100rem] overflow-x-auto">
       {
-        sources.map((src) => (
+        barSources.map((src) => (
           <li class="flex-1 shrink-0 border-r-2 border-coal-black last:border-r-0">
             <a
               href={src.url}
