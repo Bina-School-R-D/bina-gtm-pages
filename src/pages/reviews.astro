@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
 
-const { headline, sources, filters, reviews, registry, beyond } = data;
+const { headline, sources, reviews, registry, beyond } = data;
 
 // Survey figures live in family-survey.json only, so the two pages can never disagree.
 const recommendAvg = survey.headline.recommendAvg;
@@ -68,18 +68,6 @@ const sourceVerb: Record<string, string> = {
   'world-schools': 'Verified on world-schools.com',
 };
 
-// Counts per filter pill — a pill that would show nothing never renders.
-const filterCounts = Object.fromEntries(
-  filters.map((f) => [
-    f.key,
-    f.key === 'all'
-      ? reviews.length
-      : f.type === 'role'
-        ? reviews.filter((r) => r.role === f.key).length
-        : reviews.filter((r) => r.themes.includes(f.key)).length,
-  ])
-);
-const pills = filters.filter((f) => filterCounts[f.key] > 0);
 
 const niche = reviews.filter((r) => r.source === 'niche');
 const site = reviews.filter((r) => r.source === 'site');
@@ -215,29 +203,7 @@ const monthYear = (iso: string | null) =>
 
   <!-- the wall -->
   <section class="border-t-2 border-coal-black bg-bina-purple/10">
-    <div class="mx-auto max-w-[96rem] px-6 py-10 sm:px-10 sm:py-12">
-      <div
-        id="review-filters"
-        class="mb-8 flex flex-wrap gap-2"
-        role="group"
-        aria-label="Filter reviews"
-      >
-        {
-          pills.map((f, i) => (
-            <button
-              type="button"
-              class="filter-pill cursor-pointer rounded-full border-2 border-coal-black bg-white px-4 py-2 font-display text-sm font-bold text-coal-black transition-colors duration-200 hover:bg-bina-grass aria-pressed:bg-coal-black aria-pressed:text-bina-yellow"
-              data-filter={f.key}
-              data-type={f.type ?? 'all'}
-              aria-pressed={i === 0 ? 'true' : 'false'}
-            >
-              {f.label}
-              <span class="ml-1 font-normal opacity-60">{filterCounts[f.key]}</span>
-            </button>
-          ))
-        }
-      </div>
-
+    <div class="mx-auto max-w-[96rem] px-6 py-8 sm:px-10 sm:py-10">
       <div
         id="review-wall"
         class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
@@ -482,9 +448,6 @@ const monthYear = (iso: string | null) =>
         }
       </div>
 
-      <p id="review-empty" class="hidden pt-4 font-display font-bold">
-        No reviews mention that yet. Try another filter.
-      </p>
     </div>
   </section>
 
@@ -605,7 +568,7 @@ const monthYear = (iso: string | null) =>
   </style>
 
   <script>
-    // 1. Cards are a fixed height. Where a review overflows, fade it out and offer the full text
+    // Cards are a fixed height. Where a review overflows, fade it out and offer the full text
     //    in a dialog; where it fits, leave it completely alone.
     document.querySelectorAll<HTMLElement>('.review-body').forEach((body) => {
       if (body.scrollHeight > body.clientHeight + 2) body.classList.add('is-faded');
@@ -627,29 +590,5 @@ const monthYear = (iso: string | null) =>
       });
     });
 
-    // 2. Filter pills — one active at a time, counts already rendered server-side.
-    const wall = document.getElementById('review-wall');
-    const empty = document.getElementById('review-empty');
-    const pills = document.querySelectorAll<HTMLButtonElement>('#review-filters .filter-pill');
-    const cards = wall ? Array.from(wall.querySelectorAll<HTMLElement>('.review-card')) : [];
-
-    pills.forEach((pill) => {
-      pill.addEventListener('click', () => {
-        const key = pill.dataset.filter ?? 'all';
-        const type = pill.dataset.type ?? 'all';
-        pills.forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
-
-        let shown = 0;
-        cards.forEach((card) => {
-          const match =
-            key === 'all' ||
-            (type === 'role' && card.dataset.role === key) ||
-            (type === 'theme' && (card.dataset.themes ?? '').split(' ').includes(key));
-          card.classList.toggle('hidden', !match);
-          if (match) shown++;
-        });
-        empty?.classList.toggle('hidden', shown > 0);
-      });
-    });
   </script>
 </BaseLayout>
