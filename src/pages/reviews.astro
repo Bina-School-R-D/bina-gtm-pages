@@ -159,65 +159,61 @@ const monthYear = (iso: string | null) =>
     </div>
   </header>
 
-  <!-- mid-page provider bar: where the reviews live, one row, scores on the way past -->
+  <!-- where the reviews live: compact pills, so the row wraps instead of scrolling on a phone -->
   <nav aria-label="Where bina is reviewed" class="border-y-2 border-coal-black bg-white">
-    <ul class="mx-auto flex max-w-[100rem] overflow-x-auto">
-      {
-        barSources.map((src) => (
-          <li class="flex-1 shrink-0 border-r-2 border-coal-black last:border-r-0">
-            <a
-              href={src.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group flex h-full min-w-[12rem] items-center gap-3 px-5 py-5 no-underline transition-colors duration-300 hover:bg-bina-yellow"
-            >
-              {sourceLogo[src.key] ? (
-                <img
-                  src={sourceLogo[src.key]}
-                  alt=""
-                  width="32"
-                  height="32"
-                  class="h-8 w-8 shrink-0"
-                  loading="lazy"
-                />
-              ) : (
-                <span
-                  aria-hidden="true"
-                  class:list={[
-                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-coal-black font-display text-xs font-bold text-coal-black',
-                    src.markColor,
-                  ]}
-                >
-                  {src.mark}
-                </span>
-              )}
-              <span class="min-w-0 flex-1">
-                <span class="block truncate font-display font-bold text-coal-black">
-                  {src.barLabel}
-                </span>
-                {src.barStat && (
-                  <span class="block text-xs font-medium text-coal-900">{src.barStat}</span>
-                )}
-              </span>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                class="h-4 w-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+    <div class="mx-auto max-w-[96rem] px-6 py-3 sm:px-10">
+      <ul class="flex flex-wrap items-center gap-2">
+        {
+          barSources.map((src) => (
+            <li>
+              <a
+                href={src.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 rounded-full border-2 border-coal-black bg-white px-3 py-1.5 font-display text-xs font-bold text-coal-black no-underline transition-colors duration-200 hover:bg-bina-yellow"
               >
-                <path d="M14 4h6v6M20 4 10.5 13.5" />
-                <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
-              </svg>
-              <span class="sr-only">(opens in a new tab)</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+                {sourceLogo[src.key] ? (
+                  <img
+                    src={sourceLogo[src.key]}
+                    alt=""
+                    width="18"
+                    height="18"
+                    class="h-[1.125rem] w-[1.125rem] shrink-0"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    class:list={[
+                      'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full border-2 border-coal-black text-[0.55rem]',
+                      src.markColor,
+                    ]}
+                  >
+                    {src.mark}
+                  </span>
+                )}
+                <span>{src.barLabel}</span>
+                {src.barStat && <span class="font-normal text-coal-900">{src.barStat}</span>}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="h-3 w-3 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14 4h6v6M20 4 10.5 13.5" />
+                  <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+                </svg>
+                <span class="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </nav>
 
   <!-- the wall -->
