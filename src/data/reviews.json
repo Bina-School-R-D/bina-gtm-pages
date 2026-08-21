@@ -1,7 +1,8 @@
 {
-  "_provenance": "Every quote is copied verbatim. Niche reviews read from https://www.niche.com/k12/bina-claymont-de/reviews/ (20 of the 21 its structured data reports) and Trustpilot reviews read from https://www.trustpilot.com/review/thebinaschool.com on 2026-08-21; the six remaining testimonials were copied from thebinaschool.com, where the families had already permissioned them. Nothing on this page is written by bina. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows); this page renders only the 17 rows at '✅ Approved to Share' plus the public reviews those rows were excerpted from, and never a '🔒 Needs Retrieval' or '🟡 Needs Permission' row. Survey figures are imported from family-survey.json.",
+  "_provenance": "Every quote is copied verbatim. Niche reviews read from https://www.niche.com/k12/bina-claymont-de/reviews/ (20 of the 21 its structured data reports) and Trustpilot reviews read from https://www.trustpilot.com/review/thebinaschool.com on 2026-08-21; the six remaining testimonials were copied from thebinaschool.com, where the families had already permissioned them. Nothing on this page is written by bina. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows); this page renders only the 17 rows at '✅ Approved to Share' plus the public reviews those rows were excerpted from, and never a '🔒 Needs Retrieval' or '🟡 Needs Permission' row. Survey figures are imported from family-survey.json. Reviews we host ourselves carry initials only: the family let us print their first name on thebinaschool.com, not on a page that aggregates them, so the full name never reaches this page's markup. Names shown on Trustpilot are kept, because the reviewer published them there themselves.",
   "_openQuestions": [
     "Only '✅ Approved to Share' Notion rows may be published. All 17 appear here: 2 as link cards (the LinkedIn article and the Instagram reel), 1 as the first hero pull quote (T-007a), and the other 14 inside the full public review each was excerpted from. The 40 blocked rows (30 Needs Retrieval, 10 Needs Permission) are absent and must stay absent until Family Success clears them.",
+    "Site-hosted testimonials are initialised in the data itself (author: 'A.', 'M. & S.'), not just in the template, so no full name ships in the HTML. If a family later agrees to be named here, restore the name in reviews.json and drop fullNameWithheld.",
     "Trustpilot shows a 4.2 TrustScore over 6 reviews while every visible review is 5 stars — TrustScore is Trustpilot's weighted score, not a mean, so never restate it as an average of the reviews shown.",
     "T-007a's exact registry wording ('My 4th grader finally loves school!!') is no longer displayed after the pull-quote band was removed. The same parent's full review is published in full from Trustpilot (Sarah Schmirl, 2024-05-20), so the row is represented but not quoted verbatim.",
     "Two Trustpilot reviews are the same families' Niche reviews cross-posted (Іван Бойченюк, and Алиса Сазонова's longer bilingual review). The Niche copies are already on the page, so the Trustpilot duplicates are deliberately not shown — do not add them as separate cards.",
@@ -429,18 +430,19 @@
     },
     {
       "id": "site-01",
-      "author": "Amina",
+      "author": "A.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
       "date": null,
       "source": "site",
       "body": "bina has been a blessing for our family, it keeps me closely involved in my son's learning while giving him structure, confidence, and a nurturing school community that shares our values.",
-      "themes": []
+      "themes": [],
+      "fullNameWithheld": true
     },
     {
       "id": "site-02",
-      "author": "Makeda & Steve",
+      "author": "M. & S.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
@@ -449,22 +451,24 @@
       "body": "We were exhausted and losing connection. Since joining bina, our daughter is calm, confident, and learning joyfully and no more after-school tantrums.",
       "themes": [
         "switched"
-      ]
+      ],
+      "fullNameWithheld": true
     },
     {
       "id": "site-03",
-      "author": "Lorena",
+      "author": "L.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
       "date": null,
       "source": "site",
       "body": "My daughter's passion for learning and friendships has grown tremendously. The teachers at bina nurture her independence, confidence, and emotional awareness beautifully.",
-      "themes": []
+      "themes": [],
+      "fullNameWithheld": true
     },
     {
       "id": "site-04",
-      "author": "Amanda",
+      "author": "A.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
@@ -473,11 +477,12 @@
       "body": "bina has been a bright spot for our family. The small, live classes and caring teachers helped our children grow in confidence, learning, and connection.",
       "themes": [
         "small-classes"
-      ]
+      ],
+      "fullNameWithheld": true
     },
     {
       "id": "site-05",
-      "author": "Mo & Ayo",
+      "author": "M. & A.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
@@ -487,11 +492,12 @@
       "themes": [
         "ability",
         "small-classes"
-      ]
+      ],
+      "fullNameWithheld": true
     },
     {
       "id": "site-06",
-      "author": "Mary Kate",
+      "author": "M. K.",
       "role": "parent",
       "roleLabel": "bina parent",
       "rating": null,
@@ -500,7 +506,8 @@
       "body": "After years of searching for 'a better way' in virtual education, I finally found it with bina, where my boys are seen, supported, and thriving every day.",
       "themes": [
         "switched"
-      ]
+      ],
+      "fullNameWithheld": true
     },
     {
       "id": "tp-01",
