@@ -1,19 +1,23 @@
 {
-  "_provenance": "Niche reviews copied verbatim from https://www.niche.com/k12/bina-claymont-de/reviews/ on 2026-08-21 (20 of the 21 reviews its own structured data reports). Site testimonials copied verbatim from thebinaschool.com on 2026-08-21. Nothing on this page is written by bina. Survey figures (recommendation average, NPS, sample size) are not duplicated here — the page imports them from family-survey.json so the two pages can never disagree.",
+  "_provenance": "Niche reviews copied verbatim from https://www.niche.com/k12/bina-claymont-de/reviews/ on 2026-08-21 (20 of the 21 reviews its own structured data reports). Site testimonials copied verbatim from thebinaschool.com on 2026-08-21. Nothing on this page is written by bina. Survey figures (recommendation average, NPS, sample size) are not duplicated here — the page imports them from family-survey.json so the two pages can never disagree. The canonical registry is the Growth team's Testimonial Management System v2 in Notion (57 rows). This page renders only the 17 rows at '✅ Approved to Share'; the 30 'Needs Retrieval' and 10 'Needs Permission' rows are deliberately absent until Family Success clears them. 14 of the 17 approved rows are pull-quote excerpts of Niche reviews already published here in full, so they are recorded as notionExcerpts on the parent review rather than duplicated as cards.",
   "_openQuestions": [
-    "Niche's structured data reports reviewCount 21; 20 render on the reviews page. The 21st is probably a rating with no text. Do not publish '21 reviews' as a count of quotes.",
-    "Trustpilot (https://www.trustpilot.com/review/thebinaschool.com) is behind an AWS WAF challenge, so its score, review count and review text are NOT verified. The page links to it without asserting a number. Paste the verbatim reviews + confirmed TrustScore here before claiming either.",
-    "world-schools.com shows 5.0/5 from 5 reviews, four of which duplicate Niche reviews. A fifth ('My 4th grader finally loves school!! We tried traditional public school, world schooling, home schooling and even unschooling!') is not yet copied verbatim and is therefore not on the page.",
+    "Only '✅ Approved to Share' rows from Notion may be published. 40 of the 57 rows (30 Needs Retrieval, 10 Needs Permission) are blocked and must not be added to this page without Family Success consent — several are exceptional (T-001, T-002, T-009, T-010, T-043).",
+    "The pull-quote 'My 4th grader finally loves school!!' is logged in Notion (T-007a) with Source = Niche, but the copy we actually observed sits on world-schools.com. Both are public and Approved; the card cites world-schools.com because that is where it was read.",
+    "Trustpilot (https://www.trustpilot.com/review/thebinaschool.com) is behind an AWS WAF challenge, so its score, review count and review text are NOT verified. The page links to it without asserting a number.",
+    "The Asana source list includes a public Facebook homeschooling-group post (facebook.com/groups/homeschoolingaus/posts/2120112675387368) that has not been read or logged in Notion. Not on the page.",
     "The bina Facebook page shows 0 reviews / not yet rated, so Facebook is deliberately NOT listed as a review source.",
-    "Glassdoor (Working at bina, EI_IE5085999) is employee reviews. It is listed only inside the team section, never as family social proof.",
+    "Glassdoor is employee reviews. It is referenced only inside the wall's intro line, never as family social proof.",
     "Niche lists bina as PK-6 / ages 4-12. bina serves ages 4-15. Do not repeat Niche's grade range on this page.",
     "Site testimonials carry first names but no dates, because thebinaschool.com publishes none.",
-    "The 'Share your experience' / 'Write a review' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com (Trustpilot's standard write-a-review path). It could not be fetched to confirm because Trustpilot serves an AWS WAF challenge — open it once in a browser before promoting the page."
+    "Niche's structured data reports reviewCount 21; 20 render on the reviews page. Do not publish '21 reviews' as a count of quotes.",
+    "world-schools.com shows 5.0/5 from 5 reviews; four duplicate Niche reviews already on this page.",
+    "The 'Share your experience' CTA points at https://www.trustpilot.com/evaluate/thebinaschool.com (Trustpilot's standard write-a-review path), unconfirmed because Trustpilot blocks automated reading. Open it once in a browser.",
+    "T-015 and T-016 are Approved but hold no quotable text (a reel and an article), so they render as link cards, never as quotes."
   ],
   "headline": {
     "nicheAvg": 5.0,
     "nicheCount": 20,
-    "parentCount": 21,
+    "parentCount": 22,
     "staffCount": 5
   },
   "sources": [
@@ -31,6 +35,14 @@
       "detail": "verified customer reviews",
       "note": "we cannot delete a review here",
       "url": "https://www.trustpilot.com/review/thebinaschool.com",
+      "stat": null
+    },
+    {
+      "key": "instagram",
+      "name": "Instagram + LinkedIn",
+      "detail": "parents posting about bina on their own accounts",
+      "note": "their words, their feeds",
+      "url": "https://www.instagram.com/thebinaschool/",
       "stat": null
     },
     {
@@ -281,6 +293,11 @@
         "travelling",
         "switched",
         "academics"
+      ],
+      "notionExcerpts": [
+        "T-047",
+        "T-048",
+        "T-007f"
       ]
     },
     {
@@ -295,6 +312,11 @@
       "themes": [
         "early-years",
         "travelling"
+      ],
+      "notionExcerpts": [
+        "T-050",
+        "T-007i",
+        "T-007j"
       ]
     },
     {
@@ -308,6 +330,10 @@
       "body": "We are so happy that found bina for our daughter. She now loves going to school and is excited to learn! The teachers at bina are incredible and really cater to each child's needs since there are such small class sizes.  The online tools that they use are great for engaging students and really help them learn. Classes are always organized with great projects that the kids are always excited about.",
       "themes": [
         "small-classes"
+      ],
+      "notionExcerpts": [
+        "T-007b",
+        "T-007d"
       ]
     },
     {
@@ -322,6 +348,10 @@
       "themes": [
         "early-years",
         "academics"
+      ],
+      "notionExcerpts": [
+        "T-007g",
+        "T-007h"
       ]
     },
     {
@@ -333,7 +363,10 @@
       "date": "2024-05-23",
       "source": "niche",
       "body": "I think Bina is one the best online school for children. For me, as father, the most important is my kid's feelings, her happiness to visit school, her bright eyes and smile when she tells me about her day in Bina. She likes lessons and even during her weekend she looks forward to come back to Bina.",
-      "themes": []
+      "themes": [],
+      "notionExcerpts": [
+        "T-046"
+      ]
     },
     {
       "id": "niche-19",
@@ -346,6 +379,10 @@
       "body": "When we were looking for an online school for our daughter, it was important to find a place with an individualized approach to each child. Our choice fell on Bina School, and we were not mistaken. The incredible care for the children is evident in everything. Our daughter is thrilled with the interesting projects. She has come to love reading books, learned to work in a team, and is making progress thanks to the attentive teachers. The focus on the child’s emotional well-being is paramount.\n\nAlthough our child did not know any English before joining Bina, after six months, we have a bilingual child who doesn’t notice whether she watches cartoons in her native language or English. But most importantly, we are delighted with how eagerly our daughter runs to her lessons and how many positive emotions she shares after classes.\n\nThis school has been a true revelation for us, and we are immensely grateful for its contribution to our daughter’s development. BINA ONE LOVE ❤️",
       "themes": [
         "academics"
+      ],
+      "notionExcerpts": [
+        "T-007e",
+        "T-007c"
       ]
     },
     {
@@ -360,6 +397,9 @@
       "themes": [
         "early-years",
         "switched"
+      ],
+      "notionExcerpts": [
+        "T-049"
       ]
     },
     {
@@ -436,6 +476,71 @@
       "themes": [
         "switched"
       ]
+    },
+    {
+      "id": "ws-01",
+      "author": null,
+      "role": "parent",
+      "roleLabel": "bina parent",
+      "rating": 5,
+      "date": "2024-07-01",
+      "source": "world-schools",
+      "body": "My 4th grader finally loves school!!",
+      "themes": [
+        "switched"
+      ],
+      "notionId": "T-007a"
+    }
+  ],
+  "registry": {
+    "name": "Testimonial Management System v2 (Notion)",
+    "url": "https://app.notion.com/p/thebinaschool/Testimonial-Management-System-v2-3b9a520a69f381f59129f18525247a25",
+    "total": 57,
+    "approved": 17,
+    "needsRetrieval": 30,
+    "needsPermission": 10,
+    "declined": 0,
+    "rule": "Only rows with Status '✅ Approved to Share' may appear on this page. Public-platform reviews start Approved; anything captured in Slack, Telegram, Seesaw or Zoom needs the family's written consent from Family Success first. Never publish a 🔒 Needs Retrieval or 🟡 Needs Permission row."
+  },
+  "pullQuotes": [
+    {
+      "notionId": "T-007a",
+      "text": "My 4th grader finally loves school!!",
+      "attribution": "bina parent",
+      "source": "world-schools",
+      "tint": "bg-bina-yellow"
+    },
+    {
+      "notionId": "T-049",
+      "text": "Our 6-year-old loves her teachers and classmates and is learning so much better than when she was in traditional school.",
+      "attribution": "bina parent",
+      "source": "niche",
+      "tint": "bg-bina-grass"
+    },
+    {
+      "notionId": "T-048",
+      "text": "Thankful to Bina I can raise my daughter near family in Brazil, travel to work in the US, and travel Europe with her by my side while getting excellent education!",
+      "attribution": "bina parent",
+      "source": "niche",
+      "tint": "bg-bina-purple"
+    }
+  ],
+  "beyond": [
+    {
+      "notionId": "T-016",
+      "kind": "A parent wrote the case for us, in public",
+      "title": "Seven Theory-Informed Reasons This Alternative Education Route Makes Sense",
+      "detail": "A bina parent who is also a psychologist published a full, evidence-informed article about choosing bina. We asked for a newsletter quote; she wrote this instead.",
+      "cta": "Read it on LinkedIn",
+      "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/"
+    },
+    {
+      "notionId": "T-015",
+      "kind": "A parent filmed what clubs did for her son",
+      "title": "MaryKate on what bina's clubs have meant for Cash",
+      "detail": "Posted to her own Instagram, unprompted, and left public.",
+      "cta": "Watch the reel",
+      "url": "https://www.instagram.com/reel/DQrWLA9jXyY/"
     }
   ]
 }

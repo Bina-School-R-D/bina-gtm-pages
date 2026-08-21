@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
 
-const { headline, sources, filters, reviews } = data;
+const { headline, sources, filters, reviews, registry, pullQuotes, beyond } = data;
 
 // Survey figures live in family-survey.json only, so the two pages can never disagree.
 const recommendAvg = survey.headline.recommendAvg;
@@ -31,9 +31,22 @@ const TRUSTPILOT_WRITE = 'https://www.trustpilot.com/evaluate/thebinaschool.com'
 const familySources = sources.filter((s) => s.key !== 'glassdoor');
 const glassdoor = sources.find((s) => s.key === 'glassdoor')!;
 
+const WORLD_SCHOOLS = 'https://world-schools.com/schools/bina-school/';
+
 const sourceUrl: Record<string, string> = {
   niche: NICHE,
   site: SITE,
+  'world-schools': WORLD_SCHOOLS,
+};
+const sourceInitial: Record<string, string> = {
+  niche: 'N',
+  site: 'b',
+  'world-schools': 'W',
+};
+const sourceVerb: Record<string, string> = {
+  niche: 'Verified on Niche',
+  site: 'Published on thebinaschool.com',
+  'world-schools': 'Verified on world-schools.com',
 };
 
 // Counts per filter pill — a pill that would show nothing never renders.
@@ -101,7 +114,7 @@ const monthYear = (iso: string | null) =>
 const explainers = [
   {
     q: 'Where did these reviews come from?',
-    a: `${headline.nicheCount} of them are copied word for word from bina's page on Niche, an independent US school-review site we have no control over — we cannot add, edit or delete anything there. The rest are families who gave us permission to quote them on our own site. Every card tells you which is which and links straight to the source so you can read it there instead.`,
+    a: `${headline.nicheCount} of them are copied word for word from bina's page on Niche, an independent US school-review site we have no control over — we cannot add, edit or delete anything there. The rest are families who gave us permission to quote them on our own site. Every card tells you which is which and links straight to the source so you can read it there instead. Trustpilot has reviews too — we link them rather than reprint them, so read those there.`,
     accent: 'bg-bina-grass',
   },
   {
@@ -110,13 +123,13 @@ const explainers = [
     accent: 'bg-bina-yellow',
   },
   {
-    q: 'Which reviews did you leave out?',
-    a: 'None that we found. There are five reviews on the world-schools.com directory, four of which are the same reviews already on this page, and one we have not yet copied across. Our Facebook page has no reviews at all. Trustpilot has reviews we have linked but not reproduced here, so read those on Trustpilot directly rather than taking our summary of them.',
+    q: 'Are you only showing the good ones?',
+    a: `We keep a log of every kind word a family or child has said about bina — ${registry.total} entries so far, from public reviews, from messages to teachers, from things said out loud in class. Only ${registry.approved} of them are on this page, and not because the rest are bad: ${registry.needsPermission} are waiting on a family to say yes to being quoted, and ${registry.needsRetrieval} are still sitting in a screenshot or a video that nobody has typed up. Nothing has been declined. If a family has not given permission, their words stay off this page however good they are — which is exactly why the ones here are all public reviews.`,
     accent: 'bg-bina-blue',
   },
   {
     q: 'What should I be sceptical about?',
-    a: 'Parents who write reviews are rarely the neutral middle — happy and unhappy families both write more than everyone else, and ours skew happy. This is 26 reviews, not a survey, so treat it as stories rather than statistics; the scored survey of 103 families is the statistics, and it is linked above. Five of the reviews are written by bina staff and are labelled as such — they tell you what it is like to work here, not what it is like to be a family here.',
+    a: `Parents who write reviews are rarely the neutral middle — happy and unhappy families both write more than everyone else, and ours skew happy. This is ${reviews.length} reviews, not a survey, so treat it as stories rather than statistics; the scored survey of ${surveyN} families is the statistics, and it is linked above. ${headline.staffCount} of the reviews are written by bina staff and are labelled as such — they tell you what it is like to work here, not what it is like to be a family here.`,
     accent: 'bg-bina-purple',
   },
 ];
@@ -124,7 +137,7 @@ const explainers = [
 
 <BaseLayout
   title="bina Reviews — What Families Actually Say About Us"
-  description="Every review of bina, in one place: 20 verbatim parent and teacher reviews from Niche, plus links to every independent site where families rate us."
+  description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
 >
   <!-- hero: the claim, the proof, and the way out to the sources -->
@@ -138,10 +151,10 @@ const explainers = [
         </span>
       </h1>
       <p class="mb-8 max-w-2xl text-lg text-coal-1000 sm:text-xl">
-        We didn't write a word of what follows. {headline.nicheCount} of them sit on Niche, where
-        families rate schools and bina has no edit button; the other {site.length} are families who
-        gave us permission to quote them. {headline.parentCount} parents, {headline.staffCount} of
-        our own teachers, nothing edited.
+        We didn't write a word of what follows. {headline.nicheCount + 1} of these reviews sit on
+        review sites where bina has no edit button; the other {site.length} are families who gave us
+        permission to quote them here. {headline.parentCount} parents, {headline.staffCount} of our
+        own teachers, nothing edited.
       </p>
 
       <div class="mb-10 flex flex-wrap gap-3">
@@ -177,6 +190,35 @@ const explainers = [
       </dl>
     </div>
   </header>
+
+  <!-- pull-quote band: the three strongest approved lines, in the biggest type on the page -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-[100rem] px-5 py-12 sm:py-14">
+      <ul class="grid gap-5 lg:grid-cols-3">
+        {
+          pullQuotes.map((q) => (
+            <li>
+              <figure class:list={['card-bina flex h-full flex-col p-7 sm:p-8', q.tint]}>
+                <blockquote class="font-display text-2xl font-bold leading-tight text-coal-black sm:text-3xl">
+                  &ldquo;{q.text}&rdquo;
+                </blockquote>
+                <figcaption class="mt-5 text-sm font-medium text-coal-1000">
+                  {q.attribution} ·{' '}
+                  <a
+                    href={sourceUrl[q.source]}
+                    rel="noopener"
+                    class="font-display font-bold text-coal-black underline underline-offset-4"
+                  >
+                    {q.source === 'niche' ? 'read it on Niche' : 'read it on world-schools.com'}
+                  </a>
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
   <!-- the links, high up: a sceptic wants to leave and check -->
   <section class="border-t-2 border-coal-black">
@@ -284,7 +326,7 @@ const explainers = [
             const r = item.review;
             const i = ordered.indexOf(r);
             const tint = tints[i % tints.length];
-            const initial = r.author ? r.author.charAt(0) : r.source === 'niche' ? 'N' : 'b';
+            const initial = r.author ? r.author.charAt(0) : sourceInitial[r.source];
             const when = monthYear(r.date);
             const paras = r.body.split('\n\n').filter(Boolean);
 
@@ -333,7 +375,7 @@ const explainers = [
                     rel="noopener"
                     class="font-display font-bold text-coal-black underline underline-offset-4"
                   >
-                    {r.source === 'niche' ? 'Verified on Niche' : 'Published on thebinaschool.com'} →
+                    {sourceVerb[r.source]} →
                   </a>
                 </p>
               </article>
@@ -345,6 +387,44 @@ const explainers = [
       <p id="review-empty" class="hidden pt-4 font-display font-bold">
         No reviews mention that yet. Try another filter.
       </p>
+    </div>
+  </section>
+
+
+  <!-- approved public content that is not a quote: an article and a reel -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
+      <h2 class="mb-3 text-3xl sm:text-4xl">Two parents didn't stop at a review</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Nobody asked them for either of these. They made them, published them on their own accounts,
+        and left them up.
+      </p>
+      <ul class="grid gap-4 md:grid-cols-2">
+        {
+          beyond.map((b, i) => (
+            <li>
+              <a
+                href={b.url}
+                rel="noopener"
+                class:list={[
+                  'card-bina group flex h-full flex-col p-6 no-underline transition-colors duration-300 sm:p-7',
+                  i === 0 ? 'bg-bina-blue/20 hover:bg-bina-blue/40' : 'bg-bina-pink/15 hover:bg-bina-pink/30',
+                ]}
+              >
+                <span class="mb-2 block font-display text-xs font-bold uppercase tracking-widest text-coal-900">
+                  {b.kind}
+                </span>
+                <span class="mb-3 block font-display text-xl font-bold text-coal-black">{b.title}</span>
+                <span class="mb-5 block text-coal-1000">{b.detail}</span>
+                <span class="mt-auto block font-display font-bold text-coal-black">
+                  {b.cta}
+                  <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -397,7 +477,11 @@ const explainers = [
   </section>
 
   <p slot="footer-note" class="text-xs text-white/60">
-    Reviews are copied verbatim and by hand — {headline.nicheCount} from
+    Every quote here comes from the Growth team's testimonial registry, which holds {registry.total}
+    entries; only the {registry.approved} marked approved for public use are published, and the {
+      registry.needsPermission
+    } awaiting a family's consent plus the {registry.needsRetrieval} not yet transcribed are not on
+    this page. Reviews are copied verbatim and by hand — {headline.nicheCount} from
     <a href={NICHE} rel="noopener" class="underline">bina's Niche page</a> (last checked 21 August
     2026) and {site.length} from families who gave permission to be quoted on thebinaschool.com. This
     page is not a live feed, so read the source for the current picture. Niche's own structured data
