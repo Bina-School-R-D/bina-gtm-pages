@@ -100,18 +100,6 @@
       "markColor": "bg-bina-purple",
       "barLabel": "Our family survey",
       "barStat": "9.42/10"
-    },
-    {
-      "key": "site",
-      "name": "thebinaschool.com",
-      "detail": "families who let us quote them",
-      "note": "the only source we host ourselves",
-      "url": "https://thebinaschool.com",
-      "stat": null,
-      "mark": "b",
-      "markColor": "bg-bina-yellow",
-      "barLabel": "thebinaschool.com",
-      "barStat": null
     }
   ],
   "filters": [
