@@ -194,17 +194,13 @@
     {
       "s": "New Hampshire",
       "prog": "Education Freedom Account (EFA)",
-      "status": "coming-soon",
+      "status": "approved",
       "who": "Families under the state income limit.",
       "howMuch": "About $5,000 per child, per year.",
-      "standing": "Our application is submitted and awaiting the state's decision.",
       "platform": "ClassWallet",
       "applyWindow": "Rolling. Submit your documents by July 1 to clear the July 15 funding deadline.",
       "applyUrl": "https://nhefa.scholarshipfund.org/",
       "approval": "Expect a response within about 30 days; if they ask for more documents it can take up to two months. Funds then arrive in four installments (September, November, January, April).",
-      "soonIntro": "New Hampshire's EFA runs year-round and bina's application is with the state. Here's where we are, and how New Hampshire families are joining bina in the meantime.",
-      "soonWhy": "The EFA is rolling, runs through ClassWallet, and pays in four installments — a good fit for how bina bills, once we're listed.",
-      "soonWork": "bina's application is in with New Hampshire and we're waiting on their approval. We'll email you the moment it lands.",
       "officialUrl": "https://nhefa.scholarshipfund.org/",
       "binaUrl": "https://www.thebinaschool.com/homeschooling-guides/new-hampshire"
     },
@@ -344,17 +340,13 @@
     {
       "s": "Wyoming",
       "prog": "Steamboat Legacy Scholarship (ESA)",
-      "status": "coming-soon",
+      "status": "approved",
       "who": "Most Wyoming families.",
       "howMuch": "$7,000 per child, per year.",
-      "standing": "Approved as a Wyoming vendor — we're finishing our course listings before families can spend funds with us.",
       "platform": "Odyssey",
       "applyWindow": "Opens July 6, 2026 at 9 a.m. and runs to the end of July. Returning families renew with pre-filled forms.",
       "applyUrl": "https://edu.wyoming.gov/parents/education-savings-accounts/",
       "approval": "Wyoming verifies eligibility by the end of July, and your $7,000 lands in your Odyssey account by September 1. Returning families also get an extra $1,750 in rollover funds — we time your bina start to your funding date.",
-      "soonIntro": "bina is already an approved Wyoming vendor and you can find us in the state's provider list. The last step is our course listings. Here's where we are, and how Wyoming families are joining bina in the meantime.",
-      "soonWhy": "The Steamboat Legacy Scholarship deposits funds into your Odyssey account in quarterly installments from July 1, and bina is already registered as an approved provider — you can see us in the state's list today.",
-      "soonWork": "We're uploading bina's course offerings so the program can release funds against them. Until those listings are live, families can't check out with bina — and we'd rather say that than have you find out at the wallet.",
       "officialUrl": "https://edu.wyoming.gov/parents/education-savings-accounts/",
       "binaUrl": "https://www.thebinaschool.com/esa/wyoming"
     }
