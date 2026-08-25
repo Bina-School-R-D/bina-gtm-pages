@@ -1,9 +1,9 @@
 {
   "_provenance": "Sales copy for the paid-search ESA landing pages (/esa/<state>). Program facts (amounts, windows, platforms, portals) are NOT stored here — they are read from esa-states.json, which is synced from bina-gtm/notes/ESA_State_Database.xlsx. Tuition figures are copied from https://thebinaschool.com/tuition (published, 2026-08-21). School facts (ages, class cap, hours, accreditations, clubs) are copied from thebinaschool.com. Proof numbers are imported from family-survey.json, student-results.json and reviews.json — never re-typed here.",
   "_openQuestions": [
-    "STATUS CONFLICT — three sources disagree on where bina is live. Akis (Slack + Google Ads call, 2026-08-07): approved in Arizona, Idaho, Utah, New Hampshire, Wyoming. esa-states.json (the team's ESA database): Arizona + Utah approved, Idaho approved-as-reimbursement, New Hampshire application pending, Wyoming vendor-approved but course listings unfinished. thebinaschool.com homepage: Utah, Arizona, Wyoming only. These pages follow esa-states.json, the narrowest and most specific source. Confirm the real status per state, then update esa-states.json first.",
+    "STATUS — Akis confirmed on 2026-08-25 that bina is live in all five states: Arizona, Idaho, Utah, Wyoming and New Hampshire. esa-states.json was updated to match (Wyoming and New Hampshire moved from coming-soon to approved). Two places still lag and are not this page's to fix: the upstream bina-gtm/notes/ESA_State_Database.xlsx, and thebinaschool.com's homepage, which still names only Utah, Arizona and Wyoming.",
     "thebinaschool.com says ESA funding 'covers tuition in full' for Utah, Arizona and Wyoming. It does not: the largest base award in those states is $8,000 against $10,769 yearly tuition. These pages publish the remainder instead. The homepage line should be corrected.",
-    "Application windows: only Arizona is open year-round. Utah's 2026-27 window closed (next opens spring), Idaho's second 2026 window closed 2026-08-15, Wyoming's closed end of July. Copy on those pages sells the school now and lines the family up for the next window — confirm that is the intent before paid traffic is pointed at them.",
+    "Application windows: only Arizona and New Hampshire take applications year-round. Utah's 2026-27 window closed (next opens spring), Idaho's second 2026 window closed 2026-08-15, Wyoming's closed end of July. The closed-window pages sell the school now and line the family up for the next window — that is deliberate, and it is why paid budget should weight Arizona.",
     "Class size: the main site says 'never more than 12 in a class'; /esa already publishes 'small live classes of 6-8 with two teachers'; the Google Ads copy says 'typical class size 7-8 kids'. These pages publish 6-8 with two teachers, capped at 12 — the union of what we already say. Confirm with the CSO.",
     "The $8,000 (Utah) / $7,000-$8,000 (Arizona) figures are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount."
   ],
@@ -175,44 +175,44 @@
     {
       "slug": "wyoming",
       "state": "Wyoming",
-      "tier": "vendor-pending",
+      "tier": "funded",
       "esaMin": 7000,
       "esaMax": 7000,
-      "pill": "Wyoming Steamboat Legacy · bina is an approved vendor",
-      "h1": "bina is an approved Wyoming ESA vendor",
-      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. You can find us in Wyoming's approved vendor list today. One step is still outstanding, and we would rather you read it here than discover it at the checkout.",
+      "pill": "Wyoming Steamboat Legacy · bina is an approved provider",
+      "h1": "Your Wyoming ESA pays for bina",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. The Steamboat Legacy Scholarship pays $7,000 per child into your Odyssey account, and bina is an approved provider you can spend it with.",
       "gate": [
-        "bina is in Wyoming's approved vendor list",
+        "bina is an approved Wyoming ESA provider",
         "$7,000 per child, per year (+$1,750 rollover when you renew)",
-        "Funds land in your Odyssey account"
+        "You spend it through Odyssey"
       ],
-      "coverTitle": "Approved as a vendor — course listings still going up",
-      "coverBody": "The Steamboat Legacy Scholarship pays into your Odyssey account and bina is a registered provider. What is not finished is our course listings, and the program releases funds against those listings — so Wyoming families cannot check out with bina yet. We are uploading them now and will email you the day it is done.",
-      "timingTitle": "This year's window has closed; families are still starting",
-      "timingBody": "The application window opened Jul 6 and ran to the end of July, with eligibility verified by end of July and funds in your Odyssey account by Sep 1. Families who want bina this year enrol and pay directly, and we line your funding up for the next cycle.",
+      "coverTitle": "$7,000 lands in your Odyssey account, and bina is in the list",
+      "coverBody": "Wyoming deposits the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina. Renewing families get an extra $1,750 in rollover funds on top.",
+      "timingTitle": "This year's window has closed — the school decision doesn't have to wait",
+      "timingBody": "Applications opened Jul 6 and ran to the end of July, eligibility is verified by the end of July, and funds land in Odyssey by Sep 1. Families who want bina this year enrol and pay directly, and we line your funding up for the next cycle.",
       "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved Wyoming vendor for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer."
+      "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer."
     },
     {
       "slug": "new-hampshire",
       "state": "New Hampshire",
-      "tier": "application-pending",
+      "tier": "funded",
       "esaMin": 5000,
       "esaMax": 5000,
-      "pill": "New Hampshire EFA · bina's application is with the state",
-      "h1": "New Hampshire families: bina's EFA application is in, and not yet approved",
-      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. Our Education Freedom Account application is with the state and we are waiting on their decision. Here is exactly where that stands.",
+      "pill": "New Hampshire EFA · bina is an approved provider",
+      "h1": "Your New Hampshire EFA pays for bina",
+      "lead": "bina is a full-time live online school for ages 4 to 15 — real teachers, never more than 12 children in a class, five hours a day. New Hampshire's Education Freedom Account runs year-round through ClassWallet, and bina is an approved provider you can spend it with.",
       "gate": [
-        "Our EFA application is submitted, not yet approved",
-        "About $5,000 per child, per year once listed",
-        "The EFA runs through ClassWallet"
+        "bina is an approved New Hampshire EFA provider",
+        "About $5,000 per child, per year",
+        "You spend it through ClassWallet"
       ],
-      "coverTitle": "We will not tell you we're approved before we are",
-      "coverBody": "New Hampshire's EFA is rolling, pays in four installments, and runs through ClassWallet — a good fit for how bina bills, once we are listed. Until the state decides, New Hampshire families join bina and pay directly, and we email you the moment the approval lands.",
-      "timingTitle": "Rolling program, with document deadlines",
-      "timingBody": "The EFA accepts applications year-round; documents in by Jul 1 clear the Jul 15 funding deadline. Decisions take about 30 days, or up to two months if the state asks for more paperwork, and funds arrive in September, November, January and April.",
-      "seoTitle": "New Hampshire EFA and bina Online School | bina",
-      "seoDesc": "Where bina's New Hampshire Education Freedom Account application stands, and how New Hampshire families join our live online school for ages 4 to 15."
+      "coverTitle": "A rolling program, paid in four installments",
+      "coverBody": "The EFA accepts applications all year and pays into your ClassWallet account in September, November, January and April — which lines up with how bina bills, so you are never asked for money the state hasn't sent yet.",
+      "timingTitle": "Rolling applications, with document deadlines that matter",
+      "timingBody": "Documents in by Jul 1 clear the Jul 15 funding deadline. Decisions take about 30 days, or up to two months if the state asks for more paperwork. Because the program is rolling, the sensible order is to talk to us first and apply with your bina numbers in hand.",
+      "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition."
     }
   ],
   "tierCopy": {
