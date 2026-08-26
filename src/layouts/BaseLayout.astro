@@ -83,20 +83,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
          separate from the main site's project so this domain's traffic and session
          replays can be watched on their own. Replay, console-log and performance
          capture are enabled server-side in the project, so array.js starts recording
-         on its own once loaded. Lazy on the same terms as GTM, which means a replay
-         starts at load + 5s or on first interaction — bounce visits shorter than
-         that leave no recording. */
+         on its own once loaded. Loaded EAGERLY, unlike GTM — a deliberate break from
+         the main site's deferred loader (Akis, 2026-08-26) so every visit gets a
+         replay, including sub-5s bounces the deferred loader would miss. The script
+         itself is async, so it stays off the parser's critical path. */
       (function () {
         if (/HeadlessChrome|ReactSnap/i.test(navigator.userAgent || '')) return;
         if (!/(^|\.)(thebinaschool\.com|bina\.school)$/.test(window.location.hostname || '')) return;
-        var started = false;
-        function init() {
-          if (started) return;
-          started = true;
-          ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (t) {
-            window.removeEventListener(t, init);
-          });
-          !(function (t, e) {
+        !(function (t, e) {
             var o, n, p, r;
             e.__SV ||
               ((window.posthog = e),
@@ -142,12 +136,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             api_host: 'https://us.i.posthog.com',
             defaults: '2026-01-30',
           });
-        }
-        ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (t) {
-          window.addEventListener(t, init, { once: true, passive: true });
-        });
-        if (document.readyState === 'complete') window.setTimeout(init, 5000);
-        else window.addEventListener('load', function () { window.setTimeout(init, 5000); }, { once: true });
       })();
     </script>
 
