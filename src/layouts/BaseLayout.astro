@@ -42,7 +42,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="generator" content={Astro.generator} />
 
     <!-- Tracking parity with thebinaschool.com: same GTM container (CookieYes CMP + GA4
-         live inside it), same PostHog project, same first-touch attribution file. Both
+         live inside it), a dedicated PostHog project for go.bina.school (session replay
+         enabled), same first-touch attribution file. Both
          tags use the main site's deferred loader — they load after full page load + idle,
          or on first interaction, whichever comes first — so the consent banner never
          lands on the LCP critical path. Host-gated to bina domains so previews and local
@@ -78,8 +79,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
 
     <script is:inline>
-      /* PostHog — same project key and api_host as thebinaschool.com, so product analytics
-         for these pages land in the existing project. Lazy on the same terms as GTM. */
+      /* PostHog — dedicated project for go.bina.school (us.posthog.com project 578193),
+         separate from the main site's project so this domain's traffic and session
+         replays can be watched on their own. Replay, console-log and performance
+         capture are enabled server-side in the project, so array.js starts recording
+         on its own once loaded. Lazy on the same terms as GTM, which means a replay
+         starts at load + 5s or on first interaction — bounce visits shorter than
+         that leave no recording. */
       (function () {
         if (/HeadlessChrome|ReactSnap/i.test(navigator.userAgent || '')) return;
         if (!/(^|\.)(thebinaschool\.com|bina\.school)$/.test(window.location.hostname || '')) return;
@@ -132,7 +138,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               }),
               (e.__SV = 1));
           })(document, window.posthog || []);
-          window.posthog.init('phc_u3t5aKtGXF9YSYkqSzJZCP8wpVtwFi9buiuN7BQRLCev', {
+          window.posthog.init('phc_D4SErijz7JBzQTuzsJGdYQcKUB3LZxZoqBsBJSn8TQH4', {
             api_host: 'https://us.i.posthog.com',
             defaults: '2026-01-30',
           });
