@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PillLabel from '../components/sections/pill_label.astro';
+import UiStepper from '../components/sections/ui_stepper.astro';
+import UiLink from '../components/sections/ui_link.astro';
 import data from '../data/book-adventure.json';
 
 const { campaign, intro, ageGroups } = data;
@@ -8,27 +11,24 @@ const { campaign, intro, ageGroups } = data;
 // The `campaign` field in the payload tells the workflow which page sent the lead.
 const WEBHOOK = 'https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake';
 
-const steps = [
-  { n: 1, label: 'The class' },
-  { n: 2, label: 'About you' },
-  { n: 3, label: 'Your child' },
-];
+const steps = ['The class', 'About you', 'Your child'];
 ---
 
 <BaseLayout
   title="Book a bina Adventure — a live class for your child"
   description="A 60-minute live group class where your child experiences bina firsthand — with a real teacher and learners their age. Pick an age group and a time."
   noindex={true}
+  decorationSet="deco_waterlily"
 >
   <!-- hero -->
-  <header class="bg-bina-yellow">
-    <div class="mx-auto max-w-4xl px-5 py-14 sm:py-16">
-      <p class="pill-bina mb-6 text-sm tracking-wide">bina adventure · ages 4–15</p>
-      <h1 class="mb-4 max-w-2xl text-4xl font-black sm:text-5xl">
+  <header class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-4xl px-5 py-14 sm:py-16">
+      <PillLabel text="bina adventure · ages 4–15" accentColor="grass" class="mb-6" />
+      <h1 class="mb-4 max-w-2xl text-hero text-bina-grass">
         Book a bina
-        <span class="underline decoration-bina-pink decoration-8 underline-offset-4">Adventure</span>
+        Adventure
       </h1>
-      <p class="max-w-2xl text-lg text-coal-1000">
+      <p class="max-w-2xl text-body-2 text-bina-grass">
         A live, 60-minute group class where your child experiences bina firsthand — no commitment,
         just a real taste of how bina works.
       </p>
@@ -36,38 +36,27 @@ const steps = [
   </header>
 
   <!-- booking tool -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-2xl px-5 py-12">
+  <section class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-2xl px-5 py-12">
       <!-- progress -->
-      <ol id="progress" class="mb-6 flex flex-wrap gap-2" aria-label="Booking steps">
-        {
-          steps.map((s) => (
-            <li
-              data-step-pill={s.n}
-              class="inline-flex items-center gap-2 rounded-full border-2 border-coal-black bg-white px-4 py-1.5 font-display text-xs font-bold transition-colors duration-200 data-[active]:bg-coal-black data-[active]:text-white"
-            >
-              <span>{s.n}</span> {s.label}
-            </li>
-          ))
-        }
-      </ol>
+      <UiStepper id="progress" steps={steps} currentStep={1} accentColor="grass" class="mb-10" />
 
-      <div class="card-bina p-6 sm:p-10">
+      <div class="card_base bg-coal-black p-6 sm:p-10">
         <!-- step 1 · intro -->
         <div data-step="1">
-          <h2 class="mb-4 text-2xl sm:text-3xl">What is a bina Adventure class?</h2>
-          <p class="mb-4 text-coal-1000">{intro.whatItIs}</p>
-          <p class="mb-8 text-coal-1000">{intro.whyItMatters}</p>
-          <button type="button" data-next class="btn-bina w-full text-lg sm:w-auto">
-            Book your child's spot →
+          <h2 class="mb-4 text-subtitle-2 text-bina-grass">What is a bina Adventure class?</h2>
+          <p class="mb-4 text-body-2 text-bina-grass">{intro.whatItIs}</p>
+          <p class="mb-8 text-body-2 text-bina-grass">{intro.whyItMatters}</p>
+          <button type="button" data-next class="ui_button w-full sm:w-auto">
+            Book your child's spot
           </button>
         </div>
 
         <!-- step 2 · contact -->
         <form data-step="2" hidden novalidate>
-          <h2 class="mb-6 text-2xl sm:text-3xl">First, a bit about you</h2>
+          <h2 class="mb-6 text-subtitle-2 text-bina-grass">First, a bit about you</h2>
 
-          <label for="parent-name" class="mb-2 block font-display text-lg font-bold">Your name</label>
+          <label for="parent-name" class="mb-2 block font-display text-body-3 font-bold text-bina-grass">Your name</label>
           <input
             id="parent-name"
             name="name"
@@ -75,10 +64,10 @@ const steps = [
             autocomplete="name"
             required
             placeholder="First and last name"
-            class="input-bina mb-5"
+            class="ui_input mb-5"
           />
 
-          <label for="parent-email" class="mb-2 block font-display text-lg font-bold">Your email</label>
+          <label for="parent-email" class="mb-2 block font-display text-body-3 font-bold text-bina-grass">Your email</label>
           <input
             id="parent-email"
             name="email"
@@ -86,11 +75,11 @@ const steps = [
             autocomplete="email"
             required
             placeholder="your@email.com"
-            class="input-bina mb-5"
+            class="ui_input mb-5"
           />
 
-          <label for="parent-phone" class="mb-2 block font-display text-lg font-bold">
-            Your phone <span class="font-medium text-coal-900">(optional)</span>
+          <label for="parent-phone" class="mb-2 block font-display text-body-3 font-bold text-bina-grass">
+            Your phone <span class="font-medium">(optional)</span>
           </label>
           <input
             id="parent-phone"
@@ -98,9 +87,9 @@ const steps = [
             type="tel"
             autocomplete="tel"
             placeholder="+1 555 000 0000"
-            class="input-bina mb-2"
+            class="ui_input mb-2"
           />
-          <p class="mb-6 text-sm text-coal-900">
+          <p class="mb-6 text-body-3 text-bina-grass">
             By adding your phone number, you agree to receive SMS updates from bina school about
             your class.
           </p>
@@ -114,16 +103,16 @@ const steps = [
           <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
 
           <div class="flex flex-wrap items-center gap-3">
-            <button type="submit" class="btn-bina text-lg">Continue →</button>
-            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
+            <button type="submit" class="ui_button">Continue</button>
+            <button type="button" data-back class="ui_button_ghost">← Back</button>
           </div>
         </form>
 
         <!-- step 3 · child + age group -->
         <form data-step="3" hidden novalidate>
-          <h2 class="mb-6 text-2xl sm:text-3xl">Now, about your child</h2>
+          <h2 class="mb-6 text-subtitle-2 text-bina-grass">Now, about your child</h2>
 
-          <label for="child-name" class="mb-2 block font-display text-lg font-bold">
+          <label for="child-name" class="mb-2 block font-display text-body-3 font-bold text-bina-grass">
             Your child's first name
           </label>
           <input
@@ -132,10 +121,10 @@ const steps = [
             type="text"
             autocomplete="off"
             required
-            class="input-bina mb-6"
+            class="ui_input mb-6"
           />
 
-          <p class="mb-3 block font-display text-lg font-bold">Pick your child's age group</p>
+          <p class="mb-3 block font-display text-body-3 font-bold text-bina-grass">Pick your child's age group</p>
           <div class="mb-6 grid gap-2 sm:grid-cols-2" role="group" aria-label="Your child's age group">
             {
               ageGroups.map((g) => (
@@ -143,7 +132,7 @@ const steps = [
                   type="button"
                   data-age={g.value}
                   aria-pressed="false"
-                  class="age-btn flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-coal-black bg-white px-4 py-3 text-left font-display text-lg font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
+                  class="age-btn flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-bina-grass bg-transparent px-4 py-3 text-left font-display text-body-3 font-bold text-bina-grass transition-colors duration-200 hover:border-coal-black hover:bg-bina-yellow hover:text-coal-black aria-pressed:border-coal-black aria-pressed:bg-coal-black aria-pressed:text-bina-grass"
                 >
                   <span class={`h-6 w-2 flex-none rounded-full border-2 border-coal-black ${g.accent}`} />
                   {g.label}
@@ -155,10 +144,10 @@ const steps = [
           <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
 
           <div class="flex flex-wrap items-center gap-3">
-            <button type="submit" class="btn-bina text-lg">Pick a class time →</button>
-            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
+            <button type="submit" class="ui_button">Pick a class time</button>
+            <button type="button" data-back class="ui_button_ghost">← Back</button>
           </div>
-          <p class="mt-4 text-sm text-coal-900">
+          <p class="mt-4 text-body-3 text-bina-grass">
             Next you'll choose a date and time on our booking calendar.
           </p>
         </form>
@@ -166,10 +155,17 @@ const steps = [
     </div>
   </section>
 
-  <p slot="footer-note" class="text-xs text-white/60">
+  <p slot="footer-note" class="text-small text-bina-grass">
     Questions? Write to
-    <a href="mailto:admissions@thebinaschool.com" class="underline">admissions@thebinaschool.com</a>.
+    <UiLink href="mailto:admissions@thebinaschool.com" cardFill="dark" accentColor="grass">admissions@thebinaschool.com</UiLink>.
   </p>
+
+  <style>
+    /* page-wide dark background — this page only, not a site-wide toggle */
+    :global(body) {
+      background: var(--color-dark-bg);
+    }
+  </style>
 
   <script define:vars={{ ageGroups, campaign, WEBHOOK }}>
     const byAge = {};
@@ -185,15 +181,19 @@ const steps = [
     };
 
     const panels = document.querySelectorAll('[data-step]');
-    const pills = document.querySelectorAll('[data-step-pill]');
+    const stepperSteps = document.querySelectorAll('#progress li[data-stepper-step]');
+    const stepperConnectors = document.querySelectorAll('#progress [data-stepper-connector-after]');
 
     function show(n) {
       panels.forEach((p) => (p.hidden = p.dataset.step !== String(n)));
-      pills.forEach((pl) => {
-        if (Number(pl.dataset.stepPill) <= n) pl.setAttribute('data-active', '');
-        else pl.removeAttribute('data-active');
+      stepperSteps.forEach((li) => {
+        const pos = Number(li.dataset.stepperStep);
+        li.dataset.state = pos < n ? 'completed' : pos === n ? 'active' : 'upcoming';
       });
-      const card = document.querySelector('.card-bina');
+      stepperConnectors.forEach((c) => {
+        c.dataset.state = Number(c.dataset.stepperConnectorAfter) + 1 <= n ? 'reached' : 'unreached';
+      });
+      const card = document.querySelector('.card_base');
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 

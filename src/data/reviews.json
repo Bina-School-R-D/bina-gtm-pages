@@ -593,8 +593,7 @@
       "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/",
       "who": "A bina parent",
       "platform": "LinkedIn · she is also a psychologist",
-      "logo": "/images/logos/linkedin.svg",
-      "tint": "bg-bina-blue/20"
+      "logo": "/images/logos/linkedin.svg"
     },
     {
       "notionId": "T-015",
@@ -605,8 +604,7 @@
       "url": "https://www.instagram.com/reel/DQrWLA9jXyY/",
       "who": "MaryKate",
       "platform": "Instagram · bina parent",
-      "logo": "/images/logos/instagram.svg",
-      "tint": "bg-bina-pink/15"
+      "logo": "/images/logos/instagram.svg"
     }
   ],
   "cta": {

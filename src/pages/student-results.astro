@@ -1,5 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PillLabel from '../components/sections/pill_label.astro';
+import UiAccordion from '../components/sections/ui_accordion.astro';
+import LayoutStatSection from '../components/sections/layout_stat_section.astro';
+import CardStat from '../components/sections/card_stat.astro';
+import SectionTabbedStat from '../components/sections/section_tabbed_stat.astro';
+import ChartVerticalBar from '../components/sections/chart_vertical_bar.astro';
+import UiLink from '../components/sections/ui_link.astro';
 import results from '../data/student-results.json';
 
 const { headline, curves, levels, tenure, year } = results;
@@ -9,30 +16,29 @@ const SITE = 'https://thebinaschool.com';
 // Plain-language explainers for the STAR section — the page's only jargon, defused.
 const explainers = [
   {
-    q: 'What is STAR, and why does it matter?',
-    a: "STAR is an adaptive reading and math assessment by Renaissance Learning, normed on millions of U.S. students. Because it's built and scored by an outside company, the results aren't ours to bend — every number on this page comes from it.",
-    accent: 'bg-bina-grass',
+    question: 'What is STAR, and why does it matter?',
+    answer: "STAR is an adaptive reading and math assessment by Renaissance Learning, normed on millions of U.S. students. Because it's built and scored by an outside company, the results aren't ours to bend — every number on this page comes from it.",
   },
   {
-    q: 'What is a "scaled score"?',
-    a: 'A single number for what a student can do, on one continuous scale across all grades. It only goes up when ability goes up — which is why growth in scaled-score points is the cleanest way to show a year of learning.',
-    accent: 'bg-bina-yellow',
+    question: 'What is a "scaled score"?',
+    answer: 'A single number for what a student can do, on one continuous scale across all grades. It only goes up when ability goes up — which is why growth in scaled-score points is the cleanest way to show a year of learning.',
   },
   {
-    q: 'What is the "national benchmark"?',
-    a: 'Renaissance flags a student as at or above benchmark when they score in the top 60% of U.S. students for their grade (the 40th percentile or higher). It is the standard line schools use for "on track".',
-    accent: 'bg-bina-blue',
+    question: 'What is the "national benchmark"?',
+    answer: 'Renaissance flags a student as at or above benchmark when they score in the top 60% of U.S. students for their grade (the 40th percentile or higher). It is the standard line schools use for "on track".',
   },
   {
-    q: 'How we report these numbers',
-    a: `Growth figures cover the ${headline.pairedN} students assessed in both Oct '25 and May '26 at the same level. Spring standing covers everyone assessed in May. Groups with fewer than 10 students are never reported. All figures are school aggregates — no individual student data appears on this page.`,
-    accent: 'bg-bina-purple',
+    question: 'How we report these numbers',
+    answer: `Growth figures cover the ${headline.pairedN} students assessed in both Oct '25 and May '26 at the same level. Spring standing covers everyone assessed in May. Groups with fewer than 10 students are never reported. All figures are school aggregates — no individual student data appears on this page.`,
   },
 ];
 
 // ---- distribution curves (built at compile time — pure static SVG) ----
-// Chart colors validated for CVD separation on white: oct #33afff (bina-blue),
-// may #03cb5b (bina-green); black 2px strokes + direct labels carry identity.
+// Multi-series chart colors (CLAUDE.md Rule 20): first series (Oct '25) is the section's own
+// accent — magenta #fe49c1, the literal swatch hex for the "pink" role, matching how Rule 7's
+// approved fills are expressed — and the second series (May '26) is a contrasting palette color,
+// grass green #03cb5b, kept unchanged from its original choice. Black 2px strokes + direct labels
+// carry identity; semi-transparent fills (Rule 21) keep both readable where the curves overlap.
 const W = 640;
 const H = 230;
 const PAD = 14;
@@ -92,37 +98,23 @@ const curveCards = [
   },
 ];
 
-// ---- tenure chart: bars measure distance ABOVE the national average (true zero baseline) ----
-const TW = 640;
-const TH = 240;
-const tMax = Math.max(...tenure.map((b) => b.aboveNational));
-const barW = 92;
-const gap = (TW - 60 - tenure.length * barW) / (tenure.length - 1);
-const tenureBars = tenure.map((b, i) => {
-  const h = (b.aboveNational / tMax) * (TH - 92);
-  return {
-    ...b,
-    x: 40 + i * (barW + gap),
-    y: TH - 44 - h,
-    h,
-  };
-});
 ---
 
 <BaseLayout
   title="bina Student Results — Independently Measured"
   description="How much do bina students actually learn? See a year of reading and math growth, measured by the nationally normed Renaissance STAR assessment."
   flushFooter={true}
+  decorationSet="deco_waterlily"
 >
   <!-- hero -->
-  <header class="bg-bina-grass">
-    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
-      <p class="pill-bina mb-6 text-sm tracking-wide">student results · {year}</p>
-      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
+  <header class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-6xl px-8 py-[clamp(3rem,6vw,6rem)]">
+      <PillLabel text={`student results · ${year}`} accentColor="grass" class="mb-6" />
+      <h1 class="mb-5 max-w-3xl text-hero text-bina-grass">
         How much do kids actually learn at
-        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">bina</span>?
+        bina?
       </h1>
-      <p class="max-w-2xl text-lg text-coal-1000 sm:text-xl">
+      <p class="max-w-2xl text-body-2 text-bina-grass">
         We don't grade our own homework. bina students (ages 4–15) sit
         <strong>Renaissance STAR</strong> — an independent, nationally normed assessment used by
         schools across the U.S. — so families can see real growth against real national benchmarks.
@@ -132,71 +124,68 @@ const tenureBars = tenure.map((b, i) => {
   </header>
 
   <!-- headline stats -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14">
+  <section class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-6xl px-8 py-[clamp(3rem,6vw,6rem)]">
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card-bina p-6 stat-tile">
-          <p class="font-display text-5xl font-black text-coal-black">
-            +<span data-count={headline.readGrowthAvg}>0</span>
-          </p>
-          <p class="mt-2 font-display font-bold">points of reading growth</p>
-          <p class="mt-1 text-sm text-coal-900">average per student in one school year¹</p>
-        </div>
-        <div class="card-bina p-6 stat-tile">
-          <p class="font-display text-5xl font-black text-coal-black">
-            +<span data-count={headline.mathGrowthAvg}>0</span>
-          </p>
-          <p class="mt-2 font-display font-bold">points of math growth</p>
-          <p class="mt-1 text-sm text-coal-900">average per student in one school year¹</p>
-        </div>
-        <div class="card-bina p-6 stat-tile">
-          <p class="font-display text-5xl font-black text-coal-black">
-            <span data-count={headline.readAtAbovePct}>0</span>%
-          </p>
-          <p class="mt-2 font-display font-bold">at or above the national reading benchmark</p>
-          <p class="mt-1 text-sm text-coal-900">of {headline.readAtAboveN} students assessed in spring '26</p>
-        </div>
-        <div class="card-bina p-6 stat-tile">
-          <p class="font-display text-5xl font-black text-coal-black">
-            <span data-count={headline.readGrewPct}>0</span>%
-          </p>
-          <p class="mt-2 font-display font-bold">of students grew their reading score</p>
-          <p class="mt-1 text-sm text-coal-900">autumn to spring¹</p>
-        </div>
+        <CardStat
+          count={headline.readGrowthAvg}
+          countPrefix="+"
+          label="points of reading growth"
+          note="average per student in one school year¹"
+          accentColor="grass"
+        />
+        <CardStat
+          count={headline.mathGrowthAvg}
+          countPrefix="+"
+          label="points of math growth"
+          note="average per student in one school year¹"
+          accentColor="grass"
+        />
+        <CardStat
+          count={headline.readAtAbovePct}
+          countSuffix="%"
+          label="at or above the national reading benchmark"
+          note={`of ${headline.readAtAboveN} students assessed in spring '26`}
+          accentColor="grass"
+        />
+        <CardStat
+          count={headline.readGrewPct}
+          countSuffix="%"
+          label="of students grew their reading score"
+          note="autumn to spring¹"
+          accentColor="grass"
+        />
       </div>
-      <p class="mt-4 text-sm text-coal-900">
+      <p class="mt-4 text-body-3 text-bina-grass">
         ¹ STAR scaled-score points, Oct '25 → May '26, across the {headline.pairedN} students
         assessed at both points at the same level.
       </p>
     </div>
   </section>
 
-  <!-- distribution curves -->
-  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">One year of growth</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">The whole school moved forward</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Each curve is the spread of student scores across the school. Watch the spring curve sit to
-        the right of autumn — that's a year of learning, in one picture.
-      </p>
-
+  <!-- distribution curves: bell-curve chart stays bespoke page-specific SVG, per CLAUDE.md's
+       reusable-chart-set rule — only the shell (eyebrow/heading/intro) is componentized below -->
+  <LayoutStatSection eyebrow="One year of growth" heading="The whole school moved forward" accentColor="pink">
+    <Fragment slot="intro">
+      Each curve is the spread of student scores across the school. Watch the spring curve sit to
+      the right of autumn — that's a year of learning, in one picture.
+    </Fragment>
       <div class="grid gap-6 lg:grid-cols-2">
         {
           curveCards.map((c) => {
             const ch = charts[c.key];
             return (
-              <figure class="card-bina curve-card p-6">
+              <figure class="card_base bg-coal-black curve-card p-6">
                 <figcaption class="mb-1 flex items-baseline justify-between gap-3">
-                  <span class="font-display text-xl font-bold">{c.title}</span>
-                  <span class={`font-display text-xl font-black ${c.accent}`}>
+                  <span class="font-display text-body-2 font-bold text-bina-pink">{c.title}</span>
+                  <span class="font-display text-body-2 font-black text-bina-pink">
                     +{c.growth} pts avg growth
                   </span>
                 </figcaption>
-                <p class="mb-3 text-sm text-coal-900">STAR scaled scores, {headline.pairedN} students</p>
-                <p class="mb-2 flex gap-5 font-display text-sm font-bold">
+                <p class="mb-3 text-body-3 text-bina-pink">STAR scaled scores, {headline.pairedN} students</p>
+                <p class="mb-2 flex gap-5 font-display text-body-3 font-bold text-bina-pink">
                   <span class="inline-flex items-center gap-2">
-                    <span class="h-3.5 w-3.5 rounded-full border-2 border-coal-black bg-bina-blue"></span>
+                    <span class="h-3.5 w-3.5 rounded-full border-2 border-coal-black" style="background:#fe49c1"></span>
                     Oct '25
                   </span>
                   <span class="inline-flex items-center gap-2">
@@ -210,32 +199,32 @@ const tenureBars = tenure.map((b, i) => {
                   aria-label={`${c.title}: distribution of scores shifted right from October to May; average grew ${c.growth} points`}
                   class="w-full"
                 >
-                  <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#000" stroke-width="2" />
+                  <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#fe48c2" stroke-width="2" />
                   <g class="curve-oct">
-                    <path d={ch.octArea} fill="#33afff" fill-opacity="0.3" />
+                    <path d={ch.octArea} fill="#fe49c1" fill-opacity="0.3" />
                     <path d={ch.octLine} fill="none" stroke="#000" stroke-width="2" />
-                    <line x1={ch.octMeanX} y1={H - PAD} x2={ch.octMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                    <line x1={ch.octMeanX} y1={H - PAD} x2={ch.octMeanX} y2="40" stroke="#fe48c2" stroke-width="1.5" stroke-dasharray="5 4" />
                   </g>
                   <g class="curve-may">
                     <path d={ch.mayArea} fill="#03cb5b" fill-opacity="0.4" />
                     <path d={ch.mayLine} fill="none" stroke="#000" stroke-width="2" />
-                    <line x1={ch.mayMeanX} y1={H - PAD} x2={ch.mayMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                    <line x1={ch.mayMeanX} y1={H - PAD} x2={ch.mayMeanX} y2="40" stroke="#fe48c2" stroke-width="1.5" stroke-dasharray="5 4" />
                   </g>
                   <text x={ch.octMeanX - 8} y="30" text-anchor="end" class="chart-label">Oct '25</text>
                   <text x={ch.mayMeanX + 8} y="30" text-anchor="start" class="chart-label">May '26</text>
                 </svg>
-                <details class="mt-3">
-                  <summary class="cursor-pointer font-display text-sm font-bold">See the numbers</summary>
-                  <table class="mt-2 w-full text-left text-sm">
+                <details class="mt-3 text-bina-pink">
+                  <summary class="cursor-pointer font-display text-body-3 font-bold text-bina-pink">See the numbers</summary>
+                  <table class="mt-2 w-full text-left text-body-3 text-bina-pink">
                     <thead>
-                      <tr class="border-b-2 border-coal-black font-display">
+                      <tr class="border-b-2 border-bina-pink font-display">
                         <th class="py-1 pr-3">Point</th>
                         <th class="py-1 pr-3">Average scaled score</th>
                         <th class="py-1">Students</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="border-b border-coal-black/20">
+                      <tr class="border-b border-bina-pink/20">
                         <td class="py-1 pr-3">Oct '25</td>
                         <td class="py-1 pr-3">{ch.oct.mean}</td>
                         <td class="py-1">{ch.oct.n}</td>
@@ -247,7 +236,7 @@ const tenureBars = tenure.map((b, i) => {
                       </tr>
                     </tbody>
                   </table>
-                  <p class="mt-2 text-xs text-coal-900">
+                  <p class="mt-2 text-body-3 text-bina-pink">
                     Average growth (+{c.growth}) is the average of each student's own change, so it
                     can differ slightly from subtracting the rounded averages above.
                   </p>
@@ -257,192 +246,175 @@ const tenureBars = tenure.map((b, i) => {
           })
         }
       </div>
-    </div>
-  </section>
+  </LayoutStatSection>
 
   <!-- per-level tool -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Your child's level</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">See results for your child's age group</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Pick your child's age group — P1 is our youngest primary group, M1 the start of middle
-        school. Not sure which one fits?
-        <a href={SITE} class="font-bold underline underline-offset-4">Visit bina to learn more</a>.
-      </p>
+  <LayoutStatSection eyebrow="Your child's level" heading="See results for your child's age group" accentColor="orange">
+    <Fragment slot="intro">
+      Pick your child's age group — P1 is our youngest primary group, M1 the start of middle
+      school. Not sure which one fits?
+      <UiLink href={SITE} cardFill="dark" accentColor="orange">Visit bina to learn more</UiLink>.
+    </Fragment>
 
-      <div class="card-bina p-6 sm:p-8">
-        <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="Your child's level">
-          {
-            levels.map((l, i) => (
-              <button
-                type="button"
-                data-level={l.level}
-                aria-pressed={i === 0 ? 'true' : 'false'}
-                aria-label={`${l.level}, ages ${l.ages}`}
-                class="level-btn cursor-pointer rounded-2xl border-2 border-coal-black bg-white px-4 py-2 text-left font-display font-bold leading-tight transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
-              >
-                {l.level}
-                <span class="block text-xs font-medium opacity-70">ages {l.ages}</span>
-              </button>
-            ))
-          }
-        </div>
-        <div id="level-result" aria-live="polite"></div>
-      </div>
-    </div>
-  </section>
+      <SectionTabbedStat
+        items={levels.map((l) => ({ value: l.level, label: l.level, sublabel: `ages ${l.ages}` }))}
+        accentColor="orange"
+        ariaLabel="Your child's level"
+        class="level-picker"
+      >
+        {
+          levels.map((l, i) => (
+            <div data-tabbed-stat-panel={l.level} hidden={i !== 0} aria-live="polite">
+              <div class="grid gap-4">
+                <CardStat
+                  fill="none"
+                  valueSize="md"
+                  value={`${l.readBenchPct}%`}
+                  label="at or above the national reading benchmark"
+                  note={`${l.readBenchAt} of ${l.readBenchN} ${l.level} students assessed in spring '26`}
+                  accentColor="orange"
+                />
+                {l.readGrowthMedian != null && (
+                  <>
+                    <CardStat
+                      fill="none"
+                      valueSize="md"
+                      value={`+${l.readGrowthMedian} pts`}
+                      label="typical reading growth in one year"
+                      note={`median scaled-score change across the ${l.readGrowthN} ${l.level} students assessed autumn and spring`}
+                      accentColor="orange"
+                    />
+                    <CardStat
+                      fill="none"
+                      valueSize="md"
+                      value={`${l.readGrewPct}%`}
+                      label="grew their reading score"
+                      note={`autumn to spring, same group of ${l.readGrowthN} students`}
+                      accentColor="orange"
+                    />
+                  </>
+                )}
+              </div>
+              {l.readGrowthMedian == null && (
+                <p class="mt-4 text-body-2 text-coal-black">
+                  Fewer than 10 {l.level} students were assessed at both points of the year, so we
+                  don't report a growth figure — small groups aren't statistically reliable, and
+                  we'd rather show you less than stretch the truth.
+                </p>
+              )}
+              <p class="mt-4 text-body-2 text-coal-black">
+                Want to see what a typical week looks like for a {l.level} student (ages {l.ages})?
+                <UiLink href={SITE} cardFill="accent">Visit bina to learn more</UiLink>.
+              </p>
+            </div>
+          ))
+        }
+      </SectionTabbedStat>
+  </LayoutStatSection>
 
   <!-- tenure chart -->
-  <section class="border-t-2 border-coal-black bg-bina-purple/15">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Time with bina</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">The longer at bina, the further ahead in reading</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Every group of bina students reads above the U.S. national average — and the gap widens the
-        longer they've been with us. Each bar shows how far a group sits <strong>above</strong> the
-        national average.
-      </p>
-
-      <figure class="card-bina p-6 sm:p-8">
-        <svg
-          viewBox={`0 0 ${TW} ${TH}`}
-          role="img"
-          aria-label="Reading scores above the national average, by time enrolled at bina — from 5.4 points above for newer students to 10.7 points above after 2–3 years"
-          class="w-full"
-        >
-          <line x1="20" y1={TH - 44} x2={TW - 20} y2={TH - 44} stroke="#000" stroke-width="2" />
-          <text x="24" y={TH - 26} class="chart-label-sm">national average reading level</text>
-          {
-            tenureBars.map((b) => (
-              <g class="tenure-bar">
-                <title>{`${b.label} at bina — ${b.n} students, average reading NCE ${b.readNceMean} (national average = 50)`}</title>
-                <rect
-                  x={b.x}
-                  y={b.y}
-                  width={barW}
-                  height={b.h}
-                  rx="6"
-                  fill="#03cb5b"
-                  stroke="#000"
-                  stroke-width="2"
-                />
-                <text x={b.x + barW / 2} y={b.y - 10} text-anchor="middle" class="chart-label">
-                  +{b.aboveNational}
-                </text>
-                <text x={b.x + barW / 2} y={TH - 8} text-anchor="middle" class="chart-label-sm">
-                  {b.label}
-                </text>
-              </g>
-            ))
-          }
-        </svg>
-        <figcaption class="mt-4 text-sm text-coal-900">
+  <LayoutStatSection eyebrow="Time with bina" heading="The longer at bina, the further ahead in reading" accentColor="purple">
+    <Fragment slot="intro">
+      Every group of bina students reads above the U.S. national average — and the gap widens the
+      longer they've been with us. Each bar shows how far a group sits <strong>above</strong> the
+      national average.
+    </Fragment>
+      <figure class="card_base bg-coal-black p-6 sm:p-8">
+        <ChartVerticalBar
+          bars={tenure.map((b) => ({
+            label: b.label,
+            value: b.aboveNational,
+            title: `${b.label} at bina — ${b.n} students, average reading NCE ${b.readNceMean} (national average = 50)`,
+          }))}
+          baselineLabel="national average reading level"
+          valuePrefix="+"
+          fillColor="#b38cff"
+          hoverColor="#fe6c23"
+          cardFill="dark"
+          accentColor="purple"
+          ariaLabel="Reading scores above the national average, by time enrolled at bina — from 5.4 points above for newer students to 10.7 points above after 2–3 years"
+        />
+        <figcaption class="mt-4 text-body-3 text-bina-purple">
           Average reading score in NCE points above the U.S. national average (50), spring '26,
           grouped by how long each student has been enrolled. Groups with fewer than 10 students
           aren't shown — too small to report reliably.
         </figcaption>
       </figure>
-    </div>
-  </section>
+  </LayoutStatSection>
 
   <!-- understanding STAR -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Understanding STAR</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">Who marks our homework?</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Not us. Every number on this page comes from <strong>Renaissance STAR</strong> — an
-        independent assessment sat by millions of U.S. students. Here's what that means, and what
-        each term on this page actually says about a child.
-      </p>
+  <LayoutStatSection eyebrow="Understanding STAR" heading="Who marks our homework?" accentColor="green">
+    <Fragment slot="intro">
+      Not us. Every number on this page comes from <strong>Renaissance STAR</strong> — an
+      independent assessment sat by millions of U.S. students. Here's what that means, and what
+      each term on this page actually says about a child.
+    </Fragment>
 
       <div class="mb-6 grid gap-4 md:grid-cols-3">
-        <div class="card-bina flex flex-col gap-2 p-6">
-          <span class="pill-bina self-start text-xs">independent</span>
-          <p class="font-display text-lg font-bold">Built and scored outside bina</p>
-          <p class="text-sm text-coal-900">
+        <div class="card_base bg-bina-green flex flex-col gap-2 p-6">
+          <span class="pill_solid self-start text-body-3">independent</span>
+          <p class="font-display text-body-3 font-bold text-coal-black">Built and scored outside bina</p>
+          <p class="text-body-3 text-coal-black">
             Renaissance Learning sets the questions and the national comparisons — we can't tune
             either.
           </p>
         </div>
-        <div class="card-bina flex flex-col gap-2 p-6">
-          <span class="pill-bina self-start text-xs">adaptive</span>
-          <p class="font-display text-lg font-bold">It finds each child's real level</p>
-          <p class="text-sm text-coal-900">
+        <div class="card_base bg-bina-green flex flex-col gap-2 p-6">
+          <span class="pill_solid self-start text-body-3">adaptive</span>
+          <p class="font-display text-body-3 font-bold text-coal-black">It finds each child's real level</p>
+          <p class="text-body-3 text-coal-black">
             Questions get harder or easier as a child answers, so the result reflects what they can
             genuinely do.
           </p>
         </div>
-        <div class="card-bina flex flex-col gap-2 p-6">
-          <span class="pill-bina self-start text-xs">nationally normed</span>
-          <p class="font-display text-lg font-bold">Compared to U.S. peers, not to us</p>
-          <p class="text-sm text-coal-900">
+        <div class="card_base bg-bina-green flex flex-col gap-2 p-6">
+          <span class="pill_solid self-start text-body-3">nationally normed</span>
+          <p class="font-display text-body-3 font-bold text-coal-black">Compared to U.S. peers, not to us</p>
+          <p class="text-body-3 text-coal-black">
             "On track" means on track against the whole country's students in the same grade.
           </p>
         </div>
       </div>
 
-      <div class="grid gap-3 sm:grid-cols-2">
-        {
-          explainers.map((e) => (
-            <details class="card-bina group overflow-hidden p-0">
-              <summary class="flex cursor-pointer items-center gap-3 p-5 font-display font-bold">
-                <span class={`h-8 w-2 flex-none rounded-full border-2 border-coal-black ${e.accent}`} />
-                <span class="flex-1">{e.q}</span>
-                <span class="flex-none font-display text-xl transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
-                  +
-                </span>
-              </summary>
-              <p class="border-t-2 border-coal-black/10 px-5 pb-5 pt-4 text-sm text-coal-900">{e.a}</p>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+      <UiAccordion items={explainers} />
+  </LayoutStatSection>
 
   <!-- CTA -->
-  <section class="border-t-2 border-coal-black bg-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
-      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
-        Curious what a year at bina could do for <span class="text-bina-grass">your child</span>?
+  <section class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-4xl px-5 py-16 text-center">
+      <h2 class="mb-4 text-section text-bina-grass">
+        Curious what a year at bina could do for your child?
       </h2>
-      <p class="mx-auto mb-8 max-w-xl text-white/80">
+      <p class="mx-auto mb-8 max-w-xl text-body-2 text-bina-grass">
         See how bina teaches, how we track every child's progress, and how to start — all on our
         main site.
       </p>
       <div class="flex justify-center">
-        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
+        <a href={SITE} class="ui_button">Visit bina</a>
       </div>
     </div>
   </section>
 
-  <p slot="footer-note" class="text-xs text-white/60">
+  <p slot="footer-note" class="text-small text-bina-grass">
     Results reflect the {year} school year and are school-wide aggregates from Renaissance STAR
     assessments. Individual results vary, and past results don't guarantee future ones. Learn more
-    about STAR at <a href="https://www.renaissance.com/products/star-assessments/" class="underline">renaissance.com</a>.
+    about STAR at <UiLink href="https://www.renaissance.com/products/star-assessments/" cardFill="dark" accentColor="grass">renaissance.com</UiLink>.
   </p>
 
   <style>
+    /* page-wide dark background — this page only, not a site-wide toggle */
+    :global(body) {
+      background: var(--color-dark-bg);
+    }
     .chart-label {
       font-family: 'Rund Display', Arial, sans-serif;
       font-weight: 700;
-      font-size: 17px;
-      fill: #000;
+      font-size: 18px;
+      fill: var(--color-bina-pink);
     }
-    .chart-label-sm {
-      font-family: 'Rund Text', Arial, sans-serif;
-      font-size: 13px;
-      fill: #313131;
-    }
-    .tenure-bar rect,
     .curve-oct,
     .curve-may {
       transition: opacity 0.2s ease-out;
-    }
-    .tenure-bar:hover rect {
-      fill: #f7d928;
     }
     /* scroll-in animation, curves rise one after the other */
     .curve-card .curve-oct,
@@ -472,104 +444,45 @@ const tenureBars = tenure.map((b, i) => {
     }
   </style>
 
-  <script define:vars={{ levels, SITE }}>
-    // ---- count-up stat tiles ----
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const counters = document.querySelectorAll('[data-count]');
-    const runCount = (el) => {
-      const target = Number(el.dataset.count);
-      if (reduceMotion) {
-        el.textContent = target;
-        return;
-      }
-      const start = performance.now();
-      const dur = 1100;
-      const tick = (now) => {
-        const t = Math.min(1, (now - start) / dur);
-        const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.round(target * eased);
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    };
-
+  <script define:vars={{ levels }}>
+    // ---- distribution-curve reveal (the bell-curve chart stays bespoke, so this stays too —
+    //      count-up stat tiles now self-animate via card_stat.astro's own script) ----
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
             if (!e.isIntersecting) return;
             io.unobserve(e.target);
-            if (e.target.classList.contains('curve-card')) {
-              e.target.classList.add('in');
-            } else {
-              e.target.querySelectorAll('[data-count]').forEach(runCount);
-            }
+            e.target.classList.add('in');
           });
         },
         { threshold: 0.35 }
       );
-      document.querySelectorAll('.stat-tile, .curve-card').forEach((el) => io.observe(el));
+      document.querySelectorAll('.curve-card').forEach((el) => io.observe(el));
     } else {
-      counters.forEach((el) => (el.textContent = el.dataset.count));
       document.querySelectorAll('.curve-card').forEach((el) => el.classList.add('in'));
     }
 
     // ---- level picker ----
-    const byLevel = {};
-    levels.forEach((l) => (byLevel[l.level] = l));
-    const buttons = document.querySelectorAll('.level-btn');
-    const result = document.getElementById('level-result');
+    // All per-level content is pre-rendered at build time now (SectionTabbedStat + CardStat,
+    // fill="none" — see the static markup above), so this script only needs to (a) sync the
+    // selected level into the URL for sharing/deep-linking, and (b) apply a requested `?level=`
+    // deep link on load by clicking the matching tab — the component's own click handler does
+    // the actual panel show/hide, this doesn't duplicate that logic.
+    const levelPicker = document.querySelector('.level-picker');
+    if (levelPicker) {
+      levelPicker.addEventListener('tabchange', (e) => {
+        const url = new URL(location);
+        url.searchParams.set('level', e.detail.value);
+        history.replaceState(null, '', url);
+      });
 
-    function bigStat(value, label, note) {
-      return `
-        <div class="rounded-2xl border-2 border-coal-black bg-white p-5">
-          <p class="font-display text-4xl font-black">${value}</p>
-          <p class="mt-1 font-display font-bold">${label}</p>
-          <p class="mt-1 text-sm text-coal-900">${note}</p>
-        </div>`;
-    }
-
-    function render(level) {
-      const l = byLevel[level];
-      if (!l) return;
-      let cards =
-        bigStat(
-          `${l.readBenchPct}%`,
-          'at or above the national reading benchmark',
-          `${l.readBenchAt} of ${l.readBenchN} ${l.level} students assessed in spring '26`
-        );
-      if (l.readGrowthMedian != null) {
-        cards += bigStat(
-          `+${l.readGrowthMedian} pts`,
-          'typical reading growth in one year',
-          `median scaled-score change across the ${l.readGrowthN} ${l.level} students assessed autumn and spring`
-        );
-        cards += bigStat(
-          `${l.readGrewPct}%`,
-          'grew their reading score',
-          `autumn to spring, same group of ${l.readGrowthN} students`
-        );
+      const requested = new URLSearchParams(location.search).get('level');
+      const validLevels = levels.map((l) => l.level);
+      if (requested && validLevels.includes(requested)) {
+        const tab = levelPicker.querySelector(`[data-value="${requested}"]`);
+        tab?.click();
       }
-      const note =
-        l.readGrowthMedian == null
-          ? `<p class="mt-4 text-sm text-coal-900">Fewer than 10 ${l.level} students were assessed at both points of the year, so we don't report a growth figure — small groups aren't statistically reliable, and we'd rather show you less than stretch the truth.</p>`
-          : '';
-      result.innerHTML = `
-        <div class="grid gap-3 sm:grid-cols-3">${cards}</div>
-        ${note}
-        <p class="mt-4 text-sm text-coal-900">
-          Want to see what a typical week looks like for a ${l.level} student (ages ${l.ages})?
-          <a href="${SITE}" class="font-bold underline underline-offset-4">Visit bina to learn more</a>.
-        </p>`;
-      buttons.forEach((b) => b.setAttribute('aria-pressed', b.dataset.level === level ? 'true' : 'false'));
-      const url = new URL(location);
-      url.searchParams.set('level', level);
-      history.replaceState(null, '', url);
     }
-
-    buttons.forEach((b) => b.addEventListener('click', () => render(b.dataset.level)));
-
-    const requested = new URLSearchParams(location.search).get('level');
-    render(byLevel[requested] ? requested : levels[0].level);
   </script>
 </BaseLayout>

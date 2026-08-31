@@ -6,12 +6,159 @@
 /* ------------------------------------------------------------------ */
 @theme {
   --font-display: "Rund Display", "Arial", sans-serif;
-  --font-sans: "Rund Text", "Arial", sans-serif;
+
+  /* ------------------------------------------------------------------ */
+  /* `--text-hero` / `--text-section` — the ORIGINAL fluid heading scale, extracted
+     from thebinaschool.com (Bina-School-R-D/website): every component there sets
+     fontSize inline (mostly clamp()), chosen per-section rather than off one shared
+     scale; these two are our distillation of the values that recurred most
+     consistently (admissions/education/middle-school h1, the repeated section h2) —
+     see CLAUDE.md "Typography & spacing" for the source-by-source count. Renamed
+     from `--text-h1`/`--text-h2` (their names through the site's first several
+     months) specifically to free `h1`/`h2` for bina's own official Figma type scale
+     below, which uses those names for a different, fixed-px system — the two scales
+     coexist under different names, this one is not being retired, just renamed.
+     `--text-h3` (28px→40px) and `--text-small` (14px→30px, unrelated to the new
+     scale's `small` step below) were dropped in the same pass: both were dead code,
+     never referenced by any page or component, so there was nothing to migrate.
+     Always pair with `font-display` (Tailwind v4 has no per-size font-family
+     sub-token, so these carry size/line-height only, not the font itself). */
+  --text-hero: clamp(3.5rem, 3.7vw, 5.25rem); /* 56px → 84px, weight 700 */
+  --text-hero--line-height: 1;
+  --text-section: clamp(2rem, 4vw, 3.5rem); /* 32px → 56px, weight 700 */
+  --text-section--line-height: 1.1;
+  --text-button: clamp(0.92rem, 1.22vw, 1.97rem); /* ≈15px → ≈32px, weight 400 */
+  --text-button--line-height: 1;
+
+  /* ------------------------------------------------------------------ */
+  /* bina's official type scale (Figma "bina website AUTO LAYOUT" library) — the
+     ONE scale for every heading/body/caption size on GTM pages going forward,
+     named to match exactly what designers call each step so the repo and the
+     brand library stay in sync. Rund Display is the only font in this repo (Rund
+     Text and its @font-face block were removed entirely, including the font
+     files) — every one of these steps uses it; only the weight changes per step.
+     100% line-height and 0 letter-spacing on every step, per the source library —
+     both are declared explicitly below rather than left to inherit, so a step
+     never silently drifts from spec. Font-weight is declared as a paired
+     `--text-<name>--font-weight` token (Tailwind v4 supports this alongside
+     `--line-height`/`--letter-spacing` for the `text-*` utility), so `text-h1`
+     alone carries size + weight + line-height + letter-spacing together — no
+     separate `font-bold`/`font-medium` class needed alongside it.
+     Correction to an earlier version of this comment: the 96px/80px steps are
+     NOT "H1"/"H2" in the source library — checked again directly against the
+     Figma panel and they're their own named category, `Display1` (96px) and
+     `Display2` (80px). There's no naming collision with GTM's own `H1`/`H2`/`H3`
+     below at all — no renumbering was ever needed. What the source library calls
+     H3/H4/H5 are what this repo's `H1`/`H2`/`H3` map to (GTM pages don't use
+     anything as large as the library's own H1/H2, so those two names were simply
+     never adopted here — Display1/Display2 fill the "very large" role instead,
+     for a narrower purpose, see below).
+
+     `Display1`/`Display2` are for EMPHASIZED NUMBERS specifically — a headline
+     stat figure ("70%", "9.42"), not a heading of any kind. Never use either for
+     a hero/section heading, however large the moment calls for; `H1` (64px) is
+     still the largest heading permitted on a GTM page. Both are weight 900
+     (Black) — the source library's Figma panel calls for ExtraBold (800), which
+     doesn't exist as a real font file anywhere (this repo or thebinaschool.com's
+     own — only Regular/Medium/SemiBold/Bold/Black are licensed); Black was a
+     deliberate, explicitly-confirmed substitution, not left to an unpredictable
+     browser font-weight fallback. If the real ExtraBold file is ever sourced,
+     swap the weight token, not the pixel values.
+
+     Responsive: every step below is a fluid `clamp()`, mobile value → desktop
+     value, using the "one step down" rule — each step's mobile size is simply
+     the next step's own desktop value, so no new pixel value is invented
+     anywhere in this scale. Breakpoint is `sm` (640px)-equivalent in spirit, but
+     implemented as a continuous clamp (not a hard breakpoint jump) referenced
+     against a 375px (mobile) → 1280px (desktop) viewport range — 375px is a
+     standard small-phone width, 1280px is where nearly every GTM page's content
+     column (max-w-6xl, 1200px, plus its own px-8 gutters) has already reached
+     full size, so the clamp finishes scaling right around where there's no more
+     layout width left to fill anyway. Below 375px or above 1280px the value
+     holds flat at its min/max — it doesn't keep shrinking on a tinier phone or
+     keep growing on an ultra-wide monitor. `text-small` doesn't scale at all:
+     16px is Rule 10's own absolute floor, so there's no smaller mobile value to
+     clamp down to. Each `clamp()`'s middle term is `calc(A + Bvw)`, solved so the
+     curve passes exactly through (375px → mobile value) and (1280px → desktop
+     value) — this is a real two-point interpolation, not a copy of this file's
+     older `--text-hero`/`--text-section` clamp shape (single vw term, no `calc()`
+     offset), which was checked and turns out to stay flat through virtually all
+     of mobile/tablet/normal-desktop and only actually scales between ~1513px and
+     ~2270px viewports — not what "responsive" should mean for a new scale. Same
+     "one step down" rule and 375px→1280px reference range applies to
+     `Display1`/`Display2` too — `Display2`'s mobile value (64px) lands exactly
+     on `H1`'s own desktop value, so even these two large steps don't invent a
+     pixel value that isn't already real elsewhere in the combined scale. */
+  --text-display-1: clamp(5rem, calc(4.586rem + 1.768vw), 6rem); /* 80px → 96px, Black (900 — see note above on the missing ExtraBold weight) */
+  --text-display-1--line-height: 1;
+  --text-display-1--letter-spacing: 0;
+  --text-display-1--font-weight: 900;
+  --text-display-2: clamp(4rem, calc(3.586rem + 1.768vw), 5rem); /* 64px → 80px, Black */
+  --text-display-2--line-height: 1;
+  --text-display-2--letter-spacing: 0;
+  --text-display-2--font-weight: 900;
+  --text-h1: clamp(3.5rem, calc(3.293rem + 0.884vw), 4rem); /* 56px → 64px, Bold */
+  --text-h1--line-height: 1;
+  --text-h1--letter-spacing: 0;
+  --text-h1--font-weight: 700;
+  --text-h2: clamp(3rem, calc(2.793rem + 0.884vw), 3.5rem); /* 48px → 56px, Bold */
+  --text-h2--line-height: 1;
+  --text-h2--letter-spacing: 0;
+  --text-h2--font-weight: 700;
+  --text-h3: clamp(2.5rem, calc(2.293rem + 0.884vw), 3rem); /* 40px → 48px, Bold */
+  --text-h3--line-height: 1;
+  --text-h3--letter-spacing: 0;
+  --text-h3--font-weight: 700;
+  --text-subtitle-1: clamp(2rem, calc(1.793rem + 0.884vw), 2.5rem); /* 32px → 40px, Bold */
+  --text-subtitle-1--line-height: 1;
+  --text-subtitle-1--letter-spacing: 0;
+  --text-subtitle-1--font-weight: 700;
+  --text-subtitle-2: clamp(1.5rem, calc(1.293rem + 0.884vw), 2rem); /* 24px → 32px, Bold */
+  --text-subtitle-2--line-height: 1;
+  --text-subtitle-2--letter-spacing: 0;
+  --text-subtitle-2--font-weight: 700;
+  --text-body-1: clamp(1.25rem, calc(1.146rem + 0.442vw), 1.5rem); /* 20px → 24px, Medium */
+  --text-body-1--line-height: 1;
+  --text-body-1--letter-spacing: 0;
+  --text-body-1--font-weight: 500;
+  --text-body-2: clamp(1.125rem, calc(1.073rem + 0.221vw), 1.25rem); /* 18px → 20px, Medium */
+  --text-body-2--line-height: 1;
+  --text-body-2--letter-spacing: 0;
+  --text-body-2--font-weight: 500;
+  --text-body-3: clamp(1rem, calc(0.948rem + 0.221vw), 1.125rem); /* 16px → 18px, Regular */
+  --text-body-3--line-height: 1;
+  --text-body-3--letter-spacing: 0;
+  --text-body-3--font-weight: 400;
+  --text-small: 1rem; /* 16px, Regular — flat, Rule 10's own floor, never scales down further */
+  --text-small--line-height: 1;
+  --text-small--letter-spacing: 0;
+  --text-small--font-weight: 400;
+
+  /* Spacing scale — same source, same caveat: no named spacing tokens there either,
+     and Tailwind v4 has no utility-generating namespace for named spacing (only the
+     single `--spacing` base multiplier behind the numeric p-, gap-, m- scale). These
+     are reference values only — apply them with Tailwind's matching stock numeric
+     class (documented per-token below), not a custom class name. */
+  --space-section-y: clamp(3rem, 6vw, 6rem); /* 48px → 96px — use py-24 (site's fluid clamp tops out exactly at py-24's 96px) */
+  --space-heading-gap: 3rem; /* 48px — use mb-12, heading → content margin */
+  --space-card-gap: 1.25rem; /* 20px — use gap-5, between cards in a grid */
+  --space-card-padding: 1.5rem; /* 24px — use p-6; source uses a fluid clamp(1rem,1.5vw,2rem), but this repo already fixed card padding to a flat 24px (SequenceSteps) and this token matches that precedent rather than reintroducing a fluid value */
 
   /* Coal (text / surfaces) */
   --color-coal-black: #000000;
   --color-coal-1000: #262626;
   --color-coal-900: #313131;
+
+  /* Muted/secondary gray text on dark backgrounds (CLAUDE.md Rule 17) — the ONLY approved gray
+     for de-emphasized text on #1c1c1c/#000000: captions, footnotes, disclaimers, muted labels.
+     #999999 on #1c1c1c is ~6:1 (comfortably above the 4.5:1 AA minimum) with margin to spare;
+     never use an arbitrary lighter/darker gray or an opacity-faded black/accent to get the same
+     "de-emphasized" look instead — that's what caused the two real contrast failures Rule 17 was
+     written to fix (see its own note in CLAUDE.md for specifics). Not for light/accent-card
+     backgrounds — muted text there still follows Rule 2's existing black-with-reduced-opacity
+     convention (e.g. `/esa`'s fact-label `text-coal-black/60`), a different, already-covered case.
+  */
+  --color-muted-gray: #999999;
 
   /* Chromatic accents (as used on the live site) */
   --color-bina-grass: #03ecc5;
@@ -25,31 +172,88 @@
   --color-bina-red: #ff605b;
   --color-bina-orange: #fe6c23;
 
+  /* ---------------------------------------------------------------- */
+  /* Dark-surface palette — page bg #1c1c1c, content cards #000000.    */
+  /* For dark SECTIONS/components (the existing bg-coal-black CTA      */
+  /* blocks, footer, etc.), not a prefers-color-scheme toggle — the    */
+  /* site has no light/dark mode.                                      */
+  /*                                                                    */
+  /* Matched against the live thebinaschool.com dark sections (DOM-    */
+  /* inspected, not guessed): there is no gray/opacity text-hierarchy   */
+  /* system there at all — copy is either plain white, or the section's */
+  /* own accent color used at full strength for heading + body + link   */
+  /* together (e.g. the accreditations section runs entirely in         */
+  /* turquoise on #1b1b1b; "This is for you if" cards are solid accent  */
+  /* fills with black text, no border — the fill itself is the edge).   */
+  /* So: default text is white; themed copy takes the section's accent  */
+  /* color directly for anything that needs the section's own hierarchy */
+  /* (headings, body, links). This repo has since added ITS OWN muted-  */
+  /* gray tier on top of that, though (Rule 17, --color-muted-gray      */
+  /* above) — a handful of components genuinely need a de-emphasized,   */
+  /* non-accent, non-white label (SourcePill, a stepper's "not yet"     */
+  /* step, a step description that reads better toned down) and were    */
+  /* each hand-picking their own arbitrary gray for it before Rule 17    */
+  /* gave them one shared, contrast-checked value. Source-site parity    */
+  /* stops at "don't invent a THIRD text tier casually" — it doesn't     */
+  /* mean every one-off gray already in this repo was deleted.           */
+  /*                                                                    */
+  /* Accents are bina's official brand hex (brand swatch sheet), used   */
+  /* unchanged unless noted — swapped only where the default member of  */
+  /* that color's family fails 4.5:1 on #1c1c1c, using another official */
+  /* swatch from the same family rather than a new hue. Ratios below    */
+  /* are vs #1c1c1c (page) / vs #000000 (card) — the card is darker     */
+  /* than the page, an inverted step from the usual "surface is         */
+  /* lighter" convention, so it reads as a card via a colored fill or a */
+  /* border, never from the ~1.2:1 bg-vs-card shade jump alone.         */
+  --color-dark-bg: #1c1c1c; /* page background */
+  --color-dark-surface: #000000; /* content card background — reuses --color-coal-black */
+  --color-dark-border: #2e2e2e; /* optional card edge (white/18% over #000) — only needed when a card's content isn't itself a color fill; page-vs-card alone is too subtle (1.2:1) to rely on */
+  --color-dark-text: #ffffff; /* default body/heading text on dark */
+
+  --color-dark-turqoise: #2fe5c9; /* bina-grass/mint role, unchanged — 10.7:1 page / 13.2:1 card */
+  --color-dark-lemon: #ffe916; /* CTA fill only — brand rule: no yellow text — 13.7:1 / 16.9:1 */
+  --color-dark-lila: #e2ccff; /* swapped from brand purple #632aa8 (1.97:1, fails) — 11.6:1 / 14.3:1 */
+  --color-dark-magenta: #fe49c1; /* bina-pink role, unchanged — 5.6:1 / 6.9:1 */
+  --color-dark-grass-green: #43ca66; /* bina-green role, unchanged — 8.0:1 / 9.9:1 */
+  --color-dark-light-blue: #4f97fc; /* swapped from brand dark blue #0149ae (2.08:1, fails) — 5.8:1 / 7.2:1 */
+  --color-dark-watermelon: #ff6d63; /* swapped from brand red #d52a1d (3.39:1, fails normal text) — 6.2:1 / 7.6:1; keep #d52a1d for large bold button fills only, paired with white text */
+  --color-dark-orange: #ff6a00; /* bina-orange role, unchanged — 5.9:1 / 7.3:1 */
+
   /* Radii — the site leans on large, friendly corners */
   --radius-card: 1.875rem; /* 30px cards */
   --radius-cta: 1rem;
+
+  /* Chart/data-viz stroke weight (CLAUDE.md Rule 7) — tied to .ui_button's own border weight
+     (`border-2`, 2px), the site's one other black-outline-on-a-colored-fill pattern, so button
+     chrome and data-viz share one visual language instead of two coincidentally-matching numbers.
+     Unitless (SVG stroke-width is unitless user-units here, not a CSS length) — reference it via
+     `style="stroke-width: var(--stroke-chart)"` on the actual XML attribute (SVG presentation
+     attributes don't parse `var()`, only the CSS `style` property does), never a repeated literal
+     "2". Not a `--color-*`/`--radius-*`/`--text-*` namespace, so Tailwind doesn't generate a
+     utility class from it — same "reference value only" status as `--space-section-y` above. */
+  --stroke-chart: 2;
+
+  /* Standard content container — override Tailwind's stock 6xl (72rem/1152px) to our own
+     75rem/1200px, so every page's outer section wrapper uses the same `max-w-6xl px-8`
+     instead of each page repeating its own max-w-5xl px-5. Was previously untokenized and
+     copy-pasted per section across every page — see CLAUDE.md "Standard content container". */
+  --container-6xl: 75rem; /* 1200px */
 }
 
-/* Rund Display — headings */
+/* Rund Display — the only font in this repo (Rund Text and its @font-face block/files were
+   removed entirely; body now defaults to font-display, see @layer base below). */
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
 
-/* Rund Text — body copy */
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
-
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-coal-1000 font-sans antialiased;
+    @apply bg-white text-coal-1000 font-display antialiased;
     line-height: 1.6;
   }
   h1, h2, h3, h4 {
@@ -61,39 +265,66 @@
 }
 
 @layer components {
-  /* Primary CTA — exact behavior from the live site:
-     yellow → pink on hover → red on press, chunky black border */
-  .btn-bina {
-    @apply inline-flex items-center justify-center gap-2 cursor-pointer
-      rounded-2xl border-2 border-coal-black bg-bina-yellow text-coal-black
-      px-6 py-3 font-display font-bold no-underline
+  /* Primary CTA — extracted exactly from thebinaschool.com's shared CTAButton
+     (Bina-School-R-D/website, src/components/ui/CTAButton.tsx, size="medium",
+     the variant used in every nav — see CLAUDE.md "Standard CTA button").
+     yellow → pink on hover → red on press, chunky black border, weight 400 (not bold —
+     that was a drift from the source, which sets fontWeight:400 explicitly). All spacing
+     is the source's own fluid clamp(), not a flat Tailwind step, so it scales continuously
+     with viewport instead of jumping at a breakpoint. */
+  .ui_button {
+    @apply inline-flex items-center justify-center gap-[clamp(0.375rem,0.46vw,0.5rem)] cursor-pointer
+      min-h-[clamp(2.45rem,3.24vw,5.25rem)] rounded-[clamp(0.625rem,0.83vw,1rem)]
+      border-2 border-coal-black bg-bina-yellow text-coal-black
+      px-[clamp(1rem,1.39vw,1.5rem)] py-[clamp(0.5rem,0.7vw,0.75rem)]
+      font-display text-button font-normal no-underline
       transition-colors duration-300 ease-out
       hover:bg-bina-pink active:bg-bina-red;
   }
-  .btn-bina-ghost {
-    @apply inline-flex items-center justify-center gap-2 cursor-pointer
-      rounded-2xl border-2 border-coal-black bg-white text-coal-black
-      px-6 py-3 font-display font-bold no-underline
+  /* Secondary/ghost CTA — this repo's own invention (the source's CTAButton only ships a
+     yellow and a black variant, no white/ghost one), kept for visual hierarchy when two CTAs
+     sit side by side. Shares the primary's exact shape/sizing/weight for one consistent
+     button family — only the color scheme differs. */
+  .ui_button_ghost {
+    @apply inline-flex items-center justify-center gap-[clamp(0.375rem,0.46vw,0.5rem)] cursor-pointer
+      min-h-[clamp(2.45rem,3.24vw,5.25rem)] rounded-[clamp(0.625rem,0.83vw,1rem)]
+      border-2 border-coal-black bg-white text-coal-black
+      px-[clamp(1rem,1.39vw,1.5rem)] py-[clamp(0.5rem,0.7vw,0.75rem)]
+      font-display text-button font-normal no-underline
       transition-colors duration-300 ease-out
       hover:bg-bina-grass active:bg-bina-mint;
   }
 
-  /* Card — 30px corners, chunky border */
-  .card-bina {
-    @apply rounded-[1.875rem] border-2 border-coal-black bg-white;
+  /* Card — 30px corners, no border (Rule 12). Defaults text to true black: the white/accent-fill
+     case (the vast majority of cards) needs black content per Rule 2, so this is a safe fallback
+     for any text node that forgets its own explicit color — it inherits true #000 instead of
+     silently falling through to body's text-coal-1000 default (#262626, visibly not black on an
+     accent card). Dark-filled cards (bg-coal-black) always set explicit accent text on every
+     element already, so this default never actually surfaces there — it's a pure safety net, not
+     a behavior change for any existing card. */
+  .card_base {
+    @apply rounded-[1.875rem] bg-white text-coal-black;
   }
 
   /* Small pill (the site uses black pills with chromatic text) */
-  .pill-bina {
+  .pill_solid {
     @apply inline-flex items-center rounded-full bg-coal-black px-4 py-1
       font-display font-bold text-bina-pink;
   }
 
   /* Form field — matches the ESA select; use on every campaign form */
-  .input-bina {
+  .ui_input {
     @apply w-full rounded-2xl border-2 border-coal-black bg-white px-4 py-4
       font-display text-lg font-bold text-coal-black placeholder:font-medium
       placeholder:text-coal-900/50
       focus-visible:outline-4 focus-visible:outline-bina-pink;
+  }
+
+  /* Link.astro's own class — kept as a global rule (not a component-scoped <style>) so raw HTML
+     strings that hand-match Link.astro's resolved output (e.g. /esa's JS-rendered results panel,
+     which can't render an Astro component client-side) pick up the same focus-visible outline
+     color as the real component. */
+  .ui_link {
+    outline-color: currentColor;
   }
 }

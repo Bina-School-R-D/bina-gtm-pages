@@ -1,9 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PillLabel from '../components/sections/pill_label.astro';
+import LayoutSequenceSteps from '../components/sections/layout_sequence_steps.astro';
+import UiDropdown from '../components/sections/ui_dropdown.astro';
 import esaData from '../data/esa-states.json';
 import landing from '../data/esa-landing.json';
 
 const { programs, allStates, noProgramNotes } = esaData;
+
+// Every state is listed, so a family never has to guess whether silence means "no" — states
+// without a usable program still get an honest answer instead of no answer.
+const stateOptions = Array.from(new Set(allStates.concat(programs.map((d) => d.s))))
+  .sort()
+  .map((name) => ({ value: name, label: name }));
 
 // States that also have a paid-search landing page at /esa/<slug>: the tool links across to
 // it so a family who came here for the process can still read the case for the school.
@@ -11,127 +20,113 @@ const landingSlugs = Object.fromEntries(landing.states.map((st) => [st.state, st
 
 // One high-level journey, shown once under the hero. The per-state tool fills in the detail.
 const journey = [
-  { who: 'bina', t: 'Talk to bina' },
-  { who: 'state', t: "Apply for your state's program" },
-  { who: 'state', t: 'Get approved & funded' },
-  { who: 'bina', t: 'Enroll at bina' },
-  { who: 'both', t: 'Pay with your funds' },
+  {
+    number: '1',
+    title: 'Talk to bina',
+    description: 'With bina — book a call, tell us your state, and we’ll confirm your numbers before you apply for anything.',
+  },
+  {
+    number: '2',
+    title: "Apply for your state's program",
+    description: 'On your state’s site — submit your ESA application. We walk you through exactly what it needs first.',
+  },
+  {
+    number: '3',
+    title: 'Get approved & funded',
+    description: 'On your state’s site — your state reviews your application and funds your account. Timing varies by state.',
+  },
+  {
+    number: '4',
+    title: 'Enroll at bina',
+    description: 'With bina — finish admissions and pick a start date. We handle every document your program needs.',
+  },
+  {
+    number: '5',
+    title: 'Pay with your funds',
+    description: 'Together — pay bina using your ESA funds, directly or by reimbursement depending on your state.',
+  },
 ];
-
-const dot = {
-  bina: 'bg-bina-yellow',
-  state: 'bg-bina-blue',
-  both: 'bg-bina-grass',
-};
 ---
 
 <BaseLayout
   title="ESA Funding for bina — Parent Guide"
   description="See if your state's Education Savings Account (ESA) can help pay for bina — and the exact steps, from your first call with bina to tuition paid."
+  decorationSet="deco_waterlily"
 >
   <!-- hero + journey, one unit -->
-  <header class="bg-bina-purple">
-    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
-      <p class="pill-bina mb-6 text-sm tracking-wide">ESA funding for families</p>
-      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
-        Can an ESA help pay for <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">bina</span>?
+  <header class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-6xl px-8 py-[clamp(3rem,6vw,6rem)]">
+      <PillLabel text="ESA funding for families" accentColor="grass" class="mb-6" />
+      <h1 class="mb-5 max-w-3xl text-hero text-bina-grass">
+        Can an ESA help pay for bina?
       </h1>
-      <p class="mb-12 max-w-2xl text-lg text-coal-1000 sm:text-xl">
+      <p class="mb-12 max-w-2xl text-body-2 text-bina-grass">
         Many U.S. states give families public education dollars — an
         <strong>Education Savings Account (ESA)</strong> — to spend on approved learning like bina.
         It takes a few steps, and we do them <strong>with you</strong>. Here's the whole path:
       </p>
 
-      <!-- journey rail: horizontal on desktop, vertical on mobile, sits on the hero -->
-      <ol class="relative grid gap-6 border-t-2 border-coal-black/20 pt-10 md:grid-cols-5 md:gap-3">
-        <span
-          class="absolute left-[19px] top-[3.75rem] h-[calc(100%-4.5rem)] w-0.5 bg-coal-black/25 md:left-0 md:top-[calc(2.5rem+19px)] md:h-0.5 md:w-full"
-          aria-hidden="true"></span>
-        {
-          journey.map((step, i) => (
-            <li class="relative flex items-start gap-4 md:block">
-              <span class="relative z-10 grid h-10 w-10 flex-none place-items-center rounded-full border-2 border-coal-black bg-white font-display text-base font-black md:mb-3">
-                {i + 1}
-              </span>
-              <span class="md:block">
-                <h2 class="mb-1.5 font-display text-base font-bold leading-snug">{step.t}</h2>
-                <span class="inline-flex items-center gap-1.5 font-display text-xs font-bold text-coal-900">
-                  <span class={`h-2.5 w-2.5 rounded-full border border-coal-black ${dot[step.who]}`} />
-                  {step.who === 'bina' ? 'with bina' : step.who === 'state' ? "on your state's site" : 'together'}
-                </span>
-              </span>
-            </li>
-          ))
-        }
-      </ol>
+      <!-- journey: numbered step cards -->
+      <LayoutSequenceSteps steps={journey} accentColor="grass" />
     </div>
   </header>
 
   <!-- state tool -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">Your state</p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">See your state's exact steps</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Every state runs its own program — different money, different deadlines, different rules.
-        Pick yours and we'll show you the whole path, tailored to bina.
-      </p>
+  <section class="bg-dark-bg">
+    <div class="relative z-[1] mx-auto max-w-6xl px-8 py-[clamp(3rem,6vw,6rem)]">
+      <h2 class="mb-8 text-section text-bina-purple">See your state's exact steps</h2>
 
-      <div class="card-bina p-6 sm:p-8">
-        <p class="mb-4 text-sm text-coal-900">
-          Every state is listed — including the ones with no program yet, so you get a straight
-          answer either way. New programs launch most years, so it's worth checking back.
-        </p>
-        <label for="state" class="mb-3 block font-display text-lg font-bold">Which state do you live in?</label>
-        <div class="relative">
-          <select
-            id="state"
-            aria-label="Select your state"
-            class="w-full cursor-pointer appearance-none rounded-2xl border-2 border-coal-black bg-white px-4 py-4 font-display text-lg font-bold focus-visible:outline-4 focus-visible:outline-bina-pink"
-          >
-            <option value="">Select your state…</option>
-          </select>
-          <span class="pointer-events-none absolute right-5 top-1/2 h-3 w-3 -translate-y-[70%] rotate-45 border-b-2 border-r-2 border-coal-black"></span>
-        </div>
-        <div id="result" class="mt-6 scroll-mt-24"></div>
+      <p class="mb-8 max-w-2xl text-body-2 text-bina-purple">
+        Every state runs its own program — different money, different deadlines, different rules.
+        Pick yours and we'll show you the whole path, tailored to bina. Every state is listed —
+        including the ones with no program yet, so you get a straight answer either way. New
+        programs launch most years, so it's worth checking back.
+      </p>
+      <label class="mb-3 block font-display text-body-3 font-bold text-bina-purple">Which state do you live in?</label>
+      <div class="relative max-w-md">
+        <UiDropdown id="state" ariaLabel="Select your state" placeholder="Select your state…" options={stateOptions} accentColor="purple" fill="none" />
       </div>
+      <div id="result" class="mt-8 scroll-mt-24"></div>
     </div>
   </section>
 
-  <p slot="footer-note" class="text-xs text-white/60">
+  <p slot="footer-note" class="text-small text-bina-grass">
     Program details reflect the latest information available to the bina team and are subject to change — your state's official program site is the final word.
   </p>
 
-  <script define:vars={{ programs, allStates, noProgramNotes, landingSlugs }}>
+  <style>
+    /* page-wide dark background — this page only, not a site-wide toggle */
+    :global(body) {
+      background: var(--color-dark-bg);
+    }
+  </style>
+
+  <script define:vars={{ programs, noProgramNotes, landingSlugs }}>
     const WEBSITE = 'https://thebinaschool.com';
     const EMAIL = 'admissions@thebinaschool.com';
 
     const byState = {};
     programs.forEach((d) => (byState[d.s] = d));
 
+    // Options are rendered at build time (see `stateOptions` in the frontmatter) — this is now
+    // a UiDropdown component instance, not a native <select>, but it still exposes `.value` and
+    // fires `change`, so the wiring below is unchanged from when this was a native select.
     const sel = document.getElementById('state');
-    // Every state is listed, so a family never has to guess whether silence means "no".
-    // States without a usable program get an honest answer instead of no answer.
-    Array.from(new Set(allStates.concat(programs.map((d) => d.s))))
-      .sort()
-      .forEach((name) => {
-        const o = document.createElement('option');
-        o.value = name;
-        o.textContent = name;
-        sel.appendChild(o);
-      });
 
+    // One accent (purple/lila) throughout this panel, per Rule 14 — these used to carry
+    // per-status fill colors (yellow/blue/grass/orange), which mixed unrelated accents into one
+    // section. Now plain labels; every chip/badge shares the same outlined-purple treatment.
     const CHIP = {
-      bina: { label: 'with bina', cls: 'bg-bina-yellow' },
-      state: { label: "on your state's site", cls: 'bg-bina-blue' },
-      both: { label: 'together', cls: 'bg-bina-grass' },
+      bina: 'with bina',
+      state: "on your state's site",
+      both: 'together',
     };
 
     const BADGE = {
-      approved: { label: '✓ bina is an approved provider', cls: 'bg-bina-grass' },
-      'approved-reimb': { label: '✓ Ready to use for bina', cls: 'bg-bina-grass' },
-      'coming-soon': { label: 'Coming soon', cls: 'bg-bina-orange' },
-      exploring: { label: 'possible for some families — ask us', cls: 'bg-bina-blue' },
+      approved: '✓ bina is an approved provider',
+      'approved-reimb': '✓ Ready to use for bina',
+      'coming-soon': 'Coming soon',
+      exploring: 'possible for some families — ask us',
     };
 
     const PAY_FACT = {
@@ -250,24 +245,42 @@ const dot = {
 
     function ctaLink(kind, d) {
       if (kind === 'book')
-        return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + WEBSITE + '">Book a call with bina →</a>';
+        return '<a class="mt-2 inline-flex ui_link text-body-3 font-bold text-bina-purple underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2" href="' + WEBSITE + '">Book a call with bina →</a>';
       if (kind === 'notify')
-        return '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent(d.s + ' funding updates') + '">Email us about ' + esc(d.s) + ' →</a>';
+        return '<a class="mt-2 inline-flex ui_link text-body-3 font-bold text-bina-purple underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2" href="mailto:' + EMAIL + '?subject=' + encodeURIComponent(d.s + ' funding updates') + '">Email us about ' + esc(d.s) + ' →</a>';
       return '';
     }
 
+    // One consistent treatment for every step, no matter which group it's in: a purple-filled
+    // circle (black number, Rule 2), a purple-filled tag with black text (never a per-status
+    // fill color — always this one section accent), a heading and a description — separated
+    // from the next step by spacing alone (32px, gap-8
+    // on the parent <ul>), no divider line and no row background. An earlier pass added
+    // alternating #242424/transparent striping to break up the rows, but the circle/heading/tag
+    // already carry enough hierarchy on their own — the striping read as arbitrary rather than
+    // intentional, so it was removed in favor of generous spacing, matching the sitewide
+    // spacing-not-dividers convention (Rule 4).
+    //
+    // Step DESCRIPTIONS are muted gray (#999999, CLAUDE.md Rule 17's one approved muted-gray
+    // value), not purple — a deliberate, page-scoped exception to Rule 1 ("text on dark bg is
+    // always an accent, never white/gray"), confirmed with Akis: full-saturation lila reads fine
+    // for short text (headings, numbers, tags) but is harder to read at this density for
+    // multi-sentence body copy. The color itself used to be a one-off #a8a8a5, hand-picked before
+    // Rule 17 existed — now the shared token, same visual intent. Using-gray-at-all here is still
+    // NOT a sitewide rule — it's scoped to this one panel's step descriptions only. Don't
+    // generalize it to other dark-bg body text elsewhere without asking first.
     function stepRow(step, n, d) {
-      const c = CHIP[step.w];
+      const tag = CHIP[step.w];
       const link = step.link
-        ? '<a class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + esc(step.link.url) + '" target="_blank" rel="noopener">' + esc(step.link.label) + '</a>'
+        ? '<a class="mt-2 inline-flex ui_link text-body-3 font-bold text-bina-purple underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2" href="' + esc(step.link.url) + '" target="_blank" rel="noopener">' + esc(step.link.label) + '</a>'
         : '';
       return (
-        '<li class="flex gap-4 border-t-2 border-coal-black bg-white px-5 py-4 sm:px-6">' +
-        '<span class="grid h-10 w-10 flex-none place-items-center rounded-xl border-2 border-coal-black bg-bina-yellow font-display text-lg font-black">' + n + '</span>' +
+        '<li class="flex gap-4">' +
+        '<span class="grid h-10 w-10 flex-none place-items-center rounded-xl bg-bina-purple font-display text-body-3 font-black text-coal-black">' + n + '</span>' +
         '<span class="min-w-0">' +
-        '<span class="mb-0.5 flex flex-wrap items-center gap-2"><strong class="font-display text-base">' + esc(step.t) + '</strong>' +
-        '<span class="inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ' + c.cls + '">' + c.label + '</span></span>' +
-        '<span class="block text-sm text-coal-900">' + esc(step.x) + '</span>' +
+        '<span class="mb-0.5 flex flex-wrap items-center gap-2"><strong class="font-display text-body-3 text-bina-purple">' + esc(step.t) + '</strong>' +
+        '<span class="inline-flex rounded-full bg-bina-purple px-2.5 py-0.5 font-display text-body-3 font-bold text-coal-black">' + tag + '</span></span>' +
+        '<span class="block text-body-3 text-muted-gray">' + esc(step.x) + '</span>' +
         (step.cta ? ctaLink(step.cta, d) : '') +
         link +
         '</span></li>'
@@ -275,13 +288,23 @@ const dot = {
     }
 
     function groupLabel(text) {
-      return '<li class="border-t-2 border-coal-black bg-coal-black px-5 py-2 font-display text-xs font-bold uppercase tracking-widest text-bina-yellow sm:px-6">' + text + '</li>';
+      return '<li class="mb-1 font-display text-body-3 font-bold uppercase text-muted-gray">' + text + '</li>';
     }
 
+    // Facts sit directly on the black results panel (Rule 17 — no nested facts card). Labels are
+    // text-muted-gray (secondary text, Rule 16) — possible specifically because this panel is
+    // black, not accent-filled: Rule 2 only forces #000000 text on an *accent* card, a black card
+    // has no such constraint, so gray reads correctly here and recedes behind the bold purple value.
     function fact(k, v) {
-      return '<div class="bg-white p-4 sm:px-6"><p class="mb-1 font-display text-[11px] font-bold uppercase tracking-widest text-coal-900/60">' + k + '</p><p class="text-[15px] font-bold">' + esc(v) + '</p></div>';
+      return '<div><p class="mb-1 font-display text-body-3 font-bold uppercase text-muted-gray">' + k + '</p><p class="text-body-3 font-bold text-bina-purple">' + esc(v) + '</p></div>';
     }
 
+    // Every state renders into ONE black panel (card_base, no divider lines, no nested card of
+    // any color inside it — Rules 4/12/17): purple/lila is the section's single accent throughout,
+    // used for primary text, outlines, and the step-number circle fill; black is the neutral base,
+    // never a second accent. Secondary text (fact labels, group labels, the closing disclaimer)
+    // uses --color-muted-gray (Rule 16) — legible here specifically because the panel is black,
+    // not accent-filled (see Rule 17's own writeup for why that distinction matters).
     function render(name) {
       const box = document.getElementById('result');
       if (!name) {
@@ -292,51 +315,63 @@ const dot = {
       if (!d) {
         const note = (noProgramNotes || {})[name];
         box.innerHTML =
-          '<div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">' +
-          '<div class="bg-bina-purple/20 px-6 py-5"><p class="font-display text-xl font-black">' + esc(name) + " doesn't have a program you can use for bina yet.</p>" +
-          (note ? '<p class="mt-2 text-sm font-bold text-coal-900">' + esc(note) + '</p>' : '') +
-          '<p class="mt-2 text-sm text-coal-900">New programs launch every year — and plenty of bina families enroll privately in the meantime. Talk to us and we’ll flag you the moment ' + esc(name) + ' opens one.</p></div>' +
-          '<div class="flex flex-wrap gap-3 border-t-2 border-coal-black bg-white px-6 py-5">' +
-          '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
-          '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="mailto:' + EMAIL + '?subject=Funding%20options%20in%20' + encodeURIComponent(name) + '">Email us about funding</a>' +
+          '<div class="card_base bg-coal-black p-6 sm:p-8">' +
+          '<p class="font-display text-body-2 font-black text-bina-purple">' + esc(name) + " doesn't have a program you can use for bina yet.</p>" +
+          (note ? '<p class="mt-3 text-body-3 font-bold text-bina-purple">' + esc(note) + '</p>' : '') +
+          '<p class="mt-3 text-body-3 text-bina-purple">New programs launch every year — and plenty of bina families enroll privately in the meantime. Talk to us and we’ll flag you the moment ' + esc(name) + ' opens one.</p>' +
+          '<div class="mt-6 flex flex-wrap gap-3">' +
+          '<a class="ui_button_ghost !px-5 !py-2.5 text-body-3 !border-bina-purple !bg-transparent !text-bina-purple hover:!border-coal-black hover:!bg-bina-purple hover:!text-coal-black active:!border-coal-black active:!bg-bina-purple active:!text-coal-black" href="mailto:' + EMAIL + '?subject=Funding%20options%20in%20' + encodeURIComponent(name) + '">Email us about funding</a>' +
+          '<a class="ui_button !px-5 !py-2.5 text-body-3" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
           '</div></div>';
         return;
       }
-      const b = BADGE[d.status];
+      const badgeLabel = BADGE[d.status];
       const soon = d.status === 'coming-soon';
       const labels = FACT_LABELS[d.status] || FACT_LABELS.default;
       let n = 0;
       const stepsHtml = buildSteps(d)
         .map((g) => groupLabel(g.label) + g.steps.map((s) => stepRow(s, ++n, d)).join(''))
         .join('');
+      // Funding/status info — the intro/special/boost callouts and the fact grid — sit directly
+      // on the black panel now (Rule 17: no nested facts card). Grouped by spacing alone, matching
+      // Rule 4's "spacing, not dividers" convention.
+      const statusCardParts = [];
+      if (soon && d.soonIntro) statusCardParts.push('<p class="mb-6 text-body-3 font-bold text-bina-purple">' + esc(d.soonIntro) + '</p>');
+      if (d.special) statusCardParts.push('<p class="mb-6 text-body-3 font-bold text-bina-purple">⚠ ' + esc(d.special) + '</p>');
+      statusCardParts.push(
+        '<div class="grid gap-y-5 gap-x-8 sm:grid-cols-3">' +
+          fact(labels[0], d.who) +
+          fact(labels[1], d.howMuch) +
+          fact(labels[2], soon ? d.standing : PAY_FACT[d.status]) +
+          '</div>'
+      );
+      if (d.boost) statusCardParts.push('<p class="mt-4 text-body-3 font-bold text-bina-purple">✓ ' + esc(d.boost) + '</p>');
+      const statusCard = '<div class="mt-6">' + statusCardParts.join('') + '</div>';
       box.innerHTML =
-        '<div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">' +
-        '<div class="flex flex-wrap items-center justify-between gap-3 bg-bina-yellow px-6 py-5">' +
-        '<div><p class="font-display text-2xl font-black">' + esc(d.s) + '</p>' +
-        '<p class="text-sm font-bold text-coal-900">' + esc(d.prog) + '</p></div>' +
-        '<span class="rounded-full border-2 border-coal-black px-4 py-1.5 font-display text-xs font-bold ' + b.cls + '">' + b.label + '</span></div>' +
-        (soon && d.soonIntro ? '<div class="border-t-2 border-coal-black bg-bina-orange/25 px-6 py-4 text-sm font-bold">' + esc(d.soonIntro) + '</div>' : '') +
-        (d.special ? '<div class="border-t-2 border-coal-black bg-bina-orange/25 px-6 py-3 text-sm font-bold">⚠ ' + esc(d.special) + '</div>' : '') +
-        '<div class="grid gap-px border-t-2 border-coal-black bg-coal-black sm:grid-cols-3">' +
-        fact(labels[0], d.who) +
-        fact(labels[1], d.howMuch) +
-        fact(labels[2], soon ? d.standing : PAY_FACT[d.status]) +
-        '</div>' +
-        (d.boost ? '<div class="border-t-2 border-coal-black bg-bina-grass/25 px-6 py-3 text-sm font-bold">✓ ' + esc(d.boost) + '</div>' : '') +
-        '<ul class="m-0 list-none p-0">' + stepsHtml + '</ul>' +
+        '<div class="card_base bg-coal-black p-6 sm:p-8">' +
+        // status header
+        '<div class="flex flex-wrap items-center justify-between gap-3">' +
+        '<div><p class="font-display text-body-1 font-black text-bina-purple">' + esc(d.s) + '</p>' +
+        '<p class="text-body-3 font-bold text-bina-purple">' + esc(d.prog) + '</p></div>' +
+        '<span class="rounded-full bg-bina-purple px-4 py-1.5 font-display text-body-3 font-bold text-coal-black">' + badgeLabel + '</span></div>' +
+        statusCard +
+        // numbered steps — one consistent style throughout
+        '<ul class="m-0 list-none p-0 mt-6 flex flex-col gap-8">' + stepsHtml + '</ul>' +
+        '<p class="mt-6 text-body-3 text-bina-purple">' +
         (soon
-          ? '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-sm text-coal-900">We update this page the moment ' + esc(d.s) + '’s rules or bina’s status change — so what you read here is where things actually stand today.</div>'
-          : '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-sm text-coal-900">Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.</div>') +
-        '<div class="flex flex-wrap items-center gap-3 border-t-2 border-coal-black bg-white px-6 py-5">' +
-        '<a class="btn-bina !px-5 !py-2.5 text-sm" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
-        '<a class="btn-bina-ghost !px-5 !py-2.5 text-sm" href="' + esc(d.officialUrl) + '" target="_blank" rel="noopener">' + esc(d.s) + ' program site ↗</a>' +
-        '<a class="font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="' + esc(d.binaUrl) + '">bina’s ' + esc(d.s) + ' guide</a>' +
+          ? 'We update this page the moment ' + esc(d.s) + '’s rules or bina’s status change — so what you read here is where things actually stand today.'
+          : 'Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.') +
+        '</p>' +
+        '<div class="mt-6 flex flex-wrap items-center gap-3">' +
+        '<a class="ui_button_ghost !px-5 !py-2.5 text-body-3 !border-bina-purple !bg-transparent !text-bina-purple hover:!border-coal-black hover:!bg-bina-purple hover:!text-coal-black active:!border-coal-black active:!bg-bina-purple active:!text-coal-black" href="' + esc(d.officialUrl) + '" target="_blank" rel="noopener">' + esc(d.s) + ' program site ↗</a>' +
+        '<a class="ui_button !px-5 !py-2.5 text-body-3" href="' + WEBSITE + '" target="_blank" rel="noopener">Visit bina to start</a>' +
+        '<a class="ui_link text-body-3 font-bold text-bina-purple underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2" href="' + esc(d.binaUrl) + '">bina’s ' + esc(d.s) + ' guide</a>' +
         (landingSlugs[d.s]
-          ? '<a class="font-bold underline decoration-bina-pink decoration-2 underline-offset-4" href="/esa/' + landingSlugs[d.s] + '">bina for ' + esc(d.s) + ' families →</a>'
+          ? '<a class="ui_link text-body-3 font-bold text-bina-purple underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2" href="/esa/' + landingSlugs[d.s] + '">bina for ' + esc(d.s) + ' families →</a>'
           : '') +
         (soon ? ctaLink('notify', d).replace('mt-2 ', '') : '') +
         '</div>' +
-        '<div class="border-t-2 border-coal-black bg-white px-6 py-3 text-xs text-coal-900/70">Numbers and deadlines change every year — the official ' + esc(d.prog) + ' site is the final word.</div>' +
+        '<p class="mt-6 text-body-3 text-muted-gray">Numbers and deadlines change every year — the official ' + esc(d.prog) + ' site is the final word.</p>' +
         '</div>';
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }

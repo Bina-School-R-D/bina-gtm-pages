@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import DecoLayer from '../components/decorations/deco_layer.astro';
+import UiLink from '../components/sections/ui_link.astro';
+import type { DecorationSetName } from '../components/decorations/decoration-sets';
 
 interface Props {
   title: string;
@@ -11,6 +14,14 @@ interface Props {
   ctaLabel?: string;
   /** Drop the gap above the footer, for pages whose last section is already dark. */
   flushFooter?: boolean;
+  /**
+   * Optional page-margin decoration set (leaves, lily pads + heron — see `decoration-sets.ts`).
+   * Omit for no decoration. Rendered here, centrally, not by the page — see `deco_layer.astro`
+   * for the full stacking-order contract this depends on: `<main>` itself is deliberately left
+   * unpromoted (no `relative`/`z-index`) so each section's own background stays behind the
+   * decoration; every section's inner CONTENT wrapper is what needs `relative z-[1]`, not `<main>`.
+   */
+  decorationSet?: DecorationSetName;
 }
 
 const {
@@ -20,6 +31,7 @@ const {
   ctaHref = 'https://thebinaschool.com',
   ctaLabel = 'Visit bina',
   flushFooter = false,
+  decorationSet,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -148,25 +160,40 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <a href="https://thebinaschool.com" aria-label="bina — home">
         <img src="/images/navbar-logo.svg" alt="bina" class="h-9 w-auto" />
       </a>
-      <a
-        href={ctaHref}
-        class="inline-flex min-h-[clamp(2.75rem,3.24vw,4.25rem)] cursor-pointer items-center justify-center whitespace-nowrap rounded-[clamp(0.625rem,0.83vw,1rem)] border-2 border-coal-black bg-bina-yellow px-[clamp(1.25rem,1.6vw,2rem)] font-display text-[clamp(1rem,1.22vw,1.5rem)] font-bold text-coal-black no-underline transition-colors duration-300 ease-out hover:bg-bina-pink active:bg-bina-red"
-        >{ctaLabel}</a
-      >
+      <a href={ctaHref} class="ui_button whitespace-nowrap">
+        {ctaLabel}
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden="true"
+          class="h-[clamp(0.75rem,1.04vw,1.69rem)] w-[clamp(0.75rem,1.04vw,1.69rem)] shrink-0"
+        >
+          <path
+            d="M4 10H16M16 10L11 5M16 10L11 15"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
     </nav>
+
+    {decorationSet && <DecoLayer set={decorationSet} />}
 
     <main>
       <slot />
     </main>
 
     <footer
-      class:list={['bg-coal-black px-5 py-12 text-white sm:px-10', flushFooter ? 'mt-0' : 'mt-20']}
+      data-site-footer
+      class:list={['bg-coal-black px-5 py-12 text-bina-grass sm:px-10', flushFooter ? 'mt-0' : 'mt-20']}
     >
       <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
-        <p class="text-sm text-white/80">
-          <a href="https://thebinaschool.com/privacy" class="font-bold text-bina-grass underline underline-offset-4">Privacy</a>
+        <p class="text-base">
+          <UiLink href="https://thebinaschool.com/privacy" cardFill="dark" accentColor="grass">Privacy</UiLink>
           ·
-          <a href="https://thebinaschool.com/legal" class="font-bold text-bina-grass underline underline-offset-4">Terms &amp; Conditions</a>
+          <UiLink href="https://thebinaschool.com/legal" cardFill="dark" accentColor="grass">Terms &amp; Conditions</UiLink>
         </p>
         <slot name="footer-note" />
       </div>

@@ -16,11 +16,11 @@
     "tuitionUrl": "https://thebinaschool.com/tuition",
     "ages": "4 to 15",
     "classCap": 12,
-    "day": "5 hours a day, 5 days a week, about 200 school days a year",
+    "dayFacts": ["5 hrs/day", "5 days/week", "~200 school days"],
     "accreditations": [
       "Cognia accredited",
-      "Registered online Cambridge International School",
-      "CIS member school"
+      "Cambridge International",
+      "CIS member"
     ],
     "features": [
       {

@@ -57,37 +57,37 @@
     {
       "label": "Communication / feeling heard",
       "score": 9.55,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "A joyful experience",
       "score": 9.53,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "Overall satisfaction",
       "score": 9.48,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "Would recommend bina",
       "score": 9.42,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "Meaningful learning & growth",
       "score": 9.32,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "Trust in bina's decisions",
       "score": 9.07,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     },
     {
       "label": "Sense of belonging",
       "score": 8.58,
-      "color": "#03cb5b"
+      "color": "#43ca66"
     }
   ],
   "involvement": [
@@ -198,7 +198,7 @@
     {
       "label": "Confidence & independence",
       "pct": 25.2,
-      "color": "#ff6f4e"
+      "color": "#ff6d63"
     },
     {
       "label": "Adaptability for a changing world",
