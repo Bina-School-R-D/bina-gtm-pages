@@ -1,0 +1,207 @@
+---
+/*
+ * A stack of horizontal progress bars, one per row, all measured against the same shared max —
+ * extracted from `/family-survey`'s seven-dimension rating chart. Use this for "multiple scores
+ * against a shared max" (several ratings out of the same 10, several percentages out of the same
+ * 100) — for a single breakdown that sums to 100% across categories, use `ChartSegmentedBar` instead.
+ *
+ * Honest axis: the track always runs the full `0` to `max`, never a cropped baseline (per the
+ * "Publishing our own data" rules in CLAUDE.md) — put the weakest score in the same chart as the
+ * best, don't zoom in to flatter a gap. An optional `referenceLine` draws a dashed vertical marker
+ * at a specific value (e.g. "8/10") with its own label.
+ *
+ * The axis line keeps a fixed 26-unit margin below it for the "0"/max end-labels regardless of
+ * whether `referenceLine` is set (`AXIS_BOTTOM_MARGIN`) — this used to collapse to 6 units when
+ * `referenceLine` was omitted, putting those labels exactly on top of the axis line itself. Every
+ * text class in this chart declares a literal, real `18px` (Rule 10's 16px floor, never a smaller
+ * number picked to counteract this SVG's own viewBox scaling — see the `<style>` block's own
+ * comment for the specific mistake this corrects).
+ *
+ * Bars grow in from the left on scroll-into-view (self-contained `IntersectionObserver`, no page
+ * script needed) — set `animate={false}` to skip this (e.g. inside a component already re-rendered
+ * client-side, where scroll-triggered CSS classes don't reliably reset).
+ *
+ * `fillColor` is a single hex for every bar (Rule 14 — one accent per section). Per Rule 18, this
+ * chart always carries its own accent-colored fill, so it never sits on an accent-filled card
+ * (that would be an accent on another accent) — `cardFill="dark"` (the default; `'accent'` is kept
+ * only for a hypothetical, deliberately-reviewed future exception) puts it on a black card, with
+ * `fillColor` set to the section's own accent (Rule 18's black-card fill case, not a Rule 7
+ * cross-accent pairing). `cardFill="dark"` also switches every text element (value labels, axis
+ * "0"/`max`, the reference-line label), the unfilled track, and the axis/reference lines from black
+ * to `accentColor` (Rule 1 — nothing on a black card is ever plain black or white).
+ */
+
+export interface Props {
+  items: { label: string; value: number }[];
+  max: number;
+  /** Suffix appended after each value label, e.g. "/10". */
+  unit?: string;
+  fillColor: string;
+  referenceLine?: { value: number; label: string };
+  ariaLabel?: string;
+  animate?: boolean;
+  cardFill?: 'accent' | 'dark';
+  /** Required when cardFill="dark" — drives text/track/axis color (Rule 1). */
+  accentColor?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+const {
+  items,
+  max,
+  unit = '',
+  fillColor,
+  referenceLine,
+  ariaLabel,
+  animate = true,
+  cardFill = 'dark',
+  accentColor,
+  class: className,
+} = Astro.props;
+
+const ACCENT_HEX: Record<NonNullable<Props['accentColor']>, string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+const fg = cardFill === 'dark' && accentColor ? ACCENT_HEX[accentColor] : '#000000';
+
+const DW = 700;
+const DROW = 44;
+const DLABEL = 310;
+const DRIGHT = 90;
+const DTOP = referenceLine ? 26 : 6;
+// Bottom margin below the axis line, reserved for the "0"/max end-labels — always 26, regardless
+// of `referenceLine`. This used to be 6 (not 26) when `referenceLine` was omitted, which put the
+// end-labels at the exact same y-coordinate as the axis line itself (a real collision bug, just
+// latent since the only live usage happens to always pass a `referenceLine`). Kept unconditional
+// now so a future no-`referenceLine` usage can't reintroduce it.
+const AXIS_BOTTOM_MARGIN = 26;
+const DH = DTOP + items.length * DROW + AXIS_BOTTOM_MARGIN;
+const axisY = DTOP + items.length * DROW + 2;
+const trackW = DW - DLABEL - DRIGHT;
+const bars = items.map((it, i) => ({
+  ...it,
+  y: DTOP + i * DROW + 4,
+  w: (it.value / max) * trackW,
+}));
+const refX = referenceLine ? DLABEL + (referenceLine.value / max) * trackW : 0;
+---
+
+<svg
+  viewBox={`0 0 ${DW} ${DH}`}
+  role="img"
+  aria-label={ariaLabel ?? items.map((i) => `${i.label} ${i.value}${unit}`).join('; ')}
+  class:list={['progress-bar-list w-full', animate && 'pbl-animate', className]}
+  style={`--pbl-fg:${fg}`}
+>
+  {
+    bars.map((b) => (
+      <g class="pbl-row">
+        <text x="0" y={b.y + DROW / 2 - 6} class="pbl-label-sm">
+          {b.label}
+        </text>
+        <rect x={DLABEL} y={b.y + 4} width={trackW} height={DROW - 20} rx="6" fill={fg} fill-opacity="0.12" />
+        <rect class="pbl-fill" x={DLABEL} y={b.y + 4} width={b.w} height={DROW - 20} rx="6" fill={fillColor} stroke="#000" />
+        <text x={DW - DRIGHT + 10} y={b.y + DROW / 2 - 5} class="pbl-label">
+          {b.value}
+          <tspan class="pbl-label-suffix">{unit}</tspan>
+        </text>
+      </g>
+    ))
+  }
+  <line x1={DLABEL} y1={axisY} x2={DW - DRIGHT} y2={axisY} stroke={fg} stroke-opacity="0.3" stroke-width="2" />
+  {
+    referenceLine && (
+      <>
+        <line x1={refX} y1="20" x2={refX} y2={axisY} stroke={fg} stroke-opacity="0.4" stroke-width="2" stroke-dasharray="6 5" />
+        <text x={refX} y="14" text-anchor="middle" class="pbl-label">
+          {referenceLine.label}
+        </text>
+      </>
+    )
+  }
+  <text x={DLABEL} y={DH - 4} class="pbl-label-sm">0</text>
+  <text x={DW - DRIGHT} y={DH - 4} text-anchor="end" class="pbl-label-sm">{max}</text>
+</svg>
+
+<style>
+  /* Every text class in this chart declares a real, literal font-size — 18px (Rule 10's
+     chart-legend/axis-label tier, equal in spirit to bina's official scale's `Body3` step — but
+     literally written as `18px`, not `var(--text-body-3)`: that token is a fluid `clamp()` tuned
+     for real HTML layout, and referencing it inside this SVG's own scaled viewBox coordinate
+     system would compound two independent scaling mechanisms at once, producing an unpredictable
+     rendered size — exactly the pathology the surrounding comment here was written to prevent) —
+     never a number below 16px, and never a smaller number picked
+     to "cancel out" this SVG's own viewBox scaling. A brief version of this component tried exactly
+     that (declaring `.pbl-label-sm` as `12px` so it would render close to a literal 18px on screen
+     at this chart's ~1.53x scale) — that's a real, sitewide-forbidden violation of Rule 10's 16px
+     floor, not just a style nit, and it had already been fixed once before in this exact class (see
+     Rule 10's own history in CLAUDE.md). Rund Display is the only font in this repo (Rund Text was
+     removed entirely) — value labels (bold) and row/axis labels (regular) are differentiated by
+     weight alone now, both in Rund Display, and both render at the same ~27.6px on screen at this
+     component's standard card width, which is expected and correct, not a bug to "fix" by shrinking
+     one of them below the floor again. */
+  .pbl-label {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    fill: var(--pbl-fg, #000);
+  }
+  .pbl-label-suffix {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    fill: var(--pbl-fg, #000);
+  }
+  .pbl-label-sm {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    fill: var(--pbl-fg, #000);
+  }
+  .pbl-fill {
+    stroke-width: var(--stroke-chart);
+    transform-origin: left center;
+    transition: opacity 0.2s ease-out;
+  }
+  .pbl-row:hover .pbl-fill {
+    opacity: 0.75;
+  }
+  .pbl-animate .pbl-fill {
+    transform: scaleX(0);
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pbl-animate.in .pbl-fill {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pbl-animate .pbl-fill {
+      transform: scaleX(1);
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const charts = document.querySelectorAll<HTMLElement>('.progress-bar-list.pbl-animate');
+  if ('IntersectionObserver' in window && charts.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          e.target.classList.add('in');
+        });
+      },
+      { threshold: 0.3 }
+    );
+    charts.forEach((el) => io.observe(el));
+  } else {
+    charts.forEach((el) => el.classList.add('in'));
+  }
+</script>

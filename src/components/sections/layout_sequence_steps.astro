@@ -1,0 +1,69 @@
+---
+/*
+ * Numbered sequence / step cards — layout, spacing, typography and card shape extracted from
+ * the main site's admissions page (Bina-School-R-D/website, src/components/admissions/StepCard.tsx
+ * + AdmissionsStepsSection.tsx): a row of cards, each a large bold number, a short bold title,
+ * and a description paragraph, 30px rounded corners.
+ *
+ * Type sizes now come from bina's official type scale (CLAUDE.md "Typography"): title →
+ * `text-subtitle-2` (32px, exact match), description → `text-body-3` (18px, exact match). The
+ * number is a documented rounding call, not an exact match — the source's fixed 60px sits exactly
+ * between that scale's `H1` (64px) and `H2` (56px), a genuine tie — rounded DOWN to `text-h2`
+ * (56px) since the number is decorative (a big "1/2/3" inside a step card), and matching `H1`'s
+ * literal size would put a decorative element at the same size as an actual page hero heading.
+ * Padding stays a fixed 24px on all four sides (`p-6`), unrelated to the type-scale migration —
+ * originally fixed (not fluid `clamp()`) because a long single word in the title (e.g. "approved")
+ * overflowed past the card's right edge at narrower grid columns under the old vw-based sizing.
+ * Title and description both keep `break-words` so no single word can push past the padded
+ * content box.
+ *
+ * Deliberately NOT extracted: the source's per-card coloring (one "highlight" card in yellow,
+ * the rest in teal, with a yellow→pink hover swap on the highlighted one). Per this component's
+ * brief, every card in a set uses the SAME single accent — pass one `accentColor` for the whole
+ * set, never per-card. Text is black throughout (Rule 2 — text on an accent card is always
+ * black), and the card uses this repo's own `card_base` (30px radius, no border — Rule 12).
+ */
+
+export interface StepData {
+  number: string | number;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  steps: StepData[];
+  /** One accent for the whole set — never per-card. */
+  accentColor: 'grass' | 'yellow' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+}
+
+const { steps, accentColor } = Astro.props;
+
+const BG_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'bg-bina-grass',
+  yellow: 'bg-bina-yellow',
+  purple: 'bg-bina-purple',
+  pink: 'bg-bina-pink',
+  green: 'bg-bina-green',
+  blue: 'bg-bina-blue',
+  red: 'bg-bina-red',
+  orange: 'bg-bina-orange',
+};
+---
+
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+  {
+    steps.map((step) => (
+      <div class:list={['card_base flex flex-col gap-3 p-6', BG_CLASS[accentColor]]}>
+        <span class="break-words font-display font-black text-coal-black text-h2">
+          {step.number}
+        </span>
+        <h3 class="break-words font-display font-bold text-coal-black text-subtitle-2">
+          {step.title}
+        </h3>
+        <p class="break-words font-display font-normal text-coal-black text-body-3">
+          {step.description}
+        </p>
+      </div>
+    ))
+  }
+</div>

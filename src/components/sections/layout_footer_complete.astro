@@ -1,0 +1,109 @@
+---
+/*
+ * Complete footer — a port of thebinaschool.com's own sitewide footer (`Bina-School-R-D/website`,
+ * `src/components/shared/SiteFooter.tsx` — the ONE footer that site uses everywhere; its
+ * `LandingFooter.tsx` is just a re-export of this same component, not a different design). Re-
+ * extract from there if the source footer changes.
+ *
+ * Structure, faithfully ported: a purple tagline, three columns of mint-colored nav links (an
+ * empty spacer column sits between the tagline and the first link column on tablet/desktop,
+ * matching the source's 5-column grid), and a full-width decorative "bina" wordmark logo running
+ * flush along the bottom edge. No social icons, no contact info, no address — the real footer
+ * doesn't carry any of those either; the assumption that a "complete" footer would include them
+ * turned out not to hold once the actual component was read. Copy (tagline + all 14 links) and
+ * both fluid `clamp()` type sizes are copied exactly from `content/site/settings.yaml` and
+ * `SiteFooter.tsx` — not rewritten to this repo's own type scale, the same "extract the literal
+ * spec, don't re-derive it" precedent `.ui_button` set (see CLAUDE.md).
+ *
+ * Adapted for this repo:
+ *  - `bg-black` → `bg-coal-black` (same hex, `#000000`, this repo's token name) — footer/nav
+ *    chrome on this site has always used solid black, same as the existing Simple footer and the
+ *    top nav; Rule 5's "one background per page section" is about page CONTENT sections, not this
+ *    persistent chrome, so it doesn't apply here.
+ *  - Every link is rewritten to an absolute `https://thebinaschool.com/…` URL — on the source site
+ *    these are same-origin relative paths, but this repo is a different domain (go.bina.school)
+ *    with none of those routes itself. Two links keep their original absolute target as-is (the
+ *    partner-program signup form, already off-site on the source too). This is a literal port of
+ *    the real footer's own links, not a reinterpretation — e.g. "Education Savings Account" still
+ *    points at thebinaschool.com's own `/esa` marketing page, not this repo's own, more detailed
+ *    `/esa` tool. Worth a deliberate look before this footer ships on a page: linking that one
+ *    internally instead might serve a go.bina.school visitor better than sending them off-site for
+ *    something this site already has a stronger version of.
+ *  - The footer-logo SVG (`public/images/footer-logo.svg`) was already staged in this repo,
+ *    byte-identical to the source's `public/images/landing/logos/footer-logo.svg` — reused as-is.
+ *
+ * No `footer-note` slot (unlike Simple footer) — the source footer has no equivalent, and this
+ * component is a faithful port, not a redesign.
+ */
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const SITE = 'https://thebinaschool.com';
+
+const tagline =
+  'A global, mobile, whole schooling experience for 4-15 year olds that fits your family everywhere';
+
+const linkColumns: { label: string; href: string }[][] = [
+  [
+    { label: 'What type of school is best?', href: `${SITE}/what-type-of-school-is-best` },
+    { label: 'Homeschooling guides — USA', href: `${SITE}/homeschooling-guides` },
+    { label: 'Homeschooling guides — Europe', href: `${SITE}/homeschooling-guides-europe` },
+    { label: 'Education Savings Account', href: `${SITE}/esa` },
+  ],
+  [
+    { label: 'Education', href: `${SITE}/education` },
+    { label: 'Primary School', href: `${SITE}/primary-school` },
+    { label: 'Middle School', href: `${SITE}/middle-school` },
+    { label: 'Open Positions', href: `${SITE}/careers` },
+    { label: 'Blog', href: `${SITE}/blog` },
+    { label: 'Join the bina school partner program', href: 'https://form.thebinaschool.com/new-partner' },
+  ],
+  [
+    { label: 'Imprint', href: `${SITE}/imprint` },
+    { label: 'Privacy', href: `${SITE}/privacy` },
+    { label: 'Legal', href: `${SITE}/legal` },
+    { label: 'Partner T&Cs', href: `${SITE}/partner-program-terms` },
+  ],
+];
+---
+
+<footer class:list={['relative overflow-hidden bg-coal-black pt-10 pb-0 md:pt-12', className]}>
+  <div class="relative px-5 sm:px-10">
+    <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-5 sm:gap-x-8 md:mb-10">
+      <div>
+        <p
+          class="font-display font-medium text-bina-purple"
+          style="font-size:clamp(0.875rem,1.1675rem + 0.308vw,2.25rem); line-height:1.15;"
+        >
+          {tagline}
+        </p>
+      </div>
+
+      <div aria-hidden="true" class="hidden sm:block"></div>
+
+      {
+        linkColumns.map((column) => (
+          <div class="flex flex-col gap-3">
+            {column.map((link) => (
+              <a
+                href={link.href}
+                class="font-display font-medium text-bina-mint transition-opacity hover:opacity-80"
+                style="font-size:clamp(0.7rem,0.9175rem + 0.308vw,1.875rem);"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="relative px-0">
+    <img src="/images/footer-logo.svg" alt="bina" class="block h-auto w-full" />
+  </div>
+</footer>

@@ -1,0 +1,108 @@
+---
+/*
+ * A single bar split into colored segments that sum to 100%, with a legend underneath — extracted
+ * from `/family-survey`'s "what matters to them" breakdown. Use this for a breakdown of options
+ * people chose between (one bar, several categories) — for several independent scores measured
+ * against the same shared max, use `ChartBarList` instead.
+ *
+ * Corner radius and stroke follow the site's shared bar-chart spec (CLAUDE.md Rule 7 addendum):
+ * only the two outer ends round (via a clip-path sized to the whole bar, not per-segment — a rect's
+ * `rx` rounds all four corners uniformly, which would notch the internal seams too), one shared
+ * outline wraps the whole bar at `--stroke-chart` (the same weight as `.ui_button`'s own border —
+ * see the token's own comment in `global.css`), and thin 2px dividers mark internal seams only —
+ * never a full per-segment border, which doubles the seam thickness. See the component's own
+ * legend below the bar for the exact percentage/label/color for each segment.
+ *
+ * Each segment supplies its own `color` (a category color, not a Rule 7 fill pairing — this isn't
+ * a progress-bar-on-a-card-background situation, it's several independent categories that need to
+ * read as distinct from each other).
+ *
+ * Legend and caption text are `text-body-3` (18px) — Rule 10's secondary/supporting tier, which
+ * names "chart/graph legends" explicitly, and an exact step of bina's official type scale. Both
+ * briefly sat elsewhere (the legend bumped to `text-xl` under an earlier "everything in this card
+ * is content" reading, the caption left at the 16px floor) before Rule 10 was corrected to give
+ * legends and footnotes one shared 18px home.
+ *
+ * `cardFill` (default `'accent'`) controls the legend/caption text color, mirroring `CardStat`'s
+ * own `fill` prop: this component's own segment colors are always multi-color (Rule 19 — no accent
+ * color may sit on another), so any card it's dropped into must be BLACK, not accent-filled (Rule
+ * 6's exception). `cardFill="dark"` + `accentColor` renders the legend/caption text in that section
+ * accent (Rule 1 — text on a black card is always an accent, never black/white); the `'accent'`
+ * default is kept only for backwards compatibility with a hypothetical single-color-segment usage
+ * and should not be reached for on a genuinely multi-color breakdown.
+ */
+
+export interface Props {
+  segments: { label: string; pct: number; color: string }[];
+  width?: number;
+  caption?: string;
+  ariaLabel?: string;
+  cardFill?: 'accent' | 'dark';
+  accentColor?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+const { segments, width = 640, caption, ariaLabel, cardFill = 'accent', accentColor, class: className } = Astro.props;
+
+const TEXT_CLASS: Record<NonNullable<Props['accentColor']>, string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+const textClass = cardFill === 'dark' && accentColor ? TEXT_CLASS[accentColor] : 'text-coal-black';
+
+const clipId = `segbar-clip-${Math.random().toString(36).slice(2, 9)}`;
+
+let acc = 0;
+const segs = segments.map((s) => {
+  const x = (acc / 100) * width;
+  acc += s.pct;
+  return { ...s, x, w: (s.pct / 100) * width };
+});
+---
+
+<div class:list={className}>
+  <svg
+    viewBox={`0 0 ${width} 44`}
+    role="img"
+    aria-label={ariaLabel ?? segments.map((s) => `${s.label} ${s.pct}%`).join('; ')}
+    class="w-full"
+  >
+    <defs>
+      <clipPath id={clipId}>
+        <rect x="0" y="0" width={width} height="40" rx="6" />
+      </clipPath>
+    </defs>
+    <g clip-path={`url(#${clipId})`}>
+      {segs.map((s) => <rect x={s.x} y="0" width={s.w} height="40" fill={s.color} />)}
+      {
+        /* thin dividers between segments only — never at the two outer ends, which take the
+           container's own rounded stroke instead */
+        segs.slice(1).map((s) => <rect x={s.x - 1} y="0" width="2" height="40" fill="#000" />)
+      }
+    </g>
+    <rect class="segbar-outline" x="0" y="0" width={width} height="40" rx="6" fill="none" stroke="#000" />
+  </svg>
+  <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+    {
+      segments.map((s) => (
+        <li class="flex items-center gap-2 text-body-3">
+          <span class="h-3.5 w-3.5 flex-none rounded-full border-2 border-coal-black/30" style={`background:${s.color}`} />
+          <span class:list={['font-display font-bold', textClass]}>{s.pct}%</span>
+          <span class={textClass}>{s.label}</span>
+        </li>
+      ))
+    }
+  </ul>
+  {caption && <p class:list={['mt-4 text-body-3', textClass]}>{caption}</p>}
+</div>
+
+<style>
+  .segbar-outline {
+    stroke-width: var(--stroke-chart);
+  }
+</style>

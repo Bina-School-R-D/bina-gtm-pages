@@ -1,0 +1,38 @@
+---
+/*
+ * Simple footer — formalizes the footer every page on this site has used since it was
+ * scaffolded (previously hand-inlined in `BaseLayout.astro`, not a standalone component).
+ * Two lines only: Privacy/Terms links, and an optional page-specific disclaimer via the
+ * `footer-note` slot (e.g. `/esa`'s "Program details reflect the latest information…",
+ * `/reviews`' Testimonial Management System note). Deliberately minimal — no nav links, no
+ * logo, no social — appropriate for a narrow, single-purpose tool or landing page where a
+ * fuller site footer would outweigh the page itself. See the "Complete footer" component
+ * for the alternative, and CLAUDE.md's "Footer variants" entry for when to reach for each.
+ *
+ * This is a like-for-like extraction of the markup that was already shipping in
+ * `BaseLayout.astro` — no visual or structural changes, just given its own file and props.
+ */
+
+import UiLink from './ui_link.astro';
+
+export interface Props {
+  /** Drop the gap above the footer, for pages whose last section is already dark. */
+  flushFooter?: boolean;
+  class?: string;
+}
+
+const { flushFooter = false, class: className } = Astro.props;
+---
+
+<footer
+  class:list={['bg-coal-black px-5 py-12 text-bina-grass sm:px-10', flushFooter ? 'mt-0' : 'mt-20', className]}
+>
+  <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
+    <p class="text-small text-bina-grass">
+      <UiLink href="https://thebinaschool.com/privacy" cardFill="dark" accentColor="grass">Privacy</UiLink>
+      ·
+      <UiLink href="https://thebinaschool.com/legal" cardFill="dark" accentColor="grass">Terms &amp; Conditions</UiLink>
+    </p>
+    <slot name="footer-note" />
+  </div>
+</footer>

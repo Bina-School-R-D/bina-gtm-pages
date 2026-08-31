@@ -1,0 +1,51 @@
+---
+/*
+ * A ranked list of items, each with a percentage/value and a proportional inline bar — for a
+ * breakdown readers should scan top-to-bottom by rank rather than compare as one continuous shape.
+ * Use `ChartSegmentedBar` when the categories sum to 100% and read as one physical bar; use this when
+ * they're independent figures (don't necessarily sum to 100%) best read as a sorted list — e.g. a
+ * "which platforms sent us the most reviews" or "top reasons families chose bina" breakdown.
+ *
+ * No sitewide page currently uses this exact shape — added alongside the other chart components
+ * per the reusable-chart-set brief, ready for the next page that needs a ranked breakdown instead
+ * of a stacked bar or a full progress-bar-list. `fillColor` is one hex for every row (Rule 14).
+ */
+
+export interface Props {
+  items: { label: string; value: number; note?: string }[];
+  /** Bar scale — defaults to the largest value in the list, so the top row always reads full-width. */
+  max?: number;
+  unit?: string;
+  fillColor: string;
+  class?: string;
+}
+
+const { items, max, unit = '', fillColor, class: className } = Astro.props;
+const scaleMax = max ?? Math.max(...items.map((i) => i.value));
+---
+
+<ol class:list={['ranked-list flex list-none flex-col gap-3', className]}>
+  {
+    items.map((item, i) => (
+      <li class="flex items-center gap-3">
+        <span class="w-6 flex-none font-display text-body-3 font-black text-coal-black">{i + 1}</span>
+        <div class="min-w-0 flex-1">
+          <div class="mb-1 flex items-baseline justify-between gap-2">
+            <span class="truncate font-display text-body-3 font-bold text-coal-black">{item.label}</span>
+            <span class="flex-none font-display text-body-3 font-bold text-coal-black">
+              {item.value}
+              {unit}
+            </span>
+          </div>
+          <div class="h-2 w-full rounded-full bg-black/10">
+            <div
+              class="h-full rounded-full"
+              style={`width:${Math.min(100, (item.value / scaleMax) * 100)}%; background:${fillColor}`}
+            />
+          </div>
+          {item.note && <p class="mt-1 text-body-3 text-coal-black/70">{item.note}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>

@@ -1,0 +1,83 @@
+---
+/*
+ * Source pill — a small outlined badge linking out to a third-party review/rating source (or an
+ * internal proof page, e.g. the family survey). Always used in a group beneath a primary CTA,
+ * preceded by a small "As seen on"-style label, and always deliberately understated: the platform
+ * name is `--color-muted-gray` (#999999, Rule 16), not one of the site's 8 accent colors, so the
+ * group never competes with the CTA button sitting next to it — the whole point is to read as
+ * quiet supporting evidence, not another colorful call-to-action.
+ *
+ * The rating value (e.g. "5.0", "9.42/10") is `#e2ccff` (lila) — Rule 1 bans white/near-white on
+ * dark outright, and this used to render at `#e8e8e5` (near-white) by default and literal
+ * `#ffffff` on hover, both real violations. Lila against the muted-gray name is what makes the
+ * rating stand out, not white — see Rule 1's own note on this fix in CLAUDE.md.
+ */
+
+export interface Props {
+  /** Platform display name, e.g. "Niche" or "Our family survey". */
+  name: string;
+  /** Path to the platform's logo/icon (see public/images/logos/). */
+  logo: string;
+  logoAlt?: string;
+  /** Rating/score shown after the name, e.g. "5.0" or "9.42/10". Omit if the source has none. */
+  rating?: string;
+  href: string;
+  class?: string;
+}
+
+const { name, logo, logoAlt = '', rating, href, class: className = '' } = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    'source-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 no-underline transition-colors duration-200',
+    className,
+  ]}
+>
+  <img
+    src={logo}
+    alt={logoAlt}
+    width="18"
+    height="18"
+    class="h-[1.125rem] w-[1.125rem] shrink-0 rounded-[4px]"
+    loading="lazy"
+  />
+  <span class="font-display text-body-3 font-bold">{name}</span>
+  {rating && <span class="source-pill-rating font-display text-body-3 font-bold">{rating}</span>}
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    class="h-3 w-3 shrink-0 opacity-70"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M14 4h6v6M20 4 10.5 13.5" />
+    <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
+  </svg>
+  <span class="sr-only">(opens in a new tab)</span>
+</a>
+
+<style>
+  .source-pill {
+    border: 1px solid #3a3a38;
+    background: transparent;
+    color: var(--color-muted-gray);
+  }
+  .source-pill-rating {
+    color: #e2ccff;
+  }
+  .source-pill:hover {
+    border-color: #6b6b68;
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8e8e5;
+  }
+  .source-pill:hover .source-pill-rating {
+    color: #e2ccff;
+  }
+</style>

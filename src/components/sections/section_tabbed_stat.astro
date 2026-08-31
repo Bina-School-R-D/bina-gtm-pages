@@ -1,0 +1,152 @@
+---
+/*
+ * Tabbed stat pattern: a row of toggle tabs sitting directly on the page background, plus ONE
+ * accent-filled card below holding whichever tab's result is selected — extracted from
+ * `/student-results`' per-level result tool ("See results for your child's age group"). Built for
+ * Rule 17 (max two surface levels): the tabs aren't a card at all (inline controls, exempt from
+ * Rule 17 by name), and the result is always exactly one card, never a card nested inside it.
+ *
+ * Reused, not duplicated: `card_stat.astro` already covered the "value / label / note" stat shape
+ * — it just always drew its own card. It gained a new `fill="none"` variant (no card of its own,
+ * black text) specifically so it can be reused *inside* this component's result card instead of
+ * each stat getting its own nested card. `layout_stat_section.astro` is unchanged and still wraps this
+ * whole component from the outside (`eyebrow` + `h2` + intro), same as before — this component
+ * only owns the tabs + result-card shell that used to be a page's own hand-rolled markup, not the
+ * heading/intro shell above it.
+ *
+ * Content is a slot, not a prop, so the page controls exactly what a tab's result looks like
+ * (a `CardStat` grid, a paragraph, a chart — whatever). Each direct piece of content meant to
+ * correspond to one tab needs `data-tabbed-stat-panel="<value>"` matching that tab's `value`, and
+ * should start `hidden` unless it's the initially-selected one — see `/student-results` for the
+ * reference integration (one panel per age level, pre-rendered at build time from `results.json`,
+ * this component just shows/hides between them — no client-side HTML templating needed for
+ * content that's already fully known at build time).
+ *
+ * Tabs follow Rule 9's dark-background case (this component always sits directly on `#1c1c1c`,
+ * never on a card): unselected = `accentColor` outline + text, no fill; selected = filled
+ * `accentColor` with black text; hover fills solid with black text/border, matching the sitewide
+ * "hover fills in solid, text goes black" convention. Uses a `--tabbed-stat-accent` CSS custom
+ * property (set once via inline style, like `ui_dropdown.astro`'s `--dropdown-accent`) rather than
+ * constructing Tailwind class names dynamically, which Tailwind's build-time scanner can't see.
+ *
+ * Deep-linking (e.g. `?level=P1`) is left to the calling page's own script, not built in here —
+ * a URL param name is page-specific, and the page can just find and `.click()` the matching
+ * `[data-value]` tab on load, which runs the exact same selection logic a real click would.
+ */
+
+export interface TabItem {
+  value: string;
+  label: string;
+  sublabel?: string;
+}
+
+export interface Props {
+  items: TabItem[];
+  selectedIndex?: number;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  ariaLabel: string;
+  class?: string;
+}
+
+const { items, selectedIndex = 0, accentColor, ariaLabel, class: className } = Astro.props;
+
+const ACCENT_HEX: Record<Props['accentColor'], string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+const BG_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'bg-bina-grass',
+  purple: 'bg-bina-purple',
+  pink: 'bg-bina-pink',
+  green: 'bg-bina-green',
+  blue: 'bg-bina-blue',
+  red: 'bg-bina-red',
+  orange: 'bg-bina-orange',
+};
+---
+
+<div
+  class:list={['tabbed-stat', className]}
+  data-tabbed-stat
+  style={`--tabbed-stat-accent: ${ACCENT_HEX[accentColor]}`}
+>
+  <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={ariaLabel}>
+    {
+      items.map((item, i) => (
+        <button
+          type="button"
+          class="tabbed-stat-tab cursor-pointer rounded-2xl border-2 bg-transparent px-4 py-2 text-left font-display text-body-3 font-bold leading-tight transition-colors duration-200"
+          data-value={item.value}
+          aria-pressed={i === selectedIndex ? 'true' : 'false'}
+          aria-label={item.sublabel ? `${item.label}, ${item.sublabel}` : item.label}
+        >
+          {item.label}
+          {item.sublabel && <span class="block text-body-3 font-medium opacity-70">{item.sublabel}</span>}
+        </button>
+      ))
+    }
+  </div>
+  <div class:list={['card_base p-6 sm:p-8', BG_CLASS[accentColor]]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .tabbed-stat-tab {
+    border-color: var(--tabbed-stat-accent);
+    color: var(--tabbed-stat-accent);
+  }
+  .tabbed-stat-tab:hover {
+    background: var(--tabbed-stat-accent);
+    border-color: #000000;
+    color: #000000;
+  }
+  .tabbed-stat-tab[aria-pressed='true'] {
+    background: var(--tabbed-stat-accent);
+    border-color: #000000;
+    color: #000000;
+  }
+</style>
+
+<script is:inline>
+  /*
+   * `is:inline`, deliberately — same reason as `ui_dropdown.astro`'s own setup script. This must run
+   * synchronously at its position in the document, not as Astro's default deferred ES module: a
+   * page embedding this component may have its own trailing script that deep-links a tab on load
+   * (e.g. `?level=M1` triggering a `.click()`) expecting the click listener to already be attached.
+   * A deferred module doesn't run until after the whole document has parsed, which is AFTER a
+   * `define:vars` page script (implicitly `is:inline` itself) has already tried to click and found
+   * nothing listening — a real bug this caught on `/student-results` during verification, not a
+   * theoretical one.
+   */
+  document.querySelectorAll('[data-tabbed-stat]').forEach(function (root) {
+    if (root.dataset.tabbedStatReady) return;
+    root.dataset.tabbedStatReady = 'true';
+
+    var tabs = root.querySelectorAll('.tabbed-stat-tab');
+    // Slotted content renders inside this same root (tabs + result card are siblings inside
+    // `.tabbed-stat`, and the slot is inside the result card), so panels are descendants of root.
+    var panels = root.querySelectorAll('[data-tabbed-stat-panel]');
+
+    function select(value) {
+      tabs.forEach(function (t) {
+        t.setAttribute('aria-pressed', t.dataset.value === value ? 'true' : 'false');
+      });
+      panels.forEach(function (p) {
+        p.hidden = p.dataset.tabbedStatPanel !== value;
+      });
+      root.dispatchEvent(new CustomEvent('tabchange', { detail: { value: value }, bubbles: true }));
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        select(t.dataset.value || '');
+      });
+    });
+  });
+</script>

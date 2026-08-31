@@ -1,0 +1,64 @@
+---
+/*
+ * Stat section shell — the "label + heading + intro + card" shape repeated, hand-written, across
+ * every stat/data page (`/family-survey`, `/student-results`, `/esa/[state]`) before this existed.
+ * Renders the section wrapper, optional uppercase eyebrow, h2, and optional intro paragraph — the
+ * card/chart/table itself is entirely up to the caller via the default slot, so this component has
+ * no opinion on what kind of content follows (a `ChartDonut`, a `ChartBarList`, a plain prose
+ * card, a `UiDropdown` — anything). Rule 11's 32px heading→card gap and Rule 13's left-aligned,
+ * standard-width container are baked in so a new section can't accidentally reintroduce either.
+ *
+ * Scoped to ordinary content sections (always `<h2>`), not hero blocks — a hero mixes in an `<h1>`,
+ * `PillLabel`, CTA buttons and sometimes a gate-checklist, different enough per page that
+ * forcing it through one shell would fight more than it'd save. Build heroes by hand, still.
+ *
+ * The intro paragraph defaults to `text-xl` (20px, Rule 10's default reading tier) — baked in here
+ * so every section's intro sizes correctly without each call site remembering it. Pass a `text-lg`
+ * (or other) override in `introClass` only for a deliberate compact-context exception.
+ */
+
+export interface Props {
+  eyebrow?: string;
+  heading: string;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  /** Passthrough onto the intro paragraph's max-width — default matches the sitewide norm. */
+  introClass?: string;
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow, heading, accentColor, introClass = 'max-w-2xl', id, class: className } = Astro.props;
+
+const TEXT_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+
+const hasIntro = Astro.slots.has('intro');
+---
+
+<section class:list={['bg-dark-bg', className]} id={id}>
+  <div class="relative z-[1] mx-auto max-w-6xl px-8 py-[clamp(3rem,6vw,6rem)]">
+    {
+      eyebrow && (
+        <p class:list={['mb-2 font-display text-body-3 font-bold uppercase', TEXT_CLASS[accentColor]]}>
+          {eyebrow}
+        </p>
+      )
+    }
+    <h2 class:list={[eyebrow ? 'mb-3' : 'mb-8', 'text-section', TEXT_CLASS[accentColor]]}>{heading}</h2>
+    {
+      hasIntro && (
+        <p class:list={['mb-8 text-body-2', introClass, TEXT_CLASS[accentColor]]}>
+          <slot name="intro" />
+        </p>
+      )
+    }
+    <slot />
+  </div>
+</section>

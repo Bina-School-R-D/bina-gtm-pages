@@ -1,0 +1,149 @@
+---
+/*
+ * Progress stepper — shows position in a multi-step flow (a booking wizard, an application,
+ * a multi-page form). This is a STATUS INDICATOR, not a control: nothing here is clickable, and
+ * it must never be built from <button>s or styled to look interactive. It replaces an earlier
+ * `/book-adventure` implementation that used pill-shaped <li> tabs with hover/press states —
+ * those looked like a clickable filter control (per repo convention: tabs = interactive
+ * selectors), which is the wrong signal for "here is where you are in a flow you can't jump
+ * around in." Use a tab-selector component instead for anything the reader can actually click.
+ *
+ * Three visual states per step (`data-state` on each <li>, see below):
+ *   - completed: filled accent circle, black checkmark icon, solid accent connector leading OUT.
+ *   - active: filled accent circle, black step number, a subtle dark ring around the circle
+ *     (`--color-dark-border`, #2e2e2e, mixed with the accent) marking "you are here" — the one
+ *     visual difference from a completed circle, since both are solid-filled. Label in the accent.
+ *   - upcoming: outlined circle only (accent border, no fill — the same "outline instead of a
+ *     solid fill" spirit as Rule 9, applied here to a stepper rather than a tab/select), accent
+ *     step number, dashed accent connector leading OUT. Label is muted gray (`--color-muted-gray`,
+ *     #999999, CLAUDE.md Rule 17) — it hasn't happened. This used to be `--color-coal-900`
+ *     (#313131), a near-black token meant for LIGHT backgrounds — on this component's actual
+ *     dark-bg context it rendered at roughly 1.3:1 contrast, functionally invisible. Rule 17's
+ *     audit caught it; #999999 is both the correct token for this dark-bg case and ~6:1 contrast.
+ *
+ * A connector's style (solid vs dashed) is decided by the step it leads INTO: the segment before
+ * an active-or-completed step is solid, before an upcoming step is dashed.
+ *
+ * Client-side wizards (this component has no interactivity of its own — a multi-step *form* like
+ * `/book-adventure`'s does, entirely client-side, no page reload between steps): the page's own
+ * script re-derives each step, matching the same completed/active/upcoming rule this component
+ * used at first render, and sets it directly:
+ *   stepper.querySelectorAll('li[data-stepper-step]').forEach((li) => {
+ *     const n = Number(li.dataset.stepperStep);
+ *     li.dataset.state = n < current ? 'completed' : n === current ? 'active' : 'upcoming';
+ *   });
+ *   stepper.querySelectorAll('[data-stepper-connector-after]').forEach((c) => {
+ *     c.dataset.state = Number(c.dataset.stepperConnectorAfter) + 1 <= current ? 'reached' : 'unreached';
+ *   });
+ * All visual state lives in this component's own scoped CSS, keyed off `data-state` — the page
+ * only ever writes that one attribute, never touches classes directly.
+ */
+
+export interface Props {
+  steps: string[];
+  /** 1-indexed — which step is currently active. */
+  currentStep: number;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  /** Passed through to the root <ol> — e.g. an `id` so page script can query it. */
+  class?: string;
+  id?: string;
+}
+
+const { steps, currentStep, accentColor, class: className, ...rest } = Astro.props;
+
+const ACCENT_HEX: Record<Props['accentColor'], string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+
+function stateFor(position: number): 'completed' | 'active' | 'upcoming' {
+  if (position < currentStep) return 'completed';
+  if (position === currentStep) return 'active';
+  return 'upcoming';
+}
+---
+
+<ol
+  class:list={['stepper flex items-start', className]}
+  style={`--stepper-accent: ${ACCENT_HEX[accentColor]}`}
+  aria-label="Progress"
+  {...rest}
+>
+  {
+    steps.map((label, i) => {
+      const position = i + 1;
+      const isLast = i === steps.length - 1;
+      return (
+        <>
+          <li class="flex flex-none flex-col items-center" data-stepper-step={position} data-state={stateFor(position)} aria-current={stateFor(position) === 'active' ? 'step' : undefined}>
+            <div class="stepper-circle flex h-14 w-14 flex-none items-center justify-center rounded-full font-display text-body-3 font-bold">
+              <svg class="stepper-check h-6 w-6" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="stepper-number" aria-hidden="true">{position}</span>
+            </div>
+            <span class="stepper-label mt-3 whitespace-nowrap font-display text-body font-bold">{label}</span>
+          </li>
+
+          {!isLast && <div class="stepper-connector mt-7 h-0 flex-1 border-t-2" data-stepper-connector-after={position} data-state={position + 1 <= currentStep ? 'reached' : 'unreached'} />}
+        </>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .stepper-circle {
+    position: relative;
+    background: transparent;
+    border: 2px solid var(--stepper-accent);
+    color: var(--stepper-accent);
+  }
+  li[data-state='completed'] .stepper-circle,
+  li[data-state='active'] .stepper-circle {
+    background: var(--stepper-accent);
+    border-color: var(--stepper-accent);
+    color: #000000;
+  }
+  li[data-state='active'] .stepper-circle::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    border: 2px solid color-mix(in srgb, var(--stepper-accent) 35%, var(--color-dark-border));
+  }
+
+  .stepper-check {
+    display: none;
+  }
+  .stepper-number {
+    display: block;
+  }
+  li[data-state='completed'] .stepper-check {
+    display: block;
+  }
+  li[data-state='completed'] .stepper-number {
+    display: none;
+  }
+
+  .stepper-label {
+    color: var(--color-muted-gray);
+  }
+  li[data-state='completed'] .stepper-label,
+  li[data-state='active'] .stepper-label {
+    color: var(--stepper-accent);
+  }
+
+  .stepper-connector {
+    border-color: var(--stepper-accent);
+    border-style: dashed;
+  }
+  .stepper-connector[data-state='reached'] {
+    border-style: solid;
+  }
+</style>

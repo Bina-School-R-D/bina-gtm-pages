@@ -1,0 +1,98 @@
+---
+/*
+ * Call-to-action card — a prompt embedded inside a testimonial/review wall (e.g. "Already a bina
+ * family? Write a review"), not a review or quote itself. Deliberately styled to read as a
+ * DIFFERENT kind of content from the `CardTestimonial`s around it, not just another tinted card —
+ * see CLAUDE.md's "Testimonial cards & grids" section for when to use this vs.
+ * `card_testimonial.astro`.
+ *
+ * Solid `accentColor` fill (Rule 6-style — a filled accent card), no border (Rule 12 — card
+ * containers never get a stroke; this component briefly carried one when `CardTestimonial`s first
+ * moved to a uniform section accent, but it was replaced by this filled-accent treatment instead,
+ * so the border came back off and Rule 12 no longer needs a named exception for this component).
+ * Text is always `#000000` (Rule 2 — text on an accent-filled card is always black). The icon sits
+ * in an OUTLINED circle (transparent fill, 2px `#000000` stroke) with an outline-style icon glyph,
+ * not a filled circle with a knocked-out icon — consistent with the card having no other filled
+ * chrome besides its own background and the standard yellow `.ui_button`.
+ *
+ * Runs in the same CSS multi-column waterfall as `CardTestimonial` (see that component's own doc
+ * comment for why `grid` is the wrong container) — `mb-4` + `break-inside-avoid` are baked into
+ * this component's root for the same reason they're baked into `CardTestimonial`'s.
+ *
+ * Yellow is excluded from `accentColor`, same as every other accent-picking component in this
+ * repo — no text is ever yellow (brand rule); the CTA button keeps the standard yellow `.ui_button`
+ * fill regardless of the card's own accent, same as everywhere else on the site.
+ *
+ * `PROMPT_CARD_ACCENTS` — the approved, ordered accent list for a grid of `CardPrompt`s. This is the
+ * deliberate exception to Rule 14 (one accent per section): a `CardPrompt`'s whole job is to stand
+ * out from the uniform testimonial grid around it, so instead of sharing the section's one accent,
+ * each `CardPrompt` in a grid gets its own, assigned explicitly by SOURCE ORDER from this list — never
+ * randomized at build time (the page must render identically every time) and never repeated within
+ * one grid. **A `CardPrompt` also may never use the surrounding section's own accent** — it needs to
+ * read as visually distinct from the testimonial grid, not just distinct from its sibling
+ * `CardPrompt`s — so the calling page must filter that color out of `PROMPT_CARD_ACCENTS` before
+ * assigning. The calling page is responsible for: (1) importing this array, (2) filtering out the
+ * section's own accent, (3) assigning the filtered list's `[n]`th entry to the nth `CardPrompt` in
+ * actual render/DOM order, and (4) throwing a build-time error if there are more `CardPrompt`s in one
+ * grid than colors remaining in the filtered list, rather than silently repeating a color — see
+ * `/reviews` for the reference integration.
+ */
+
+const ICON_PATH: Record<'star' | 'eye' | 'chart', string> = {
+  star: 'M10 2L12.35 7.5L18.5 7.9L13.8 11.9L15.3 18L10 14.6L4.7 18L6.2 11.9L1.5 7.9L7.65 7.5Z',
+  eye: 'M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z',
+  chart: 'M4 15V11M10 15V6M16 15V9',
+};
+
+export interface Props {
+  icon: 'star' | 'eye' | 'chart';
+  heading: string;
+  body: string;
+  buttonLabel: string;
+  buttonHref: string;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+// Approved, ordered accent list for a grid of CTACards — see this file's own doc comment above for
+// the assignment contract (source order, no repeats within a grid, never randomized).
+export const PROMPT_CARD_ACCENTS: Props['accentColor'][] = [
+  'orange',
+  'grass',
+  'blue',
+  'purple',
+  'pink',
+  'red',
+  'green',
+];
+
+const { icon, heading, body, buttonLabel, buttonHref, accentColor, class: className } = Astro.props;
+
+const BG_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'bg-bina-grass',
+  purple: 'bg-bina-purple',
+  pink: 'bg-bina-pink',
+  green: 'bg-bina-green',
+  blue: 'bg-bina-blue',
+  red: 'bg-bina-red',
+  orange: 'bg-bina-orange',
+};
+---
+
+<div
+  class:list={[
+    'cta-card mb-4 flex flex-col break-inside-avoid rounded-[1.875rem] p-6',
+    BG_CLASS[accentColor],
+    className,
+  ]}
+>
+  <div class="mb-4 flex h-12 w-12 flex-none items-center justify-center rounded-full border-2 border-coal-black">
+    <svg viewBox="0 0 20 20" class="h-6 w-6" fill="none" aria-hidden="true">
+      <path d={ICON_PATH[icon]} stroke="#000000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      {icon === 'eye' && <circle cx="10" cy="10" r="2.5" stroke="#000000" stroke-width="1.6" />}
+    </svg>
+  </div>
+  <p class="mb-2 font-display text-body-3 font-bold text-coal-black">{heading}</p>
+  <p class="mb-4 text-body-3 text-coal-black">{body}</p>
+  <a href={buttonHref} class="ui_button w-full text-center">{buttonLabel}</a>
+</div>

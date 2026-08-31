@@ -1,0 +1,62 @@
+---
+/*
+ * A title + body-text card, extracted from `/family-survey`'s "How involved are bina parents?"
+ * pair. Optionally shows a large score above the title — the same component with `score` set
+ * covers "Our two strongest scores…"'s pattern too, so the two near-duplicate card shapes on that
+ * page share one component instead of two hand-written copies.
+ *
+ * NOTE ON NAMING: this is a different shape from `card_stat.astro` (a small value/label/note card
+ * meant to be repeated in a grid, e.g. headline stats) — that name was already taken, so this
+ * title-led, body-copy-carrying card is `CardText` instead. Don't confuse the two: reach for
+ * `CardStat` for a repeated small-number grid, `CardText` for a title + explanatory paragraph,
+ * optionally headed by one big score.
+ *
+ * Sizes come from bina's official type scale (CLAUDE.md "Typography"): body text → `text-body-2`
+ * (20px, exact match, Rule 10's default reading tier) — this card's whole reason to exist is
+ * fitting a real paragraph next to a title, not a one-line note, so it takes that tier rather than
+ * `CardTestimonial`'s compact 18px one. Title → `text-subtitle-2` (32px, exact match) — matching
+ * `LayoutSequenceSteps`' own title size. `scoreUnit` → `text-body-1` (24px, exact match). The `score`
+ * display is a documented rounding call, not an exact match — same tie as `LayoutSequenceSteps`' number
+ * (its 60px sits exactly between the scale's `H1`/64px and `H2`/56px), rounded DOWN to `text-h2`
+ * for the same reason: it's a decorative headline figure, not a real page-hero heading, so it
+ * shouldn't share `H1`'s literal size. All text is black (Rule 2).
+ */
+
+export interface Props {
+  title: string;
+  /** When set, a big score (e.g. `9.55`) renders above the title — the "with score" variant. */
+  score?: string | number;
+  scoreUnit?: string;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+const { title, score, scoreUnit, accentColor, class: className } = Astro.props;
+
+const BG_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'bg-bina-grass',
+  purple: 'bg-bina-purple',
+  pink: 'bg-bina-pink',
+  green: 'bg-bina-green',
+  blue: 'bg-bina-blue',
+  red: 'bg-bina-red',
+  orange: 'bg-bina-orange',
+};
+
+const hasScore = score !== undefined;
+---
+
+<div class:list={['card_base p-8', BG_CLASS[accentColor], className]}>
+  {
+    hasScore && (
+      <p class="font-display text-h2 font-black text-coal-black">
+        {score}
+        {scoreUnit && <span class="text-body-1 font-bold text-coal-black">{scoreUnit}</span>}
+      </p>
+    )
+  }
+  <p class:list={['font-display text-subtitle-2 font-bold text-coal-black', hasScore && 'mt-3']}>{title}</p>
+  <p class="mt-3 text-body-2 text-coal-black">
+    <slot />
+  </p>
+</div>

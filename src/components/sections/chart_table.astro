@@ -1,0 +1,47 @@
+---
+/*
+ * A plain data table styled for sitting inside an accent-colored card — extracted from
+ * `/family-survey`'s exam-preparation table. Header row gets a solid 2px underline, body rows a
+ * faint 15%-opacity divider between them (this is the one place a divider-within-a-card is
+ * structural rather than decorative — Rule 4's own carve-out for a table's row lines). Text is
+ * black throughout (Rule 2 — the card is accent-filled).
+ *
+ * Cell text is `text-body-3` (18px) — Rule 10's secondary/supporting tier, which names "table
+ * headers and cell content" explicitly; also an exact step of bina's official type scale (Body3).
+ * This briefly sat at `text-xl` (20px) under an earlier reading that a small, sentence-like table
+ * counted as primary reading content; Rule 10 was corrected to give every table sitewide one
+ * shared 18px home instead, so this table matches the others.
+ */
+
+export interface Props {
+  columns: string[];
+  rows: (string | number)[][];
+  /** Column indices rendered bold (font-display font-bold) — default matches the source table: first and last. */
+  boldColumns?: number[];
+  class?: string;
+}
+
+const { columns, rows, boldColumns, class: className } = Astro.props;
+const bold = boldColumns ?? [0, columns.length - 1];
+---
+
+<table class:list={['w-full min-w-[26rem] text-left text-body-3', className]}>
+  <thead>
+    <tr class="border-b-2 border-coal-black font-display text-coal-black">
+      {columns.map((c, i) => <th class:list={['py-2', i < columns.length - 1 && 'pr-4']}>{c}</th>)}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr class="border-b border-coal-black/15 text-coal-black">
+          {row.map((cell, i) => (
+            <td class:list={['py-2', bold.includes(i) ? 'font-display font-bold' : 'text-coal-black', i < row.length - 1 && 'pr-4']}>
+              {cell}
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

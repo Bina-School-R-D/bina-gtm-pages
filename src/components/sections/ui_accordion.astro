@@ -1,0 +1,128 @@
+---
+/*
+ * FAQ accordion — structure, spacing, typography and expand/collapse behavior extracted from
+ * the main site's landing-page FAQ (Bina-School-R-D/website, src/components/landing/FAQSection.tsx):
+ *   - No card, no border, no divider between items — just vertical padding rhythm (py-5/6).
+ *   - Question in large medium-weight type; "+" toggle at the same color, rotating 45° open.
+ *   - Answer in a lighter weight, tighter line-height, same color as its question.
+ *   - Each item is color-coded from the brand accent set, cycling so neighbors never repeat.
+ *   - Smooth height+opacity expand (source used animejs; here it's a dependency-free CSS
+ *     grid-template-rows transition, so no extra JS library ships for one component).
+ *   - Exactly one item open at a time (source: `activeIndex` state), reduced-motion respected.
+ *
+ * Adapted to this repo's dark palette (CLAUDE.md "Text & layout rules"): text sits directly on
+ * the caller's #1c1c1c section — never white (Rule 1) — and no divider lines are introduced
+ * between items, matching Rule 4's own "no divider between things" spirit for this component.
+ * This component renders only the list (+ optional heading); the calling page supplies the
+ * enclosing section/background per Rule 5.
+ */
+
+export interface FAQItemData {
+  question: string;
+  answer: string;
+  /** Omit to auto-cycle through the accent rotation. */
+  color?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+}
+
+// Yellow is excluded — brand rule: never a text color (CLAUDE.md).
+const ACCENTS = ['grass', 'purple', 'pink', 'green', 'blue', 'red', 'orange'] as const;
+type Accent = (typeof ACCENTS)[number];
+const COLOR_CLASS: Record<Accent, string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+
+interface Props {
+  items: FAQItemData[];
+  /** Optional heading rendered above the list — omit if the page supplies its own H2. */
+  title?: string;
+  /** Title color — an accent per Rule 1, never white. Defaults to purple (the source's own FAQ-heading color). */
+  titleColor?: Accent;
+}
+
+const { items, title, titleColor = 'purple' } = Astro.props;
+
+// Unique per render so multiple accordions on one page (or in dev preview) don't cross-toggle.
+const gid = `faq-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="faq-accordion" data-faq-group={gid}>
+  {title && <h2 class:list={['mb-8 text-3xl font-bold sm:text-4xl', COLOR_CLASS[titleColor]]}>{title}</h2>}
+  {
+    items.map((item, i) => {
+      const accent = item.color ?? ACCENTS[i % ACCENTS.length];
+      const cls = COLOR_CLASS[accent];
+      const panelId = `${gid}-panel-${i}`;
+      return (
+        <div class="faq-item">
+          <button
+            type="button"
+            class:list={['faq-trigger flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left md:py-6', cls]}
+            aria-expanded="false"
+            aria-controls={panelId}
+          >
+            <span class="pr-4 font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-medium leading-none">
+              {item.question}
+            </span>
+            <span
+              class="faq-icon flex h-10 w-10 flex-none items-center justify-center font-display text-3xl font-normal leading-none md:h-11 md:w-11 md:text-4xl"
+              aria-hidden="true"
+            >
+              +
+            </span>
+          </button>
+          <div id={panelId} class:list={['faq-panel grid grid-rows-[0fr] opacity-0', cls]}>
+            <div class="overflow-hidden">
+              <p class="pb-5 pt-1 text-[clamp(1.1rem,2vw,1.375rem)] font-normal leading-[1.15] md:pb-6 md:pt-2">
+                {item.answer}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
+
+<style>
+  .faq-panel {
+    transition:
+      grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-trigger[aria-expanded='true'] + .faq-panel {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .faq-icon {
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .faq-trigger[aria-expanded='true'] .faq-icon {
+    transform: rotate(45deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel,
+    .faq-icon {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Exactly one item open at a time per accordion instance, matching the source's behavior.
+  document.querySelectorAll<HTMLElement>('[data-faq-group]').forEach((group) => {
+    const triggers = group.querySelectorAll<HTMLButtonElement>(':scope > .faq-item > .faq-trigger');
+    triggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+        triggers.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+        btn.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+      });
+    });
+  });
+</script>

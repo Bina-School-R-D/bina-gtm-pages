@@ -1,0 +1,178 @@
+---
+/*
+ * Page-level side decorations — 1-2 small illustrations pinned to the left/right viewport margin
+ * for the whole page scroll, extracted from thebinaschool.com's own decoration pattern
+ * (`Bina-School-R-D/website`). Rendered ONCE per page, centrally, via `BaseLayout`'s own
+ * `decorationSet` prop — pages don't import or place this component themselves. See CLAUDE.md
+ * ("DecoLayer — opt-in, per page" and "Adding new imagery") for the full usage contract.
+ *
+ * WHY `position: fixed` AND `z-index: 0` NEEDS A COOPERATING CHANGE IN EVERY SECTION — this is the
+ * single trickiest part of this component, worth understanding before touching any of the three
+ * files involved (this one, `BaseLayout.astro`, and every page's own section markup):
+ *
+ * These images are `position: fixed` so they stay put through the whole page scroll (not tied to
+ * one section), and decorations are allowed to overlap real content (cards, tables, charts) — they
+ * always render BEHIND it, never in front, while still showing THROUGH each section's own plain
+ * background (otherwise they'd only ever be visible in the sliver of true page background, i.e.
+ * never). Getting all three of those right at once is the hard part. Three things that look like
+ * they'd work, don't — verified empirically (a throwaway HTML page, not just reasoned through) —
+ * before landing on the actual fix:
+ *   - `z-index: 0` alone: paints ABOVE ordinary non-positioned content (headings, cards, text) —
+ *     per the CSS stacking spec, non-positioned in-flow content is a LOWER paint layer than any
+ *     positioned element with z-index 0/auto, regardless of DOM order. A z-index:0 fixed decoration
+ *     would sit on top of every card on the page.
+ *   - `z-index: -1`: paints BEHIND every section's own background too, not just its content —
+ *     since none of this site's `<section>`s establish their own stacking context, a negative
+ *     z-index sibling disappears completely behind the FIRST section's background it reaches,
+ *     invisible everywhere content actually is.
+ *   - Promoting `<main>` itself (`relative z-[1]`) "fixes" the card-covering problem, but breaks the
+ *     other requirement: it lifts EVERY section's background along with its content as one unit, so
+ *     the decoration is invisible against every section too — same practical result as the
+ *     `z-index: -1` case, just reached a different way. `<main>` is deliberately left unpromoted.
+ * The actual fix: this component uses `z-index: 0`, and every section's own inner CONTENT wrapper
+ * (the `mx-auto max-w-6xl px-8 …` div every section already has, per this repo's standard-container
+ * convention — see `layout_stat_section.astro` and each page's own hero for the pattern) gets
+ * `relative z-[1]`, while the `<section>`/`<header>` element carrying the actual background stays
+ * unpromoted. That specific split — background layer stays put, content wrapper lifts — is what
+ * lets the decoration paint above a plain section background but below that section's real content,
+ * everywhere on the page, not just in one place. Don't reintroduce a negative z-index, don't
+ * promote `<main>` or a `<section>` itself, and don't drop a content wrapper's `relative z-[1]`
+ * without re-verifying against a real overlap case — all three were tested directly before landing
+ * on this combination.
+ *
+ * BREAKPOINT: shown from `1280px` up (not a Tailwind default is unnecessary here — 1280px IS
+ * Tailwind's `xl`, chosen deliberately to match). Earlier versions of this component computed a
+ * much higher breakpoint (1600px, before that 2560px) by solving for "never overlaps the 1200px
+ * container" — that constraint no longer applies now that overlap is an intended, accepted
+ * behavior (content renders on top regardless), so the breakpoint's only remaining job is "don't
+ * show on a screen with no real margin at all" (mobile/tablet). At 1280px the gutter outside the
+ * 1200px container is only ~40px per side — the images (already scaled to 48% of source size, see
+ * `decoration-sets.ts`) are NOT shrunk further to fit inside that gutter; they're simply allowed to
+ * crop at the browser's own viewport edge, exactly like `position: fixed` content naturally does.
+ * Shrinking further to avoid any cropping was considered and rejected — overlap/cropping is fine
+ * per the rule above, and the images already read clearly at 48% scale; shrinking more for a
+ * problem that no longer exists would just make them harder to recognize as a leaf/lily/heron.
+ *
+ * FOOTER STOP: decorations must never show over or behind the footer. Wired with an
+ * `IntersectionObserver` watching `[data-site-footer]` (set on `BaseLayout`'s own `<footer>`), not
+ * a hardcoded scroll offset — this makes it correct for any page length automatically, rather than
+ * needing a per-page pixel value that would drift out of date the moment page content changes.
+ * When the footer becomes intersecting (any part of it visible), a `side-decoration-past-footer`
+ * class is added to both images, which wins on plain CSS specificity (two classes beat the one-
+ * class breakpoint rule) — removed again the moment the footer scrolls back out of view.
+ */
+
+import type { ImageMetadata } from 'astro';
+import { decorationSets, type DecorationSetName, type DecorationImage } from './decoration-sets';
+
+export interface Props {
+  set: DecorationSetName;
+  left?: boolean;
+  right?: boolean;
+  class?: string;
+}
+
+const { set, left = true, right = true, class: className } = Astro.props;
+
+const config = decorationSets[set];
+if (!config) {
+  throw new Error(
+    `DecoLayer: unknown set "${set}". Available sets: ${Object.keys(decorationSets).join(', ')}`
+  );
+}
+
+const modules = import.meta.glob<{ default: ImageMetadata }>('/src/assets/decorations/*.png', {
+  eager: true,
+});
+const byFilename: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(modules)) {
+  byFilename[path.split('/').pop()!] = mod.default;
+}
+
+function resolve(file: string): ImageMetadata {
+  const img = byFilename[file];
+  if (!img) {
+    throw new Error(`DecoLayer: "${file}" not found in src/assets/decorations/`);
+  }
+  return img;
+}
+
+function styleFor(img: DecorationImage): string {
+  const rules = [
+    'position: fixed',
+    `${img.verticalEdge}: ${img.verticalOffset}`,
+    `${img.side}: ${img.horizontalOffset}`,
+    `width: ${img.width}`,
+    img.maxWidth ? `max-width: ${img.maxWidth}` : '',
+    img.height ? `height: ${img.height}` : 'height: auto',
+    img.objectPosition ? `object-fit: contain` : '',
+    img.objectPosition ? `object-position: ${img.objectPosition}` : '',
+    'z-index: 0',
+    'pointer-events: none',
+  ];
+  return rules.filter(Boolean).join('; ') + ';';
+}
+
+const leftImage = left ? config.left : undefined;
+const rightImage = right ? config.right : undefined;
+---
+
+{
+  leftImage && (
+    <img
+      src={resolve(leftImage.file).src}
+      width={resolve(leftImage.file).width}
+      height={resolve(leftImage.file).height}
+      alt=""
+      aria-hidden="true"
+      class:list={['side-decoration', className]}
+      style={styleFor(leftImage)}
+    />
+  )
+}
+{
+  rightImage && (
+    <img
+      src={resolve(rightImage.file).src}
+      width={resolve(rightImage.file).width}
+      height={resolve(rightImage.file).height}
+      alt=""
+      aria-hidden="true"
+      class:list={['side-decoration', className]}
+      style={styleFor(rightImage)}
+    />
+  )
+}
+
+<style>
+  .side-decoration {
+    display: none;
+  }
+  @media (min-width: 1280px) {
+    .side-decoration {
+      display: block;
+    }
+  }
+  .side-decoration.side-decoration-past-footer {
+    display: none;
+  }
+</style>
+
+<script>
+  const footer = document.querySelector('[data-site-footer]');
+  const decorations = document.querySelectorAll<HTMLElement>('.side-decoration');
+
+  if (footer && decorations.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          decorations.forEach((el) => {
+            el.classList.toggle('side-decoration-past-footer', entry.isIntersecting);
+          });
+        });
+      },
+      { threshold: 0 }
+    );
+    io.observe(footer);
+  }
+</script>

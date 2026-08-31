@@ -1,0 +1,34 @@
+---
+/*
+ * A small outlined, muted-gray text pill for a row of short supporting facts/credentials sitting
+ * directly on a dark/black background — e.g. `/esa/[state]`'s hero spec row ("Ages 4–15", "Cognia
+ * accredited"...). Deliberately outlined, not filled (Rule 9's dark-background control treatment —
+ * 2px border, no fill), and deliberately `--color-muted-gray` (Rule 16), not a section accent: these
+ * are secondary, supporting facts, not the section's one primary message. See CLAUDE.md's own note
+ * on this pattern — accent color is reserved for the claim a section is making; gray is for the
+ * credentials that back it up. Always gray — there is no `accentColor` prop, on purpose; that's the
+ * whole point of this component vs. `PillLabel`/`.pill_solid`.
+ *
+ * No existing pill/tag fit this shape, checked before building: `.pill_solid` (`global.css`) is a
+ * filled black pill with chromatic text — the opposite treatment (filled + accent, not outlined +
+ * gray). `pill_source.astro` is closer in tone (outlined, neutral gray) but is a whole link component
+ * — it requires a `logo` image and an `href`, built specifically for linking out to a review
+ * platform, not for a plain static text tag. Neither could be reused here without stripping away
+ * required props that don't apply, so this is a new, deliberately minimal component.
+ */
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded-full border-2 border-muted-gray px-4 py-1 font-display text-body-3 font-bold text-muted-gray',
+    className,
+  ]}
+>
+  <slot />
+</span>

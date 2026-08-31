@@ -1,0 +1,132 @@
+---
+/*
+ * The one reusable hyperlink component for body copy and standalone "emphasis" links (e.g. "Book
+ * a call with bina →") — replaces every hand-coded `<a class="underline ...">` sitewide. Extracted
+ * from thebinaschool.com's own blog article template (`.blog-rich-text a` / `.blog-rich-text
+ * a:hover` in `Bina-School-R-D/website`'s `src/styles/index.css`), not invented locally — see
+ * CLAUDE.md's own component entry for the full source-vs-adapted breakdown.
+ *
+ * Resting: `color: #b38cff` (source's literal purple), `font-weight: 600`, `text-decoration:
+ * underline`, no explicit underline-offset/thickness in the source's own blog rule. This repo
+ * generalizes the color to the section's own rotating `accentColor` (Rule 14) rather than a single
+ * hardcoded purple — the source site only ever runs one brand accent, this one rotates per section,
+ * so "whichever accent this section already uses" is the direct equivalent of "the source's one
+ * purple." Underline-offset (2px) and the hover transition (`opacity 0.2s ease`) are adopted from
+ * the source's own sibling `.legal-rich-text a` rule, not `.blog-rich-text a` itself — the blog
+ * rule is missing both (no transition at all, meaning its hover is an instant snap, and no
+ * underline-offset), which reads as an oversight on the source's own two nearly-identical link
+ * rules disagreeing with each other, not a deliberate blog-specific choice. Underline thickness is
+ * `decoration-2` (2px) — this repo's own already-established convention (`/esa`'s hand-coded
+ * standalone links), kept since the source specifies no thickness at all for either rule.
+ *
+ * Hover: `opacity: 0.7` (the source's own value, kept exactly) — verified this works across all
+ * three background cases below, not just the source's own single dark-page context, so no color
+ * swap or alternate hover mechanic was needed; only the RESTING color needed to vary per case, per
+ * Rule 2/Rule 14, same as every other component in this repo.
+ *
+ * Focus-visible: the source declares none for either link rule (falls through to the browser
+ * default outline) — a real gap, not a deliberate absence, and a real accessibility miss on a
+ * component every reader will tab through. Added `focus-visible:outline-2
+ * focus-visible:outline-offset-2` in the link's own resolved color, matching this repo's existing
+ * `.ui_input` precedent for visible keyboard-focus styling (that one uses a fixed pink at a
+ * heavier weight for a form field; this uses a lighter 2px in the link's own color, appropriate for
+ * inline text rather than a large form control). The `outline-color: currentColor` half of this is
+ * a plain global `.ui_link` rule in `global.css`'s `@layer components` — deliberately NOT a
+ * component-scoped `<style>` here — because `/esa`'s JS-rendered results panel builds its own raw
+ * `<a>` HTML strings client-side (can't render an Astro component at runtime) and hand-matches this
+ * component's resolved classes to stay in parity; a scoped style would only ever apply to markup
+ * Astro itself rendered, silently breaking that parity.
+ *
+ * Visited: none, matching the source exactly — visited links stay the same resolved color, no
+ * separate treatment.
+ *
+ * Three background variants (Rule 14/Rule 2 — the same `cardFill`/`accentColor` prop pair every
+ * other section component in this repo uses):
+ *  - `cardFill="dark"` (default) — for the `#1c1c1c` page background OR a `#000000` black card.
+ *    Both resolve to the SAME color logic (the section's own `accentColor`), so they share one
+ *    mode rather than needing three separate variants for what is, color-wise, only two cases.
+ *  - `cardFill="accent"` — for a card filled with a solid accent color. Color is `#000000` (Rule
+ *    2 — text on an accent-filled card is always black), `accentColor` is not read in this mode.
+ *
+ * Two usage variants:
+ *  - `variant="inline"` (default) — for a link inside a paragraph of body copy. Size inherits from
+ *    the surrounding text (no `text-*` token applied) since it's meant to sit mid-sentence at
+ *    whatever size that sentence already is. Weight 600 (semibold), matching the source exactly.
+ *    Never shows an arrow, regardless of the `arrow` prop — an arrow mid-sentence in a paragraph
+ *    reads as a typo, not emphasis.
+ *  - `variant="standalone"` — for an emphasis link on its own, e.g. "Book a call with bina →".
+ *    Sized `text-body-3` (18px, Rule 10's link/button-text tier) and weight 700 (bold) — bolder
+ *    than the inline case on purpose, matching this repo's own pre-existing hand-coded standalone
+ *    links (`/esa`'s "Book a call with bina →", "Email us about {state} funding →", etc., all of
+ *    which the migration below folds into this component). Shows an arrow by default (override
+ *    with `arrow={false}` if a specific standalone link genuinely shouldn't have one).
+ *
+ * Arrow direction is never manually chosen — it's derived from `href` every time, per this repo's
+ * existing sitewide convention (→ internal, ↗ external — see the `.ui_button` spec in CLAUDE.md for
+ * where that convention originates, though this component is a different case: that rule scopes
+ * the *nav* button's arrow to nav-only; this component's arrow is for standalone emphasis links,
+ * an already-established pattern on `/esa` before this component existed, not a new exception to
+ * that rule). "Internal" means a relative path (starts with `/`) or this site's own origin;
+ * everything else — another domain, `mailto:`, `tel:` — is "external" and also gets `target="_blank"
+ * rel="noopener"` automatically (matching the source's own `ArticleBody.tsx`, which does the same
+ * external-link auto-`target="_blank"` as a post-render DOM pass — done here at build time instead,
+ * via the same internal/external check, since Astro doesn't need a runtime pass for a static href).
+ */
+
+export interface Props {
+  href: string;
+  variant?: 'inline' | 'standalone';
+  cardFill?: 'accent' | 'dark';
+  /** Required when cardFill="dark" (the default) — drives the link's resolved color. */
+  accentColor?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  /** Standalone only — inline links never show an arrow regardless of this prop. Defaults to true for standalone. */
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'inline',
+  cardFill = 'dark',
+  accentColor,
+  arrow,
+  class: className,
+} = Astro.props;
+
+const TEXT_CLASS: Record<NonNullable<Props['accentColor']>, string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+
+const colorClass = cardFill === 'accent' || !accentColor ? 'text-coal-black' : TEXT_CLASS[accentColor];
+
+const isExternal =
+  /^https?:\/\//.test(href) && !href.startsWith('https://go.bina.school')
+    ? true
+    : href.startsWith('mailto:') || href.startsWith('tel:');
+
+const showArrow = variant === 'standalone' && (arrow ?? true);
+const arrowChar = isExternal ? ' ↗' : ' →';
+
+const sizeWeightClass = variant === 'standalone' ? 'text-body-3 font-bold' : 'font-semibold';
+---
+
+<a
+  href={href}
+  class:list={[
+    'ui_link underline decoration-2 underline-offset-2 transition-opacity duration-200 ease-out hover:opacity-70',
+    'focus-visible:outline-2 focus-visible:outline-offset-2',
+    sizeWeightClass,
+    colorClass,
+    className,
+  ]}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener' : undefined}
+>
+  <slot />{showArrow && arrowChar}
+</a>

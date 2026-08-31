@@ -1,0 +1,261 @@
+---
+/*
+ * Custom-styled dropdown/select — replaces a native <select>, which cannot be brought into
+ * Rule 9 compliance with CSS alone. A native <select>'s closed-state box can be restyled (bg,
+ * border, text), but its OPEN option-list popup is rendered by the OS/browser chrome, outside
+ * the page's own styling reach — no combination of CSS gets a native <select> a dark, bordered,
+ * accent-colored option list. That gap (a `<select>` on `/esa` still showing a plain white
+ * dropdown open state despite its closed box being restyled) is why this component exists:
+ * `<button aria-haspopup="listbox">` + `<ul role="listbox">`, fully our own markup, so every
+ * state — closed, open, hovered option, selected option — is styled by us end to end.
+ *
+ * Rule 9 styling, both states, two `fill` modes:
+ *   - `fill="dark"` (default) — Trigger (closed): dark fill (`#000000`), 2px border + text in
+ *     `accentColor`, no white anywhere. This is the specific case Rule 9 already covers for a dark
+ *     background: this control is its own dark "island" (its background isn't the page/card color
+ *     showing through), so its outline matches the section's own accent — never black, never white.
+ *     Listbox (open): same dark fill and accent border as the trigger.
+ *   - `fill="none"` — for when the UiDropdown's actual immediate background IS the plain page
+ *     (`#1c1c1c`), not a card it needs its own dark fill to stand out against: transparent
+ *     background, 2px `accentColor` border, `accentColor` text — Rule 9's plain outlined-control
+ *     treatment, no fill of its own. Use this when nothing else on the page gives this control a
+ *     reason to carry its own solid background (see Rule 17's `/esa` writeup for the case that
+ *     introduced this — a UiDropdown that used to sit on a purple card and now sits directly on the
+ *     page after that card was removed).
+ *   - Both modes: each option is accent-colored text by default; the hovered/keyboard-focused
+ *     option fills solid with the accent color and switches to black text (Rule 9's existing hover
+ *     convention, reused here) — this part doesn't change between fill modes.
+ *
+ * Integration with page script: this is a real, minimal form-like control, not just decoration.
+ * The root element gets a `.value` property (getter/setter) and dispatches a bubbling `change`
+ * event on selection — so a page migrating off a native <select> only needs to swap
+ * `document.getElementById('state')` for this component's root and keep its existing
+ * `el.addEventListener('change', ...)` / `el.value = x` code as-is. See `/esa`'s own script for
+ * the reference integration (deep-link `?state=` sets `.value` programmatically on load).
+ */
+
+export interface DropdownOption {
+  value: string;
+  label: string;
+}
+
+export interface Props {
+  id: string;
+  ariaLabel: string;
+  placeholder: string;
+  options: DropdownOption[];
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  /** 'dark' (default): solid #000000 fill, for sitting on a colored card. 'none': transparent,
+   * outlined only, for sitting directly on the #1c1c1c page background. */
+  fill?: 'dark' | 'none';
+  class?: string;
+}
+
+const { id, ariaLabel, placeholder, options, accentColor, fill = 'dark', class: className } = Astro.props;
+
+const ACCENT_HEX: Record<Props['accentColor'], string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+---
+
+<div
+  id={id}
+  class:list={['dropdown-select relative', className]}
+  style={`--dropdown-accent: ${ACCENT_HEX[accentColor]}`}
+  data-placeholder={placeholder}
+>
+  <button
+    type="button"
+    class:list={[
+      'dropdown-trigger flex w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 px-4 py-4 font-display text-body-3 font-bold',
+      fill === 'dark' ? 'bg-coal-black' : 'bg-transparent',
+    ]}
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label={ariaLabel}
+  >
+    <span class="dropdown-trigger-label truncate">{placeholder}</span>
+    <svg viewBox="0 0 20 20" class="h-4 w-4 flex-none" fill="none" aria-hidden="true">
+      <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <ul
+    class:list={[
+      'dropdown-listbox absolute inset-x-0 top-full z-20 mt-2 hidden max-h-72 overflow-y-auto rounded-2xl border-2 p-2',
+      fill === 'dark' ? 'bg-coal-black' : 'bg-dark-bg',
+    ]}
+    role="listbox"
+    aria-label={ariaLabel}
+    tabindex="-1"
+  >
+    {
+      options.map((opt) => (
+        <li class="dropdown-option cursor-pointer rounded-xl px-3 py-2 font-display font-bold" role="option" aria-selected="false" data-value={opt.value} tabindex="-1">
+          {opt.label}
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .dropdown-trigger,
+  .dropdown-listbox {
+    border-color: var(--dropdown-accent);
+  }
+  .dropdown-trigger {
+    /* The chevron SVG uses stroke="currentColor" — setting `color` here (not just on the label
+       span) is what makes it pick up the accent instead of falling back to the button's
+       inherited default text color. */
+    color: var(--dropdown-accent);
+  }
+  .dropdown-option {
+    color: var(--dropdown-accent);
+  }
+  .dropdown-option.is-active {
+    background: var(--dropdown-accent);
+    color: #000000;
+  }
+  .dropdown-trigger:focus-visible {
+    outline: 4px solid var(--dropdown-accent);
+    outline-offset: 2px;
+  }
+</style>
+
+<script is:inline>
+  /*
+   * Plain JS, `is:inline` on purpose: this must run as a classic, synchronously-executing
+   * script — not Astro's default bundled ES module (which is auto-deferred to run after the
+   * whole document parses). A page embedding this component sets `.value` imperatively from its
+   * OWN script (e.g. a `?state=` deep link) expecting it to behave like a native <select> — if
+   * this setup script were a deferred module, the page's script could run first, assign a plain
+   * expando `.value` property, and then have this script's `Object.defineProperty` silently
+   * discard it when it turns that property into a getter/setter. `is:inline` guarantees this
+   * script executes at its position in the document — before any later deferred/module script,
+   * including the page's own — so the accessor exists before anyone tries to use it.
+   */
+  (function () {
+    function closeAll(except) {
+      document.querySelectorAll('.dropdown-select').forEach(function (root) {
+        if (root === except) return;
+        var trigger = root.querySelector('.dropdown-trigger');
+        var listbox = root.querySelector('.dropdown-listbox');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        if (listbox) listbox.classList.add('hidden');
+      });
+    }
+
+    document.querySelectorAll('.dropdown-select').forEach(function (root) {
+      // This script runs once per UiDropdown instance (is:inline, un-deduped) — skip roots another
+      // instance's copy of this same script already wired up, so two Dropdowns on one page don't
+      // double-attach listeners to each other's elements.
+      if (root.dataset.dropdownReady) return;
+      root.dataset.dropdownReady = 'true';
+
+      var trigger = root.querySelector('.dropdown-trigger');
+      var label = root.querySelector('.dropdown-trigger-label');
+      var listbox = root.querySelector('.dropdown-listbox');
+      var options = Array.prototype.slice.call(root.querySelectorAll('.dropdown-option'));
+      var placeholder = root.dataset.placeholder || '';
+      var value = '';
+
+      function isOpen() {
+        return trigger.getAttribute('aria-expanded') === 'true';
+      }
+
+      function open() {
+        closeAll(root);
+        trigger.setAttribute('aria-expanded', 'true');
+        listbox.classList.remove('hidden');
+        var current = options.filter(function (o) {
+          return o.dataset.value === value;
+        })[0];
+        (current || options[0])?.focus();
+      }
+
+      function close(returnFocus) {
+        trigger.setAttribute('aria-expanded', 'false');
+        listbox.classList.add('hidden');
+        if (returnFocus) trigger.focus();
+      }
+
+      function select(opt, dispatch) {
+        value = opt.dataset.value || '';
+        label.textContent = value ? opt.textContent : placeholder;
+        options.forEach(function (o) {
+          o.classList.toggle('is-active', o === opt);
+          o.setAttribute('aria-selected', o === opt ? 'true' : 'false');
+        });
+        if (dispatch !== false) root.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      trigger.addEventListener('click', function () {
+        isOpen() ? close() : open();
+      });
+      trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
+        }
+      });
+
+      options.forEach(function (opt, i) {
+        opt.addEventListener('click', function () {
+          select(opt);
+          close(true);
+        });
+        opt.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            (options[Math.min(i + 1, options.length - 1)] || opt).focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            (options[Math.max(i - 1, 0)] || opt).focus();
+          } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            select(opt);
+            close(true);
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            close(true);
+          } else if (e.key === 'Tab') {
+            close();
+          }
+        });
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!root.contains(e.target)) close();
+      });
+
+      // Imperative API so page script can treat this like a native <select>.
+      Object.defineProperty(root, 'value', {
+        get: function () {
+          return value;
+        },
+        set: function (v) {
+          var opt = options.filter(function (o) {
+            return o.dataset.value === v;
+          })[0];
+          if (opt) {
+            select(opt, false);
+          } else {
+            value = '';
+            label.textContent = placeholder;
+            options.forEach(function (o) {
+              o.classList.remove('is-active');
+              o.setAttribute('aria-selected', 'false');
+            });
+          }
+        },
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,217 @@
+---
+/*
+ * A single prominent stat, living inside a card the calling page already provides (unlike
+ * `CardStat`, which owns its own card) — for the ONE headline number a section is built around.
+ *
+ * variant="ring" (default): a circular progress ring filling to `value / max`, extracted from
+ * `/family-survey`'s recommendation donut. `fillColor` is the ring's own ✱fill✱ color. Per Rule 18
+ * this is a chart with its own accent-colored mark, so it never sits on an accent-filled card
+ * (that would be an accent sitting on another accent) — `cardFill="dark"` (the only real-world
+ * mode now; `'accent'` is kept only for a hypothetical future exception) puts the ring on a black
+ * card instead, with `fillColor` set to the section's own accent (Rule 18's second Rule-7 case,
+ * not the accent-card pairing table — that table is effectively unused by this component now that
+ * every ring lives on black). `cardFill="dark"` also switches `.donut-value`/`.donut-unit` from
+ * black to `accentColor` (Rule 1 — text on a black card is always an accent). The ring sweeps in
+ * from empty on scroll-into-view (CSS transition, `prefers-reduced-motion` respected); this is
+ * self-contained via its own `IntersectionObserver` scoped to `.donut-stat`, no page script needed.
+ *
+ * The ring's black "stroke" (Rule 7's stroke requirement) isn't a standalone stroke-width — it's a
+ * wider black arc (`stroke-width="26"`) drawn underneath the colored arc (`stroke-width="22"`), so
+ * 2 units of black peek out on both edges: `26 = 22 + 2 × --stroke-chart`. Astro's frontmatter
+ * computes that arithmetic at build time, where a CSS custom property isn't readable, so the `26`
+ * is a literal number, not a `var(--stroke-chart)` reference — if the shared token value in
+ * `global.css` ever changes, update this by hand too. The two faint boundary hairlines just inside
+ * and outside the ring (`.donut-hairline`, the `r="100"`/`r="78"` circles) are a separate, simpler
+ * case and do reference the token directly.
+ *
+ * variant="number": no ring, just a big centered number — for a stat that doesn't have a "how much
+ * of a max" framing (e.g. `/family-survey`'s "70% of families..."). Set `countUp` to animate it
+ * counting up from 0 on scroll-into-view (shares the same observer/script as the ring variant).
+ * Sized with `text-display-1` (bina's official type scale — CLAUDE.md "Typography"), the pair
+ * reserved specifically for emphasized numbers; this was previously a bespoke `text-7xl
+ * sm:text-8xl` (72px→96px hard breakpoint), now a real 80px→96px fluid `clamp()` instead — the
+ * desktop value is unchanged, the mobile floor moved from 72px to 80px.
+ */
+
+export interface Props {
+  variant?: 'ring' | 'number';
+  value: number;
+  max?: number;
+  unit?: string;
+  /** Ring variant only — the ring's fill hex. Per Rule 18, this should be the section's own accent, since the ring now always sits on a black card. */
+  fillColor?: string;
+  /** Ring variant only — 'dark' (default) puts the ring on a black card, per Rule 18; 'accent' is a legacy/exceptional mode kept only for a deliberately-reviewed future exception. */
+  cardFill?: 'accent' | 'dark';
+  /** Ring variant only — required when cardFill="dark"; drives the value/unit text color (Rule 1). */
+  accentColor?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  ariaLabel?: string;
+  countUp?: boolean;
+  countDecimals?: number;
+  class?: string;
+}
+
+const {
+  variant = 'ring',
+  value,
+  max = 10,
+  unit,
+  fillColor = '#000000',
+  cardFill = 'dark',
+  accentColor,
+  ariaLabel,
+  countUp = false,
+  countDecimals = 0,
+  class: className,
+} = Astro.props;
+
+const ACCENT_HEX: Record<NonNullable<Props['accentColor']>, string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+const textFill = cardFill === 'dark' && accentColor ? ACCENT_HEX[accentColor] : '#000000';
+
+const RING_R = 89;
+const ringCirc = 2 * Math.PI * RING_R;
+const ringDash = (value / max) * ringCirc;
+const ringVars = `--ring-circ:${ringCirc.toFixed(1)};--ring-final:${(ringCirc - ringDash).toFixed(1)};--donut-text:${textFill}`;
+---
+
+{
+  variant === 'ring' ? (
+    <figure class:list={['donut-stat mx-auto w-56 sm:w-64', className]} style={`--donut-text:${textFill}`}>
+      <svg viewBox="0 0 240 240" role="img" aria-label={ariaLabel} class="w-full">
+        <circle cx="120" cy="120" r={RING_R} fill="none" stroke="#000" stroke-opacity="0.12" stroke-width="22" />
+        <circle
+          class="donut-arc"
+          cx="120"
+          cy="120"
+          r={RING_R}
+          fill="none"
+          stroke="#000"
+          stroke-width="26"
+          stroke-linecap="round"
+          stroke-dasharray={ringCirc.toFixed(1)}
+          transform="rotate(-90 120 120)"
+          style={ringVars}
+        />
+        <circle
+          class="donut-arc"
+          cx="120"
+          cy="120"
+          r={RING_R}
+          fill="none"
+          stroke={fillColor}
+          stroke-width="22"
+          stroke-linecap="round"
+          stroke-dasharray={ringCirc.toFixed(1)}
+          transform="rotate(-90 120 120)"
+          style={ringVars}
+        />
+        <circle class="donut-hairline" cx="120" cy="120" r="100" fill="none" stroke="#000" stroke-opacity="0.2" />
+        <circle class="donut-hairline" cx="120" cy="120" r="78" fill="none" stroke="#000" stroke-opacity="0.2" />
+        <text x="120" y="122" text-anchor="middle" class="donut-value">
+          {value}
+        </text>
+        {unit && (
+          <text x="120" y="148" text-anchor="middle" class="donut-unit">
+            {unit}
+          </text>
+        )}
+      </svg>
+    </figure>
+  ) : (
+    <p
+      class:list={[
+        'donut-stat text-center font-display text-display-1 font-black',
+        className,
+      ]}
+      data-count={countUp ? value : undefined}
+      data-decimals={countUp ? countDecimals : undefined}
+    >
+      {countUp ? <span class="donut-count">0</span> : value}
+      {unit}
+    </p>
+  )
+}
+
+<style>
+  .donut-value {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 900;
+    font-size: 54px;
+    fill: var(--donut-text, #000);
+  }
+  .donut-unit {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    fill: var(--donut-text, #000);
+  }
+  .donut-hairline {
+    stroke-width: var(--stroke-chart);
+  }
+  .donut-arc {
+    stroke-dashoffset: var(--ring-circ);
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .donut-stat.in .donut-arc {
+    stroke-dashoffset: var(--ring-final);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .donut-arc {
+      stroke-dashoffset: var(--ring-final);
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const runCount = (el: HTMLElement) => {
+    const target = Number(el.dataset.count);
+    const decimals = Number(el.dataset.decimals ?? 0);
+    const countEl = el.querySelector<HTMLElement>('.donut-count');
+    const show = (v: number) => {
+      if (countEl) countEl.textContent = v.toFixed(decimals);
+    };
+    if (reduceMotion) {
+      show(target);
+      return;
+    }
+    const start = performance.now();
+    const dur = 1100;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      show(target * (1 - Math.pow(1 - t, 3)));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const stats = document.querySelectorAll<HTMLElement>('.donut-stat');
+  if ('IntersectionObserver' in window && stats.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          e.target.classList.add('in');
+          if (e.target.matches('[data-count]')) runCount(e.target as HTMLElement);
+        });
+      },
+      { threshold: 0.3 }
+    );
+    stats.forEach((el) => io.observe(el));
+  } else {
+    stats.forEach((el) => {
+      el.classList.add('in');
+      if (el.matches('[data-count]')) runCount(el);
+    });
+  }
+</script>

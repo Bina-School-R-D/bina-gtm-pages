@@ -1,0 +1,166 @@
+---
+/*
+ * A single small stat card — big value, a bold label under it, an optional smaller note under
+ * that. Meant to be repeated in a grid (`/student-results`' headline stats, `/esa/[state]`'s proof
+ * and money stat grids) — for one big feature stat sitting alone inside an already-provided card,
+ * use `ChartDonut` (variant="number") instead; this component always owns its own card container
+ * UNLESS `fill="none"` (see below).
+ *
+ * Three fills:
+ *  - `fill="accent"` (default): `card_base bg-bina-{accentColor}`, black text (Rule 2 — text on an
+ *    accent-filled card is always black), no border (Rule 12).
+ *  - `fill="dark"`: `bg-coal-black`, text in `accentColor` (Rule 1 — text on a dark/black
+ *    background is always an accent, never white).
+ *  - `fill="none"`: no card of its own at all — no `card_base`, no background, no padding. Text is
+ *    still black (Rule 2), same as `fill="accent"` — this variant exists for Rule 17 (max two
+ *    surface levels): several `CardStat`s that used to each get their OWN small card, all sitting
+ *    inside one shared already-accent-filled parent card, would be a third nesting level. `/student-
+ *    results`' per-level result grid is the reference: 2-3 `fill="none"` `CardStat`s sit directly
+ *    inside one `bg-bina-orange` card the *page* provides (not this component), instead of each
+ *    stat getting its own nested black card the way it used to.
+ *
+ * `note` is a plain string for the short line under the label; pass a `note` named slot instead
+ * when it needs a link or other inline markup (e.g. "12 reviews · read all of them →").
+ *
+ * `value` is a pre-formatted static string ("$8,200", "+12 pts"). `count` animates a plain number
+ * up from 0 on scroll-into-view instead (used for the headline reading/math growth stats) — pass
+ * one or the other, not both. The animation is self-contained (its own `IntersectionObserver`,
+ * scoped to `.stat-card[data-count]`) and dedupes automatically across every `CardStat` instance on
+ * a page, the same pattern `CardTestimonial`'s "See more" button uses — the calling page needs no
+ * script of its own for this.
+ *
+ * `labelColor="muted"` (fill="dark" only) — the label/note switch from the card's `accentColor` to
+ * `--color-muted-gray` (Rule 16) instead. Added for `/esa/[state]`'s hero fact-card row: three black
+ * cards where the VALUE (a claim — "Approved", the award amount, the payment platform) stays the
+ * section's purple accent, but the supporting sentence under it is secondary information, not the
+ * message itself — muted gray is the established sitewide signal for that (Rule 16), and Rule 2 only
+ * forces black text on an *accent-filled* card, so a black card is free to carry a gray tier the way
+ * an accent card never can. Defaults to `'accent'`, so every existing call site (which never passes
+ * this prop) renders byte-identical to before this was added.
+ */
+
+export interface Props {
+  value?: string;
+  count?: number;
+  countPrefix?: string;
+  countSuffix?: string;
+  countDecimals?: number;
+  label: string;
+  note?: string;
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  fill?: 'accent' | 'dark' | 'none';
+  /** Value type size — 'lg' (text-5xl, most stat grids) or 'md' (text-3xl, denser grids like the money stats or a 3-column `fill="none"` group). */
+  valueSize?: 'lg' | 'md';
+  /** `fill="dark"` only — 'accent' (default) keeps label/note in accentColor; 'muted' switches them to `--color-muted-gray` (Rule 16). The VALUE stays accentColor either way. */
+  labelColor?: 'accent' | 'muted';
+  class?: string;
+}
+
+const {
+  value,
+  count,
+  countPrefix = '',
+  countSuffix = '',
+  countDecimals = 0,
+  label,
+  note,
+  accentColor,
+  fill = 'accent',
+  valueSize = 'lg',
+  labelColor = 'accent',
+  class: className,
+} = Astro.props;
+
+const BG_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'bg-bina-grass',
+  purple: 'bg-bina-purple',
+  pink: 'bg-bina-pink',
+  green: 'bg-bina-green',
+  blue: 'bg-bina-blue',
+  red: 'bg-bina-red',
+  orange: 'bg-bina-orange',
+};
+const TEXT_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+
+const isDark = fill === 'dark';
+const isBare = fill === 'none';
+const textClass = isDark ? TEXT_CLASS[accentColor] : 'text-coal-black';
+const supportingClass = isDark && labelColor === 'muted' ? 'text-muted-gray' : textClass;
+const valueTextClass = valueSize === 'lg' ? 'text-h3' : 'text-subtitle-2';
+const hasNoteSlot = Astro.slots.has('note');
+---
+
+<div
+  class:list={[
+    'stat-card',
+    !isBare && 'card_base p-6',
+    !isBare && (isDark ? 'bg-coal-black' : BG_CLASS[accentColor]),
+    className,
+  ]}
+  data-count={count !== undefined ? count : undefined}
+  data-decimals={count !== undefined ? countDecimals : undefined}
+>
+  <p class:list={['font-display font-black', valueTextClass, textClass]}>
+    {count !== undefined ? (
+      <>
+        {countPrefix}<span class="stat-card-count">0</span>{countSuffix}
+      </>
+    ) : (
+      value
+    )}
+  </p>
+  <p class:list={['mt-2 font-display text-body-2 font-bold', supportingClass]}>{label}</p>
+  {(note || hasNoteSlot) && (
+    <p class:list={['mt-1 text-body-2', supportingClass]}>
+      {hasNoteSlot ? <slot name="note" /> : note}
+    </p>
+  )}
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const runCount = (card: HTMLElement) => {
+    const target = Number(card.dataset.count);
+    const decimals = Number(card.dataset.decimals ?? 0);
+    const el = card.querySelector<HTMLElement>('.stat-card-count');
+    if (!el) return;
+    if (reduceMotion) {
+      el.textContent = target.toFixed(decimals);
+      return;
+    }
+    const start = performance.now();
+    const dur = 1100;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      el.textContent = (target * (1 - Math.pow(1 - t, 3))).toFixed(decimals);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const cards = document.querySelectorAll<HTMLElement>('.stat-card[data-count]');
+  if ('IntersectionObserver' in window && cards.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          runCount(e.target as HTMLElement);
+        });
+      },
+      { threshold: 0.3 }
+    );
+    cards.forEach((el) => io.observe(el));
+  } else {
+    cards.forEach((el) => runCount(el));
+  }
+</script>

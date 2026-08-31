@@ -1,0 +1,49 @@
+---
+/*
+ * Small pill-shaped label sitting above a section/page heading — a category or context tag
+ * (e.g. "reviews", "family survey", "ESA funding for families"). Black pill, chromatic text.
+ *
+ * Color-matching rule: the label's text color is NOT fixed — it must match the accent color of
+ * the heading it sits above (pass the same `accentColor` the heading itself uses). Before this
+ * component existed, every page hardcoded the label to pink via the shared `.pill_solid` class
+ * regardless of the heading's own color, which produced real mismatches (e.g. `/esa`'s pink label
+ * over a purple h1). `.pill_solid` itself is untouched and still used as-is for the sitewide
+ * black-pill convention elsewhere (badge tags inside cards, e.g. student-results' "independent" /
+ * "adaptive" tags) — those aren't sitting above a heading, so the color-matching rule doesn't
+ * apply to them, and they're deliberately out of this component's scope.
+ *
+ * Yellow is excluded from `accentColor`, same as every other accent-picking component in this
+ * repo (UiAccordion, LayoutSequenceSteps, CardTestimonial) — the brand rule is that no text is ever
+ * yellow (CLAUDE.md), and a heading should never be yellow either, so this component can't be
+ * asked to match one.
+ */
+
+export interface Props {
+  text: string;
+  /** Must match the accent color of the heading directly below this label. */
+  accentColor: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+const { text, accentColor, class: className } = Astro.props;
+
+const TEXT_CLASS: Record<Props['accentColor'], string> = {
+  grass: 'text-bina-grass',
+  purple: 'text-bina-purple',
+  pink: 'text-bina-pink',
+  green: 'text-bina-green',
+  blue: 'text-bina-blue',
+  red: 'text-bina-red',
+  orange: 'text-bina-orange',
+};
+---
+
+<p
+  class:list={[
+    'inline-flex items-center rounded-full bg-coal-black px-4 py-1 font-display text-body-3 font-bold',
+    TEXT_CLASS[accentColor],
+    className,
+  ]}
+>
+  {text}
+</p>

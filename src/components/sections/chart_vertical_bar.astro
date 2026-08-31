@@ -1,0 +1,143 @@
+---
+/*
+ * Vertical bars rising from a baseline reference line, one value label above each bar and one
+ * category label below — extracted from `/student-results`' tenure chart ("the longer at bina, the
+ * further ahead in reading"). Use this when the story is "how far above/below a baseline does each
+ * group sit" — a true-zero baseline the caller supplies a label for (e.g. "national average
+ * reading level"), not a cropped axis.
+ *
+ * Bars float 4 viewBox units above the baseline (`BAR_BASELINE_GAP`), never touching it — a bar
+ * sitting flush on the baseline visually merges into it and reads as one shape instead of two. The
+ * baseline itself (`BASELINE_Y`) doesn't move; only the bars are offset. The axis caption sits on
+ * its own line just below the baseline, with the category-label row given enough clearance beneath
+ * it that the two never collide. Every text class declares a literal, real `18px` (Rule 10's 16px
+ * floor, never a smaller number picked to counteract this SVG's own viewBox scaling) — see the
+ * `<style>` block's own comment for the specific mistake this corrects.
+ *
+ * `fillColor` is a single hex for every bar (Rule 14 — one accent per section). Per Rule 18, this
+ * chart always carries its own accent-colored fill, so it never sits on an accent-filled card —
+ * `cardFill="dark"` (the default; `'accent'` is kept only for a hypothetical, deliberately-reviewed
+ * future exception) puts it on a black card, with `fillColor` set to the section's own accent
+ * (Rule 18's black-card fill case, not a Rule 7 cross-accent pairing). `cardFill="dark"` also
+ * switches the baseline line and every text label from black to `accentColor` (Rule 1). `hoverColor`
+ * is untouched by this — it's a transient, momentary interaction state (never simultaneously visible
+ * alongside the resting fill), not a second persistent color, so it stays whatever fixed color the
+ * caller wants regardless of `cardFill`. No scroll-reveal animation — the source chart this was
+ * extracted from didn't have one, so none was invented here to avoid a visual change on migration;
+ * add one later if a page actually wants it.
+ */
+
+export interface Props {
+  bars: { label: string; value: number; title?: string }[];
+  baselineLabel: string;
+  /** Prefixed onto each bar's value label, e.g. "+". */
+  valuePrefix?: string;
+  fillColor: string;
+  hoverColor?: string;
+  ariaLabel?: string;
+  cardFill?: 'accent' | 'dark';
+  /** Required when cardFill="dark" — drives the baseline/label color (Rule 1). */
+  accentColor?: 'grass' | 'purple' | 'pink' | 'green' | 'blue' | 'red' | 'orange';
+  class?: string;
+}
+
+const {
+  bars: items,
+  baselineLabel,
+  valuePrefix = '',
+  fillColor,
+  hoverColor,
+  ariaLabel,
+  cardFill = 'dark',
+  accentColor,
+  class: className,
+} = Astro.props;
+
+const ACCENT_HEX: Record<NonNullable<Props['accentColor']>, string> = {
+  grass: '#03ecc5',
+  purple: '#b38cff',
+  pink: '#fe48c2',
+  green: '#03cb5b',
+  blue: '#33afff',
+  red: '#ff605b',
+  orange: '#fe6c23',
+};
+const fg = cardFill === 'dark' && accentColor ? ACCENT_HEX[accentColor] : '#000000';
+
+const W = 640;
+const H = 240;
+const BASELINE_Y = H - 44;
+// Bars float 4 viewBox units above the baseline, never touching it, so the axis stays visually
+// distinct from the data (CLAUDE.md's ChartVerticalBar entry) — bar height is unchanged, the whole
+// bar just shifts up by the gap.
+const BAR_BASELINE_GAP = 4;
+const barMax = Math.max(...items.map((b) => b.value));
+const barW = 92;
+const gap = (W - 60 - items.length * barW) / Math.max(1, items.length - 1);
+const bars = items.map((b, i) => {
+  const h = (b.value / barMax) * (H - 92);
+  return { ...b, x: 40 + i * (barW + gap), y: BASELINE_Y - BAR_BASELINE_GAP - h, h };
+});
+---
+
+<svg
+  viewBox={`0 0 ${W} ${H}`}
+  role="img"
+  aria-label={ariaLabel ?? items.map((b) => `${b.label} ${valuePrefix}${b.value}`).join('; ')}
+  class:list={['vertical-bar-chart w-full', className]}
+  style={`--vbc-fg:${fg};${hoverColor ? `--vbc-hover:${hoverColor}` : ''}`}
+>
+  <line x1="20" y1={BASELINE_Y} x2={W - 20} y2={BASELINE_Y} stroke={fg} stroke-width="2" />
+  <text x="24" y={BASELINE_Y + 14} class="vbc-label-sm">{baselineLabel}</text>
+  {
+    bars.map((b) => (
+      <g class="vbc-bar">
+        {b.title && <title>{b.title}</title>}
+        <rect x={b.x} y={b.y} width={barW} height={b.h} rx="6" fill={fillColor} stroke="#000" />
+        <text x={b.x + barW / 2} y={b.y - 10} text-anchor="middle" class="vbc-label">
+          {valuePrefix}
+          {b.value}
+        </text>
+        <text x={b.x + barW / 2} y={H - 8} text-anchor="middle" class="vbc-label-sm">
+          {b.label}
+        </text>
+      </g>
+    ))
+  }
+</svg>
+
+<style>
+  /* Every text class in this chart declares a real, literal font-size — 18px (Rule 10's
+     chart-legend/axis-label tier, equal in spirit to bina's official scale's `Body3` step — kept
+     as a literal `18px`, not `var(--text-body-3)`, since that token's fluid `clamp()` would
+     compound with this SVG's own viewBox scaling and produce an unpredictable rendered size) —
+     never a number below 16px, and never a smaller number picked
+     to "cancel out" this SVG's own viewBox scaling. A brief version of this component tried
+     exactly that (declaring `.vbc-label-sm` as `11px` so it would render close to a literal 18px
+     on screen at this chart's ~1.675x scale) — that's a real, sitewide-forbidden violation of
+     Rule 10's 16px floor, not a style nit, and it had already been fixed once before in this exact
+     class (see Rule 10's own history in CLAUDE.md). Rund Display is the only font in this repo
+     (Rund Text was removed entirely) — value labels (bold) and category/axis labels (regular) are
+     differentiated by weight alone now, both in Rund Display, and both render at the same ~30px on
+     screen at this component's standard card width, which is expected and correct, not a bug to
+     "fix" by shrinking one of them below the floor again. */
+  .vbc-label {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    fill: var(--vbc-fg, #000);
+  }
+  .vbc-label-sm {
+    font-family: 'Rund Display', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    fill: var(--vbc-fg, #000);
+  }
+  .vbc-bar rect {
+    stroke-width: var(--stroke-chart);
+    transition: opacity 0.2s ease-out;
+  }
+  .vertical-bar-chart[style*='--vbc-hover'] .vbc-bar:hover rect {
+    fill: var(--vbc-hover);
+  }
+</style>
