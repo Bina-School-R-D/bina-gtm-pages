@@ -14,5 +14,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    // Vite's dev-server Host header check blocks unrecognized hosts by default (DNS-rebinding
+    // protection). Allow ngrok's free-tier subdomains so the dev server can be tunneled for
+    // sharing previews — dev-only, has no effect on `astro build`/production.
+    server: {
+      allowedHosts: ['.ngrok-free.dev'],
+    },
   },
 });
