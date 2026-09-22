@@ -11,7 +11,6 @@
 - **Step 4 "Enroll at bina" email flow** — copy says the admissions contact emails the parent everything
   (invoice, enrollment letter, accreditation). Confirm with the admissions team that this matches the
   real process and wording.
-- **Class size** — pages publish "6–8 with two teachers, capped at 12". Still unconfirmed with the CSO.
 - **The 45 retired state redirects are indefinite.** They exist because PR #36 briefly published a page
   per state. Once those URLs are out of Google and off any live link, the redirect block in
   `astro.config.mjs` and `allStates` in `esa-states.json` can both go. Review in ~6 months.
