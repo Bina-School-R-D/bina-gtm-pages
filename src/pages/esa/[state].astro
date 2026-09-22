@@ -1,42 +1,383 @@
 ---
 /*
- * /esa/<state> — one static page per state, all 50 of them.
+ * /esa/<state> — one page per state where bina can accept students. Five of them.
  *
- * This is the same tool /esa always was; the state's answer is just server-rendered here
- * instead of injected into /esa?state=... at runtime. Every state the picker offers is a
- * real URL a family can be linked to and a crawler can read. Program facts come from
- * esa-states.json only — nothing on this page is written by hand.
+ * Merged 2026-09-22 from the old split between /esa (a process tool) and /esa/<state> (a
+ * paid-search landing page): a parent needed both halves, so this page runs
+ * hero → how it works → the money → the full process → that state's FAQ.
+ *
+ * The 45 states we cannot serve are not pages — they redirect to /esa (astro.config.mjs).
+ * Program facts come from esa-states.json only; sales copy from esa-landing.json; proof
+ * numbers are imported from the other pages' data files and never re-typed.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import EsaHero from '../../components/EsaHero.astro';
-import EsaPicker from '../../components/EsaPicker.astro';
-import EsaStatePanel from '../../components/EsaStatePanel.astro';
-import { stateNames, stateSlug } from '../../lib/esa-states.js';
+import EsaProcess from '../../components/EsaProcess.astro';
+import landing from '../../data/esa-landing.json';
+import survey from '../../data/family-survey.json';
+import results from '../../data/student-results.json';
+import reviewData from '../../data/reviews.json';
+import { CTA, CTA_LABEL, statePage, usd } from '../../lib/esa-states.js';
 
 export function getStaticPaths() {
-  return stateNames.map((name) => ({ params: { state: stateSlug(name) }, props: { name } }));
+  return landing.states.map((s) => ({ params: { state: s.slug }, props: { slug: s.slug } }));
 }
 
-const { name } = Astro.props;
+const page = statePage(Astro.props.slug);
+const { copy, program, reimbursed, tier, awardLabel, awardNote, monthLabel, gapLabel, questions, otherStates } = page;
+const { school, faq, reviewIds, howItWorks } = landing;
+
+const reviews = reviewIds.map((id) => reviewData.reviews.find((r) => r.id === id)).filter(Boolean);
+const sourceLabel = { niche: 'Niche', trustpilot: 'Trustpilot', site: 'thebinaschool.com' };
+const reviewDate = (d) =>
+  d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
+
+// Built as one string: JSX around the separators leaves a space before every comma.
+const otherStatesHtml = otherStates
+  .map(
+    (s, i) =>
+      (i === 0 ? '' : i === otherStates.length - 1 ? ' and ' : ', ') +
+      `<a href="/esa/${s.slug}" class="font-bold text-bina-grass underline">${s.state}</a>`
+  )
+  .join('');
 ---
 
 <BaseLayout
-  title="ESA Funding for bina — Parent Guide"
-  description="See if your state's Education Savings Account (ESA) can help pay for bina — and the exact steps, from your first call with bina to tuition paid."
+  title={copy.seoTitle}
+  description={copy.seoDesc}
+  ctaHref={CTA}
+  ctaLabel="Start your journey"
 >
-  <EsaHero>
-    <h1 slot="heading" class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">
-      Can an ESA help pay for <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">bina</span>?
-    </h1>
-  </EsaHero>
+  <!-- HERO: the claim, the funding gate, and what this page is -->
+  <header class="bg-bina-purple">
+    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
+      <p class="pill-bina mb-6 text-sm tracking-wide">{copy.pill}</p>
+      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">{copy.h1}</h1>
+      <p class="mb-5 max-w-2xl text-lg text-coal-1000 sm:text-xl">{copy.intro}</p>
+      <p class="mb-8 max-w-2xl text-coal-900">{howItWorks.heroSchool}</p>
 
-  <EsaPicker selected={name}>
-    <div class="mt-6">
-      <EsaStatePanel state={name} />
+      <div class="mb-10 flex flex-wrap items-center gap-3">
+        <a href={CTA} class="btn-bina text-lg">{CTA_LABEL}</a>
+        <a href="#process" class="btn-bina-ghost text-lg">See the whole process</a>
+      </div>
+
+      <ul class="grid gap-3 border-t-2 border-coal-black/20 pt-8 sm:grid-cols-3">
+        {
+          copy.gate.map((g) => (
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full border-2 border-coal-black bg-white font-display text-xs font-black"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+              <span class="font-display font-bold leading-snug">{g}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 text-sm font-medium text-coal-1000">
+        Ages {school.ages} · {school.day} · {school.accreditations.join(' · ')}
+      </p>
     </div>
-  </EsaPicker>
+  </header>
 
-  <p slot="footer-note" class="text-xs text-white/60">
-    Program details reflect the latest information available to the bina team and are subject to change — your state's official program site is the final word.
+  <!-- HOW IT WORKS: the funding in brief, then what the money buys -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+            How it works
+          </p>
+          <h2 class="mb-6 text-3xl sm:text-4xl">{howItWorks.fundingTitle}</h2>
+          <ol class="grid gap-5">
+            {
+              howItWorks.fundingSteps.map((s, i) => (
+                <li class="flex gap-4">
+                  <span class="grid h-9 w-9 flex-none place-items-center rounded-full border-2 border-coal-black bg-bina-yellow font-display text-sm font-black">
+                    {i + 1}
+                  </span>
+                  <span>
+                    <h3 class="mb-1 font-display text-base font-bold leading-snug">{s.t}</h3>
+                    <p class="text-sm text-coal-900">{s.d}</p>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+          {
+            program.windowNote && (
+              <p class="card-bina mt-6 p-5 text-sm font-bold">
+                {program.windowState === 'annual-unpublished' ? '🕑' : '📅'} {program.windowNote}
+              </p>
+            )
+          }
+        </div>
+
+        <div>
+          <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+            The school
+          </p>
+          <h2 class="mb-4 text-3xl sm:text-4xl">{howItWorks.schoolTitle}</h2>
+          <p class="mb-6 text-coal-900">{howItWorks.schoolLead}</p>
+          <ul class="grid gap-3">
+            {
+              howItWorks.schoolPoints.map((p) => (
+                <li class="flex items-start gap-3">
+                  <span
+                    class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full border-2 border-coal-black bg-bina-grass font-display text-xs font-black"
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                  <span class="font-medium leading-snug">{p}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE MONEY: award, tuition, and the remainder we are not hiding -->
+  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        {program.prog} · {tier.label}
+      </p>
+      <h2 class="mb-3 text-3xl sm:text-4xl">{copy.coverTitle}</h2>
+      <p class="mb-8 max-w-3xl text-lg text-coal-1000">{copy.coverBody}</p>
+
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="card-bina p-6">
+          <p class="font-display text-3xl font-black">{awardLabel}</p>
+          <p class="mt-2 font-display font-bold">per child, per year</p>
+          <p class="mt-1 text-sm text-coal-900">{awardNote}</p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-3xl font-black">{usd(school.tuitionYearly)}</p>
+          <p class="mt-2 font-display font-bold">a full year at bina, on the yearly plan</p>
+          <p class="mt-1 text-sm text-coal-900">
+            {usd(school.tuitionQuarterly)} on the quarterly plan ·
+            <a href={school.tuitionUrl} class="underline">tuition page</a>
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-3xl font-black">{monthLabel}<span class="text-lg">/mo</span></p>
+          <p class="mt-2 font-display font-bold">{gapLabel}</p>
+          <p class="mt-1 text-sm text-coal-900">
+            before {usd(school.siblingDiscount)} off per additional child
+          </p>
+        </div>
+      </div>
+
+      <div class="card-bina mt-6 p-6">
+        <h3 class="mb-4 font-display text-xl">Who can apply, and where the money sits</h3>
+        <dl class="grid gap-4 sm:grid-cols-3">
+          <div>
+            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">Who qualifies</dt>
+            <dd class="mt-1">{program.who}</dd>
+          </div>
+          <div>
+            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">How you spend it</dt>
+            <dd class="mt-1">
+              {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
+            </dd>
+          </div>
+          <div>
+            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">Official program</dt>
+            <dd class="mt-1">
+              <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
+            </dd>
+          </div>
+        </dl>
+        <p class="mt-4 text-sm text-coal-900">
+          Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
+          official program site as the final word — and we will go through it with you on the call.
+        </p>
+      </div>
+
+      {program.boost && <p class="card-bina mt-6 bg-bina-grass/25 p-5 font-bold">✓ {program.boost}</p>}
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <EsaProcess page={page} />
+
+  <!-- PROOF: is this actually a good school? -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-3 text-3xl sm:text-4xl">
+        The school, before the money: our families score us {survey.headline.recommendAvg} out of 10
+      </h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        The funding only matters if the school is worth it. So here is our own survey data, our own
+        assessment results, and every review we have — including the platforms we cannot edit.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="card-bina p-6">
+          <p class="font-display text-5xl font-black text-coal-black">{survey.headline.recommendAvg}</p>
+          <p class="mt-2 font-display font-bold">Parents would send their friends here</p>
+          <p class="mt-1 text-sm text-coal-900">
+            out of 10, from {survey.surveyA.n} families · <a href="/family-survey" class="underline">all seven scores</a>
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-5xl font-black text-coal-black">{reviewData.headline.nicheAvg.toFixed(1)} ★</p>
+          <p class="mt-2 font-display font-bold">Every review on Niche is five stars</p>
+          <p class="mt-1 text-sm text-coal-900">
+            {reviewData.headline.nicheCount} reviews · <a href="/reviews" class="underline">read all of them</a>
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-5xl font-black text-coal-black">+{results.headline.readGrowthAvg}</p>
+          <p class="mt-2 font-display font-bold">Points of reading growth in one school year</p>
+          <p class="mt-1 text-sm text-coal-900">
+            STAR, {results.headline.pairedN} students · <a href="/student-results" class="underline">the full results</a>
+          </p>
+        </div>
+        <div class="card-bina p-6">
+          <p class="font-display text-5xl font-black text-coal-black">{school.classCap}</p>
+          <p class="mt-2 font-display font-bold">The most children your child's class can hold</p>
+          <p class="mt-1 text-sm text-coal-900">a cap, not an average</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- projection: picture your own week -->
+  <section class="border-t-2 border-coal-black bg-bina-grass/20">
+    <div class="mx-auto max-w-4xl px-5 py-14">
+      <h2 class="mb-3 text-3xl sm:text-4xl">Your Tuesday, if your child were at bina</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        The school day fits your time zone, so this shape holds whether you are in {copy.state} or
+        three flights away from it.
+      </p>
+      <ol class="grid gap-4 sm:grid-cols-2">
+        {
+          school.dayInLife.map((d) => (
+            <li class="card-bina p-5">
+              <p class="font-display text-sm font-bold uppercase tracking-wide text-bina-pink">{d.time}</p>
+              <p class="mt-1 font-medium text-coal-1000">{d.what}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- reviews -->
+  <section class="border-t-2 border-coal-black bg-bina-blue/15">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-3 text-3xl sm:text-4xl">Families who made this exact decision</h2>
+      <p class="mb-8 max-w-2xl text-coal-900">
+        Copied word for word, nothing trimmed. There are
+        {' '}{reviewData.reviews.length - reviews.length} more on
+        {' '}<a href="/reviews" class="font-bold underline">our reviews page</a>, including the platforms
+        where we do not control what gets published.
+      </p>
+      <div class="grid gap-4 md:grid-cols-3">
+        {
+          reviews.map((r) => (
+            <figure class="card-bina flex h-full flex-col p-6">
+              <blockquote class="grow whitespace-pre-line text-sm text-coal-1000">{r.body}</blockquote>
+              <figcaption class="mt-4 border-t-2 border-coal-black/10 pt-3 font-display text-xs font-bold text-coal-900">
+                {r.roleLabel} · {sourceLabel[r.source]}
+                {reviewDate(r.date) ? ` · ${reviewDate(r.date)}` : ''}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ: this state's questions first, then the ones every family asks -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-14">
+      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+        {copy.state} questions
+      </p>
+      <h2 class="mb-8 text-3xl sm:text-4xl">The questions {copy.state} families actually ask</h2>
+      <div class="divide-y-2 divide-coal-black/10">
+        {
+          questions.map((f) => (
+            <details class="group py-4">
+              <summary class="cursor-pointer list-none font-display text-lg font-bold marker:hidden">
+                <span class="inline-flex items-start gap-3">
+                  <span class="mt-1 font-black text-bina-pink transition-transform group-open:rotate-90">›</span>
+                  {f.q}
+                </span>
+              </summary>
+              <p class="mt-3 pl-7 text-coal-1000">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- close -->
+  <section class="border-t-2 border-coal-black bg-coal-black text-white">
+    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
+      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
+        One call tells you whether this works for your family
+      </h2>
+      <p class="mx-auto mb-8 max-w-2xl text-white/80">
+        We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
+        whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
+      </p>
+      <a href={CTA} class="btn-bina text-lg">{CTA_LABEL}</a>
+      <p class="mt-6 text-sm text-white/60">
+        Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold text-bina-grass underline">admissions@thebinaschool.com</a>
+      </p>
+      <p class="mt-8 border-t border-white/15 pt-6 text-sm text-white/60">
+        In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
+        {' '}<a href="/esa" class="font-bold text-bina-grass underline">See all five →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- where every number came from -->
+  <section class="border-t-2 border-coal-black">
+    <div class="mx-auto max-w-4xl px-5 py-12">
+      <h2 class="mb-4 font-display text-xl">Where these numbers come from</h2>
+      <ul class="grid gap-2 text-sm text-coal-900">
+        <li>
+          <strong>{copy.state} program details and dates</strong> — the bina team's ESA database, checked
+          against {copy.state}'s own program site. {copy.state} sets the rules and can change them;
+          <a href={program.officialUrl} rel="noopener" class="underline"> the official program site</a> is the final word.
+        </li>
+        <li>
+          <strong>Tuition</strong> — published on
+          <a href={school.tuitionUrl} class="underline"> thebinaschool.com/tuition</a>. The monthly figure
+          on this page is simple arithmetic: yearly tuition minus the base award, divided by 12, before
+          sibling discounts. Awards for children with special needs are higher in several states.
+        </li>
+        <li>
+          <strong>{survey.headline.recommendAvg} out of 10</strong> — our own family survey,
+          {' '}{survey.surveyA.n} families, {survey.surveyA.responseRatePct}% response rate. Families who
+          answer a survey are more positive than those who do not; every score, including our weakest, is
+          on <a href="/family-survey" class="underline">the survey page</a>.
+        </li>
+        <li>
+          <strong>+{results.headline.readGrowthAvg} reading points</strong> — STAR assessments,
+          Oct '25 to May '26, the {results.headline.pairedN} students assessed at both points at the same
+          level. Aggregates only, on <a href="/student-results" class="underline">the results page</a>.
+        </li>
+        <li>
+          <strong>Reviews</strong> — copied verbatim from Niche, where we cannot edit or remove anything.
+          The full set is on <a href="/reviews" class="underline">our reviews page</a>.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <p slot="footer-note" class="mx-auto max-w-2xl text-xs text-white/60">
+    {program.prog} is run by the state of {copy.state}, not by bina. Program amounts, eligibility and
+    deadlines are subject to change — always confirm with
+    <a href={program.officialUrl} rel="noopener" class="underline">the official program site</a> before
+    you rely on a number here.
   </p>
 </BaseLayout>

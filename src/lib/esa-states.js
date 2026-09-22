@@ -1,32 +1,33 @@
 /*
  * Shared content model for the ESA state pages.
  *
- * This is a straight lift of the branching that used to run in the browser inside
- * /esa's <script> — same states, same statuses, same copy. It now runs at build time so
- * every state is a real page a crawler can read. Nothing here invents a number: all
- * program facts come from esa-states.json, which is synced from the team's ESA database.
+ * Scope, set by Akis on 2026-09-22: a state is on the site only if bina can accept its
+ * students today. States that are pending, blocked or have no program are not pages — they
+ * redirect to /esa (see astro.config.mjs). So the coming-soon and exploring branches this
+ * module used to carry are gone with them.
+ *
+ * Nothing here invents a number: program facts come from esa-states.json (synced from the
+ * team's ESA database), sales copy from esa-landing.json. The two are cross-checked at build
+ * time in statePage() — a drift fails the build rather than shipping a wrong award.
  */
 import esaData from '../data/esa-states.json';
-
-const { programs, allStates, noProgramNotes } = esaData;
+import landing from '../data/esa-landing.json';
 
 export const WEBSITE = 'https://thebinaschool.com';
 export const EMAIL = 'admissions@thebinaschool.com';
+export const CTA = 'https://form.thebinaschool.com/new';
+export const CTA_LABEL = 'Start your bina journey →';
 
 /** State name → URL slug. All 50 names are ASCII words, so spaces are the only join. */
 export const stateSlug = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
-// Every state gets a page, so a family never has to guess whether silence means "no".
-// States without a usable program get an honest answer instead of no answer.
-export const stateNames = Array.from(new Set(allStates.concat(programs.map((d) => d.s)))).sort();
+const byState = Object.fromEntries(esaData.programs.map((d) => [d.s, d]));
 
-const byState = Object.fromEntries(programs.map((d) => [d.s, d]));
-
-/** The program row for a state, or null when the state has nothing usable yet. */
+/** The program row for a state we serve, or null. */
 export const programFor = (name) => byState[name] ?? null;
 
-/** The extra "why not yet" line some no-program states carry. */
-export const noteFor = (name) => (noProgramNotes || {})[name] ?? null;
+/** Every state that is not a page — these redirect to /esa. Exported for the build check. */
+export const retiredStates = esaData.allStates.filter((name) => !byState[name]);
 
 export const CHIP = {
   bina: { label: 'with bina', cls: 'bg-bina-yellow' },
@@ -34,136 +35,149 @@ export const CHIP = {
   both: { label: 'together', cls: 'bg-bina-grass' },
 };
 
-export const BADGE = {
-  approved: { label: '✓ bina is an approved provider', cls: 'bg-bina-grass' },
-  'approved-reimb': { label: '✓ Ready to use for bina', cls: 'bg-bina-grass' },
-  'coming-soon': { label: 'Coming soon', cls: 'bg-bina-orange' },
-  exploring: { label: 'possible for some families — ask us', cls: 'bg-bina-blue' },
+// Ordered by what a parent can act on today: rolling states first, because those are the only
+// ones where reading this in September leads anywhere this school year.
+const WINDOW_RANK = { rolling: 0, annual: 1, 'annual-unpublished': 2 };
+
+export const WINDOW_BADGE = {
+  rolling: { label: 'Apply any time', cls: 'bg-bina-grass' },
+  annual: { label: 'One window a year', cls: 'bg-bina-blue' },
+  'annual-unpublished': { label: 'Next dates not published', cls: 'bg-bina-orange' },
 };
 
-const PAY_FACT = {
-  approved: 'Yes — the state pays bina directly from your account.',
-  // Idaho-style: usable today, but the money reaches you rather than us.
-  'approved-reimb': 'You pay bina, then the state gets the money back to you — and we give you every receipt and document your claim needs.',
-  exploring: "It depends on your approval — we'll know your route and handle it with you.",
-};
+const usd = (n) => '$' + n.toLocaleString('en-US');
+export { usd };
 
-// Third fact tile: "does the state pay bina" is the wrong question for a coming-soon
-// state, so those show where bina's approval actually stands instead.
-const FACT_LABELS = {
-  'coming-soon': ['Who the state funds', 'What it’s worth per child', 'Where bina stands'],
-  'approved-reimb': ['Who can apply', 'How much for bina', 'How the money works'],
-  default: ['Who can apply', 'How much for bina', 'Does the state pay bina directly?'],
-};
-
-/** The three fact tiles across the top of a state's panel. */
-export function facts(d) {
-  const labels = FACT_LABELS[d.status] || FACT_LABELS.default;
-  return [
-    { k: labels[0], v: d.who },
-    { k: labels[1], v: d.howMuch },
-    { k: labels[2], v: d.status === 'coming-soon' ? d.standing : PAY_FACT[d.status] },
-  ];
-}
-
-// Step 5 — pay copy. Definite for approved states; conditional (Akis's ask) otherwise.
-function payStep(d) {
-  if (d.status === 'approved') {
-    const acct = d.platform ? ' from your ' + d.platform + ' account' : ' from your account';
+/**
+ * Step 5 — how the money reaches bina. The only split left between served states: Idaho
+ * pays the family back, the other four pay bina directly.
+ */
+function payStep(d, reimbursed) {
+  if (reimbursed)
     return {
-      w: 'both',
-      t: 'Pay tuition from your account',
-      x: 'bina is an approved ' + d.prog + ' provider, so the state pays bina directly' + acct + " — nothing comes out of your pocket. If your award doesn't cover full tuition, you only pay the difference.",
-    };
-  }
-  if (d.status === 'approved-reimb') {
-    return {
-      w: 'both',
+      who: 'both',
       t: 'Pay bina, then claim it back',
-      x: 'You pay bina and claim it back through the ' + d.prog + '. We give you the itemized invoice, enrollment letter and accreditation details every time you need them, so your claim goes in clean and nothing gets held up over paperwork.',
+      d: `You pay bina and claim it back through the ${d.prog}. We give you the itemized invoice, enrollment letter and accreditation details every time you need them, so your claim goes in clean and nothing gets held up over paperwork.`,
     };
-  }
-  const acct = d.platform ? ' (from your ' + d.platform + ' account)' : '';
   return {
-    w: 'both',
-    t: 'Pay tuition — the way your approval allows',
-    x:
-      'How you pay depends on what your step-3 approval allows, and we handle it with you either way: ' +
-      '(a) if it lets bina be paid directly, the state pays us' + acct + " and nothing comes out of your pocket; " +
-      "(b) if it only allows reimbursement, you pay bina and we give you the itemized invoice, enrollment letter, and accreditation details to claim it back. " +
-      "We'll know which one the moment you're approved.",
+    who: 'both',
+    t: 'Pay tuition from your account',
+    d: `bina is an approved ${d.prog} provider, so ${d.s} pays bina directly from your ${d.platform} account — nothing comes out of your pocket. Where your award doesn't cover full tuition, you pay only the difference.`,
   };
 }
 
-// Coming-soon states get an honest picture instead of a path we can't yet deliver:
-// what the program is, what's in the way, what bina is doing, and what a family can do now.
-function comingSoonSteps(d) {
-  const steps = [
-    { w: 'state', t: 'The funding is real and worth planning for', x: d.soonWhy, link: { url: d.officialUrl, label: 'See the ' + d.s + ' program ↗' } },
-  ];
-
-  // Skip the dates block where the program itself is on hold — there's nothing to diary.
-  if (d.applyWindow && !/^on hold/i.test(d.applyWindow))
-    steps.push({
-      w: 'state',
-      t: 'Keep the dates on your radar',
-      x: d.applyWindow + ' Applying keeps your state options open — and we’ll tell you straight the moment bina fits into them.',
-      link: { url: d.applyUrl, label: 'Apply on the ' + d.s + ' site ↗' },
-    });
-
-  steps.push(
-    { w: 'bina', t: 'What we’re doing about it', x: d.soonWork },
+/** The numbered step groups. Numbering runs across all groups. */
+export function numberedSteps(d, reimbursed) {
+  const groups = [
     {
-      w: 'bina',
-      t: 'How ' + d.s + ' families join bina today',
-      x: 'Plenty of families choose bina without any state funding — small live classes of 6–8 with two teachers, and a real community your child belongs to. Book a call and we’ll be straight with you about timing, cost and exactly where the ' + d.prog + ' stands.',
-      cta: 'book',
+      label: 'Before you enroll — during bina admissions',
+      steps: [
+        {
+          who: 'bina',
+          t: 'Talk to bina first',
+          d: `One call. We tell you what bina costs, what the ${d.prog} covers in ${d.s}, and what is left for you — before you fill in anything.`,
+        },
+        {
+          who: 'state',
+          t: `Apply for the ${d.prog}`,
+          d: d.applyWindow,
+          url: d.applyUrl,
+          urlLabel: `Apply on ${d.s}'s site ↗`,
+        },
+        { who: 'state', t: 'Get approved and funded', d: d.approval },
+      ],
     },
     {
-      w: 'bina',
-      t: 'Be first in line when ' + d.s + ' opens',
-      x: 'Send us one line saying you’re in ' + d.s + '. When this funding becomes usable at bina, you’ll hear from us before the next application window — not after it closes.',
-      cta: 'notify',
+      label: 'After you enroll',
+      steps: [
+        {
+          who: 'bina',
+          t: 'Enroll at bina',
+          d: "Finish admissions and pick a start date. Your bina admissions contact emails you everything your program needs — itemized invoice, enrollment letter and accreditation details — and answers anything specific your state asks for. You won't have to work the paperwork out alone.",
+        },
+        payStep(d, reimbursed),
+      ],
     },
-  );
-
-  return [{ label: 'Where ' + d.s + ' stands today', steps: steps }];
-}
-
-/** The numbered step groups under the fact tiles. Numbering runs across all groups. */
-export function buildSteps(d) {
-  if (d.status === 'coming-soon') return comingSoonSteps(d);
-
-  const talk =
-    d.status === 'exploring'
-      ? { w: 'bina', t: 'Talk to bina first', x: "The " + d.prog + " isn't a guaranteed fit for online schools yet, but families do make it work. Book a call and we'll map whether it works for your family — before you spend anything.", cta: 'book' }
-      : { w: 'bina', t: 'Talk to bina first', x: "Book a call and tell us you're using the " + d.prog + ". We'll confirm your numbers, your timing, and exactly what to prepare — so the state steps are quick.", cta: 'book' };
-
-  const apply = {
-    w: 'state',
-    t: 'Apply for the ' + d.prog,
-    x: d.applyWindow,
-    link: { url: d.applyUrl, label: 'Apply on the ' + d.s + ' site ↗' },
-  };
-
-  const approved = { w: 'state', t: 'Get approved & funded', x: d.approval };
-
-  const enroll = {
-    w: 'bina',
-    t: 'Enroll at bina',
-    x: "Finish admissions and pick a start date. Your bina admissions contact emails you everything your program needs — itemized invoice, enrollment letter, and accreditation details — and answers anything specific your state asks for. You won't have to figure the paperwork out alone.",
-  };
-
-  return [
-    { label: 'Before you enroll — during bina admissions', steps: [talk, apply, approved] },
-    { label: 'After you enroll', steps: [enroll, payStep(d)] },
   ];
-}
-
-/** Step groups with the running step number already resolved, for straightforward markup. */
-export function numberedSteps(d) {
   let n = 0;
-  return buildSteps(d).map((g) => ({ label: g.label, steps: g.steps.map((s) => ({ ...s, n: ++n })) }));
+  return groups.map((g) => ({ label: g.label, steps: g.steps.map((s) => ({ ...s, n: ++n })) }));
 }
 
-export const notifyHref = (name) => `mailto:${EMAIL}?subject=${encodeURIComponent(name + ' funding updates')}`;
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+export const words = WORDS;
+
+/**
+ * Everything a /esa/<state> page renders, resolved once: program facts, sales copy, the
+ * money arithmetic and the steps. Throws rather than shipping a page built on a mismatch.
+ */
+export function statePage(slug) {
+  const copy = landing.states.find((s) => s.slug === slug);
+  if (!copy) throw new Error(`No esa-landing.json copy for /esa/${slug}.`);
+
+  const program = programFor(copy.state);
+  if (!program)
+    throw new Error(`No esa-states.json entry for ${copy.state} — sync the ESA database first.`);
+
+  // Fail the build if the database moves and this page's award drifts out of step with it.
+  for (const n of new Set([copy.esaMin, copy.esaMax])) {
+    if (!program.howMuch.includes(usd(n)))
+      throw new Error(
+        `${copy.state}: esa-landing.json says ${usd(n)} but esa-states.json says "${program.howMuch}" — reconcile them.`
+      );
+  }
+
+  const { school } = landing;
+  const reimbursed = copy.tier === 'reimbursed';
+  const perMonth = (gap) => Math.round(gap / 12);
+  // esaMax is the larger award, so it produces the smaller remainder.
+  const monthLow = perMonth(school.tuitionYearly - copy.esaMax);
+  const monthHigh = perMonth(school.tuitionYearly - copy.esaMin);
+
+  const groups = numberedSteps(program, reimbursed);
+  const allSteps = groups.flatMap((g) => g.steps);
+  const countBy = (who) => WORDS[allSteps.filter((s) => s.who === who).length];
+
+  return {
+    copy,
+    program,
+    reimbursed,
+    tier: landing.tierCopy[copy.tier],
+    badge: WINDOW_BADGE[program.windowState],
+    awardLabel: copy.esaMin === copy.esaMax ? usd(copy.esaMax) : `${usd(copy.esaMin)}–${usd(copy.esaMax)}`,
+    // The base award is what we quote; several states pay more for children with special needs.
+    awardNote: /special needs|disability/i.test(program.howMuch)
+      ? 'The base award. Several states pay more for a child with special needs.'
+      : `Paid through ${program.platform}.`,
+    monthLabel: monthLow === monthHigh ? usd(monthHigh) : `${usd(monthLow)}–${usd(monthHigh)}`,
+    gapLabel: reimbursed ? 'your net cost after the refund' : 'is what you cover yourself',
+    groups,
+    stepTotal: WORDS[allSteps.length],
+    stepsBina: countBy('bina'),
+    stepsState: countBy('state'),
+    stepsBoth: countBy('both'),
+    // This state's own questions lead; the ones every family asks follow.
+    questions: [...copy.faq, ...landing.faq],
+    otherStates: landing.states.filter((s) => s.slug !== slug),
+  };
+}
+
+/** The /esa chooser: one card per served state, actionable ones first. */
+export function chooserStates() {
+  return landing.states
+    .map((s) => {
+      const program = programFor(s.state);
+      if (!program) throw new Error(`No esa-states.json entry for ${s.state}.`);
+      return {
+        ...s,
+        program,
+        badge: WINDOW_BADGE[program.windowState],
+        awardLabel:
+          s.esaMin === s.esaMax ? usd(s.esaMax) : `${usd(s.esaMin)}–${usd(s.esaMax)}`,
+      };
+    })
+    .sort(
+      (a, b) =>
+        WINDOW_RANK[a.program.windowState] - WINDOW_RANK[b.program.windowState] ||
+        a.state.localeCompare(b.state)
+    );
+}
