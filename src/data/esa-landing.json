@@ -7,8 +7,8 @@
     "thebinaschool.com still says ESA funding 'covers tuition in full' for Utah, Arizona and Wyoming. It does not: the largest base award is $8,000 against $10,769 yearly tuition. These pages publish the remainder instead. The homepage line should be corrected — not this repo's to fix.",
     "thebinaschool.com's homepage still names only Utah, Arizona and Wyoming, and the upstream ESA_State_Database.xlsx never got the Wyoming and New Hampshire approvals. Both lag these pages.",
     "New Hampshire's 'who' said 'families under the state income limit' — wrong since SB 295 (2025) removed the 350% FPL cap. Corrected here to universal with the 12,500-student statewide cap. Push the correction back into the upstream database.",
-    "Class size: the main site says 'never more than 12 in a class'; these pages publish '6–8 with two teachers, capped at 12' — the union of what we already say. Still unconfirmed with the CSO.",
-    "Awards quoted are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount."
+    "Awards quoted are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount.",
+    "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold."
   ],
   "school": {
     "tuitionYearly": 10769,
@@ -29,7 +29,7 @@
       {
         "eyebrow": "Small classes",
         "title": "Your child is known by name, not managed in a crowd",
-        "body": "Classes of six to eight children with two teachers in the room, and never more than 12. Educators who know what your child needs next, and tell you every week."
+        "body": "An average class of six to eight children with two teachers in the room, and never more than 12. Educators who know what your child needs next, and tell you every week."
       },
       {
         "eyebrow": "A real school day",
@@ -99,13 +99,13 @@
     "schoolTitle": "What you get for it",
     "schoolLead": "Not a curriculum in a box and not a video library. A school: a class, a timetable, the same teachers every day, and a Family Success person who knows your child's name.",
     "schoolPoints": [
-      "A real class of 6–8 children with two teachers in the room, capped at 12",
+      "An average class of 6–8 children with two teachers in the room, capped at 12",
       "Five hours a day, five days a week, about 200 school days a year",
       "Certified teachers, report cards and assessments — Cognia accredited, a registered Cambridge International School",
       "A timetable that fits your time zone, wherever you are",
       "Ages 4 to 15, with clubs and a community your child belongs to"
     ],
-    "heroSchool": "bina is a school, not a curriculum or a video library: your child gets a class of 6–8 children with two teachers in the room, a timetable, and the same faces every day. Ages 4 to 15, five hours a day, five days a week."
+    "heroSchool": "bina is a school, not a curriculum or a video library: your child gets a class averaging 6–8 children with two teachers in the room, a timetable, and the same faces every day. Ages 4 to 15, five hours a day, five days a week."
   },
   "faq": [
     {
