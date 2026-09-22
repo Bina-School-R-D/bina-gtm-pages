@@ -1,0 +1,83 @@
+---
+/*
+ * One state's process — the numbered steps that used to live in /esa's dropdown panel,
+ * server-rendered for the state whose page this is. Replaces EsaStatePanel: with the page
+ * merged (hero → how it works → money → process → FAQ) the fact tiles moved up into the
+ * money section, so this block is the steps and nothing else.
+ */
+import { CHIP, CTA, CTA_LABEL } from '../lib/esa-states.js';
+
+interface Props {
+  /** The resolved page model from statePage(). */
+  page: ReturnType<typeof import('../lib/esa-states.js').statePage>;
+}
+
+const { page } = Astro.props;
+const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
+const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
+---
+
+<section id="process" class="scroll-mt-20 border-t-2 border-coal-black">
+  <div class="mx-auto max-w-4xl px-5 py-14">
+    <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+      The process
+    </p>
+    <h2 class="mb-3 text-3xl sm:text-4xl">{title} steps, and we are on the call for all of them</h2>
+    <p class="mb-8 max-w-2xl text-coal-900">
+      You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
+      do together — so you never have to work out which is which on your own.
+    </p>
+
+    <div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">
+      {
+        groups.map((g) => (
+          <>
+            <p class="bg-coal-black px-5 py-2 font-display text-xs font-bold uppercase tracking-widest text-bina-yellow sm:px-6">
+              {g.label}
+            </p>
+            <ul class="m-0 list-none p-0">
+              {g.steps.map((step) => (
+                <li class="flex gap-4 border-t-2 border-coal-black bg-white px-5 py-5 sm:px-6">
+                  <span class="grid h-10 w-10 flex-none place-items-center rounded-xl border-2 border-coal-black bg-bina-yellow font-display text-lg font-black">
+                    {step.n}
+                  </span>
+                  <span class="min-w-0">
+                    <span class="mb-1 flex flex-wrap items-center gap-2">
+                      <strong class="font-display text-base">{step.t}</strong>
+                      <span
+                        class={`inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ${CHIP[step.who].cls}`}
+                      >
+                        {step.who === 'state' ? `on ${copy.state}'s site` : CHIP[step.who].label}
+                      </span>
+                    </span>
+                    <span class="block text-sm text-coal-900">{step.d}</span>
+                    {step.url && (
+                      <a
+                        href={step.url}
+                        rel="noopener"
+                        class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4"
+                      >
+                        {step.urlLabel}
+                      </a>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))
+      }
+      <p class="border-t-2 border-coal-black bg-white px-5 py-3 text-sm text-coal-900 sm:px-6">
+        Funding renews each school year — we send you fresh paperwork every season, so renewing
+        takes minutes.
+      </p>
+    </div>
+
+    <div class="card-bina mt-8 p-6 sm:p-8">
+      <p class="mb-2 font-display text-xs font-bold uppercase tracking-widest text-bina-pink">Timing</p>
+      <h3 class="mb-2 font-display text-xl">{copy.timingTitle}</h3>
+      <p class="text-coal-1000">{copy.timingBody}</p>
+      <a href={CTA} class="btn-bina mt-5">{CTA_LABEL}</a>
+    </div>
+  </div>
+</section>
