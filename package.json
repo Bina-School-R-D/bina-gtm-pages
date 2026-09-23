@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/check-esa-static.mjs && node scripts/check-attribution.mjs && node scripts/check-consent-contract.mjs && node scripts/check-posthog-consent.mjs",
+    "build": "astro build && node scripts/check-esa-static.mjs && node scripts/check-attribution.mjs && node scripts/check-consent-contract.mjs && node scripts/check-posthog-consent.mjs && node scripts/check-go-lead-event.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
