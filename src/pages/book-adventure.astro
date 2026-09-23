@@ -239,6 +239,7 @@ const steps = [
 
     // ---- step 3: child + age group → submit ----
     const childForm = document.querySelector('form[data-step="3"]');
+    let submitted = false;
     const ageButtons = childForm.querySelectorAll('.age-btn');
     ageButtons.forEach((b) =>
       b.addEventListener('click', () => {
@@ -250,14 +251,25 @@ const steps = [
 
     childForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (submitted) return;
       state.child_name = childForm.elements.child_name.value.trim();
       if (!state.child_name) return setError(childForm, "Please add your child's first name.");
       if (!byAge[state.age_group]) return setError(childForm, "Please pick your child's age group.");
       setError(childForm, '');
+      submitted = true;
 
       const group = byAge[state.age_group];
+      const url = `${group.calUrl}?name=${encodeURIComponent(state.name)}&email=${encodeURIComponent(state.email)}`;
+      let redirected = false;
+      let redirectTimer;
+      const redirect = () => {
+        if (redirected) return;
+        redirected = true;
+        if (redirectTimer) window.clearTimeout(redirectTimer);
+        location.assign(url);
+      };
 
-      // Capture the lead — fire-and-forget so the redirect never waits on it.
+      // Capture the lead without waiting for the webhook response.
       // text/plain keeps sendBeacon CORS-preflight-free; the workflow JSON-parses the body.
       const honeypot = contact.website.value;
       if (!honeypot) {
@@ -279,14 +291,26 @@ const steps = [
             utm_content: params.get('utm_content') || '',
             utm_term: params.get('utm_term') || '',
           };
-          navigator.sendBeacon(WEBHOOK, new Blob([JSON.stringify(payload)], { type: 'text/plain' }));
+          if (navigator.sendBeacon(WEBHOOK, new Blob([JSON.stringify(payload)], { type: 'text/plain' }))) {
+            // The GTM lead tag listens for this event. Queue acceptance is not delivery proof.
+            // URL-supplied campaign values may contain personal data; do not mirror them into the GTM event.
+            window.dataLayer = window.dataLayer || [];
+            // Give GTM a short chance to process the event; never hold the booking beyond 500 ms.
+            redirectTimer = window.setTimeout(redirect, 500);
+            window.dataLayer.push({
+              event: 'bina.lead_submitted',
+              bina_lead_form_name: campaign,
+              eventCallback: redirect,
+              eventTimeout: 500,
+            });
+            return;
+          }
         } catch (_) {
           /* capture is best-effort — booking must never break */
         }
       }
 
-      const url = `${group.calUrl}?name=${encodeURIComponent(state.name)}&email=${encodeURIComponent(state.email)}`;
-      location.assign(url);
+      redirect();
     });
 
     show(1);
