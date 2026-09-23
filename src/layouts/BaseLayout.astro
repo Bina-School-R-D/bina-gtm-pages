@@ -43,8 +43,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Tracking parity with thebinaschool.com: same GTM container (CookieYes CMP + GA4
          live inside it), a dedicated PostHog project for go.bina.school (session replay
-         enabled), same first-touch attribution file. Both
-         tags use the main site's deferred loader — they load after full page load + idle,
+         enabled after analytics consent), same first-touch attribution file. GTM
+         uses the main site's deferred loader — they load after full page load + idle,
          or on first interaction, whichever comes first — so the consent banner never
          lands on the LCP critical path. Host-gated to bina domains so previews and local
          dev stay out of the metrics. Keep in sync with the main site's snippet. -->
@@ -79,68 +79,69 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
 
     <script is:inline>
-      /* PostHog — dedicated project for go.bina.school (us.posthog.com project 578193),
-         separate from the main site's project so this domain's traffic and session
-         replays can be watched on their own. Replay, console-log and performance
-         capture are enabled server-side in the project, so array.js starts recording
-         on its own once loaded. Loaded EAGERLY, unlike GTM — a deliberate break from
-         the main site's deferred loader (Akis, 2026-08-26) so every visit gets a
-         replay, including sub-5s bounces the deferred loader would miss. The script
-         itself is async, so it stays off the parser's critical path. */
+      /* Dedicated go PostHog project and existing replay settings. CookieYes in
+         shared GTM owns consent; only its resolved analytics boolean grants access. */
       (function () {
         if (/HeadlessChrome|ReactSnap/i.test(navigator.userAgent || '')) return;
         if (!/(^|\.)(thebinaschool\.com|bina\.school)$/.test(window.location.hostname || '')) return;
-        !(function (t, e) {
-            var o, n, p, r;
-            e.__SV ||
-              ((window.posthog = e),
-              (e._i = []),
-              (e.init = function (i, s, a) {
-                function g(t, e) {
-                  var o = e.split('.');
-                  2 == o.length && ((t = t[o[0]]), (e = o[1]));
-                  t[e] = function () {
-                    t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
-                  };
-                }
-                ((p = t.createElement('script')).type = 'text/javascript'),
-                  (p.crossOrigin = 'anonymous'),
-                  (p.async = !0),
-                  (p.src = 'https://us-assets.i.posthog.com/static/array.js'),
-                  (r = t.getElementsByTagName('script')[0]).parentNode.insertBefore(p, r);
-                var u = e;
-                for (
-                  void 0 !== a ? (u = e[a] = []) : (a = 'posthog'),
-                    u.people = u.people || [],
-                    u.toString = function (t) {
-                      var e = 'posthog';
-                      return 'posthog' !== a && (e += '.' + a), t || (e += ' (stub)'), e;
-                    },
-                    u.people.toString = function () {
-                      return u.toString(1) + '.people (stub)';
-                    },
-                    o =
-                      'init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug'.split(
-                        ' '
-                      ),
-                    n = 0;
-                  n < o.length;
-                  n++
-                )
-                  g(u, o[n]);
-                e._i.push([i, s, a]);
-              }),
-              (e.__SV = 1));
-          })(document, window.posthog || []);
-          window.posthog.init('phc_D4SErijz7JBzQTuzsJGdYQcKUB3LZxZoqBsBJSn8TQH4', {
-            api_host: 'https://us.i.posthog.com',
-            defaults: '2026-01-30',
-          });
+        var loading = false, sdkReady = false, initialized = false, capturing = false;
+        function analyticsAllowed() {
+          try {
+            var consent = window.getCkyConsent();
+            return !!(consent && consent.categories && consent.categories.analytics === true);
+          } catch (error) {
+            return false;
+          }
+        }
+        function syncConsent() {
+          if (!analyticsAllowed()) {
+            if (capturing) {
+              capturing = false;
+              window.posthog.opt_out_capturing();
+              window.posthog.stopSessionRecording();
+            }
+            return;
+          }
+          if (!sdkReady) {
+            if (loading) return;
+            loading = true;
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.crossOrigin = 'anonymous';
+            script.async = true;
+            script.src = 'https://us-assets.i.posthog.com/static/array.js';
+            // Load the real SDK without the snippet's queued init or a second loader.
+            // Its unloaded instance has no project until this fresh consent check.
+            script.onload = function () {
+              loading = false;
+              sdkReady = !!(window.posthog && typeof window.posthog.init === 'function');
+              if (sdkReady) syncConsent();
+            };
+            script.onerror = function () { loading = false; script.remove(); };
+            var first = document.getElementsByTagName('script')[0];
+            first.parentNode.insertBefore(script, first);
+            return;
+          }
+          if (capturing) return;
+          if (!initialized) {
+            initialized = true;
+            window.posthog.init('phc_D4SErijz7JBzQTuzsJGdYQcKUB3LZxZoqBsBJSn8TQH4', {
+              api_host: 'https://us.i.posthog.com',
+              defaults: '2026-01-30',
+            });
+          }
+          window.posthog.opt_in_capturing();
+          window.posthog.startSessionRecording();
+          capturing = true;
+        }
+        document.addEventListener('cookieyes_banner_load', syncConsent);
+        document.addEventListener('cookieyes_consent_update', syncConsent);
+        syncConsent();
       })();
     </script>
 
     <!-- First-touch attribution — a port of thebinaschool.com/attribution.js. Carries
-         utm_*, gclid and the partner ?ref= onto every form.thebinaschool.com CTA. -->
+         utm_*, gclid and the partner ?ref= onto form CTAs and the HTTPS main-site homepage. -->
     <script is:inline defer src="/attribution.js"></script>
   </head>
   <body>

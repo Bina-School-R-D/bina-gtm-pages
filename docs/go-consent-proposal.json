@@ -1,0 +1,18 @@
+{
+  "status": "offline-proposal",
+  "input": "Page Hostname",
+  "rows": [
+    { "hostname": "go.bina.school", "websiteKey": "a0152240f952608c3aef584b8e6b3210" }
+  ],
+  "defaultValue": "815e2d032929805e004eec67b12f2714",
+  "preserve": {
+    "tag_id": 92,
+    "function": "__cvt_KDQSW",
+    "waitForTime": "2000",
+    "urlPassThrough": false,
+    "adsRedaction": false,
+    "firing": "Consent Initialization - All Pages"
+  },
+  "goRuleCondition": "regionName IS 'EU_UK'",
+  "goActiveLaw": "gdpr"
+}

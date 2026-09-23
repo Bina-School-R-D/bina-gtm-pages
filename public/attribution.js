@@ -9,10 +9,11 @@
  * What it does
  *   1. Captures utm_source/medium/campaign/content/term + gclid + the affiliate `ref`
  *      from the landing URL and persists the FIRST set it ever sees (localStorage).
- *   2. Appends those params to every CTA pointing at form.thebinaschool.com, so the form's
- *      hidden fields receive source/campaign and the Close attribution chain stays intact.
+ *   2. Appends those params to form links and the observed HTTPS main-site homepage
+ *      CTAs, carrying the first touch to the main helper and then the form.
  *
- * Two deliberate differences from the main-site file, both documented in CLAUDE.md:
+ * Three deliberate differences from the main-site file, all documented in CLAUDE.md:
+ *   - Also decorates https://thebinaschool.com/ (query/hash allowed), the ESA CTA.
  *   - The stored set expires after 365 days (the main site keeps it forever). Matches the
  *     partner-program window and beats any real ad attribution window.
  *   - Reads the legacy `bina_ref` key written by the old inline snippet on this domain, so
@@ -97,16 +98,19 @@
     return merged;
   }
 
-  function isFormUrl(value) {
+  function isAttributionUrl(value) {
     if (!value) return false;
     try {
-      return new URL(value, window.location.href).hostname === FORM_HOST;
+      var url = new URL(value, window.location.href);
+      if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
+      return url.hostname === FORM_HOST ||
+        (url.origin === 'https://thebinaschool.com' && url.pathname === '/');
     } catch (e) {
-      return value.indexOf(FORM_HOST) !== -1;
+      return false;
     }
   }
 
-  // Append attribution to a form URL. Idempotent — never overwrites a param already there,
+  // Append attribution to an allowed URL. Never overwrites a param already there,
   // so re-running on the same element (or a manual ?ref= on the link) is a no-op.
   function withAttribution(value) {
     var data = attribution();
@@ -129,14 +133,14 @@
     var anchors = root.querySelectorAll('a[href]');
     for (var i = 0; i < anchors.length; i++) {
       var href = anchors[i].getAttribute('href');
-      if (isFormUrl(href)) anchors[i].setAttribute('href', withAttribution(href));
+      if (isAttributionUrl(href)) anchors[i].setAttribute('href', withAttribution(href));
     }
     for (var d = 0; d < DATA_ATTRS.length; d++) {
       var attr = DATA_ATTRS[d];
       var els = root.querySelectorAll('[' + attr + ']');
       for (var j = 0; j < els.length; j++) {
         var val = els[j].getAttribute(attr);
-        if (isFormUrl(val)) els[j].setAttribute(attr, withAttribution(val));
+        if (isAttributionUrl(val)) els[j].setAttribute(attr, withAttribution(val));
       }
     }
   }
@@ -148,7 +152,7 @@
     while (node && node !== document) {
       if (node.tagName === 'A') {
         var href = node.getAttribute('href');
-        if (isFormUrl(href)) {
+        if (isAttributionUrl(href)) {
           node.setAttribute('href', withAttribution(href));
           return;
         }
@@ -156,7 +160,7 @@
       if (node.getAttribute) {
         for (var d = 0; d < DATA_ATTRS.length; d++) {
           var val = node.getAttribute(DATA_ATTRS[d]);
-          if (val && isFormUrl(val)) {
+          if (val && isAttributionUrl(val)) {
             node.setAttribute(DATA_ATTRS[d], withAttribution(val));
             return;
           }
