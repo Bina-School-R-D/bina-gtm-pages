@@ -3,7 +3,7 @@
   "_openQuestions": [
     "SCOPE — 2026-09-22: these pages now cover only the five states where bina can accept students (Arizona, Idaho, New Hampshire, Utah, Wyoming). Every other state was removed on Akis's instruction; add one back the day its approval lands, not while it is pending.",
     "MERGE — 2026-09-22: /esa/<state> is now one page (hero → how it works → process → FAQ). The old /esa 50-state dropdown tool is gone; /esa is now a chooser across the five states.",
-    "DATES — 2027 windows researched 2026-09-22 against each state's own site; provenance per state is in esa-states.json under _dates. Wyoming has not published 2027–28 yet and the page says so. Arizona's quarterly cutoffs could not be re-verified (azed.gov blocks automated fetches) — confirm by hand with ADE. Re-verify all five every August.",
+    "DATES — 2027 windows researched 2026-09-22 against each state's own site; provenance per state is in esa-states.json under _dates. Wyoming has not published 2027–28 yet and the page says so. Arizona's funding quarters were confirmed by hand from the ADE handbook/FAQ on 2026-09-30 (azed.gov blocks automated fetches). Re-verify all five every August.",
     "thebinaschool.com still says ESA funding 'covers tuition in full' for Utah, Arizona and Wyoming. It does not: the largest base award is $8,000 against $10,769 yearly tuition. These pages publish the remainder instead. The homepage line should be corrected — not this repo's to fix.",
     "thebinaschool.com's homepage still names only Utah, Arizona and Wyoming, and the upstream ESA_State_Database.xlsx never got the Wyoming and New Hampshire approvals. Both lag these pages.",
     "New Hampshire's 'who' said 'families under the state income limit' — wrong since SB 295 (2025) removed the 350% FPL cap. Corrected here to universal with the 12,500-student statewide cap. Push the correction back into the upstream database.",
@@ -156,7 +156,7 @@
       "coverTitle": "Arizona's own handbook approves what bina is",
       "coverBody": "The ESA handbook lists “tuition or fees for a nonpublic online learning program” as an approved expense — the exact category bina sits in. You are not hoping a reviewer stretches a rule.",
       "timingTitle": "Arizona is open all year, and the date you sign moves your money",
-      "timingBody": "There is no annual deadline — applications run year-round. Funding quarters start Jun 1, Sep 1, Dec 1 and Mar 1, and your quarter is set by your contract-signing date, so signing with bina earlier puts you in an earlier funding quarter. Of the five states on this site, Arizona is the easiest one to start in mid-year.",
+      "timingBody": "There is no annual deadline — applications run year-round. Funding runs in quarters — Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun — and your funding starts in the quarter you sign your contract, with money arriving between the 15th and 30th of that quarter's first month. Signing with bina earlier puts you in an earlier funding quarter. Of the five states on this site, Arizona is the easiest one to start in mid-year.",
       "faq": [
         {
           "q": "Is bina really an approved Arizona ESA expense, or are we hoping a reviewer agrees?",
@@ -168,7 +168,7 @@
         },
         {
           "q": "Can we start mid-year?",
-          "a": "Yes, and Arizona is the best state on this site for it. There is no annual deadline; your funding quarter is set by the date you sign, with cutoffs on Jun 1, Sep 1, Dec 1 and Mar 1. Sign earlier, get funded sooner."
+          "a": "Yes, and Arizona is the best state on this site for it. There is no annual deadline; your funding quarter is set by the date you sign, and the quarters end on Sep 30, Dec 31, Mar 31 and Jun 30. Sign earlier, get funded sooner."
         },
         {
           "q": "How long does approval take?",

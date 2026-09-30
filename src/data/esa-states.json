@@ -2,7 +2,7 @@
   "_source": "bina-gtm/notes/ESA_State_Database.xlsx — the bina team's ESA database. This file lists ONLY the states where bina can accept students today; a state is added here the day its approval lands, never before. Sync from the database; never invent numbers or dates. If a field is unknown, use an honest fallback and flag the gap to the team.",
   "_dates": {
     "_note": "Application windows researched 2026-09-22 against each state's own site. Re-verify every August, before the next cycle opens. Where a state has not published its dates, say so on the page rather than guessing.",
-    "Arizona": "Rolling, no annual deadline. Quarterly cutoffs (Jun 1 / Sep 1 / Dec 1 / Mar 1) carried from the team database — azed.gov blocks automated fetches, so confirm by hand with ADE.",
+    "Arizona": "Rolling, no annual deadline. Funding quarters Jul 1–Sep 30 / Oct 1–Dec 31 / Jan 1–Mar 31 / Apr 1–Jun 30; funding starts in the quarter the contract is signed, deposited the 15th–30th of the quarter's first month. Confirmed by hand from the ADE ESA handbook/FAQ (2025–26, latest published) on 2026-09-30 — azed.gov blocks automated fetches.",
     "New Hampshire": "nh.scholarshipfund.org — rolling; full award needs the application complete and verified by Jul 15, documents in by Jul 1; prorated awards through February. 2027–28 open date not published; 2026–27 opened Mar 16, 2026.",
     "Utah": "utaheducationfitsall.org — Mar 1 returning / Apr 1 new / May 1 close is the recurring schedule set in law, so the 2027 dates follow from statute rather than an announcement.",
     "Idaho": "Idaho State Tax Commission — Jan 15 – Mar 15, 2027 published for the 2026 credit paid in 2027. Priority from 2027: prior-year recipients, then ≤300% FPL.",
@@ -69,7 +69,7 @@
       "who": "Every Arizona K–12 family — no income requirement.",
       "howMuch": "$7,000–$8,000 per child, per year (more for children with special needs).",
       "platform": "ClassWallet",
-      "applyWindow": "Open all year — Arizona has no annual deadline. Your funding quarter is set by the date you sign with bina, with cutoffs on Jun 1, Sep 1, Dec 1 and Mar 1, so signing earlier means funds sooner.",
+      "applyWindow": "Open all year — Arizona has no annual deadline. Your funding quarter is set by the date you sign with bina, and the quarters end on Sep 30, Dec 31, Mar 31 and Jun 30, so signing earlier means funds sooner.",
       "windowState": "rolling",
       "windowNote": "Arizona is the one state you can start in any month of the year.",
       "applyUrl": "https://esaportal.azed.gov/",
