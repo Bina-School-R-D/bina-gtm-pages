@@ -2,8 +2,6 @@
 
 ## /esa — open items
 
-- **Arizona quarterly cutoffs unverified** — `azed.gov` blocks automated fetches, so the Jun 1 / Sep 1 /
-  Dec 1 / Mar 1 funding-quarter cutoffs are still the team-database figures. Confirm by hand with ADE.
 - **Wyoming 2027–28 dates not published** — WDE has announced nothing. The page says so and points at
   early July 2027 based on the 2026–27 cycle. Replace with real dates the day they land.
 - **Re-verify all five application windows each August**, before the next cycle opens. Per-state
