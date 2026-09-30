@@ -132,7 +132,6 @@ for (const name of served) {
   for (const text of [
     copy.h1, // hero
     copy.intro,
-    landing.howItWorks.heroSchool,
     landing.howItWorks.fundingTitle, // how it works
     landing.howItWorks.schoolTitle,
     d.howMuch === undefined ? '' : copy.coverTitle, // the money
