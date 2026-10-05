@@ -110,6 +110,12 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     };
     document.querySelectorAll('.sd').forEach((el) => {
       ['pointerenter', 'focus', 'click'].forEach((t) => el.addEventListener(t, () => show(el)));
+      // Mouse-out or focus-out resets the line. Touch fires pointerleave right after a tap, so
+      // only a mouse resets on leave — a tapped date stays shown until the next tap.
+      el.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse') info.textContent = DEFAULT_INFO;
+      });
+      el.addEventListener('blur', () => (info.textContent = DEFAULT_INFO));
     });
   </script>
 </BaseLayout>
