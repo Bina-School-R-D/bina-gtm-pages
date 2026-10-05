@@ -20,7 +20,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
         <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
         <span class="switch-label">Show the dates your child can start</span>
       </label>
-      <p class="cal-info" id="cal-info" aria-live="polite" hidden></p>
+      <p class="cal-info is-off" id="cal-info" aria-live="polite"></p>
     </div>
 
     <header class="cal-head">
@@ -95,7 +95,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     function setMode(on) {
       root.dataset.mode = on ? 'starts' : 'calendar';
       toggle.checked = on;
-      info.hidden = !on;
+      info.classList.toggle('is-off', !on);
       info.textContent = DEFAULT_INFO;
       history.replaceState(null, '', on ? '#start-dates' : location.pathname + location.search);
     }
@@ -133,13 +133,35 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   }
 
   /* ---- toggle ---- */
+  /* Toggle sits dead centre; the sign-up line has its own slot on the right, and is only
+     made invisible (never removed), so switching on moves nothing — not the toggle, not the grid. */
   .cal-toggle {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem 1.25rem;
     min-height: 2.75rem;
+  }
+  .cal-toggle .switch {
+    grid-column: 2;
+  }
+  .cal-toggle .cal-info {
+    grid-column: 3;
+    justify-self: end;
+  }
+  .cal-info.is-off {
+    visibility: hidden;
+  }
+  @media (max-width: 900px) {
+    .cal-toggle {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+    .cal-toggle .switch,
+    .cal-toggle .cal-info {
+      grid-column: 1;
+      justify-self: center;
+    }
   }
   .switch {
     display: inline-flex;
