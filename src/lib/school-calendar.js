@@ -8,6 +8,15 @@ const toIso = (d) => d.toISOString().slice(0, 10);
 const addDays = (iso, n) => toIso(new Date(toDate(iso).getTime() + n * DAY));
 const weekday = (iso) => toDate(iso).getUTCDay(); // 0 = Sun … 6 = Sat
 const isWeekend = (iso) => [0, 6].includes(weekday(iso));
+/** Step back n business days (Mon–Fri) — the last day a family can sign for a given start. */
+const subBusinessDays = (iso, n) => {
+  let d = iso;
+  while (n > 0) {
+    d = addDays(d, -1);
+    if (!isWeekend(d)) n -= 1;
+  }
+  return d;
+};
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -42,7 +51,7 @@ function computeStartDates() {
 
 const startList = (data.startDates.override ?? computeStartDates()).map((s) => ({
   ...s,
-  signBy: addDays(s.iso, -(data.startDates.signByDaysBefore[weekday(s.iso)] ?? 6)),
+  signBy: subBusinessDays(s.iso, data.startDates.signByBusinessDays),
 }));
 const startByIso = new Map(startList.map((s) => [s.iso, s]));
 
