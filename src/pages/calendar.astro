@@ -369,12 +369,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   .key-starts { display: none; }
   .cal[data-mode='starts'] .key-calendar { display: none; }
   .cal[data-mode='starts'] .key-starts { display: flex; }
-  .cal[data-mode='starts'] .d:not(.sd) { opacity: 0.22; }
-  .cal[data-mode='starts'] .d:not(.sd) .n {
-    background: transparent;
-    border-color: transparent;
-    color: var(--text);
-  }
+  /* Keep every biome colour, faded, so a start date still reads against its biome. */
+  .cal[data-mode='starts'] .d:not(.sd) { opacity: 0.3; }
   .cal[data-mode='starts'] .d.sd {
     cursor: pointer;
   }
