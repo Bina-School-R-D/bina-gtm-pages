@@ -1,0 +1,402 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/school-calendar.json';
+import { calendarMonths, startDates } from '../lib/school-calendar.js';
+
+const months = calendarMonths();
+const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+---
+
+<BaseLayout
+  title={`bina calendar ${data.schoolYear}`}
+  description={`The bina school year ${data.schoolYear}: every biome, every showcase, and the dates a new child can start class.`}
+  noindex={true}
+  bare={true}
+>
+  <div class="cal" data-mode="calendar">
+    <div class="cal-toggle">
+      <label class="switch">
+        <input type="checkbox" id="starts-toggle" />
+        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        <span class="switch-label">Show the dates your child can start</span>
+      </label>
+      <p class="cal-info" id="cal-info" aria-live="polite" hidden></p>
+    </div>
+
+    <header class="cal-head">
+      <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="195" height="124" />
+      <h1>bina calendar</h1>
+      <img src="/images/calendar/year-27.png" alt="2027" class="cal-art" width="182" height="130" />
+    </header>
+
+    <div class="cal-grid">
+      {months.map((m) => (
+        <section class="month" aria-label={m.name}>
+          <h2>{m.name}</h2>
+          <div class="days">
+            {weekdays.map((w, i) => <span class:list={['dow', { wknd: i > 4 }]}>{w}</span>)}
+            {Array.from({ length: m.lead }).map(() => <span />)}
+            {m.cells.map((c) => (
+              <span
+                class:list={['d', c.kind, { wknd: c.weekend, sd: c.start }]}
+                style={c.biome ? `--c:${c.biome.color};--ink:${c.biome.ink}` : c.start ? `--c:${c.start.color}` : undefined}
+                data-iso={c.iso}
+                data-signby={c.start?.signBy}
+                data-info={c.start ? `${c.start.label} · ${c.start.biome} · sign up by ${c.start.signByLabel}` : undefined}
+                tabindex={c.start ? 0 : undefined}
+              >
+                <span class="n">{c.day}</span>
+              </span>
+            ))}
+          </div>
+          {m.biomeStarts.map((b) => (
+            <p class="biome-key" style={`--c:${b.color}`}>Start of biome: {b.name}</p>
+          ))}
+        </section>
+      ))}
+    </div>
+
+    <footer class="cal-foot">
+      <ul class="key key-calendar">
+        <li><span class="k k-start">00</span> Start of a new biome</li>
+        <li><span class="k k-unit">00</span> Biome Unit</li>
+        <li><span class="k k-show">00</span> Final Project Showcase</li>
+      </ul>
+      <ul class="key key-starts">
+        <li><span class="k k-open">00</span> Your child can start</li>
+        <li><span class="k k-closed">00</span> Sign-up window closed</li>
+        <li class="key-next" id="key-next"></li>
+      </ul>
+      <a href="https://thebinaschool.com" class="cal-logo" aria-label="bina — home">
+        <img src="/images/navbar-logo.svg" alt="bina" />
+      </a>
+    </footer>
+  </div>
+
+  <script define:vars={{ starts: startDates.map((s) => ({ iso: s.iso, signBy: s.signBy })) }}>
+    const root = document.querySelector('.cal');
+    const toggle = document.getElementById('starts-toggle');
+    const info = document.getElementById('cal-info');
+    const next = document.getElementById('key-next');
+    const DEFAULT_INFO = 'Tap a date to see when to sign up by.';
+
+    // Today in the viewer's own timezone — a sign-up deadline is end of that day, where they are.
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+    document.querySelectorAll('.sd').forEach((el) => {
+      if (el.dataset.signby < today) el.classList.add('gone');
+    });
+    const firstOpen = document.querySelector('.sd:not(.gone)');
+    next.textContent = firstOpen
+      ? `Next start: ${firstOpen.dataset.info.replace(' · ', ' (').replace(' · ', ') — ')}`
+      : 'No start dates left this school year.';
+
+    function setMode(on) {
+      root.dataset.mode = on ? 'starts' : 'calendar';
+      toggle.checked = on;
+      info.hidden = !on;
+      info.textContent = DEFAULT_INFO;
+      history.replaceState(null, '', on ? '#start-dates' : location.pathname + location.search);
+    }
+    toggle.addEventListener('change', () => setMode(toggle.checked));
+    setMode(location.hash === '#start-dates');
+
+    const show = (el) => {
+      if (root.dataset.mode !== 'starts') return;
+      info.textContent = el.classList.contains('gone')
+        ? `${el.dataset.info.split(' · sign up by')[0]} — sign-up window closed`
+        : el.dataset.info;
+    };
+    document.querySelectorAll('.sd').forEach((el) => {
+      ['pointerenter', 'focus', 'click'].forEach((t) => el.addEventListener(t, () => show(el)));
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  :global(body) {
+    background: #212121;
+  }
+  .cal {
+    --bg: #212121;
+    --muted: #b3b3b3;
+    --dim: #6f6f6f;
+    --text: #e6e6e6;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1rem clamp(1rem, 2.4vw, 2.5rem) 1.5rem;
+    font-family: var(--font-display);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  /* ---- toggle ---- */
+  .cal-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
+    min-height: 2.75rem;
+  }
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .switch input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .switch-track {
+    position: relative;
+    width: 3.25rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: #3a3a3a;
+    border: 2px solid #4a4a4a;
+    transition: background 0.2s;
+  }
+  .switch-thumb {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    background: #fff;
+    transition: transform 0.2s;
+  }
+  .switch input:checked + .switch-track {
+    background: var(--color-bina-yellow);
+    border-color: var(--color-bina-yellow);
+  }
+  .switch input:checked + .switch-track .switch-thumb {
+    transform: translateX(1.5rem);
+    background: #000;
+  }
+  .switch input:checked ~ .switch-label {
+    color: #fff;
+  }
+  .switch input:focus-visible + .switch-track {
+    outline: 3px solid var(--color-bina-pink);
+    outline-offset: 2px;
+  }
+  .cal-info {
+    margin: 0;
+    padding: 0.25rem 0.875rem;
+    border-radius: 999px;
+    background: #000;
+    color: var(--color-bina-yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  /* ---- header ---- */
+  .cal-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .cal-head h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: #4f97fb;
+    font-size: clamp(2.5rem, 6.4vw, 6rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-align: center;
+  }
+  .cal-art {
+    width: clamp(4.5rem, 13vw, 12.5rem);
+    height: auto;
+  }
+  .cal-head .cal-art:last-child {
+    justify-self: end;
+  }
+
+  /* ---- months ---- */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2.75rem clamp(0.75rem, 1.6vw, 2rem);
+  }
+  @media (max-width: 1100px) {
+    .cal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
+    .cal-head { gap: 0.25rem; }
+  }
+  .month h2 {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1rem, 1.25vw, 1.25rem);
+    color: var(--muted);
+  }
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    row-gap: 0.3rem;
+    text-align: center;
+    font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  }
+  .dow {
+    color: var(--muted);
+    font-weight: 500;
+    padding-bottom: 0.15rem;
+  }
+  .dow.wknd,
+  .d.wknd {
+    color: var(--dim);
+  }
+  .d {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    color: var(--text);
+    transition: opacity 0.2s;
+  }
+  .d .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.45em;
+    height: 1.45em;
+    padding: 0 0.1em;
+    border-radius: 0.3em;
+    border: 1.5px solid transparent;
+    line-height: 1;
+  }
+  .d.unit .n {
+    background: var(--c);
+    color: var(--ink);
+  }
+  .d.start .n {
+    border-color: var(--c);
+  }
+  .d.showcase .n {
+    border-color: var(--c);
+    border-radius: 999px;
+  }
+  .biome-key {
+    margin: 1.1rem 0 0;
+    color: var(--c);
+    font-weight: 700;
+    font-size: clamp(0.72rem, 0.85vw, 0.85rem);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .biome-key::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--c);
+  }
+
+  /* ---- footer ---- */
+  .cal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid #5a5a5a;
+  }
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  }
+  .key li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .k {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.3rem;
+    border: 1.5px solid var(--muted);
+    color: var(--muted);
+  }
+  .k-unit { background: var(--muted); color: var(--bg); }
+  .k-show { border-radius: 999px; }
+  .k-open { background: var(--color-bina-yellow); border-color: var(--color-bina-yellow); color: #000; }
+  .k-closed { background: #444; border-color: #444; color: #888; text-decoration: line-through; }
+  .key-next { color: var(--color-bina-yellow); }
+  .cal-logo {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.6rem;
+    background: #000;
+  }
+  .cal-logo img { width: 2.6rem; height: auto; }
+
+  /* ---- start-dates mode ---- */
+  .key-starts { display: none; }
+  .cal[data-mode='starts'] .key-calendar { display: none; }
+  .cal[data-mode='starts'] .key-starts { display: flex; }
+  .cal[data-mode='starts'] .d:not(.sd) { opacity: 0.22; }
+  .cal[data-mode='starts'] .d:not(.sd) .n {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text);
+  }
+  .cal[data-mode='starts'] .d.sd {
+    cursor: pointer;
+  }
+  .cal[data-mode='starts'] .d.sd .n {
+    background: var(--c);
+    border-color: #fff;
+    border-radius: 0.3em;
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 0 0 2px var(--bg);
+  }
+  .cal[data-mode='starts'] .d.sd:hover .n,
+  .cal[data-mode='starts'] .d.sd:focus-visible .n {
+    outline: 2px solid var(--color-bina-pink);
+    outline-offset: 1px;
+  }
+  .cal[data-mode='starts'] .d.sd.gone .n {
+    background: #444;
+    border-color: #444;
+    color: #888;
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+  .d.sd:focus { outline: none; }
+</style>

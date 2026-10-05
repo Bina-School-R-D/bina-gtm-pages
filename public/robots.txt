@@ -1,0 +1,3 @@
+User-agent: *
+# Provisional 2026/27 dates — remove once the school team confirms the final list.
+Disallow: /calendar
