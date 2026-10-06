@@ -15,6 +15,10 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 >
   <div class="cal" data-mode="calendar">
     <div class="cal-toggle">
+      <label class="handover">
+        <span>Sign-up date</span>
+        <input type="date" id="handover" class="handover-input" />
+      </label>
       <label class="switch">
         <input type="checkbox" id="starts-toggle" />
         <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
@@ -64,7 +68,6 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
       </ul>
       <ul class="key key-starts">
         <li><span class="k k-open">00</span> Your child can start</li>
-        <li><span class="k k-closed">00</span> Sign-up window closed</li>
         <li class="key-next" id="key-next"></li>
       </ul>
       <a href="https://thebinaschool.com" class="cal-logo" aria-label="bina — home">
@@ -80,17 +83,38 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     const next = document.getElementById('key-next');
     const DEFAULT_INFO = 'Tap a date to see when to sign up by.';
 
+    const handover = document.getElementById('handover');
+
     // Today in the viewer's own timezone — a sign-up deadline is end of that day, where they are.
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const isIso = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v ?? '');
 
-    document.querySelectorAll('.sd').forEach((el) => {
-      if (el.dataset.signby < today) el.classList.add('gone');
+    // The sign-up (handover) date: a start date is open only if its sign-by deadline is on or
+    // after it. Defaults to today; `?signup=YYYY-MM-DD` lets a rep send a family a pre-set link.
+    function applyHandover(iso) {
+      document.querySelectorAll('.sd').forEach((el) => {
+        const gone = el.dataset.signby < iso;
+        el.classList.toggle('gone', gone);
+        el.tabIndex = gone ? -1 : 0;
+      });
+      const firstOpen = document.querySelector('.sd:not(.gone)');
+      next.textContent = firstOpen
+        ? `First possible start: ${firstOpen.dataset.info.replace(' · ', ' (').replace(' · ', ') — ')}`
+        : 'No start dates left this school year for that sign-up date.';
+    }
+    const params = new URLSearchParams(location.search);
+    handover.value = isIso(params.get('signup')) ? params.get('signup') : today;
+    applyHandover(handover.value);
+    handover.addEventListener('change', () => {
+      const iso = isIso(handover.value) ? handover.value : today;
+      applyHandover(iso);
+      if (iso === today) params.delete('signup');
+      else params.set('signup', iso);
+      const q = params.toString();
+      history.replaceState(null, '', `${location.pathname}${q ? `?${q}` : ''}${location.hash}`);
+      setMode(true);
     });
-    const firstOpen = document.querySelector('.sd:not(.gone)');
-    next.textContent = firstOpen
-      ? `Next start: ${firstOpen.dataset.info.replace(' · ', ' (').replace(' · ', ') — ')}`
-      : 'No start dates left this school year.';
 
     function setMode(on) {
       root.dataset.mode = on ? 'starts' : 'calendar';
@@ -103,10 +127,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     setMode(location.hash === '#start-dates');
 
     const show = (el) => {
-      if (root.dataset.mode !== 'starts') return;
-      info.textContent = el.classList.contains('gone')
-        ? `${el.dataset.info.split(' · sign up by')[0]} — sign-up window closed`
-        : el.dataset.info;
+      if (root.dataset.mode !== 'starts' || el.classList.contains('gone')) return;
+      info.textContent = el.dataset.info;
     };
     document.querySelectorAll('.sd').forEach((el) => {
       ['pointerenter', 'focus', 'click'].forEach((t) => el.addEventListener(t, () => show(el)));
@@ -148,6 +170,10 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     gap: 0.5rem 1.25rem;
     min-height: 2.75rem;
   }
+  .cal-toggle .handover {
+    grid-column: 1;
+    justify-self: start;
+  }
   .cal-toggle .switch {
     grid-column: 2;
   }
@@ -163,6 +189,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
       grid-template-columns: 1fr;
       justify-items: center;
     }
+    .cal-toggle .handover,
     .cal-toggle .switch,
     .cal-toggle .cal-info {
       grid-column: 1;
@@ -213,6 +240,27 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     color: #fff;
   }
   .switch input:focus-visible + .switch-track {
+    outline: 3px solid var(--color-bina-pink);
+    outline-offset: 2px;
+  }
+  .handover {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .handover-input {
+    font: inherit;
+    font-weight: 700;
+    color: #fff;
+    background: #000;
+    border: 2px solid #4a4a4a;
+    border-radius: 999px;
+    padding: 0.2rem 0.75rem;
+    color-scheme: dark;
+  }
+  .handover-input:focus-visible {
     outline: 3px solid var(--color-bina-pink);
     outline-offset: 2px;
   }
@@ -379,7 +427,6 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   .k-unit { background: var(--muted); color: var(--bg); }
   .k-show { border-radius: 999px; }
   .k-open { background: var(--color-bina-yellow); border-color: var(--color-bina-yellow); color: #000; }
-  .k-closed { background: #444; border-color: #444; color: #888; text-decoration: line-through; }
   .key-next { color: var(--color-bina-yellow); }
   .cal-logo {
     margin-left: auto;
@@ -415,12 +462,16 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     outline: 2px solid var(--color-bina-pink);
     outline-offset: 1px;
   }
+  /* Too late for the chosen sign-up date: not shown as a start date at all. */
+  .cal[data-mode='starts'] .d.sd.gone { opacity: 0.3; cursor: default; }
   .cal[data-mode='starts'] .d.sd.gone .n {
-    background: #444;
-    border-color: #444;
-    color: #888;
-    text-decoration: line-through;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text);
     font-weight: 500;
+    outline: none;
   }
+  .cal[data-mode='starts'] .d.sd.gone.unit .n { background: var(--c); color: var(--ink); }
   .d.sd:focus { outline: none; }
 </style>
