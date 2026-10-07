@@ -31,7 +31,8 @@ const closed = new Set(data.nonSchoolDays.map((d) => d.date));
 const biomes = data.biomes.map((b) => ({ ...b, end: b.showcase }));
 const biomeOn = (iso) => biomes.find((b) => iso >= b.start && iso <= b.end);
 
-/** The rolling-enrollment rules from Slack (#strategy 2026-09-14), applied per biome. */
+/** The rolling-enrollment rules from Slack (#strategy 2026-09-14), applied per biome.
+ *  Rolling Wednesdays stop after `rollingUntil`; from then on only biome starts are intakes. */
 function computeStartDates() {
   const rules = data.startDates;
   const list = [];
@@ -44,7 +45,10 @@ function computeStartDates() {
       weds.push(iso);
     }
     weds.pop(); // the last remaining Wednesday is closed: a new child would get one week, then a break
-    for (const iso of weds) list.push({ iso, biome: b.name, type: 'rolling' });
+    for (const iso of weds) {
+      if (rules.rollingUntil && iso > rules.rollingUntil) continue; // after it, biome starts only
+      list.push({ iso, biome: b.name, type: 'rolling' });
+    }
   }
   return list;
 }
@@ -80,7 +84,7 @@ export function calendarMonths() {
         weekend: isWeekend(iso),
         kind,
         biome: kind ? b : null,
-        start: s ? { ...s, label: formatDay(s.iso), signByLabel: formatDay(s.signBy), color: biomeOn(iso).color } : null,
+        start: s ? { ...s, label: formatDay(s.iso), signByLabel: formatDay(s.signBy), color: biomeOn(iso).color, stroke: biomeOn(iso).stroke } : null,
       });
     }
     months.push({
