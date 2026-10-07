@@ -7,19 +7,24 @@
  * identical parameter set a lead from the main site does.
  *
  * What it does
- *   1. Captures utm_source/medium/campaign/content/term + gclid + the affiliate `ref`
- *      from the landing URL and persists the FIRST set it ever sees (localStorage).
- *   2. Appends those params to form links and the observed HTTPS main-site homepage
- *      CTAs, carrying the first touch to the main helper and then the form.
+ *   1. Captures utm_source/medium/campaign/content/term + gclid + fbclid + the affiliate
+ *      `ref` from the landing URL and persists the FIRST set it ever sees (localStorage).
+ *   2. Appends those params to form links, links to the start.bina.school app and the
+ *      observed HTTPS main-site homepage CTAs, carrying the first touch to the main
+ *      helper, the form or the app.
  *
- * Three deliberate differences from the main-site file, all documented in CLAUDE.md:
+ * Deliberate differences from the main-site file, all documented in CLAUDE.md:
  *   - Also decorates https://thebinaschool.com/ (query/hash allowed), the ESA CTA.
+ *   - Also decorates any start.bina.school path (bina-start-school decision #56), so the
+ *     first touch survives the hop to the app. Same key list as the app: the 8 below.
+ *   - Carries fbclid too (the main-site file does not).
  *   - The stored set expires after 365 days (the main site keeps it forever). Matches the
  *     partner-program window and beats any real ad attribution window.
  *   - Reads the legacy `bina_ref` key written by the old inline snippet on this domain, so
  *     partner links shared before this shipped keep attributing.
  * localStorage is per-origin: a first touch stored here is NOT visible on
- * thebinaschool.com, which is exactly why the params are carried on the URL instead.
+ * thebinaschool.com or start.bina.school, which is exactly why the params are carried on
+ * the URL instead.
  */
 (function () {
   'use strict';
@@ -28,12 +33,14 @@
   // Skip under headless prerenderers so snapshots / storage stay clean (mirrors the main site).
   if (typeof navigator !== 'undefined' && /ReactSnap|HeadlessChrome/i.test(navigator.userAgent || '')) return;
 
-  var FORM_HOST = 'form.thebinaschool.com';
+  // Hosts decorated on any path. Exact hostname match, so lookalikes never receive params.
+  var DECORATED_HOSTS = ['form.thebinaschool.com', 'start.bina.school'];
   var STORE_KEY = 'bina_attribution'; // same key name as the main site
   var STORE_TS_KEY = 'bina_attribution_ts';
   var LEGACY_REF_KEY = 'bina_ref';
   var MAX_DAYS = 365;
-  var PARAM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'ref'];
+  // One key list across go.bina.school and start.bina.school (decision #56).
+  var PARAM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'fbclid', 'ref'];
   var DATA_ATTRS = ['data-href', 'data-url', 'data-link']; // non-anchor CTA patterns
 
   function readUrlParams() {
@@ -103,7 +110,7 @@
     try {
       var url = new URL(value, window.location.href);
       if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
-      return url.hostname === FORM_HOST ||
+      return DECORATED_HOSTS.indexOf(url.hostname) !== -1 ||
         (url.origin === 'https://thebinaschool.com' && url.pathname === '/');
     } catch (e) {
       return false;

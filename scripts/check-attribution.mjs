@@ -7,8 +7,10 @@ import test from 'node:test';
 
 const source = readFileSync(new URL('../public/attribution.js', import.meta.url), 'utf8');
 const evidence = process.argv[2];
-const campaign = '?utm_source=test-source&utm_medium=cpc&utm_campaign=test-campaign&utm_content=cta&utm_term=school&gclid=test-click&ref=test-partner&email=excluded';
-const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'ref'];
+const campaign = '?utm_source=test-source&utm_medium=cpc&utm_campaign=test-campaign&utm_content=cta&utm_term=school&gclid=test-click&fbclid=test-fb&ref=test-partner&email=excluded';
+// The one key list shared with start.bina.school (bina-start-school decision #56).
+const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'fbclid', 'ref'];
+const mainSiteKeys = keys.filter((key) => key !== 'fbclid'); // thebinaschool.com's own helper carries 7
 function element(value, attr = 'href') {
   const attrs = { [attr]: value };
   return { tagName: attr === 'href' ? 'A' : 'BUTTON', parentNode: null,
@@ -29,8 +31,8 @@ function run({ elements = [], search = campaign, stored = {}, blocked = false, c
     click: (el) => { assert.equal(listeners.click.capture, true); listeners.click.fn({ target: { parentNode: el } }); } };
 }
 function params(el, attr = 'href') { return new URL(el.getAttribute(attr)).searchParams; }
-function allParams(el, attr = 'href') {
-  for (const key of keys) assert.equal(params(el, attr).get(key), new URLSearchParams(campaign).get(key), key);
+function allParams(el, attr = 'href', expected = keys) {
+  for (const key of expected) assert.equal(params(el, attr).get(key), new URLSearchParams(campaign).get(key), key);
   assert.equal(params(el, attr).has('email'), false);
 }
 for (const state of ['arizona', 'idaho', 'new-hampshire', 'utah', 'wyoming']) {
@@ -44,7 +46,7 @@ for (const state of ['arizona', 'idaho', 'new-hampshire', 'utah', 'wyoming']) {
   });
 }
 for (const attr of ['href', 'data-href', 'data-url', 'data-link']) {
-  for (const host of ['thebinaschool.com', 'form.thebinaschool.com']) {
+  for (const host of ['thebinaschool.com', 'form.thebinaschool.com', 'start.bina.school']) {
     test(`${host} ${attr}: static and dynamic nested click`, () => {
       const staticEl = element(`https://${host}/`, attr);
       const dynamicEl = element(`https://${host}/`, attr);
@@ -54,6 +56,26 @@ for (const attr of ['href', 'data-href', 'data-url', 'data-link']) {
     });
   }
 }
+test('start.bina.school: every app path carries the first touch; its own query and hash survive', () => {
+  for (const value of ['https://start.bina.school', 'https://start.bina.school/discovery', 'https://start.bina.school/form?goal=trial',
+    'https://start.bina.school/j/tok_8Fq2#plan', 'https://start.bina.school/r/partner-code', 'http://start.bina.school/discovery',
+    '//start.bina.school/discovery', 'https://START.bina.school/discovery']) {
+    for (const attr of ['href', 'data-href', 'data-url', 'data-link']) {
+      const el = element(value, attr); const env = run({ elements: [el] }); env.flush(); env.click(el); allParams(el, attr);
+    }
+  }
+  const el = element('https://start.bina.school/form?goal=trial&ref=manual#step-2');
+  run({ elements: [el] }).flush();
+  assert.equal(params(el).get('goal'), 'trial'); assert.equal(params(el).get('ref'), 'manual');
+  assert.equal(new URL(el.getAttribute('href')).hash, '#step-2');
+});
+test('start.bina.school: stored first touch wins over the landing URL', () => {
+  const el = element('https://start.bina.school/discovery');
+  const stored = { bina_attribution: JSON.stringify({ utm_source: 'first', fbclid: 'first-fb' }), bina_attribution_ts: String(Date.now()) };
+  run({ elements: [el], stored }).flush();
+  assert.equal(params(el).get('utm_source'), 'first'); assert.equal(params(el).get('fbclid'), 'first-fb');
+  assert.equal(params(el).get('gclid'), 'test-click'); assert.equal(params(el).has('email'), false);
+});
 test('destination values, hash and unrelated query survive', () => {
   const el = element('https://thebinaschool.com/?ref=manual&utm_source=destination&other=keep#apply');
   run({ elements: [el] }).flush();
@@ -84,7 +106,10 @@ test('first touch persists; no attribution and headless controls stay unchanged'
 test('no leakage to external/lookalike hosts, unsupported schemes, or unobserved main paths', () => {
   for (const value of ['https://external.example', 'https://thebinaschool.com.evil.test', 'https://form.thebinaschool.com.evil.test',
     'https://thebinaschool.com@evil.test', 'https://www.thebinaschool.com', 'https://thebinaschool.com/privacy',
-    'ftp://form.thebinaschool.com/new', 'javascript://form.thebinaschool.com/new', 'mailto:form.thebinaschool.com', 'http://thebinaschool.com', 'https://[bad']) {
+    'ftp://form.thebinaschool.com/new', 'javascript://form.thebinaschool.com/new', 'mailto:form.thebinaschool.com', 'http://thebinaschool.com', 'https://[bad',
+    'https://start.bina.school.evil.test/discovery', 'https://evilstart.bina.school/discovery', 'https://www.start.bina.school/discovery',
+    'https://start.bina.school@evil.test/discovery', 'https://user:pass@start.bina.school/discovery', 'https://bina.school/',
+    'https://go.bina.school/esa', 'ftp://start.bina.school/discovery', 'javascript://start.bina.school/discovery', 'mailto:start.bina.school']) {
     for (const attr of ['href', 'data-href', 'data-url', 'data-link']) {
       const el = element(value, attr); const env = run({ elements: [el] }); env.flush(); env.click(el);
       assert.equal(el.getAttribute(attr), value, value);
@@ -100,5 +125,5 @@ if (evidence) test('fixture-only go to main to form executes the saved real main
   const main = element('https://thebinaschool.com'); run({ elements: [main] }).flush();
   const form = element('https://form.thebinaschool.com/new#apply');
   const env = run({ code: readFileSync(resolve(evidence, 'main-attribution.js'), 'utf8'), host: 'thebinaschool.com', search: new URL(main.getAttribute('href')).search, elements: [form] });
-  env.flush(); env.click(form); allParams(form);
+  env.flush(); env.click(form); allParams(form, 'href', mainSiteKeys);
 });
