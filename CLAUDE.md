@@ -82,7 +82,7 @@ There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.m
 
 ## Campaign lead-gen pages — the standard pattern
 
-Ad-hoc lead-gen campaign forms (Tally replacements) are a **standard page type**, not one-offs. The reference implementation, `/book-adventure`, was retired on 2026-10-07: its flow moved to the start app as **Try bina** (`start.bina.school/trial`, repo `bina-start-school`), and `/book-adventure` now redirects to thebinaschool.com. A new campaign page here follows this pattern (git history has the old page):
+Ad-hoc lead-gen campaign forms (Tally replacements) are a **standard page type**, not one-offs. The reference implementation, `/book-adventure`, was retired on 2026-10-07: its flow moved to the start app as **Try bina** (`start.bina.school/try`, repo `bina-start-school`), and `/book-adventure` now redirects to thebinaschool.com. A new campaign page here follows this pattern (git history has the old page):
 
 1. Multi-step wizard in one `card-bina` (intro → contact → qualify → redirect), plain inline script, no framework island. Form fields use `.input-bina` (defined in `global.css`); access inputs via `form.elements` (`form.name` is the form's own attribute — a real bug otherwise).
 2. On final submit, `navigator.sendBeacon` posts the lead to the shared n8n **`[S] A4. Campaign Intake`** webhook (`https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake`) as a `text/plain` blob (avoids a CORS preflight; the workflow parses JSON from the raw body), then `location.assign`s the redirect — capture is fire-and-forget and must never block or break the redirect.
