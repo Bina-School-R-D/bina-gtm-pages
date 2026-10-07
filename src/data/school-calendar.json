@@ -1,5 +1,5 @@
 {
-  "_source": "Copied from bina-start-school/config/calendar-2026-27.json (transcribed 2026-09-14 from the printed 2026/27 bina calendar) + config/enrollment.json. Provisional: replace with the school team's final list when it lands.",
+  "_source": "MIRROR — bina-start-school is the source of truth for dates and start-date rules (it is the brain of placement): change config/enrollment.json + config/calendar-2026-27.json there first, then copy here. Copied from bina-start-school/config/calendar-2026-27.json (transcribed 2026-09-14 from the printed 2026/27 bina calendar) + config/enrollment.json. Provisional: replace with the school team's final list when it lands.",
   "_openQuestions": [
     "EXTRA NOV+ INTAKE DATES (head of school, 2026-10-07): more start dates for November onward are coming the week of 2026-10-12. Until then only biome starts show after October.",
     "PROVISIONAL DATES (Akis, 2026-10-05): the school team is preparing the final start-date list. When it lands, put it in startDates.override and drop the noindex + robots.txt block.",
@@ -85,6 +85,7 @@
     "weekday": 3,
     "includeBiomeStart": true,
     "rollingUntil": "2026-10-31",
+    "_mirrors": "bina-start-school config/enrollment.json biomeFrom = 2026-11-01 (rollingUntil is the day before).",
     "_rollingUntil": "Head of school, 2026-10-07: rolling admissions continue through October; from November new children start only on biome start dates. More November-onward dates coming the following week — add them to override when they land.",
     "signByBusinessDays": 3,
     "_signBy": "Fixed rule (Akis, 2026-10-05): Family Success needs at least 3 business days to onboard, for every start date including biome-start Mondays. Wednesday → sign by the Friday before; Monday → sign by the Wednesday before. Same rule as bina-start-school config/enrollment.json (cutoffBusinessDays).",
