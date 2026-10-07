@@ -43,7 +43,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
             {m.cells.map((c) => (
               <span
                 class:list={['d', c.kind, { wknd: c.weekend, sd: c.start }]}
-                style={c.biome ? `--c:${c.biome.color};--ink:${c.biome.ink}` : c.start ? `--c:${c.start.color}` : undefined}
+                style={c.biome ? `--c:${c.biome.color};--ink:${c.biome.ink};--s:${c.biome.stroke}` : c.start ? `--c:${c.start.color};--s:${c.start.stroke}` : undefined}
                 data-iso={c.iso}
                 data-signby={c.start?.signBy}
                 data-info={c.start ? `${c.start.label} · ${c.start.biome} · sign up by ${c.start.signByLabel}` : undefined}
@@ -451,7 +451,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   }
   .cal[data-mode='starts'] .d.sd .n {
     background: var(--c);
-    border-color: #fff;
+    border-color: var(--s); /* designer's light tint of each biome colour */
     border-radius: 0.3em;
     color: #000;
     font-weight: 700;

@@ -1,6 +1,7 @@
 {
   "_source": "Copied from bina-start-school/config/calendar-2026-27.json (transcribed 2026-09-14 from the printed 2026/27 bina calendar) + config/enrollment.json. Provisional: replace with the school team's final list when it lands.",
   "_openQuestions": [
+    "EXTRA NOV+ INTAKE DATES (head of school, 2026-10-07): more start dates for November onward are coming the week of 2026-10-12. Until then only biome starts show after October.",
     "PROVISIONAL DATES (Akis, 2026-10-05): the school team is preparing the final start-date list. When it lands, put it in startDates.override and drop the noindex + robots.txt block.",
     "Wed 10 Mar 2027 non-school day inside Rainforest: 'still being confirmed with the school' (Akis quick guide, 2026-09-15)."
   ],
@@ -11,6 +12,7 @@
     {
       "name": "Freshwater",
       "color": "#4f97fb",
+      "stroke": "#BDD9FF",
       "ink": "#000000",
       "start": "2026-08-24",
       "showcase": "2026-09-28"
@@ -18,6 +20,7 @@
     {
       "name": "Desert",
       "color": "#fa6901",
+      "stroke": "#FFC8B0",
       "ink": "#000000",
       "start": "2026-10-05",
       "showcase": "2026-11-09"
@@ -25,6 +28,7 @@
     {
       "name": "Tundra",
       "color": "#32e4c8",
+      "stroke": "#CFF9F1",
       "ink": "#000000",
       "start": "2026-11-16",
       "showcase": "2026-12-17"
@@ -32,6 +36,7 @@
     {
       "name": "Grasslands",
       "color": "#fb6d62",
+      "stroke": "#FFC6BF",
       "ink": "#000000",
       "start": "2027-01-11",
       "showcase": "2027-02-15"
@@ -39,6 +44,7 @@
     {
       "name": "Rainforest",
       "color": "#ac83ff",
+      "stroke": "#DBCDFF",
       "ink": "#000000",
       "start": "2027-02-22",
       "showcase": "2027-03-31"
@@ -46,6 +52,7 @@
     {
       "name": "Marine",
       "color": "#fde814",
+      "stroke": "#FDF8CF",
       "ink": "#000000",
       "start": "2027-04-19",
       "showcase": "2027-05-24"
@@ -53,6 +60,7 @@
     {
       "name": "Microbiome",
       "color": "#14706e",
+      "stroke": "#62D0BB",
       "ink": "#000000",
       "start": "2027-05-31",
       "showcase": "2027-06-23"
@@ -60,6 +68,7 @@
     {
       "name": "Forest",
       "color": "#42ca66",
+      "stroke": "#ADE8B5",
       "ink": "#000000",
       "start": "2027-06-28",
       "showcase": "2027-07-21"
@@ -75,6 +84,8 @@
     "_rules": "Slack #strategy 2026-09-14 (confirmed by Juli) and #admissions-team 2026-09-15. A Wednesday is a start date only if: 1) inside a biome (no breaks), 2) not a non-school day, 3) not the biome's last day, 4) not the last remaining Wednesday of the biome. Plus each biome's first day (a Monday).",
     "weekday": 3,
     "includeBiomeStart": true,
+    "rollingUntil": "2026-10-31",
+    "_rollingUntil": "Head of school, 2026-10-07: rolling admissions continue through October; from November new children start only on biome start dates. More November-onward dates coming the following week — add them to override when they land.",
     "signByBusinessDays": 3,
     "_signBy": "Fixed rule (Akis, 2026-10-05): Family Success needs at least 3 business days to onboard, for every start date including biome-start Mondays. Wednesday → sign by the Friday before; Monday → sign by the Wednesday before. Same rule as bina-start-school config/enrollment.json (cutoffBusinessDays).",
     "override": null
