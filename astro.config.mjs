@@ -21,6 +21,8 @@ export default defineConfig({
   redirects: {
     '/': 'https://thebinaschool.com',
     '/esa-guide': '/esa',
+    // Retired 2026-10-07: the Try bina lead-gen path moved to start.bina.school/try. Ads never pointed here.
+    '/book-adventure': 'https://thebinaschool.com',
     ...retiredStateRedirects,
   },
   vite: {
