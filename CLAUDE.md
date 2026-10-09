@@ -3,6 +3,8 @@
 Growth, marketing, and sales-enablement pages for bina, published at **https://go.bina.school**.
 Akis and Lorraine describe the page they need; Claude Code builds it here.
 
+> **🔴 This site is moving into the start app (decision #71, 2026-10-07).** After Phase 1 of `bina-start-school` is live, the six pages (`/esa`, `/esa/<state>`, `/student-results`, `/family-survey`, `/reviews`, `/calendar`) are served by `start.bina.school` at the same paths, and `go.bina.school` becomes redirect-only (one 301 to the same path, query kept; `/` and `/book-adventure` → thebinaschool.com). After 30 days of clean redirects this repo is archived. Plan: `bina-start-school/docs/build-plan.md` → "Pages move" (P.1–P.7). Until then, keep fixing pages here; **build new growth pages in `bina-start-school`**, not here.
+
 ## 🔴 TOP RULE — reply in short bullets, never a wall of text
 
 - **Short bullets only.** No paragraphs, no prose blocks, no endless analysis. Outranks everything else here.
