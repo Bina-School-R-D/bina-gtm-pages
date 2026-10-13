@@ -46,7 +46,7 @@ function computeStartDates() {
     }
     weds.pop(); // the last remaining Wednesday is closed: a new child would get one week, then a break
     for (const iso of weds) {
-      if (rules.rollingUntil && iso > rules.rollingUntil) continue; // after it, biome starts only
+      if (rules.rollingUntil && iso > rules.rollingUntil) continue; // after it, biome starts + midBiome only
       list.push({ iso, biome: b.name, type: 'rolling' });
     }
     for (const iso of rules.midBiome ?? []) {
