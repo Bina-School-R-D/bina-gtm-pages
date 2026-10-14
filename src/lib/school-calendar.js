@@ -32,7 +32,7 @@ const biomes = data.biomes.map((b) => ({ ...b, end: b.showcase }));
 const biomeOn = (iso) => biomes.find((b) => iso >= b.start && iso <= b.end);
 
 /** The rolling-enrollment rules from Slack (#strategy 2026-09-14), applied per biome.
- *  Rolling Wednesdays stop after `rollingUntil`; from then on only biome starts are intakes. */
+ *  Rolling Wednesdays stop after `rollingUntil`; from then on the intakes are biome starts plus `midBiome`. */
 function computeStartDates() {
   const rules = data.startDates;
   const list = [];
@@ -46,11 +46,14 @@ function computeStartDates() {
     }
     weds.pop(); // the last remaining Wednesday is closed: a new child would get one week, then a break
     for (const iso of weds) {
-      if (rules.rollingUntil && iso > rules.rollingUntil) continue; // after it, biome starts only
+      if (rules.rollingUntil && iso > rules.rollingUntil) continue; // after it, biome starts + midBiome only
       list.push({ iso, biome: b.name, type: 'rolling' });
     }
+    for (const iso of rules.midBiome ?? []) {
+      if (iso > b.start && iso <= b.end) list.push({ iso, biome: b.name, type: 'mid-biome' });
+    }
   }
-  return list;
+  return list.sort((x, y) => x.iso.localeCompare(y.iso));
 }
 
 const startList = (data.startDates.override ?? computeStartDates()).map((s) => ({
