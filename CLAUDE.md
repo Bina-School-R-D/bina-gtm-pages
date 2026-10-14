@@ -3,7 +3,7 @@
 Growth, marketing, and sales-enablement pages for bina, published at **https://go.bina.school**.
 Akis and Lorraine describe the page they need; Claude Code builds it here.
 
-> **🔴 This site is moving into the start app (decision #71, 2026-10-07).** After Phase 1 of `bina-start-school` is live, the six pages (`/esa`, `/esa/<state>`, `/student-results`, `/family-survey`, `/reviews`, `/calendar`) are served by `start.bina.school` at the same paths, and `go.bina.school` becomes redirect-only (one 301 to the same path, query kept; `/` and `/book-adventure` → thebinaschool.com). After 30 days of clean redirects this repo is archived. Plan: `bina-start-school/docs/build-plan.md` → "Pages move" (P.1–P.7). Until then, keep fixing pages here; **build new growth pages in `bina-start-school`**, not here.
+> **🔴 This site is moving into the start app (decision #71, 2026-10-07).** After Phase 1 of `bina-start-school` is live, the six pages (`/esa`, `/esa/<state>`, `/student-results`, `/family-survey`, `/reviews`, `/calendar`) are served by `start.bina.school` at the same paths, and `go.bina.school` becomes redirect-only (one 301 to the same path, query kept; `/` → thebinaschool.com). After 30 days of clean redirects this repo is archived. Plan: `bina-start-school/docs/PRD.md` → Phase P (P.1–P.7). Until then, keep fixing pages here; **build new growth pages in `bina-start-school`**, not here.
 
 ## 🔴 TOP RULE — reply in short bullets, never a wall of text
 
@@ -82,19 +82,6 @@ If a page has per-option content a family could be linked to or Google could ran
 
 There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.mjs`).
 
-## Campaign lead-gen pages — the standard pattern
-
-Ad-hoc lead-gen campaign forms (Tally replacements) are a **standard page type**, not one-offs. The reference implementation, `/book-adventure`, was retired on 2026-10-07: its flow moved to the start app as **Try bina** (`start.bina.school/try`, repo `bina-start-school`), and `/book-adventure` now redirects to thebinaschool.com. A new campaign page here follows this pattern (git history has the old page):
-
-1. Multi-step wizard in one `card-bina` (intro → contact → qualify → redirect), plain inline script, no framework island. Form fields use `.input-bina` (defined in `global.css`); access inputs via `form.elements` (`form.name` is the form's own attribute — a real bug otherwise).
-2. On final submit, `navigator.sendBeacon` posts the lead to the shared n8n **`[S] A4. Campaign Intake`** webhook (`https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake`) as a `text/plain` blob (avoids a CORS preflight; the workflow parses JSON from the raw body), then `location.assign`s the redirect — capture is fire-and-forget and must never block or break the redirect.
-3. Payload contract: `{ campaign, submission_id, name, email, phone, child_name, age_group, redirect_url, page_url, referrer, utm_* }`. `campaign` = the page slug; `submission_id` = `${campaign}-${crypto.randomUUID()}` (the workflow's dedupe key). New campaigns reuse the same webhook — a new page needs **zero** n8n changes.
-4. Anti-bot: off-screen honeypot input (`website`) — if filled, skip the beacon but still redirect.
-5. Contact prefill: `?name=&email=&phone=` URL params pre-fill and skip the contact step (parity with Tally hidden fields).
-6. Campaign pages are `noindex={true}`.
-
-The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it writes to Close (note + task, review-flagged lead creation for new emails, no opportunity/nurture) and posts to Slack `#growth-log`. Changing the payload contract means a PR in **both** repos.
-
 ## Pages
 
 | URL | Purpose | Data source |
@@ -115,7 +102,7 @@ The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it wri
 ## Content rules
 
 - Factual claims about external programs (ESA amounts, deadlines, regulations) must carry a "verify with the official source" disclaimer and link to the official program.
-- **Primary CTA on every family-facing page is `Visit bina` → `https://thebinaschool.com`** (`/esa`, `/esa/<state>`, `/student-results` and `/reviews` all do this). We want the main site to take the enquiry; don't invent a page-specific CTA or point at a form unless the page *is* a campaign page. Campaign pages are the exception — they capture the lead themselves. (The paid-search `/esa/<state>` landing pages sent every CTA to **`https://form.thebinaschool.com/new`** labelled **`Start your bina journey →`**, matching the main site's own conversion action — Akis, 2026-08-21. Those pages were replaced by the static state pages; reuse that CTA if paid-search landing pages come back.) `BaseLayout` keeps any `?ref=` from the current URL for 365 days and appends it to form links, `start.bina.school` links and the HTTPS main-site homepage, extending the partner-attribution snippet on the main site (`bina-gtm/notes/partner-program-technical-plan.md` §4); `localStorage` is per-origin, so partner links routed through go.bina.school must carry `?ref=` on the go.bina.school URL itself.
+- **Primary CTA on every family-facing page is `Visit bina` → `https://thebinaschool.com`** (`/esa`, `/esa/<state>`, `/student-results` and `/reviews` all do this). We want the main site to take the enquiry; don't invent a page-specific CTA or point at a form. (The paid-search `/esa/<state>` landing pages sent every CTA to **`https://form.thebinaschool.com/new`** labelled **`Start your bina journey →`**, matching the main site's own conversion action — Akis, 2026-08-21. Those pages were replaced by the static state pages; reuse that CTA if paid-search landing pages come back.) `BaseLayout` keeps any `?ref=` from the current URL for 365 days and appends it to form links, `start.bina.school` links and the HTTPS main-site homepage, extending the partner-attribution snippet on the main site (`bina-gtm/notes/partner-program-technical-plan.md` §4); `localStorage` is per-origin, so partner links routed through go.bina.school must carry `?ref=` on the go.bina.school URL itself.
 - CTA email is `admissions@thebinaschool.com` — these pages talk to prospective and current families, so email CTAs go to admissions, not the general `hello@` inbox. Main-site links go to `https://thebinaschool.com`.
 
 ### Publishing our own data (surveys, results, outcomes)
