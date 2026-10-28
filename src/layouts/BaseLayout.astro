@@ -50,7 +50,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
          uses the main site's deferred loader — they load after full page load + idle,
          or on first interaction, whichever comes first — so the consent banner never
          lands on the LCP critical path. Host-gated to bina domains so previews and local
-         dev stay out of the metrics. Keep in sync with the main site's snippet. -->
+         dev stay out of the metrics. Keep in sync with the main site's snippet.
+         GTM loads first-party through Stape Custom Loader (sgtm.thebinaschool.com);
+         the last argument is Stape's encoded form of GTM-M2HWS5K, not a GTM ID. -->
     <script is:inline>
       (function (w, d, s, l, i) {
         if (/HeadlessChrome|ReactSnap/i.test(navigator.userAgent || '')) return;
@@ -65,7 +67,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             j = d.createElement(s),
             dl = l != 'dataLayer' ? '&l=' + l : '';
           j.async = true;
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          j.src = 'https://sgtm.thebinaschool.com/8bkryjbnrubr.js?' + i;
           f.parentNode.insertBefore(j, f);
           ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (t) {
             w.removeEventListener(t, loadGtm);
@@ -78,7 +80,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         // for the next real interaction, which may never come on a one-screen visit).
         if (d.readyState === 'complete') w.setTimeout(loadGtm, 5000);
         else w.addEventListener('load', function () { w.setTimeout(loadGtm, 5000); }, { once: true });
-      })(window, document, 'script', 'dataLayer', 'GTM-M2HWS5K');
+      })(window, document, 'script', 'dataLayer', '9yb=GwZINTovRzRAKiIhWylMD09QW0NIBgREBgoQEAcMCwoRChodAkwJFh8%3D');
     </script>
 
     <script is:inline>
