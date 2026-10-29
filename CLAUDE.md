@@ -95,6 +95,8 @@ The receiving workflow lives in `bina-gtm` (`automations/workflows/`) — it wri
 
 ## Pages
 
+> **Moved to thebinaschool.com (Asana 1217839991568791):** `/student-results`, `/family-survey`, `/reviews` and `/calendar` now live on the main site. Their files here are redirect stubs (`src/components/MovedPage.astro`) that keep the query string and hash; `scripts/check-moved-pages.mjs` guards them. Their data files stay because the ESA state pages still import them. Edit those pages in the `website` repo, not here. The rows below describe the original pages.
+
 | URL | Purpose | Data source |
 |---|---|---|
 | `/esa` | **The chooser, and the honest answer for everywhere else** — one card per state bina can accept, actionable states first (rolling before annual before dates-not-published), then the shared how-it-works, then what a family in any other state should do. It renders no state's answer itself. Legacy `/esa?state=Arizona` deep links `location.replace` to the static URL (case-insensitive, compatibility only); a `?state=` naming a state we no longer serve just stays here, which is the correct answer for it. | `src/data/esa-states.json` + `src/data/esa-landing.json`, via `src/lib/esa-states.js` (`chooserStates()`) |

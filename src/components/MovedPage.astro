@@ -1,0 +1,30 @@
+---
+/*
+ * A page that moved to thebinaschool.com (Asana 1217839991568791). GitHub Pages can't send a
+ * server 301, so this is a client redirect that keeps ?ref=, utm_*, gclid, ?signup= and #hash
+ * (Astro's config redirects drop them). The meta refresh is only the no-JS fallback.
+ */
+interface Props {
+  /** Exact new URL on thebinaschool.com (bare domain, no trailing slash). */
+  to: string;
+  title: string;
+}
+const { to, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <link rel="canonical" href={to} />
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ to }}>
+      location.replace(to + location.search + location.hash);
+    </script>
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+  </head>
+  <body>
+    <p>This page has moved to <a href={to}>{to}</a>.</p>
+  </body>
+</html>
