@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import react from '@astrojs/react';
 import esaData from './src/data/esa-states.json' with { type: 'json' };
 
 // ESA pages exist only for states where bina can accept students (Akis, 2026-09-22). The other
@@ -23,6 +24,8 @@ export default defineConfig({
     '/esa-guide': '/esa',
     ...retiredStateRedirects,
   },
+  // React only for the /families-map island (the component is shared with thebinaschool.com).
+  integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
   },

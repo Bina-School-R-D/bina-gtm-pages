@@ -14,8 +14,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.7",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.0.8",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "tailwindcss": "^4.2.2"
   }
 }

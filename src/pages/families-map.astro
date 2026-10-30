@@ -1,0 +1,43 @@
+---
+// Standalone share page (e.g. for investors): the families world map from the
+// thebinaschool.com homepage section, on its own. Moved here from
+// thebinaschool.com/families-map so the main domain keeps only indexed marketing pages.
+// The component in src/components/BinaFamiliesMap/ is a verbatim copy of the main
+// site's — update both together.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BinaFamiliesMap from '../components/BinaFamiliesMap';
+---
+
+<BaseLayout
+  title="bina | Where our families connect"
+  description="Where bina families live, learn and do bina together, and where families are exploring bina, on one world map."
+  noindex={true}
+  bare={true}
+>
+  <div class="families-map mx-auto flex min-h-screen flex-col justify-center px-6 py-16 text-center md:py-24">
+    <h1 class="mx-auto mb-12 max-w-[37.63rem] font-display">
+      Where our families connect, play, and do bina together
+    </h1>
+    <!-- Same column as the homepage: 920px, growing with big screens to 1280px -->
+    <div class="mx-auto w-full max-w-[clamp(57.5rem,62vw,80rem)]">
+      <BinaFamiliesMap client:load />
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* The map is designed for the main site's dark #1C1C1C background. */
+  body {
+    background: #1c1c1c;
+    color: #fff;
+  }
+</style>
+
+<style>
+  h1 {
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    font-weight: 700;
+    color: #03cb5b;
+    line-height: 1;
+  }
+</style>
