@@ -174,13 +174,26 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
         <div class="mx-auto max-w-5xl px-5 py-14">
           <p class="eyebrow-bina mb-2">Who qualifies</p>
           <h2 class="mb-8 text-title-xl sm:text-title-3xl">{copy.qualifies.title}</h2>
-          <dl class="grid gap-4 sm:grid-cols-2">
-            {copy.qualifies.items.map((it) => (
-              <div class="card-bina-solid p-6">
-                <dt class="font-display text-title-sm text-hl">{it.k}</dt>
-                <dd class="mt-2 text-body-lg"><BrandText text={it.v} /></dd>
-              </div>
-            ))}
+          <!-- A checklist, not cards: one row per condition, ✓ + label on the left, and the
+               first sentence (the answer) in bold so a scanner gets it without reading on. -->
+          <dl class="border-t border-line">
+            {copy.qualifies.items.map((it) => {
+              const cut = it.v.indexOf('. ');
+              const lead = cut === -1 ? it.v : it.v.slice(0, cut + 1);
+              const rest = cut === -1 ? '' : it.v.slice(cut + 2);
+              return (
+                <div class="grid gap-x-8 gap-y-2 border-b border-line py-6 sm:grid-cols-[15rem_1fr]">
+                  <dt class="flex items-center gap-3 font-display text-title-sm">
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                    {it.k}
+                  </dt>
+                  <dd class="text-body-lg sm:pt-1">
+                    <strong class="block font-display text-body-xl font-bold"><BrandText text={lead} /></strong>
+                    {rest && <span class="mt-1 block"><BrandText text={rest} /></span>}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </div>
       </section>
@@ -190,9 +203,9 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   <!-- HOW THE ESA WORKS (states with Notion copy) -->
   {
     copy.howEsa && (
-      <section class="theme-deep-ocean">
+      <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
-          <p class="eyebrow-line mb-2">How the {copy.state} ESA works</p>
+          <p class="eyebrow-bina mb-2">How the {copy.state} ESA works</p>
           <h2 class="mb-4 text-title-xl sm:text-title-3xl">{copy.howEsa.title}</h2>
           <p class="max-w-3xl text-body-xl">{copy.howEsa.body}</p>
         </div>
