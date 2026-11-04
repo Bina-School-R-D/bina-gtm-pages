@@ -72,26 +72,28 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                 href={`/esa/${s.slug}`}
                 class="card-bina-mint flex h-full flex-col p-6 transition-transform hover:-translate-y-0.5"
               >
-                <span class="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <strong class="font-display text-title-lg font-bold text-hl">{s.state}</strong>
-                  <span class="pill-bina">{s.badge.label}</span>
-                </span>
-                <span class="mb-4 block font-display text-body-lg font-bold">{s.program.prog}</span>
-                <span class="mb-4 grid gap-2 text-body-lg">
+                <!-- Fixed order so every card scans the same way: name, tag, program, the two
+                     numbers that matter (label over figure), one payment line, the link. -->
+                <strong class="block font-display text-title-lg font-bold text-hl">{s.state}</strong>
+                <span class="mt-2 self-start"><span class="pill-bina">{s.badge.label}</span></span>
+                <span class="mt-3 block text-body-lg">{s.program.prog}</span>
+                <span class="mt-5 grid gap-4">
                   <span>
-                    <strong class="block font-display text-title-md font-bold text-hl">{s.awardLabel}</strong>
-                    <span>per child, per year</span>
+                    <span class="block font-display text-label uppercase text-hl">State gives per year</span>
+                    <span class="block font-display text-title-md font-bold text-hl">{s.awardLabel}</span>
                   </span>
                   <span>
-                    <strong class="font-bold">You pay:</strong> {s.payLabel}
-                  </span>
-                  <span>
-                    {s.tier === 'reimbursed'
-                      ? 'You pay bina, the state reimburses you'
-                      : `Paid to bina through ${s.program.platform}`}
+                    <span class="block font-display text-label uppercase">You pay per month</span>
+                    <span class="block font-display text-title-md font-bold">{s.payValue}</span>
+                    {s.payAfter && <span class="block text-body-lg">{s.payAfter}</span>}
                   </span>
                 </span>
-                <span class="mt-auto font-bold underline decoration-2 underline-offset-4">
+                <span class="mt-5 mb-5 block text-body-lg">
+                  {s.tier === 'reimbursed'
+                    ? 'You pay bina, the state reimburses you'
+                    : `Paid to bina through ${s.program.platform}`}
+                </span>
+                <span class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
                   bina for {s.state} families →
                 </span>
               </a>
