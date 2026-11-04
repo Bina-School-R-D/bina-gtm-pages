@@ -13,7 +13,7 @@ Akis and Lorraine describe the page they need; Claude Code builds it here.
 
 ## Stack
 
-- Astro 6 + Tailwind CSS v4 (static output). Same stack as thebinaschool.com and headerpath-website.
+- Astro 6 + Tailwind CSS v4 (static output). Same stack as thebinaschool.com and headerpath-website. Design tokens: see the Design rule below.
 - `@astrojs/react` (v5 — v6+ needs Vite 8, which breaks the Tailwind plugin on Astro 6) exists only for the `/families-map` island. Don't use it for new widgets that plain `<script>` can handle.
 - Hosted on **GitHub Pages**. `.github/workflows/deploy.yml` builds and deploys on every push to `main`.
 - `public/CNAME` pins the custom domain — never delete it.
@@ -22,12 +22,50 @@ Akis and Lorraine describe the page they need; Claude Code builds it here.
 
 - **Consent release evidence and limits:** `docs/go-consent-proposal.json` is a historical offline proposal, not an importable GTM export. Go-only CookieYes EU/UK targeting and the five-cookie inventory were published and read back on September 22, 2026. The shared GTM hostname lookup was saved in workspace 57; a local candidate running that draft passed controlled banner/consent checks, including same-document Analytics withdrawal and regrant. At that observation, the website fix and GTM draft had not been published. Forced banner preview does not prove live geographic routing, and PostHog bot filtering prevented delivery proof. Check current Pages and GTM versions before asserting release status; see `docs/go-consent-handoff.md` for the release sequence and limits.
 
-## 🔴 Design rule — every page must look like thebinaschool.com
+## 🔴 Design rule — bina Foundation (rebrand, November 2026)
 
-- Tokens live in `src/styles/global.css` (`@theme`): Rund Display (headings), Rund Text (body), coal blacks, chromatic accents (`bina-grass`, `bina-yellow`, `bina-purple`, `bina-pink`, `bina-blue`, `bina-green`, `bina-red`, `bina-orange`).
-- House style: white background, black text, chunky `border-2 border-coal-black`, large radii (`card-bina` = 30px corners), yellow CTA that hovers pink and presses red (`btn-bina`), black pills with chromatic text (`pill-bina`).
-- Fonts are self-hosted in `public/fonts/` (copied from the live site — same company, licensed).
-- If the main site rebrands, re-extract tokens from the live site; don't invent new ones.
+**Source of truth:** the Figma bina Foundation Library, published as the *bina Foundation* design system: https://claude.ai/artifact/QCWK6m47YnCzuwQSem3cov. Assets (logos, landscapes, collages, people) are in the Notion **Brand Assets** library: https://app.notion.com/p/415a363fa1074cfc95c02c00f46b31fa. The old white/yellow/pink theme and the October dark palette (turquoise, cream) are **retired**: nothing from them carries over.
+
+Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched off** (`--color-*: initial`), so only bina colors generate classes.
+
+| Token | Hex | Role |
+|---|---|---|
+| `primary-base` | `#1C1C1C` | Default dark background. **Never text.** |
+| `black` | `#000000` | Text on light/bright backgrounds; cards on bright backgrounds |
+| `mint` | `#D8F6C8` | **Replaces white** (and the old cream): body text on dark |
+| `lagoon` | `#55EED4` | Primary accent (replaces the old turquoise) |
+| `lemon` | `#FFE916` | CTA color |
+| `grape` `#632AA8` · `deep-ocean` `#025EB9` · `sky-blue` `#78C0FE` · `tangerine` `#FF8A3D` · `watermelon` `#FF7A71` · `dragon-fruit` `#FE49C1` · `clover` `#64E27B` · `poppy` `#F24500` | | Palette accents / section backgrounds |
+| `deco-white` | `#FFFFFF` | Decorative only (plate behind third-party logos). Never text, icons or the logo. |
+
+**Rules**
+- **No white.** Mint does every job white used to do.
+- **Every text pairing passes WCAG 2.2 AA**, and only pairings listed in the library's "Text on background" table are allowed. Don't guess: check the table.
+- **One theme per section: background + text + one highlight. Three colors max.** A section is a band from one background change to the next. Cards reuse those colors and never add a fourth. CTA buttons/blocks, decorative tags, imagery and the logo don't count.
+- **Use the theme classes, not raw color pairs.** Each sets `--t-bg/--t-fg/--t-hl/--t-line/--t-solid-*`, and every component reads them:
+
+| Class | Background / text / highlight |
+|---|---|
+| `theme-base` (default) | primary base / mint / lagoon |
+| `theme-black` | black / mint / lagoon (nav + footer) |
+| `theme-lagoon` | lagoon / black / grape |
+| `theme-lemon` | lemon / black / grape (**secondary button only**) |
+| `theme-mint` | mint / black / deep ocean |
+| `theme-grape` | grape / mint / lemon |
+| `theme-deep-ocean` | deep ocean / mint / mint (lemon for large text only) |
+| `theme-sky-blue` `theme-clover` `theme-tangerine` `theme-watermelon` `theme-dragon-fruit` | bright / black / black cards carrying the background color |
+
+- **Components:** `btn-bina` (primary: lemon + black), `btn-bina-secondary` (black + lemon), `btn-sm` modifier. Hover is always dragon fruit with black text, 2px black outline. **One primary per section**; on lemon use secondary; on black/primary base use primary. Labels in sentence case, verb first, no icons. `card-bina` (outlined in `--t-line`), `card-bina-solid` (filled, reusing the section's colors), `pill-bina` and `eyebrow-bina` (uppercase label in the highlight), `input-bina` (outlined, never white-filled). Theme-aware utilities: `text-fg`, `text-hl`, `bg-hl`, `border-line`, `decoration-hl`.
+- **Typography:** one family, **Rund Display** (Regular, SemiBold, Bold only; no Black/900). Use the scale: `text-display-lg/md/sm` (88/72/64, the one big statement), `text-title-4xl…sm` (48→20, section + card headings), `text-body-xl…sm` (18→12), `text-label-lg/md/sm` (uppercase tags), `text-button-lg/sm`.
+- **Radii:** `rounded-lg` 16px, `rounded-sm` 8px. These are the only two the library defines.
+- **Logo:** directly on black, primary base or a dark, calm area of a photo only. Anywhere else, use the black round/square container version. Never recolor, outline or stretch it. Favicon = the b mark on lagoon. The peeking logo goes only on the bottom edge of a layout, large.
+- **Landscapes** sit on a colorful sky (never black/base), edge to edge at the bottom; they close a bright hero into a dark section. No text on the land.
+- **Imagery of children:** never alone, faces covered in photos, diverse groups, nothing scary. See the library's "People" and "Collages" rules before adding any image.
+- **Never invent a color, radius or type size.** If a design needs one that the library lacks, flag it. It has to be added in Figma and approved first.
+
+## 🔴 Migration — go.bina.school → thebinaschool.com
+
+These pages are moving to the main domain. Workflow: restyle here on a branch → preview → design approval → port each approved page to thebinaschool.com (via the `bina-website` skill / stage host) → redirect the go.bina.school URL to its new home. Keep `/esa/<state>` static-page rules, attribution and consent behavior intact through the move. Design passes are **visual only**: never change `src/lib/` logic, data values, the lead payload or tracking during a restyle.
 
 ## 🔴 Brand rule
 

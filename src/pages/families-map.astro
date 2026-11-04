@@ -26,18 +26,18 @@ import BinaFamiliesMap from '../components/BinaFamiliesMap';
 </BaseLayout>
 
 <style is:global>
-  /* The map is designed for the main site's dark #1C1C1C background. */
+  /* Dark primary base with mint text — the default bina Foundation theme. */
   body {
-    background: #1c1c1c;
-    color: #fff;
+    background: var(--color-primary-base);
+    color: var(--color-mint);
   }
 </style>
 
 <style>
   h1 {
-    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    font-size: clamp(2.5rem, 10vw, 3rem); /* title-4xl */
     font-weight: 700;
-    color: #03cb5b;
-    line-height: 1;
+    color: var(--color-lagoon);
+    line-height: 1.1;
   }
 </style>

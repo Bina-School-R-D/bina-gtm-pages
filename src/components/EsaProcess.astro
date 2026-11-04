@@ -17,45 +17,43 @@ const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
 const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
 ---
 
-<section id="process" class="scroll-mt-20 border-t-2 border-coal-black">
+<section id="process" class="theme-black scroll-mt-20">
   <div class="mx-auto max-w-4xl px-5 py-14">
-    <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
+    <p class="eyebrow-bina mb-2">
       The process
     </p>
-    <h2 class="mb-3 text-3xl sm:text-4xl">{title} steps, and we are on the call for all of them</h2>
-    <p class="mb-8 max-w-2xl text-coal-900">
+    <h2 class="mb-3 text-title-xl sm:text-title-3xl">{title} steps, and we are on the call for all of them</h2>
+    <p class="mb-8 max-w-2xl">
       You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
       do together — so you never have to work out which is which on your own.
     </p>
 
-    <div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">
+    <div class="overflow-hidden rounded-lg border-2 border-line">
       {
         groups.map((g) => (
           <>
-            <p class="bg-coal-black px-5 py-2 font-display text-xs font-bold uppercase tracking-widest text-bina-yellow sm:px-6">
+            <p class="eyebrow-bina border-t-2 border-line px-5 py-3 first:border-t-0 sm:px-6">
               {g.label}
             </p>
             <ul class="m-0 list-none p-0">
               {g.steps.map((step) => (
-                <li class="flex gap-4 border-t-2 border-coal-black bg-white px-5 py-5 sm:px-6">
-                  <span class="grid h-10 w-10 flex-none place-items-center rounded-xl border-2 border-coal-black bg-bina-yellow font-display text-lg font-black">
+                <li class="flex gap-4 border-t border-line px-5 py-5 sm:px-6">
+                  <span class="grid h-10 w-10 flex-none place-items-center rounded-sm border-2 border-line font-display text-title-sm font-bold text-hl">
                     {step.n}
                   </span>
                   <span class="min-w-0">
                     <span class="mb-1 flex flex-wrap items-center gap-2">
-                      <strong class="font-display text-base">{step.t}</strong>
-                      <span
-                        class={`inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ${CHIP[step.who].cls}`}
-                      >
+                      <strong class="font-display text-title-sm">{step.t}</strong>
+                      <span class="pill-bina">
                         {step.who === 'state' ? `on ${copy.state}'s site` : CHIP[step.who].label}
                       </span>
                     </span>
-                    <span class="block text-sm text-coal-900">{step.d}</span>
+                    <span class="block text-body-md">{step.d}</span>
                     {step.url && (
                       <a
                         href={step.url}
                         rel="noopener"
-                        class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4"
+                        class="mt-2 inline-flex font-bold underline decoration-hl decoration-2 underline-offset-4"
                       >
                         {step.urlLabel}
                       </a>
@@ -67,16 +65,16 @@ const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
           </>
         ))
       }
-      <p class="border-t-2 border-coal-black bg-white px-5 py-3 text-sm text-coal-900 sm:px-6">
+      <p class="border-t-2 border-line px-5 py-3 text-body-md sm:px-6">
         Funding renews each school year — we send you fresh paperwork every season, so renewing
         takes minutes.
       </p>
     </div>
 
     <div class="card-bina mt-8 p-6 sm:p-8">
-      <p class="mb-2 font-display text-xs font-bold uppercase tracking-widest text-bina-pink">Timing</p>
-      <h3 class="mb-2 font-display text-xl">{copy.timingTitle}</h3>
-      <p class="text-coal-1000">{copy.timingBody}</p>
+      <p class="eyebrow-bina mb-2">Timing</p>
+      <h3 class="mb-2 font-display text-title-sm">{copy.timingTitle}</h3>
+      <p class="">{copy.timingBody}</p>
       <a href={CTA} class="btn-bina mt-5">{CTA_LABEL}</a>
     </div>
   </div>

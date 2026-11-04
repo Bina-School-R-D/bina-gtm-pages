@@ -21,14 +21,14 @@ const steps = [
   noindex={true}
 >
   <!-- hero -->
-  <header class="bg-bina-yellow">
+  <header class="theme-lemon">
     <div class="mx-auto max-w-4xl px-5 py-14 sm:py-16">
-      <p class="pill-bina mb-6 text-sm tracking-wide">bina adventure · ages 4–15</p>
-      <h1 class="mb-4 max-w-2xl text-4xl font-black sm:text-5xl">
+      <p class="pill-bina mb-6">bina adventure · ages 4–15</p>
+      <h1 class="mb-4 max-w-2xl text-title-3xl sm:text-display-sm">
         Book a bina
-        <span class="underline decoration-bina-pink decoration-8 underline-offset-4">Adventure</span>
+        <span class="text-hl underline decoration-hl decoration-8 underline-offset-4">Adventure</span>
       </h1>
-      <p class="max-w-2xl text-lg text-coal-1000">
+      <p class="max-w-2xl text-body-xl">
         A live, 60-minute group class where your child experiences bina firsthand — no commitment,
         just a real taste of how bina works.
       </p>
@@ -36,7 +36,7 @@ const steps = [
   </header>
 
   <!-- booking tool -->
-  <section class="border-t-2 border-coal-black">
+  <section class="theme-base">
     <div class="mx-auto max-w-2xl px-5 py-12">
       <!-- progress -->
       <ol id="progress" class="mb-6 flex flex-wrap gap-2" aria-label="Booking steps">
@@ -44,7 +44,7 @@ const steps = [
           steps.map((s) => (
             <li
               data-step-pill={s.n}
-              class="inline-flex items-center gap-2 rounded-full border-2 border-coal-black bg-white px-4 py-1.5 font-display text-xs font-bold transition-colors duration-200 data-[active]:bg-coal-black data-[active]:text-white"
+              class="inline-flex items-center gap-2 rounded-full border-2 border-line px-4 py-1.5 font-display text-label-lg font-bold uppercase transition-colors duration-200 data-[active]:bg-lagoon data-[active]:text-black"
             >
               <span>{s.n}</span> {s.label}
             </li>
@@ -55,19 +55,19 @@ const steps = [
       <div class="card-bina p-6 sm:p-10">
         <!-- step 1 · intro -->
         <div data-step="1">
-          <h2 class="mb-4 text-2xl sm:text-3xl">What is a bina Adventure class?</h2>
-          <p class="mb-4 text-coal-1000">{intro.whatItIs}</p>
-          <p class="mb-8 text-coal-1000">{intro.whyItMatters}</p>
-          <button type="button" data-next class="btn-bina w-full text-lg sm:w-auto">
+          <h2 class="mb-4 text-title-lg sm:text-title-xl">What is a bina Adventure class?</h2>
+          <p class="mb-4">{intro.whatItIs}</p>
+          <p class="mb-8">{intro.whyItMatters}</p>
+          <button type="button" data-next class="btn-bina w-full sm:w-auto">
             Book your child's spot →
           </button>
         </div>
 
         <!-- step 2 · contact -->
         <form data-step="2" hidden novalidate>
-          <h2 class="mb-6 text-2xl sm:text-3xl">First, a bit about you</h2>
+          <h2 class="mb-6 text-title-lg sm:text-title-xl">First, a bit about you</h2>
 
-          <label for="parent-name" class="mb-2 block font-display text-lg font-bold">Your name</label>
+          <label for="parent-name" class="mb-2 block font-display text-title-sm">Your name</label>
           <input
             id="parent-name"
             name="name"
@@ -78,7 +78,7 @@ const steps = [
             class="input-bina mb-5"
           />
 
-          <label for="parent-email" class="mb-2 block font-display text-lg font-bold">Your email</label>
+          <label for="parent-email" class="mb-2 block font-display text-title-sm">Your email</label>
           <input
             id="parent-email"
             name="email"
@@ -89,8 +89,8 @@ const steps = [
             class="input-bina mb-5"
           />
 
-          <label for="parent-phone" class="mb-2 block font-display text-lg font-bold">
-            Your phone <span class="font-medium text-coal-900">(optional)</span>
+          <label for="parent-phone" class="mb-2 block font-display text-title-sm">
+            Your phone <span class="">(optional)</span>
           </label>
           <input
             id="parent-phone"
@@ -100,7 +100,7 @@ const steps = [
             placeholder="+1 555 000 0000"
             class="input-bina mb-2"
           />
-          <p class="mb-6 text-sm text-coal-900">
+          <p class="mb-6 text-body-md">
             By adding your phone number, you agree to receive SMS updates from bina school about
             your class.
           </p>
@@ -111,19 +111,19 @@ const steps = [
             <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
           </div>
 
-          <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
+          <p data-error class="mb-4 hidden font-display font-bold text-watermelon" aria-live="polite"></p>
 
           <div class="flex flex-wrap items-center gap-3">
-            <button type="submit" class="btn-bina text-lg">Continue →</button>
-            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
+            <button type="submit" class="btn-bina">Continue →</button>
+            <button type="button" data-back class="btn-bina-secondary">← Back</button>
           </div>
         </form>
 
         <!-- step 3 · child + age group -->
         <form data-step="3" hidden novalidate>
-          <h2 class="mb-6 text-2xl sm:text-3xl">Now, about your child</h2>
+          <h2 class="mb-6 text-title-lg sm:text-title-xl">Now, about your child</h2>
 
-          <label for="child-name" class="mb-2 block font-display text-lg font-bold">
+          <label for="child-name" class="mb-2 block font-display text-title-sm">
             Your child's first name
           </label>
           <input
@@ -135,7 +135,7 @@ const steps = [
             class="input-bina mb-6"
           />
 
-          <p class="mb-3 block font-display text-lg font-bold">Pick your child's age group</p>
+          <p class="mb-3 block font-display text-title-sm">Pick your child's age group</p>
           <div class="mb-6 grid gap-2 sm:grid-cols-2" role="group" aria-label="Your child's age group">
             {
               ageGroups.map((g) => (
@@ -143,22 +143,22 @@ const steps = [
                   type="button"
                   data-age={g.value}
                   aria-pressed="false"
-                  class="age-btn flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-coal-black bg-white px-4 py-3 text-left font-display text-lg font-bold transition-colors duration-200 hover:bg-bina-yellow aria-pressed:bg-coal-black aria-pressed:text-white"
+                  class="age-btn flex cursor-pointer items-center gap-3 rounded-lg border-2 border-line px-4 py-3 text-left font-display text-title-sm font-bold transition-colors duration-200 hover:bg-lagoon hover:text-black aria-pressed:bg-lagoon aria-pressed:text-black"
                 >
-                  <span class={`h-6 w-2 flex-none rounded-full border-2 border-coal-black ${g.accent}`} />
+                  <span class="h-6 w-2 flex-none rounded-full bg-current" />
                   {g.label}
                 </button>
               ))
             }
           </div>
 
-          <p data-error class="mb-4 hidden font-display font-bold text-bina-red" aria-live="polite"></p>
+          <p data-error class="mb-4 hidden font-display font-bold text-watermelon" aria-live="polite"></p>
 
           <div class="flex flex-wrap items-center gap-3">
-            <button type="submit" class="btn-bina text-lg">Pick a class time →</button>
-            <button type="button" data-back class="btn-bina-ghost text-lg">← Back</button>
+            <button type="submit" class="btn-bina">Pick a class time →</button>
+            <button type="button" data-back class="btn-bina-secondary">← Back</button>
           </div>
-          <p class="mt-4 text-sm text-coal-900">
+          <p class="mt-4 text-body-md">
             Next you'll choose a date and time on our booking calendar.
           </p>
         </form>
@@ -166,7 +166,7 @@ const steps = [
     </div>
   </section>
 
-  <p slot="footer-note" class="text-xs text-white/60">
+  <p slot="footer-note" class="text-body-sm">
     Questions? Write to
     <a href="mailto:admissions@thebinaschool.com" class="underline">admissions@thebinaschool.com</a>.
   </p>

@@ -5,22 +5,22 @@
 
 // "Current bina families" tab: dot colour by continent. Order = legend order.
 export const CONTINENTS = [
-  { id: 'north-america', label: 'North America', color: '#2FE5C9' }, // turquoise
-  { id: 'south-america', label: 'South America', color: '#43CA66' }, // grass green
-  { id: 'europe',        label: 'Europe',        color: '#FE49C1' }, // magenta
-  { id: 'africa',        label: 'Africa',        color: '#FF6A00' }, // orange
-  { id: 'asia',          label: 'Asia',          color: '#B38CFF' }, // lavender
+  { id: 'north-america', label: 'North America', color: '#55EED4' }, // lagoon
+  { id: 'south-america', label: 'South America', color: '#64E27B' }, // clover
+  { id: 'europe',        label: 'Europe',        color: '#FE49C1' }, // dragon fruit
+  { id: 'africa',        label: 'Africa',        color: '#FF8A3D' }, // tangerine
+  { id: 'asia',          label: 'Asia',          color: '#78C0FE' }, // sky blue
   { id: 'australia',     label: 'Australia',     color: '#FFE916' }, // lemon
 ];
 
-// "Families exploring bina" tab: every dot is the same light grey.
-export const EXPLORING_COLOR = '#D9D9D9';
+// "Families exploring bina" tab: every dot is the same mint.
+export const EXPLORING_COLOR = '#D8F6C8';
 
 export const THEME = {
-  land: '#2A2A2A',      // continents, one step lighter than primary base #1C1C1C
+  land: '#000000',      // continents in black on primary base #1C1C1C
   dotStroke: '#1C1C1C', // thin outline keeps neighbouring dots readable
   labelBg: '#000000',
-  labelText: '#FFFFFF',
+  labelText: '#D8F6C8',
 };
 
 /**

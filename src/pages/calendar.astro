@@ -5,6 +5,28 @@ import { calendarMonths, startDates } from '../lib/school-calendar.js';
 
 const months = calendarMonths();
 const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+// bina Foundation palette per biome — display only. The biome dates and the colors in
+// school-calendar.json stay a mirror of bina-start-school; this page paints them on-brand.
+// ink = the day-number color on that fill (every pair is in the library's contrast table).
+const MINT = '#D8F6C8';
+const BIOME_TONE = {
+  Freshwater: { color: '#78C0FE', ink: '#000000' }, // sky blue
+  Desert: { color: '#FF8A3D', ink: '#000000' }, // tangerine
+  Tundra: { color: '#55EED4', ink: '#000000' }, // lagoon
+  Grasslands: { color: '#FF7A71', ink: '#000000' }, // watermelon
+  Rainforest: { color: '#632AA8', ink: MINT }, // grape
+  Marine: { color: '#FFE916', ink: '#000000' }, // lemon
+  Microbiome: { color: '#025EB9', ink: MINT }, // deep ocean
+  Forest: { color: '#64E27B', ink: '#000000' }, // clover
+};
+const tone = (name) => BIOME_TONE[name] ?? { color: MINT, ink: '#000000' };
+const cellStyle = (c) => {
+  const name = c.biome?.name ?? c.start?.biome;
+  if (!name) return undefined;
+  const t = tone(name);
+  return `--c:${t.color};--ink:${t.ink};--s:${MINT}`;
+};
 ---
 
 <BaseLayout
@@ -43,7 +65,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
             {m.cells.map((c) => (
               <span
                 class:list={['d', c.kind, { wknd: c.weekend, sd: c.start }]}
-                style={c.biome ? `--c:${c.biome.color};--ink:${c.biome.ink};--s:${c.biome.stroke}` : c.start ? `--c:${c.start.color};--s:${c.start.stroke}` : undefined}
+                style={cellStyle(c)}
                 data-iso={c.iso}
                 data-signby={c.start?.signBy}
                 data-info={c.start ? `${c.start.label} · ${c.start.biome} · sign up by ${c.start.signByLabel}` : undefined}
@@ -54,7 +76,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
             ))}
           </div>
           {m.biomeStarts.map((b) => (
-            <p class="biome-key" style={`--c:${b.color}`}>Start of biome: {b.name}</p>
+            <p class="biome-key" style={`--c:${tone(b.name).color}`}>Start of biome: {b.name}</p>
           ))}
         </section>
       ))}
@@ -143,14 +165,16 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 </BaseLayout>
 
 <style>
+  /* Dark primary base with mint text — the default bina Foundation theme. Muted and dim
+     are mint at lower strength, not new greys. */
   :global(body) {
-    background: #212121;
+    background: var(--color-primary-base);
   }
   .cal {
-    --bg: #212121;
-    --muted: #b3b3b3;
-    --dim: #6f6f6f;
-    --text: #e6e6e6;
+    --bg: var(--color-primary-base);
+    --muted: color-mix(in srgb, var(--color-mint) 75%, transparent);
+    --dim: color-mix(in srgb, var(--color-mint) 45%, transparent);
+    --text: var(--color-mint);
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -214,8 +238,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     width: 3.25rem;
     height: 1.75rem;
     border-radius: 999px;
-    background: #3a3a3a;
-    border: 2px solid #4a4a4a;
+    background: var(--color-black);
+    border: 2px solid var(--color-lagoon);
     transition: background 0.2s;
   }
   .switch-thumb {
@@ -225,22 +249,22 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 999px;
-    background: #fff;
+    background: var(--color-mint);
     transition: transform 0.2s;
   }
   .switch input:checked + .switch-track {
-    background: var(--color-bina-yellow);
-    border-color: var(--color-bina-yellow);
+    background: var(--color-lemon);
+    border-color: var(--color-black);
   }
   .switch input:checked + .switch-track .switch-thumb {
     transform: translateX(1.5rem);
-    background: #000;
+    background: var(--color-black);
   }
   .switch input:checked ~ .switch-label {
-    color: #fff;
+    color: var(--color-mint);
   }
   .switch input:focus-visible + .switch-track {
-    outline: 3px solid var(--color-bina-pink);
+    outline: 3px solid var(--color-lagoon);
     outline-offset: 2px;
   }
   .handover {
@@ -253,23 +277,23 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   .handover-input {
     font: inherit;
     font-weight: 700;
-    color: #fff;
-    background: #000;
-    border: 2px solid #4a4a4a;
+    color: var(--color-mint);
+    background: var(--color-black);
+    border: 2px solid var(--color-lagoon);
     border-radius: 999px;
     padding: 0.2rem 0.75rem;
     color-scheme: dark;
   }
   .handover-input:focus-visible {
-    outline: 3px solid var(--color-bina-pink);
+    outline: 3px solid var(--color-lagoon);
     outline-offset: 2px;
   }
   .cal-info {
     margin: 0;
     padding: 0.25rem 0.875rem;
     border-radius: 999px;
-    background: #000;
-    color: var(--color-bina-yellow);
+    background: var(--color-black);
+    color: var(--color-lemon);
     font-weight: 700;
     font-size: 0.875rem;
   }
@@ -285,8 +309,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   .cal-head h1 {
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 500;
-    color: #4f97fb;
+    font-weight: 700;
+    color: var(--color-lagoon);
     font-size: clamp(2.5rem, 6.4vw, 6rem);
     letter-spacing: -0.02em;
     line-height: 1;
@@ -367,9 +391,10 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     border-color: var(--c);
     border-radius: 999px;
   }
+  /* Text stays mint (grape and deep ocean don't pass as text on primary base); the dot carries the biome. */
   .biome-key {
     margin: 1.1rem 0 0;
-    color: var(--c);
+    color: var(--text);
     font-weight: 700;
     font-size: clamp(0.72rem, 0.85vw, 0.85rem);
     display: flex;
@@ -393,7 +418,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     gap: 1rem 2rem;
     margin-top: 2.5rem;
     padding-top: 1.75rem;
-    border-top: 1px solid #5a5a5a;
+    border-top: 1px solid var(--dim);
   }
   .key {
     display: flex;
@@ -426,8 +451,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   }
   .k-unit { background: var(--muted); color: var(--bg); }
   .k-show { border-radius: 999px; }
-  .k-open { background: var(--color-bina-yellow); border-color: var(--color-bina-yellow); color: #000; }
-  .key-next { color: var(--color-bina-yellow); }
+  .k-open { background: var(--color-lemon); border-color: var(--color-lemon); color: var(--color-black); }
+  .key-next { color: var(--color-lemon); }
   .cal-logo {
     margin-left: auto;
     display: inline-flex;
@@ -436,7 +461,7 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 0.6rem;
-    background: #000;
+    background: var(--color-black);
   }
   .cal-logo img { width: 2.6rem; height: auto; }
 
@@ -451,15 +476,15 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   }
   .cal[data-mode='starts'] .d.sd .n {
     background: var(--c);
-    border-color: var(--s); /* designer's light tint of each biome colour */
+    border-color: var(--s); /* mint ring */
     border-radius: 0.3em;
-    color: #000;
+    color: var(--ink);
     font-weight: 700;
     box-shadow: 0 0 0 2px var(--bg);
   }
   .cal[data-mode='starts'] .d.sd:hover .n,
   .cal[data-mode='starts'] .d.sd:focus-visible .n {
-    outline: 2px solid var(--color-bina-pink);
+    outline: 2px solid var(--color-lagoon);
     outline-offset: 1px;
   }
   /* Too late for the chosen sign-up date: not shown as a start date at all. */
