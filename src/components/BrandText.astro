@@ -2,10 +2,14 @@
 /*
  * Renders text with every "bina" kept lowercase, even inside an uppercase label
  * (brand rule: the company name is always lowercase). Display only.
+ *
+ * Everything sits in ONE wrapping span: inside a flex container (tags are inline-flex),
+ * loose text and the "bina" span would become separate flex items and the space between
+ * them would be dropped ("WITHbina").
  */
 interface Props {
   text: string;
 }
 const parts = String(Astro.props.text).split(/(bina)/g);
 ---
-{parts.map((p) => (p === 'bina' ? <span class="normal-case">bina</span> : p))}
+<span>{parts.map((p) => (p === 'bina' ? <span class="normal-case">bina</span> : p))}</span>
