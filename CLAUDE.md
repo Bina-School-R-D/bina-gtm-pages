@@ -86,7 +86,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Notes | A note under a block starts with `*`, no box, no icon (lagoon on dark, black on light). A single highlighted fact is a check-line: filled circle + bold text. | — |
 | Dividers | No decorative rules between blocks (hero checklist, closing section). Only list rows (accordions, tables) get lines. | — |
 | Links | Text links are bold and underlined. **Hover: the underline thickens to 3px and moves closer, in the link's own color** (set once in `global.css`, unlayered so it beats Tailwind's decoration utilities). Whole-card links thicken the underline of their "→" line. Buttons keep the dragon-fruit hover. | global `a:hover` rule |
-| Buttons | Primary lemon / secondary black, both 24px (`btn-bina`); `btn-sm` only in the nav. **Two side by side: secondary left, primary right.** One primary per section. Hover dragon fruit. | `btn-bina`, `btn-bina-secondary` |
+| Buttons | Primary lemon / secondary black. **Responsive: Small on phones (16px label, 40px tall, 8px corners), Large from 640px (24px, 16px corners)** — the library's two sizes, nothing in between. `btn-sm` keeps the nav CTA small at every width. **Two side by side: secondary left, primary right.** One primary per section. Hover dragon fruit. | `btn-bina`, `btn-bina-secondary` |
 | Inputs | Outlined in the card's line color, never white-filled; errors in a passing color (grape on mint). | `input-bina` |
 | Nav | Full-width black bar, logo and CTA at the window edges (not in the content column). | `BaseLayout` |
 - **Radii:** `rounded-lg` 16px, `rounded-sm` 8px. These are the only two the library defines.
