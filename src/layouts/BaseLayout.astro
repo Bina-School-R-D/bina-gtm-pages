@@ -166,9 +166,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     {!bare && (
     <footer
-      class:list={['theme-black px-5 py-12 sm:px-10', flushFooter ? 'mt-0' : 'mt-20']}
+      class:list={['theme-black py-12', flushFooter ? 'mt-0' : 'mt-20']}
     >
-      <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
+      <div class="mx-auto flex max-w-5xl flex-col gap-4 px-5">
         <p class="text-body-md">
           <a href="https://thebinaschool.com/privacy" class="font-bold text-lagoon underline underline-offset-4">Privacy</a>
           ·
