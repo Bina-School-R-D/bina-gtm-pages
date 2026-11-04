@@ -68,7 +68,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | `text-label` | 14 | Bold, UPPERCASE, 10% tracking | every label and tag (see below) |
 | `text-button-lg/sm` | 24/16 | Bold | buttons |
 
-  **Nothing on any page is below 14px, at any screen width** (Zeyu, 2026-11-04). The library's label/lg (12px) is raised to 14px — **one exception: the state-card tags on `/esa` use label/lg at 12px (`text-label-sm`, Zeyu, 2026-11-04)**; `body-sm` and `label/md`/`label/sm` are not defined. Medium (500) is used once: "per child, per year" on the `/esa` state cards (Zeyu, 2026-11-04).
+  **Nothing on any page is below 14px, at any screen width** (Zeyu, 2026-11-04). The library's label/lg (12px) is raised to 14px — **one exception: the state-card tags on `/esa` use label/lg at 12px (`text-label-sm`, Zeyu, 2026-11-04)**; `body-sm` and `label/md`/`label/sm` are not defined. Medium (500) is used only on the `/esa` state cards: "per child, per year" and the text after "You pay:" (Zeyu, 2026-11-04).
 
 ### Page patterns (set on `/esa` and `/esa/<state>`, Zeyu 2026-11-04 — apply to every page)
 
