@@ -310,7 +310,7 @@ a:not([class*="btn-bina"]) {
     text-decoration-thickness 0.15s ease-out,
     text-underline-offset 0.15s ease-out;
 }
-a:not([class*="btn-bina"]):not([class*="card-bina"]):hover,
+a:not([class*="btn-bina"]):not([class*="card-bina"]):not(.no-underline):hover,
 a[class*="card-bina"]:hover .underline {
   text-decoration-line: underline;
   text-decoration-thickness: 3px;
