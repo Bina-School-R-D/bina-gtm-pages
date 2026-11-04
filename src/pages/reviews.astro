@@ -51,11 +51,12 @@ const sourceUrl: Record<string, string> = {
 const BAR = ['niche', 'trustpilot', 'world-schools', 'survey'];
 const barSources = BAR.map((key) => sources.find((src) => src.key === key)!);
 const sourceLogo: Record<string, string> = {
-  niche: '/images/logos/niche.svg',
-  trustpilot: '/images/logos/trustpilot.svg',
-  'world-schools': '/images/logos/world-schools.svg',
-  site: '/images/logos/bina.svg',
-  survey: '/images/logos/bina.svg',
+  // Black-only logos (Zeyu, 2026-11-04), so the badges and cards stay within the page's colors.
+  niche: '/images/logos/niche-black.svg',
+  trustpilot: '/images/logos/trustpilot-black.svg',
+  'world-schools': '/images/logos/world-schools-black.svg',
+  site: '/images/logos/bina-black.svg',
+  survey: '/images/logos/bina-black.svg',
 };
 
 const sourceInitial: Record<string, string> = {
@@ -164,7 +165,7 @@ const monthYear = (iso: string | null) =>
                       alt=""
                       width="18"
                       height="18"
-                      class="h-[1.125rem] w-[1.125rem] shrink-0 rounded-full bg-deco-white"
+                      class="h-[1.125rem] w-[1.125rem] shrink-0"
                       loading="lazy"
                     />
                   ) : (
