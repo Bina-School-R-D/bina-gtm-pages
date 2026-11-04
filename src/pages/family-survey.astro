@@ -126,12 +126,11 @@ const faq = [
               fill="none"
               stroke="#55EED4"
               stroke-width="22"
+              stroke-linecap="round"
               stroke-dasharray={ringCirc.toFixed(1)}
               transform="rotate(-90 120 120)"
               style={`--ring-circ:${ringCirc.toFixed(1)};--ring-final:${(ringCirc - ringDash).toFixed(1)}`}
             />
-            <circle cx="120" cy="120" r="100" fill="none" stroke="#55EED4" stroke-width="2" />
-            <circle cx="120" cy="120" r="78" fill="none" stroke="#55EED4" stroke-width="2" />
             <text x="120" y="122" text-anchor="middle" class="donut-value">{headline.recommendAvg}</text>
             <text x="120" y="148" text-anchor="middle" class="donut-unit">out of 10</text>
           </svg>
