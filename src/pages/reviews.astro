@@ -237,7 +237,7 @@ const monthYear = (iso: string | null) =>
                       loading="lazy"
                     />
                     <span class="min-w-0 flex-1">
-                      <span class="block truncate font-display text-body-md font-bold">
+                      <span class="block truncate font-display text-body-md font-bold text-hl">
                         {f.who}
                       </span>
                       <span class="block truncate text-body-md leading-tight">
@@ -264,7 +264,7 @@ const monthYear = (iso: string | null) =>
                     <span class="sr-only">(opens in a new tab)</span>
                   </p>
 
-                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-lg font-bold">
+                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-lg font-bold text-hl">
                     {f.title}
                   </p>
 
@@ -329,7 +329,7 @@ const monthYear = (iso: string | null) =>
                     loading="lazy"
                   />
                   <span class="min-w-0 flex-1">
-                    <span class="block truncate font-display text-body-md font-bold">
+                    <span class="block truncate font-display text-body-md font-bold text-hl">
                       {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                     </span>
                     <span class="block truncate text-body-md leading-tight">
@@ -373,7 +373,7 @@ const monthYear = (iso: string | null) =>
                 </p>
 
                 {r.title && (
-                  <p class="mb-1 shrink-0 truncate font-display text-body-lg font-bold">
+                  <p class="mb-1 shrink-0 truncate font-display text-body-lg font-bold text-hl">
                     {r.title}
                   </p>
                 )}
