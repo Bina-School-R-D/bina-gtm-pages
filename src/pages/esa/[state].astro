@@ -144,12 +144,12 @@ const otherStatesHtml = otherStates
       <p class="mb-8 max-w-3xl text-body-xl">{copy.coverBody}</p>
 
       <div class="grid gap-4 md:grid-cols-3">
-        <div class="card-bina-solid p-6">
+        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
           <p class="font-display text-title-2xl font-bold">{awardLabel}</p>
           <p class="mt-2 font-display font-bold">per child, per year</p>
           <p class="mt-1 text-body-lg">{awardNote}</p>
         </div>
-        <div class="card-bina-solid p-6">
+        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
           <p class="font-display text-title-2xl font-bold">{usd(school.tuitionYearly)}</p>
           <p class="mt-2 font-display font-bold">a full year at bina, on the yearly plan</p>
           <p class="mt-1 text-body-lg">
@@ -157,7 +157,7 @@ const otherStatesHtml = otherStates
             <a href={school.tuitionUrl} class="underline">tuition page</a>
           </p>
         </div>
-        <div class="card-bina-solid p-6">
+        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
           <p class="font-display text-title-2xl font-bold">{monthLabel}<span class="text-body-xl">/mo</span></p>
           <p class="mt-2 font-display font-bold">{gapLabel}</p>
           <p class="mt-1 text-body-lg">
@@ -166,33 +166,40 @@ const otherStatesHtml = otherStates
         </div>
       </div>
 
-      <div class="card-bina mt-6 p-6">
-        <h3 class="mb-4 font-display text-title-sm">Who can apply, and where the money sits</h3>
+      <!-- Who can apply: three deep ocean cards with mint text (5.43), black note and check line. -->
+      <div class="mt-12">
+        <h3 class="mb-5 font-display text-title-lg font-bold">Who can apply, and where the money sits</h3>
         <dl class="grid gap-4 sm:grid-cols-3">
-          <div>
-            <dt class="font-display text-body-md font-bold">Who qualifies</dt>
-            <dd class="mt-1">{program.who}</dd>
+          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
+            <dt class="font-display text-title-sm font-semibold">Who qualifies</dt>
+            <dd class="mt-2">{program.who}</dd>
           </div>
-          <div>
-            <dt class="font-display text-body-md font-bold">How you spend it</dt>
-            <dd class="mt-1">
+          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
+            <dt class="font-display text-title-sm font-semibold">How you spend it</dt>
+            <dd class="mt-2">
               {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
             </dd>
           </div>
-          <div>
-            <dt class="font-display text-body-md font-bold">Official program</dt>
-            <dd class="mt-1">
-              <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
+          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
+            <dt class="font-display text-title-sm font-semibold">Official program</dt>
+            <dd class="mt-2">
+              <a href={program.officialUrl} rel="noopener" class="font-bold underline underline-offset-4">{copy.state}'s own site →</a>
             </dd>
           </div>
         </dl>
-        <p class="mt-4 text-body-lg">
-          Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
+        <p class="mt-5">
+          *Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
           official program site as the final word — and we will go through it with you on the call.
         </p>
+        {
+          program.boost && (
+            <p class="mt-4 flex items-start gap-3 font-bold">
+              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean text-body-md text-mint" aria-hidden="true">✓</span>
+              <span>{program.boost}</span>
+            </p>
+          )
+        }
       </div>
-
-      {program.boost && <p class="card-bina mt-6 p-5 font-bold">✓ {program.boost}</p>}
     </div>
   </section>
 

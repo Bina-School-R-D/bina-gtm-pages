@@ -163,7 +163,7 @@ const explainers = [
           viewBox={`0 0 ${DW} ${DH}`}
           role="img"
           aria-label={`Family ratings out of 10, all above 8: ${dimensions.map((d) => `${d.label} ${d.score}`).join('; ')}`}
-          class="w-full"
+          class="hidden w-full md:block"
         >
           {
             dBars.map((d) => (
@@ -211,6 +211,24 @@ const explainers = [
           <text x={DLABEL} y={DH - 4} class="chart-label-sm">0</text>
           <text x={DW - DRIGHT} y={DH - 4} text-anchor="end" class="chart-label-sm">10</text>
         </svg>
+        <!-- Phones: the same chart as an HTML list, so labels stay readable (16px+). Full 0–10 axis, 8/10 marked. -->
+        <ul class="grid gap-5 md:hidden">
+          {
+            dimensions.map((d) => (
+              <li>
+                <p class="mb-2 flex items-baseline justify-between gap-3">
+                  <span>{d.label}</span>
+                  <span class="font-display font-bold">{d.score}<span class="font-normal">/10</span></span>
+                </p>
+                <span class="relative block h-5 rounded-sm border-2 border-black" aria-hidden="true">
+                  <span class="block h-full bg-deep-ocean" style={`width:${d.score * 10}%`}></span>
+                  <span class="absolute inset-y-[-6px] left-[80%] border-l-2 border-dashed border-black"></span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 text-body-lg md:hidden">Each bar runs 0 to 10; the dashed line marks 8/10.</p>
       </figure>
     </div>
   </section>
