@@ -103,9 +103,7 @@ const otherStatesHtml = otherStates
           </ol>
           {
             program.windowNote && (
-              <p class="card-bina mt-6 p-5 text-body-md font-bold">
-                {program.windowState === 'annual-unpublished' ? '🕑' : '📅'} {program.windowNote}
-              </p>
+              <p class="mt-6 text-body-md font-bold text-lagoon">* {program.windowNote}</p>
             )
           }
         </div>
