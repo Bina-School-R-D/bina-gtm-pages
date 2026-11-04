@@ -208,8 +208,9 @@ const otherStatesHtml = otherStates
   <!-- PROCESS -->
   <EsaProcess page={page} />
 
-  <!-- PROOF: is this actually a good school? -->
-  <section class="theme-tangerine">
+  <!-- PROOF: is this actually a good school? Dark section, mint stat cards (the
+       /student-results tiles): deep ocean number + claim, black detail. -->
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">
         The school, before the money: our families score us {survey.headline.recommendAvg} out of 10
@@ -219,31 +220,31 @@ const otherStatesHtml = otherStates
         assessment results, and every review we have — including the platforms we cannot edit.
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card-bina-solid p-6">
-          <p class="font-display text-title-4xl font-bold text-tangerine">{survey.headline.recommendAvg}</p>
-          <p class="mt-3 text-body-lg text-lagoon">Parents would send their friends here</p>
-          <p class="mt-2 text-body-lg text-lagoon">
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-4xl font-bold text-deep-ocean">{survey.headline.recommendAvg}</p>
+          <p class="mt-3 font-display font-bold text-deep-ocean">Parents would send their friends here</p>
+          <p class="mt-2 text-body-lg">
             out of 10, from {survey.surveyA.n} families · <a href="/family-survey" class="underline">all seven scores</a>
           </p>
         </div>
-        <div class="card-bina-solid p-6">
-          <p class="font-display text-title-4xl font-bold text-tangerine">{reviewData.headline.nicheAvg.toFixed(1)} ★</p>
-          <p class="mt-3 text-body-lg text-lagoon">Every review on Niche is five stars</p>
-          <p class="mt-2 text-body-lg text-lagoon">
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-4xl font-bold text-deep-ocean">{reviewData.headline.nicheAvg.toFixed(1)} ★</p>
+          <p class="mt-3 font-display font-bold text-deep-ocean">Every review on Niche is five stars</p>
+          <p class="mt-2 text-body-lg">
             {reviewData.headline.nicheCount} reviews · <a href="/reviews" class="underline">read all of them</a>
           </p>
         </div>
-        <div class="card-bina-solid p-6">
-          <p class="font-display text-title-4xl font-bold text-tangerine">+{results.headline.readGrowthAvg}</p>
-          <p class="mt-3 text-body-lg text-lagoon">Points of reading growth in one school year</p>
-          <p class="mt-2 text-body-lg text-lagoon">
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-4xl font-bold text-deep-ocean">+{results.headline.readGrowthAvg}</p>
+          <p class="mt-3 font-display font-bold text-deep-ocean">Points of reading growth in one school year</p>
+          <p class="mt-2 text-body-lg">
             STAR, {results.headline.pairedN} students · <a href="/student-results" class="underline">the full results</a>
           </p>
         </div>
-        <div class="card-bina-solid p-6">
-          <p class="font-display text-title-4xl font-bold text-tangerine">{school.classCap}</p>
-          <p class="mt-3 text-body-lg text-lagoon">The most children your child's class can hold</p>
-          <p class="mt-2 text-body-lg text-lagoon">a cap, not an average</p>
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-4xl font-bold text-deep-ocean">{school.classCap}</p>
+          <p class="mt-3 font-display font-bold text-deep-ocean">The most children your child's class can hold</p>
+          <p class="mt-2 text-body-lg">a cap, not an average</p>
         </div>
       </div>
     </div>
