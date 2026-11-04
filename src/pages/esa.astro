@@ -59,7 +59,7 @@ const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 
             <li>
               <a
                 href={`/esa/${s.slug}`}
-                class="card-bina flex h-full flex-col p-6 transition-transform hover:-translate-y-0.5"
+                class="card-bina-mint flex h-full flex-col p-6 transition-transform hover:-translate-y-0.5"
               >
                 <span class="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <strong class="font-display text-title-lg font-bold text-hl">{s.state}</strong>
@@ -161,11 +161,11 @@ const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 
         your state and we will tell you straight where it stands — and let you know if that changes.
       </p>
       <div class="flex flex-wrap gap-3">
-        <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
         <a
           href="mailto:admissions@thebinaschool.com?subject=ESA%20funding%20in%20my%20state"
           class="btn-bina-secondary">Email us about your state</a
         >
+        <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
       </div>
     </div>
   </section>
