@@ -45,13 +45,13 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                       <strong class="font-display text-title-md font-semibold">
                         <span class="sr-only">Step {step.n}: </span>{step.t}
                       </strong>
-                      <span class="inline-flex flex-none items-center rounded-full border-2 border-black px-3 py-1 font-display text-body-md">
+                      <span class="inline-flex flex-none items-center rounded-full border-2 border-black px-3 py-1 font-display text-body-md font-medium">
                         {step.who === 'state' ? `On ${copy.state}'s site` : sentence(CHIP[step.who].label)}
                       </span>
                     </span>
-                    <span class="block text-body-md">{step.d}</span>
+                    <span class="block text-body-lg">{step.d}</span>
                     {step.url && (
-                      <a href={step.url} rel="noopener" class="mt-2 inline-flex text-body-md underline underline-offset-4">
+                      <a href={step.url} rel="noopener" class="mt-2 inline-flex text-body-lg underline underline-offset-4">
                         {step.urlLabel}
                       </a>
                     )}

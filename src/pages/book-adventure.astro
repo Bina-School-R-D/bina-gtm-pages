@@ -44,7 +44,7 @@ const steps = [
           steps.map((s) => (
             <li
               data-step-pill={s.n}
-              class="inline-flex items-center gap-2 rounded-full border-2 border-line px-4 py-1.5 font-display text-body-sm font-bold transition-colors duration-200 data-[active]:bg-lagoon data-[active]:text-black"
+              class="inline-flex items-center gap-2 rounded-full border-2 border-line px-4 py-1.5 font-display text-body-md font-medium transition-colors duration-200 data-[active]:bg-lagoon data-[active]:text-black"
             >
               <span>{s.n}</span> {s.label}
             </li>
@@ -100,7 +100,7 @@ const steps = [
             placeholder="+1 555 000 0000"
             class="input-bina mb-2"
           />
-          <p class="mb-6 text-body-md">
+          <p class="mb-6 text-body-lg">
             By adding your phone number, you agree to receive SMS updates from bina school about
             your class.
           </p>
@@ -158,7 +158,7 @@ const steps = [
             <button type="button" data-back class="btn-bina-secondary">← Back</button>
             <button type="submit" class="btn-bina">Pick a class time →</button>
           </div>
-          <p class="mt-4 text-body-md">
+          <p class="mt-4 text-body-lg">
             Next you'll choose a date and time on our booking calendar.
           </p>
         </form>
@@ -166,7 +166,7 @@ const steps = [
     </div>
   </section>
 
-  <p slot="footer-note" class="text-body-sm">
+  <p slot="footer-note" class="text-body-md">
     Questions? Write to
     <a href="mailto:admissions@thebinaschool.com" class="underline">admissions@thebinaschool.com</a>.
   </p>

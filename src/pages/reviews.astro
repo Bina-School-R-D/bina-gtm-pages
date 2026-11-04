@@ -147,7 +147,7 @@ const monthYear = (iso: string | null) =>
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-line px-3 py-1.5 font-display text-body-sm font-bold no-underline transition-colors duration-200 hover:bg-black hover:text-sky-blue"
+                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-line px-3 py-1.5 font-display text-body-md font-medium no-underline transition-colors duration-200 hover:bg-black hover:text-sky-blue"
                 >
                   {sourceLogo[src.key] ? (
                     <img
@@ -162,7 +162,7 @@ const monthYear = (iso: string | null) =>
                     <span
                       aria-hidden="true"
                       class:list={[
-                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-black text-body-sm text-sky-blue',
+                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-black text-body-md text-sky-blue',
                       ]}
                     >
                       {src.mark}
@@ -226,13 +226,13 @@ const monthYear = (iso: string | null) =>
                       <span class="block truncate font-display text-body-md font-bold">
                         {f.who}
                       </span>
-                      <span class="block truncate text-body-sm leading-tight">
+                      <span class="block truncate text-body-md leading-tight">
                         {f.platform}
                       </span>
                     </span>
                   </div>
 
-                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-body-sm font-display font-bold underline underline-offset-2">
+                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-body-md font-display font-bold underline underline-offset-2">
                     {f.cta}
                     <svg
                       aria-hidden="true"
@@ -250,11 +250,11 @@ const monthYear = (iso: string | null) =>
                     <span class="sr-only">(opens in a new tab)</span>
                   </p>
 
-                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-md font-bold">
+                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-lg font-bold">
                     {f.title}
                   </p>
 
-                  <div class="review-body min-h-0 text-body-md">{f.detail}</div>
+                  <div class="review-body min-h-0 text-body-lg">{f.detail}</div>
                 </a>
               );
             }
@@ -266,7 +266,7 @@ const monthYear = (iso: string | null) =>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Already a bina family?
                     </p>
-                    <p class="mb-4 text-body-md">
+                    <p class="mb-4 text-body-lg">
                       Your honest opinion is what the next family reads before they dare to switch.
                     </p>
                     <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
@@ -281,7 +281,7 @@ const monthYear = (iso: string | null) =>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Reading about it only goes so far.
                     </p>
-                    <p class="mb-4 text-body-md">
+                    <p class="mb-4 text-body-lg">
                       See how bina teaches and whether these families are right about us.
                     </p>
                     <a href={SITE} class="btn-bina btn-sm mt-auto self-start">Visit bina</a>
@@ -293,7 +293,7 @@ const monthYear = (iso: string | null) =>
                   <p class="mb-2 font-display text-body-xl font-bold">
                     Stories are one thing. Scores are another.
                   </p>
-                  <p class="mb-4 text-body-md">
+                  <p class="mb-4 text-body-lg">
                     {surveyN} families rated us out of 10. We published every score, worst included.
                   </p>
                   <a href="/family-survey" class="mt-auto self-start font-display font-bold text-hl underline underline-offset-4">See the scores →</a>
@@ -330,7 +330,7 @@ const monthYear = (iso: string | null) =>
                     <span class="block truncate font-display text-body-md font-bold">
                       {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                     </span>
-                    <span class="block truncate text-body-sm leading-tight">
+                    <span class="block truncate text-body-md leading-tight">
                       {r.author && r.roleLabel}
                       {r.country && ` · ${r.country}`}
                       {r.author && when && ' · '}
@@ -340,7 +340,7 @@ const monthYear = (iso: string | null) =>
                   </span>
                 </div>
 
-                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-body-sm">
+                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-body-md">
                   <a
                     href={sourceUrl[r.source]}
                     target="_blank"
@@ -371,12 +371,12 @@ const monthYear = (iso: string | null) =>
                 </p>
 
                 {r.title && (
-                  <p class="mb-1 shrink-0 truncate font-display text-body-md font-bold">
+                  <p class="mb-1 shrink-0 truncate font-display text-body-lg font-bold">
                     {r.title}
                   </p>
                 )}
 
-                <div class="review-body min-h-0 text-body-md">
+                <div class="review-body min-h-0 text-body-lg">
                   {paras.map((p) => (
                     <p class="mb-1.5 last:mb-0 whitespace-pre-line">{p}</p>
                   ))}
@@ -393,7 +393,7 @@ const monthYear = (iso: string | null) =>
                         <span class="block font-display text-body-xl font-bold">
                           {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                         </span>
-                        <span class="block text-body-sm">
+                        <span class="block text-body-md">
                           {r.roleLabel}
                           {r.country && ` · ${r.country}`}
                           {when && ` · ${when}`}
@@ -422,7 +422,7 @@ const monthYear = (iso: string | null) =>
                         <p class="mb-3 last:mb-0 whitespace-pre-line">{p}</p>
                       ))}
                     </div>
-                    <p class="mt-5 text-body-sm">
+                    <p class="mt-5 text-body-md">
                       <a
                         href={sourceUrl[r.source]}
                         rel="noopener"
@@ -461,7 +461,7 @@ const monthYear = (iso: string | null) =>
     </div>
   </section>
 
-  <p slot="footer-note" class="text-body-sm">
+  <p slot="footer-note" class="text-body-md">
     Every quote here comes from the Growth team's testimonial registry, which holds {registry.total}
     entries; only the {registry.approved} marked approved for public use are published, and the {
       registry.needsPermission
@@ -535,7 +535,7 @@ const monthYear = (iso: string | null) =>
       padding: 0.1rem 0.65rem;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 0.7rem;
+      font-size: 0.875rem;
       color: var(--t-fg);
       white-space: nowrap;
       transition: background-color 0.2s ease-out, color 0.2s ease-out;

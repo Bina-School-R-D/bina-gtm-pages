@@ -264,7 +264,7 @@ const explainers = [
             ))
           }
         </ul>
-        <figcaption class="mt-4 text-body-md">One choice per family.</figcaption>
+        <figcaption class="mt-4 text-body-lg">One choice per family.</figcaption>
       </figure>
     </div>
   </section>
@@ -380,7 +380,7 @@ const explainers = [
               ))
             }
           </ul>
-          <p class="mt-4 text-body-md">
+          <p class="mt-4 text-body-lg">
             Middle-school parent survey, {surveyB.n} responses, open-ended — themes families raised
             unprompted, not options we offered. 27% left it blank.
           </p>
@@ -414,14 +414,14 @@ const explainers = [
               exams.map((e) => (
                 <tr class="border-b border-line/15">
                   <td class="py-2 pr-4 font-display font-bold">{e.label}</td>
-                  <td class="py-2 pr-4 text-body-md">{e.region}</td>
+                  <td class="py-2 pr-4 text-body-lg">{e.region}</td>
                   <td class="py-2 font-display font-bold">{e.pct}%</td>
                 </tr>
               ))
             }
           </tbody>
         </table>
-        <p class="mt-4 text-body-md">
+        <p class="mt-4 text-body-lg">
           Middle-school parent survey, {surveyB.n} responses. {examNotes.note} A further {
             examNotes.anyPct
           }% said "whatever opens the most doors" and {examNotes.nonePct}% would rather we didn't
@@ -453,7 +453,7 @@ const explainers = [
                   +
                 </span>
               </summary>
-              <p class="border-t-2 border-line px-5 pb-5 pt-4 text-body-md">{e.a}</p>
+              <p class="border-t-2 border-line px-5 pb-5 pt-4 text-body-lg">{e.a}</p>
             </details>
           ))
         }
@@ -484,7 +484,7 @@ const explainers = [
     </div>
   </section>
 
-  <p slot="footer-note" class="text-body-sm">
+  <p slot="footer-note" class="text-body-md">
     Figures come from bina's own family surveys — a whole-school survey of {surveyA.n} families ({
       surveyA.responseRatePct
     }% response rate) and a separate middle-school parent survey of {surveyB.n} responses. The two
@@ -506,12 +506,12 @@ const explainers = [
     .chart-label-suffix {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: 12px;
+      font-size: 14px;
       fill: currentColor;
     }
     .chart-label-sm {
       font-family: var(--font-display);
-      font-size: 13px;
+      font-size: 14px;
       fill: currentColor;
     }
     .donut-value {

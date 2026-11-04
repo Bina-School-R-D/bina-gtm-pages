@@ -64,6 +64,8 @@
 
 /* Rund Display — the only family. The library ships Regular, SemiBold and Bold. */
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+/* Medium (500) is for tags only (Zeyu, 2026-11-04); the file ships with the font family. */
+@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
@@ -240,7 +242,7 @@
      toward a section's three colors, but their text still has to pass. */
   .pill-bina {
     @apply inline-flex items-center rounded-full border-2 px-3 py-1
-      font-display text-body-sm font-bold;
+      font-display text-body-md font-medium;
     border-color: var(--t-hl);
     color: var(--t-hl);
   }
