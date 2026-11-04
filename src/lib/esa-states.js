@@ -190,9 +190,6 @@ export function chooserStates() {
         badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
         awardLabel: s.awardPrefix ? `${s.awardPrefix} ${award}` : award,
         payLabel: `About ${month} a month${s.tier === 'reimbursed' ? ' after your credit' : ''}`,
-        // The card shows the figure and its label separately so each scans on its own.
-        payValue: `About ${month}`,
-        payAfter: s.tier === 'reimbursed' ? 'after your credit' : null,
       };
     })
     .sort(
