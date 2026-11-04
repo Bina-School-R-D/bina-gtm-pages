@@ -97,8 +97,30 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
   </section>
 
-  <!-- the other two lists: their own mint band, directly under the approved cards (Akis: all
-       state lists together), so they never read as states that work today. Coming-soon states
+  <!-- how it works -->
+  <section class="theme-base">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
+      <ol class="grid gap-6 md:grid-cols-3">
+        {
+          c.howSteps.map((st, i) => (
+            <li class="flex gap-4">
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
+                {i + 1}
+              </span>
+              <span>
+                <h3 class="mb-1 text-title-sm"><BrandText text={st.t} /></h3>
+                <p class="text-body-lg"><BrandText text={st.d} /></p>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- the other two lists: their own mint band, after "How ESA funding works" (Zeyu, 2026-11-04 —
+       moved from directly under the approved cards), so they never read as states that work today. Coming-soon states
        are filled chips; other-ways states are rows with a line under each. Text only — no links
        to redirects (check-esa-static enforces it). -->
   <section class="theme-mint">
@@ -139,28 +161,6 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
         <span class="mt-0.5 grid h-7 w-7 flex-none place-items-center rounded-full bg-deep-ocean text-body-md text-mint" aria-hidden="true">?</span>
         <span>{c.ask.line} <a href={c.ask.url} class="underline">{c.ask.label}</a></span>
       </p>
-    </div>
-  </section>
-
-  <!-- how it works -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
-      <ol class="grid gap-6 md:grid-cols-3">
-        {
-          c.howSteps.map((st, i) => (
-            <li class="flex gap-4">
-              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
-                {i + 1}
-              </span>
-              <span>
-                <h3 class="mb-1 text-title-sm"><BrandText text={st.t} /></h3>
-                <p class="text-body-lg"><BrandText text={st.d} /></p>
-              </span>
-            </li>
-          ))
-        }
-      </ol>
     </div>
   </section>
 
