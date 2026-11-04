@@ -1,0 +1,19 @@
+---
+/*
+ * The closing CTA block for every page (Zeyu, 2026-11-04): a tangerine rounded block on the
+ * dark background, inside the shared content column, with centered black text and the lemon
+ * button(s). The one place on a page where text is centered, apart from the footer.
+ * Pages pass the heading, copy and buttons as children; use the classes below for each part.
+ *   h2:      class="cta-title"
+ *   copy:    class="cta-copy"
+ *   buttons: <div class="cta-actions"> (secondary left, primary right)
+ */
+---
+
+<section class="theme-base">
+  <div class="mx-auto max-w-5xl px-5 py-14">
+    <div class="theme-tangerine rounded-lg px-6 py-12 text-center sm:px-12 sm:py-16">
+      <slot />
+    </div>
+  </div>
+</section>

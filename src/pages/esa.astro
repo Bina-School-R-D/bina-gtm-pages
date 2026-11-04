@@ -7,6 +7,7 @@
  * page has one job: get a family to their state in one click, and give the honest answer to
  * everyone else. The 45 states we cannot serve redirect here (astro.config.mjs).
  */
+import CtaBlock from '../components/CtaBlock.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import landing from '../data/esa-landing.json';
 import { CTA, CTA_LABEL, chooserStates, stateSlug } from '../lib/esa-states.js';
@@ -148,27 +149,25 @@ const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 
   </section>
 
   <!-- the honest answer for every other state -->
-  <section class="theme-grape">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl text-hl sm:text-title-3xl">Not in one of those five states?</h2>
-      <p class="mb-4 text-body-xl">
+  <CtaBlock>
+      <h2 class="cta-title text-title-xl sm:text-title-3xl">Not in one of those five states?</h2>
+      <p class="mx-auto mb-4 max-w-2xl">
         You can still join bina — families do, from all over the world, with no state funding at all.
         What you cannot do yet is pay us with your state's money.
       </p>
-      <p class="mb-8">
+      <p class="cta-copy">
         We are working on more states, and new programs are approved most years. Some states require
         a physical campus or locally licensed teachers, which takes longer than paperwork. Email us
         your state and we will tell you straight where it stands — and let you know if that changes.
       </p>
-      <div class="flex flex-wrap gap-3">
+      <div class="cta-actions">
         <a
           href="mailto:admissions@thebinaschool.com?subject=ESA%20funding%20in%20my%20state"
           class="btn-bina-secondary">Email us about your state</a
         >
         <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
       </div>
-    </div>
-  </section>
+  </CtaBlock>
 
   <p slot="footer-note" class="max-w-2xl text-body-md">
     Each program is run by its own state, not by bina. Program amounts, eligibility and deadlines are

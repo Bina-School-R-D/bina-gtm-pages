@@ -1,4 +1,5 @@
 ---
+import CtaBlock from '../components/CtaBlock.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
@@ -444,22 +445,19 @@ const monthYear = (iso: string | null) =>
 
 
   <!-- CTA -->
-  <section class="theme-grape">
-    <div class="mx-auto max-w-5xl px-5 py-16">
-      <h2 class="mb-4 text-title-xl sm:text-title-3xl">
-        Read all you like — then come and <span class="text-hl">see for yourself</span>
+  <CtaBlock>
+      <h2 class="cta-title text-title-xl sm:text-title-3xl">
+        Read all you like — then come and see for yourself
       </h2>
-      <p class="mb-8 max-w-xl">
+      <p class="cta-copy">
         See how bina teaches, meet the teachers these families keep naming, and decide for yourself
         whether the reviews hold up.
       </p>
-      <div class="flex flex-wrap gap-3">
+      <div class="cta-actions">
         <a href="/family-survey" class="btn-bina-secondary">See the family survey</a>
         <a href={SITE} class="btn-bina">Visit bina</a>
       </div>
-
-    </div>
-  </section>
+  </CtaBlock>
 
   <p slot="footer-note" class="text-body-md">
     Every quote here comes from the Growth team's testimonial registry, which holds {registry.total}

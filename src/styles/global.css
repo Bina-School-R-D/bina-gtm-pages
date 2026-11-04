@@ -231,6 +231,11 @@
      section theme (--t-solid-*): mint card on dark, deep ocean card on mint, black card on lemon,
      lagoon and the bright colors, mint card on deep ocean. Inside the card the theme variables
      switch to the card's colors, so text-hl, pill-bina and border-line keep passing contrast. */
+  /* Closing CTA block (CtaBlock.astro): centered heading, copy and buttons. */
+  .cta-title { @apply mb-4; }
+  .cta-copy { @apply mx-auto mb-8 max-w-2xl; }
+  .cta-actions { @apply flex flex-wrap justify-center gap-3; }
+
   .card-bina-solid {
     @apply rounded-lg;
     --t-fg: var(--t-solid-fg);

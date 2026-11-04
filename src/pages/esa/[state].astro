@@ -10,6 +10,7 @@
  * Program facts come from esa-states.json only; sales copy from esa-landing.json; proof
  * numbers are imported from the other pages' data files and never re-typed.
  */
+import CtaBlock from '../../components/CtaBlock.astro';
 import Accordion from '../../components/Accordion.astro';
 import BrandText from '../../components/BrandText.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -311,25 +312,25 @@ const otherStatesHtml = otherStates
   </section>
 
   <!-- close -->
-  <section class="theme-grape">
-    <div class="mx-auto max-w-5xl px-5 py-16">
-      <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl">
-        One call tells you whether this works for your family
-      </h2>
-      <p class="mb-8 max-w-2xl">
-        We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
-        whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
-      </p>
+  <CtaBlock>
+    <h2 class="cta-title text-title-xl sm:text-title-3xl">
+      One call tells you whether this works for your family
+    </h2>
+    <p class="cta-copy">
+      We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
+      whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
+    </p>
+    <div class="cta-actions">
       <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
-      <p class="mt-6 text-body-lg">
-        Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold text-hl underline">admissions@thebinaschool.com</a>
-      </p>
-      <p class="mt-8 text-body-lg">
-        In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
-        {' '}<a href="/esa" class="font-bold text-hl underline">See all five →</a>
-      </p>
     </div>
-  </section>
+    <p class="mt-6 text-body-lg">
+      Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold underline">admissions@thebinaschool.com</a>
+    </p>
+    <p class="mx-auto mt-6 max-w-2xl text-body-lg">
+      In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
+      {' '}<a href="/esa" class="font-bold underline">See all five →</a>
+    </p>
+  </CtaBlock>
 
   <!-- where every number came from -->
   <section class="theme-base">

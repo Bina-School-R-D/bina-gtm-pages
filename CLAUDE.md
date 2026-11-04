@@ -74,7 +74,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 
 | Element | Rule | Class / component |
 |---|---|---|
-| Section width | Every section and the footer share one container and one left/right edge; all text left-aligned; no centered closing sections. **The footer is the one exception: its text is centered** (Zeyu, 2026-11-04). Narrow things get a `max-w-*` inside it. | `mx-auto max-w-5xl px-5` |
+| Section width | Every section and the footer share one container and one left/right edge; all text left-aligned. **Two exceptions, both centered: the closing CTA block and the footer** (Zeyu, 2026-11-04). Narrow things get a `max-w-*` inside it. | `mx-auto max-w-5xl px-5` |
 | Hero | Top line is an uppercase label in the section's text color (never a pill). One word of the `h1` may be colored — deep ocean, no underline (grape on sky blue, where deep ocean fails). No divider lines in the hero. | `eyebrow-line` |
 | Labels | Eyebrows above headings, group labels, tags: uppercase, bold, letter-spaced, 14px. **`bina` stays lowercase inside an uppercase label** — wrap it. | `eyebrow-bina`, `pill-bina`, `label-bina`, `<BrandText text={…} />` or `<span class="normal-case">bina</span>` |
 | Cards | **Always filled, never outlined.** The fill comes from the section: mint card on dark, deep ocean card on mint, black card on lemon/lagoon/clover/tangerine/sky, mint card on deep ocean. Inside, `text-hl`, `pill-bina` and `border-line` switch to the card's colors. | `card-bina-solid` (`card-bina-mint` = the mint card with deep ocean name/number/tag and black body) |
@@ -88,6 +88,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Links | Text links are bold and underlined. **Hover: the underline thickens to 3px and moves closer, in the link's own color** (set once in `global.css`, unlayered so it beats Tailwind's decoration utilities). Whole-card links thicken the underline of their "→" line. Buttons keep the dragon-fruit hover. | global `a:hover` rule |
 | Buttons | Primary lemon / secondary black. **Responsive: Small on phones (16px label, 48px tall, 8px corners), Large from 640px (24px, 16px corners)** — the library's two sizes, nothing in between. `btn-sm` keeps the nav CTA small at every width. **Two side by side: secondary left, primary right.** One primary per section. Hover dragon fruit. | `btn-bina`, `btn-bina-secondary` |
 | Inputs | Outlined in the card's line color, never white-filled; errors in a passing color (grape on mint). | `input-bina` |
+| Closing CTA | Every page ends with one CTA block: a tangerine rounded block on the dark background, inside the content column, centered black heading + copy, lemon button (secondary left, primary right). Never a full-bleed colored band. | `<CtaBlock>` with `cta-title` / `cta-copy` / `cta-actions` |
 | Nav | Full-width black bar, logo and CTA at the window edges (not in the content column). | `BaseLayout` |
 - **Radii:** `rounded-lg` 16px, `rounded-sm` 8px. These are the only two the library defines.
 - **Logo:** directly on black, primary base or a dark, calm area of a photo only. Anywhere else, use the black round/square container version. Never recolor, outline or stretch it. Favicon = the b mark on lagoon. The peeking logo goes only on the bottom edge of a layout, large.

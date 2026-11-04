@@ -1,4 +1,5 @@
 ---
+import CtaBlock from '../components/CtaBlock.astro';
 import Accordion from '../components/Accordion.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import results from '../data/student-results.json';
@@ -405,20 +406,18 @@ const tenureBars = tenure.map((b, i) => {
   </section>
 
   <!-- CTA -->
-  <section class="theme-grape">
-    <div class="mx-auto max-w-5xl px-5 py-16">
-      <h2 class="mb-4 text-title-xl sm:text-title-3xl">
-        Curious what a year at bina could do for <span class="text-hl">your child</span>?
+  <CtaBlock>
+      <h2 class="cta-title text-title-xl sm:text-title-3xl">
+        Curious what a year at bina could do for your child?
       </h2>
-      <p class="mb-8 max-w-xl">
+      <p class="cta-copy">
         See how bina teaches, how we track every child's progress, and how to start — all on our
         main site.
       </p>
-      <div class="flex">
+      <div class="cta-actions">
         <a href={SITE} class="btn-bina">Visit bina</a>
       </div>
-    </div>
-  </section>
+  </CtaBlock>
 
   <p slot="footer-note" class="text-body-md">
     Results reflect the {year} school year and are school-wide aggregates from Renaissance STAR

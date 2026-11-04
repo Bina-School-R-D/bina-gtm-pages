@@ -1,4 +1,5 @@
 ---
+import CtaBlock from '../components/CtaBlock.astro';
 import Accordion from '../components/Accordion.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import survey from '../data/family-survey.json';
@@ -470,20 +471,18 @@ const explainers = [
   </section>
 
   <!-- CTA -->
-  <section class="theme-lagoon">
-    <div class="mx-auto max-w-5xl px-5 py-16">
-      <h2 class="mb-4 text-title-xl sm:text-title-3xl">
-        Join the world of <span class="text-hl">bina</span> — and give your kid all of this
+  <CtaBlock>
+      <h2 class="cta-title text-title-xl sm:text-title-3xl">
+        Join the world of bina — and give your kid all of this
       </h2>
-      <p class="mb-8 max-w-xl">
+      <p class="cta-copy">
         See how bina teaches, meet the team, and find out whether we're right for your child — all on
         our main site.
       </p>
-      <div class="flex">
+      <div class="cta-actions">
         <a href={SITE} class="btn-bina">Visit bina</a>
       </div>
-    </div>
-  </section>
+  </CtaBlock>
 
   <p slot="footer-note" class="text-body-md">
     Figures come from bina's own family surveys — a whole-school survey of {surveyA.n} families ({
