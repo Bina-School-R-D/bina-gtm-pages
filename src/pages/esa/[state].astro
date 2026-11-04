@@ -250,8 +250,8 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   }
 
   <!-- GETTING TO KNOW BINA (states with Notion copy): an editorial split so it reads apart from
-       the checklists above — heading and link on the left, each fact as a large statement under a
-       lagoon rule on the right. -->
+       the checklists above — heading and link on the left, each fact as a large statement on the right
+       (no rules — Zeyu, 2026-11-04). -->
   {
     copy.about && (
       <section class="theme-base">
@@ -262,9 +262,9 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
               {copy.about.linkLabel}
             </a>
           </div>
-          <ul class="m-0 grid list-none gap-6 p-0">
+          <ul class="m-0 grid list-none gap-5 p-0 md:pt-2">
             {copy.about.bullets.map((b) => (
-              <li class="border-t-4 border-lagoon pt-4 font-display text-title-md font-bold sm:text-title-lg">{b}</li>
+              <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
             ))}
           </ul>
         </div>
