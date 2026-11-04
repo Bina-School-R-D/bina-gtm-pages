@@ -79,7 +79,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Labels | Eyebrows above headings, group labels, tags: uppercase, bold, letter-spaced, 14px. **`bina` stays lowercase inside an uppercase label** — wrap it. | `eyebrow-bina`, `pill-bina`, `label-bina`, `<BrandText text={…} />` or `<span class="normal-case">bina</span>` |
 | Cards | **Always filled, never outlined.** The fill comes from the section: mint card on dark, deep ocean card on mint, black card on lemon/lagoon/clover/tangerine/sky, mint card on deep ocean. Inside, `text-hl`, `pill-bina` and `border-line` switch to the card's colors. | `card-bina-solid` (`card-bina-mint` = the mint card with deep ocean name/number/tag and black body) |
 | Stats | Big number + a one-line claim. Dark section, mint cards: deep ocean number, bold black claim, black detail line (`/student-results`, `/esa/<state>` proof). | `card-bina-mint` / `card-bina-solid` |
-| Step lists | Lagoon cards on dark, black text, big number left, outlined black tag right, group label above each group. | `EsaProcess` |
+| Step lists | Mint cards on dark, black text, big number left, outlined black tag right, group label above each group. | `EsaProcess` |
 | Charts & tables | No card around them — they sit on the section. On phones, a chart whose labels would drop under 14px gets an HTML bar-list version below `md`. | — |
 | Accordions / FAQs | Full-width rows, thin line under each, question in body-xl Regular, "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
 | Number and check badges | Filled, never outlined: lagoon circle with a black number or ✓ on dark sections, deep ocean circle with mint on mint. | — |
