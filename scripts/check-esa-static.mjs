@@ -134,8 +134,8 @@ for (const name of served) {
     copy.h1, // hero
     copy.heroBadge,
     copy.moneyTitle ?? `What you pay with ${copy.state}'s funding`, // the money
-    'per child, per year',
-    'a full year at bina, on the yearly plan',
+    'You pay ~', // the answer line (2026-11-04: replaced the three award/tuition/remainder cards)
+    'on the yearly plan',
     'Before you enroll — during bina admissions', // process
     'After you enroll',
     'From application to first day',
