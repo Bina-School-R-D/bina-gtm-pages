@@ -149,14 +149,14 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
   </section>
 
   <!-- how it works -->
-  <section class="theme-lagoon">
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
       <ol class="grid gap-6 md:grid-cols-3">
         {
           c.howSteps.map((st, i) => (
             <li class="flex gap-4">
-              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon">
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
                 {i + 1}
               </span>
               <span>
