@@ -157,21 +157,19 @@ const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
     </div>
   </section>
 
-  <!-- getting to know bina -->
-  <section class="theme-lagoon">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-6 text-title-xl sm:text-title-3xl"><BrandText text={c.aboutTitle} /></h2>
-      <ul class="mb-6 grid gap-3">
-        {
-          c.aboutBullets.map((b) => (
-            <li class="flex items-start gap-3">
-              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
-              <span class="font-display font-bold leading-snug">{b}</span>
-            </li>
-          ))
-        }
+  <!-- getting to know bina: same editorial split as the state pages — heading and link left,
+       each fact as a large statement right, dark section, lagoon heading -->
+  <section class="theme-base">
+    <div class="mx-auto grid max-w-5xl gap-10 px-5 py-16 md:grid-cols-[1fr_1.6fr] md:gap-16">
+      <div>
+        <h2 class="mb-6 text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={c.aboutTitle} /></h2>
+        <a href={c.aboutLinkUrl} target="_blank" rel="noopener" class="text-body-xl font-bold underline">{c.aboutLinkLabel}</a>
+      </div>
+      <ul class="m-0 grid list-none gap-5 p-0 md:pt-2">
+        {c.aboutBullets.map((b) => (
+          <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
+        ))}
       </ul>
-      <a href={c.aboutLinkUrl} target="_blank" rel="noopener" class="text-body-xl font-bold underline">{c.aboutLinkLabel}</a>
     </div>
   </section>
 
