@@ -22,6 +22,8 @@ const states = chooserStates();
 const slugs = Object.fromEntries(states.map((s) => [stateSlug(s.state), true]));
 // Two cards on the first row, three on the second, so no state sits alone (md and up).
 const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
+// Each other-ways line stands alone in its row now, so it starts with a capital.
+const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
 
 <BaseLayout
@@ -98,15 +100,23 @@ const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
         }
       </ul>
 
-      <!-- the two lists: plain text on the dark section, so they never read as approved states -->
-      <div class="mt-12 grid gap-10 border-t border-line pt-10 md:grid-cols-2">
+    </div>
+  </section>
+
+  <!-- the other two lists: their own mint band, directly under the approved cards (Akis: all
+       state lists together), so they never read as states that work today. Coming-soon states
+       are filled chips; other-ways states are rows with a line under each. Text only — no links
+       to redirects (check-esa-static enforces it). -->
+  <section class="theme-mint">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="grid gap-12 md:grid-cols-[1fr_1.5fr] md:gap-16">
         <div>
           <h3 class="mb-2 font-display text-title-lg font-bold">{c.soon.title}</h3>
-          <p class="mb-4 text-body-lg"><BrandText text={c.soon.line} /></p>
-          <ul class="grid gap-2">
+          <p class="mb-6 text-body-lg"><BrandText text={c.soon.line} /></p>
+          <ul class="m-0 flex list-none flex-wrap gap-3 p-0">
             {
               c.soon.states.map((st) => (
-                <li class="font-display font-bold text-hl">
+                <li class="rounded-full bg-deep-ocean px-5 py-2 font-display text-body-xl font-bold text-mint">
                   {st.url ? <a href={st.url} class="underline">{st.name} →</a> : st.name}
                 </li>
               ))
@@ -115,35 +125,38 @@ const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
         </div>
         <div>
           <h3 class="mb-2 font-display text-title-lg font-bold">{c.other.title}</h3>
-          <p class="mb-4 text-body-lg"><BrandText text={c.other.line} /></p>
-          <ul class="grid gap-3">
+          <p class="mb-6 text-body-lg"><BrandText text={c.other.line} /></p>
+          <dl class="m-0 border-t border-line">
             {
               c.other.states.map((st) => (
-                <li class="text-body-lg">
-                  <strong class="font-display font-bold text-hl">{st.name}:</strong>{' '}
-                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={st.text} /> →</a> : <BrandText text={st.text} />}
-                </li>
+                <div class="grid gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[10rem_1fr]">
+                  <dt class="font-display text-title-sm text-hl">{st.name}</dt>
+                  <dd class="m-0 text-body-lg">
+                    {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={st.text} /> →</a> : <BrandText text={sentence(st.text)} />}
+                  </dd>
+                </div>
               ))
             }
-          </ul>
+          </dl>
         </div>
       </div>
 
-      <p class="mt-10 text-body-lg">
-        {c.ask.line} <a href={c.ask.url} class="font-bold underline">{c.ask.label}</a>
+      <p class="mt-12 flex items-start gap-3 font-display text-body-xl font-bold">
+        <span class="mt-0.5 grid h-7 w-7 flex-none place-items-center rounded-full bg-deep-ocean text-body-md text-mint" aria-hidden="true">?</span>
+        <span>{c.ask.line} <a href={c.ask.url} class="underline">{c.ask.label}</a></span>
       </p>
     </div>
   </section>
 
   <!-- how it works -->
-  <section class="theme-mint">
+  <section class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
       <ol class="grid gap-6 md:grid-cols-3">
         {
           c.howSteps.map((st, i) => (
             <li class="flex gap-4">
-              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint">
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon">
                 {i + 1}
               </span>
               <span>
