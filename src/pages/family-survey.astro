@@ -315,8 +315,8 @@ const faq = [
     </div>
   </section>
 
-  <!-- the one area not there yet -->
-  <section class="theme-grape">
+  <!-- the one area not there yet: mint section, black text, deep ocean highlights and cards -->
+  <section class="theme-mint">
     <div class="mx-auto max-w-5xl px-5 py-16">
       <h2 class="mb-6 text-title-xl sm:text-title-3xl">
         Our next goal: every score above 9, and here's the 12-month plan
@@ -339,12 +339,13 @@ const faq = [
           <p class="mb-4 font-display font-bold">
             The plan, ranked by what families asked for
           </p>
-          <ul class="space-y-3">
+          <!-- Deep ocean cards with mint text on mint (the /student-results "Understanding STAR" pattern). -->
+          <ul class="m-0 grid list-none gap-3 p-0">
             {
               wishlist.map((w) => (
-                <li class="flex items-baseline gap-4 border-b border-line pb-3">
-                  <span class="font-display text-title-md font-bold text-hl">{w.pct}%</span>
-                  <span class="">{w.label}</span>
+                <li class="flex items-baseline gap-4 rounded-lg bg-deep-ocean px-5 py-4 text-mint">
+                  <span class="w-14 flex-none font-display text-title-md font-bold">{w.pct}%</span>
+                  <span>{w.label}</span>
                 </li>
               ))
             }
@@ -358,8 +359,8 @@ const faq = [
     </div>
   </section>
 
-  <!-- what comes after bina -->
-  <section class="theme-base">
+  <!-- what comes after bina: mint section, black table lines -->
+  <section class="theme-mint">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">Whatever comes after bina, the door stays open</h2>
       <p class="mb-8">
@@ -381,7 +382,7 @@ const faq = [
           <tbody>
             {
               exams.map((e) => (
-                <tr class="border-b border-line/15">
+                <tr class="border-b border-line">
                   <td class="py-2 pr-4 font-display font-bold">{e.label}</td>
                   <td class="py-2 pr-4 text-body-lg">{e.region}</td>
                   <td class="py-2 font-display font-bold">{e.pct}%</td>
