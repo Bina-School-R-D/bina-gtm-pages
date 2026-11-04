@@ -249,13 +249,13 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   <!-- GETTING TO KNOW BINA (states with Notion copy) -->
   {
     copy.about && (
-      <section class="theme-lagoon">
+      <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
           <h2 class="mb-6 text-title-xl sm:text-title-3xl"><BrandText text={copy.about.title} /></h2>
           <ul class="mb-6 grid gap-3">
             {copy.about.bullets.map((b) => (
               <li class="flex items-start gap-3">
-                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
                 <span class="font-display font-bold leading-snug">{b}</span>
               </li>
             ))}
