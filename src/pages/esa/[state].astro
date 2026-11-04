@@ -2,13 +2,13 @@
 /*
  * /esa/<state> — one page per state where bina can accept students. Five of them.
  *
- * Merged 2026-09-22 from the old split between /esa (a process tool) and /esa/<state> (a
- * paid-search landing page): a parent needed both halves, so this page runs
- * hero → how it works → the money → the full process → that state's FAQ.
+ * Layout (Zeyu, 2026-11-04 — Arizona copy first, the same template for all five):
+ * hero → the money → the full process → CTA → FAQ. Sections whose copy lives in the team's
+ * Notion page (who qualifies, how the ESA works, paying in ClassWallet, getting to know bina)
+ * render only for states whose esa-landing.json entry carries them.
  *
  * The 45 states we cannot serve are not pages — they redirect to /esa (astro.config.mjs).
- * Program facts come from esa-states.json only; sales copy from esa-landing.json; proof
- * numbers are imported from the other pages' data files and never re-typed.
+ * Program facts come from esa-states.json only; sales copy from esa-landing.json.
  */
 import CtaBlock from '../../components/CtaBlock.astro';
 import Accordion from '../../components/Accordion.astro';
@@ -16,9 +16,6 @@ import BrandText from '../../components/BrandText.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EsaProcess from '../../components/EsaProcess.astro';
 import landing from '../../data/esa-landing.json';
-import survey from '../../data/family-survey.json';
-import results from '../../data/student-results.json';
-import reviewData from '../../data/reviews.json';
 import { CTA, CTA_LABEL, statePage, usd } from '../../lib/esa-states.js';
 
 export function getStaticPaths() {
@@ -26,22 +23,11 @@ export function getStaticPaths() {
 }
 
 const page = statePage(Astro.props.slug);
-const { copy, program, reimbursed, tier, awardLabel, awardNote, monthLabel, gapLabel, questions, otherStates } = page;
-const { school, faq, reviewIds, howItWorks } = landing;
-
-const reviews = reviewIds.map((id) => reviewData.reviews.find((r) => r.id === id)).filter(Boolean);
-const sourceLabel = { niche: 'Niche', trustpilot: 'Trustpilot', site: 'thebinaschool.com' };
-const reviewDate = (d) =>
-  d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
-
-// Built as one string: JSX around the separators leaves a space before every comma.
-const otherStatesHtml = otherStates
-  .map(
-    (s, i) =>
-      (i === 0 ? '' : i === otherStates.length - 1 ? ' and ' : ', ') +
-      `<a href="/esa/${s.slug}" class="font-bold text-hl underline">${s.state}</a>`
-  )
-  .join('');
+const { copy, program, reimbursed, tier, awardLabel, awardNote, monthLabel, gapLabel, questions, payRows, monthLow, monthHigh } = page;
+const { school } = landing;
+// Per-state copy with a neutral fallback, so a state without its new copy yet still reads right.
+const moneyTitle = copy.moneyTitle ?? `What you pay with ${copy.state}'s funding`;
+const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina`;
 ---
 
 <BaseLayout
@@ -54,12 +40,15 @@ const otherStatesHtml = otherStates
   <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
       <p class="eyebrow-line mb-5"><BrandText text={copy.pill} /></p>
-      <h1 class="mb-5 max-w-3xl text-title-3xl sm:text-display-sm">{copy.h1}</h1>
-      <p class="mb-8 max-w-2xl text-body-xl sm:text-body-xl">{copy.intro}</p>
-
-      <div class="mb-10 flex flex-wrap items-center gap-3">
-        <a href="#process" class="btn-bina-secondary">See the whole process</a>
-        <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
+      <div class="mb-10 flex flex-wrap items-end gap-x-6 gap-y-4">
+        <h1 class="max-w-3xl text-title-3xl sm:text-display-sm"><BrandText text={copy.h1} /></h1>
+        {
+          copy.heroBadge && (
+            <span class="mb-2 inline-flex flex-none items-center rounded-full bg-black px-4 py-2 font-display text-label uppercase text-lagoon">
+              <BrandText text={copy.heroBadge} />
+            </span>
+          )
+        }
       </div>
 
       <ul class="grid gap-3 sm:grid-cols-3">
@@ -80,71 +69,13 @@ const otherStatesHtml = otherStates
     </div>
   </header>
 
-  <!-- HOW IT WORKS: the funding in brief, then what the money buys -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <p class="eyebrow-bina mb-2">
-            How it works
-          </p>
-          <h2 class="mb-6 text-title-xl sm:text-title-3xl">{howItWorks.fundingTitle}</h2>
-          <ol class="grid gap-5">
-            {
-              howItWorks.fundingSteps.map((s, i) => (
-                <li class="flex gap-4">
-                  <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <h3 class="mb-1 text-title-sm">{s.t}</h3>
-                    <p class="text-body-lg">{s.d}</p>
-                  </span>
-                </li>
-              ))
-            }
-          </ol>
-          {
-            program.windowNote && (
-              <p class="mt-6 text-body-lg font-bold text-lagoon">* {program.windowNote}</p>
-            )
-          }
-        </div>
-
-        <div>
-          <p class="eyebrow-bina mb-2">
-            The school
-          </p>
-          <h2 class="mb-4 text-title-xl sm:text-title-3xl">{howItWorks.schoolTitle}</h2>
-          <p class="mb-6">{howItWorks.schoolLead}</p>
-          <ul class="grid gap-3">
-            {
-              howItWorks.schoolPoints.map((p) => (
-                <li class="flex items-start gap-3">
-                  <span
-                    class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black"
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </span>
-                  <span class="leading-snug">{p}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- THE MONEY: award, tuition, and the remainder we are not hiding -->
   <section class="theme-mint">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <p class="eyebrow-bina mb-2">
         {program.prog} · {tier.label}
       </p>
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">{copy.coverTitle}</h2>
-      <p class="mb-8 max-w-3xl text-body-xl">{copy.coverBody}</p>
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{moneyTitle}</h2>
 
       <div class="grid gap-4 md:grid-cols-3">
         <div class="rounded-lg bg-deep-ocean p-6 text-mint">
@@ -169,7 +100,39 @@ const otherStatesHtml = otherStates
         </div>
       </div>
 
-      <!-- Who can apply: three deep ocean cards with mint text (5.43), black note and check line. -->
+      <!-- The money table (Arizona, from the Notion draft): numbers computed from the data files. -->
+      {
+        copy.moneyTitle && (
+          <div class="mt-10 overflow-x-auto">
+            <table class="w-full min-w-[36rem] text-left text-body-lg">
+              <thead>
+                <tr class="border-b border-black">
+                  <th class="py-2 pr-4"><span class="sr-only">Plan</span></th>
+                  <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl"><span class="normal-case">bina</span> tuition (per year)</th>
+                  <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl">{copy.state} ESA gives you</th>
+                  <th class="py-2 align-bottom font-display text-label uppercase text-hl">You pay</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payRows.map((r, i) => (
+                  <tr class="border-b border-black align-top">
+                    <th scope="row" class="py-3 pr-4 font-display font-bold">{r.plan}</th>
+                    <td class="py-3 pr-4">{usd(r.tuition)}</td>
+                    <td class="py-3 pr-4">{awardLabel}</td>
+                    <td class="py-3">
+                      {usd(r.payLow)}–{usd(r.payHigh)} a year
+                      {i === 0 && <> (about {usd(monthLow)}–{usd(monthHigh)} a month)</>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+
+      <!-- Who can apply: shown until a state has its own "Who qualifies" section. -->
+      {!copy.qualifies && (
       <div class="mt-12">
         <h3 class="mb-5 font-display text-title-lg font-bold">Who can apply, and where the money sits</h3>
         <dl class="grid gap-4 sm:grid-cols-3">
@@ -194,178 +157,119 @@ const otherStatesHtml = otherStates
           *Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
           official program site as the final word — and we will go through it with you on the call.
         </p>
-        {
-          program.boost && (
-            <p class="mt-4 flex items-start gap-3 font-bold">
-              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean text-body-md text-mint" aria-hidden="true">✓</span>
-              <span>{program.boost}</span>
-            </p>
-          )
-        }
       </div>
+      )}
     </div>
   </section>
+
+  <!-- WHO QUALIFIES (states with Notion copy) -->
+  {
+    copy.qualifies && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <p class="eyebrow-bina mb-2">Who qualifies</p>
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl">{copy.qualifies.title}</h2>
+          <dl class="grid gap-4 sm:grid-cols-2">
+            {copy.qualifies.items.map((it) => (
+              <div class="card-bina-solid p-6">
+                <dt class="font-display text-title-sm text-hl">{it.k}</dt>
+                <dd class="mt-2 text-body-lg"><BrandText text={it.v} /></dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- HOW THE ESA WORKS (states with Notion copy) -->
+  {
+    copy.howEsa && (
+      <section class="theme-deep-ocean">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <p class="eyebrow-line mb-2">How the {copy.state} ESA works</p>
+          <h2 class="mb-4 text-title-xl sm:text-title-3xl">{copy.howEsa.title}</h2>
+          <p class="max-w-3xl text-body-xl">{copy.howEsa.body}</p>
+        </div>
+      </section>
+    )
+  }
 
   <!-- PROCESS -->
   <EsaProcess page={page} />
 
-  <!-- PROOF: is this actually a good school? Dark section, mint stat cards (the
-       /student-results tiles): deep ocean number and claim, black detail. -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">
-        The school, before the money: our families score us {survey.headline.recommendAvg} out of 10
-      </h2>
-      <p class="mb-8 max-w-2xl">
-        The funding only matters if the school is worth it. So here is our own survey data, our own
-        assessment results, and every review we have — including the platforms we cannot edit.
-      </p>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card-bina-mint p-6">
-          <p class="font-display text-title-4xl font-bold text-deep-ocean">{survey.headline.recommendAvg}</p>
-          <p class="mt-3 font-display font-bold text-deep-ocean">Parents would send their friends here</p>
-          <p class="mt-2 text-body-lg">
-            out of 10, from {survey.surveyA.n} families · <a href="/family-survey" class="font-bold underline">all seven scores</a>
-          </p>
+  <!-- PAYING BINA IN CLASSWALLET (states with Notion copy) -->
+  {
+    copy.classWallet && (
+      <section class="theme-mint">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <p class="eyebrow-bina mb-2">Paying <span class="normal-case">bina</span> in ClassWallet</p>
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.classWallet.title} /></h2>
+          <ol class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {copy.classWallet.steps.map((t, i) => (
+              <li class="card-bina-solid flex flex-col gap-3 p-6">
+                <span class="grid h-9 w-9 place-items-center rounded-full bg-mint font-display text-body-md font-bold text-deep-ocean" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span class="text-body-lg"><BrandText text={t} /></span>
+              </li>
+            ))}
+          </ol>
+          {copy.classWallet.videoUrl && (
+            <p class="mt-6 text-body-lg">
+              <a href={copy.classWallet.videoUrl} target="_blank" rel="noopener" class="font-bold underline">
+                {copy.classWallet.videoLabel} ↗
+              </a>
+            </p>
+          )}
         </div>
-        <div class="card-bina-mint p-6">
-          <p class="font-display text-title-4xl font-bold text-deep-ocean">{reviewData.headline.nicheAvg.toFixed(1)} ★</p>
-          <p class="mt-3 font-display font-bold text-deep-ocean">Every review on Niche is five stars</p>
-          <p class="mt-2 text-body-lg">
-            {reviewData.headline.nicheCount} reviews · <a href="/reviews" class="font-bold underline">read all of them</a>
-          </p>
+      </section>
+    )
+  }
+
+  <!-- GETTING TO KNOW BINA (states with Notion copy) -->
+  {
+    copy.about && (
+      <section class="theme-lagoon">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-6 text-title-xl sm:text-title-3xl"><BrandText text={copy.about.title} /></h2>
+          <ul class="mb-6 grid gap-3">
+            {copy.about.bullets.map((b) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+                <span class="font-display font-bold leading-snug">{b}</span>
+              </li>
+            ))}
+          </ul>
+          <a href={copy.about.linkUrl} target="_blank" rel="noopener" class="text-body-xl font-bold underline">
+            {copy.about.linkLabel}
+          </a>
         </div>
-        <div class="card-bina-mint p-6">
-          <p class="font-display text-title-4xl font-bold text-deep-ocean">+{results.headline.readGrowthAvg}</p>
-          <p class="mt-3 font-display font-bold text-deep-ocean">Points of reading growth in one school year</p>
-          <p class="mt-2 text-body-lg">
-            STAR, {results.headline.pairedN} students · <a href="/student-results" class="font-bold underline">the full results</a>
-          </p>
-        </div>
-        <div class="card-bina-mint p-6">
-          <p class="font-display text-title-4xl font-bold text-deep-ocean">{school.classCap}</p>
-          <p class="mt-3 font-display font-bold text-deep-ocean">The most children your child's class can hold</p>
-          <p class="mt-2 text-body-lg">a cap, not an average</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    )
+  }
 
-  <!-- projection: picture your own week -->
-  <!-- Dark section (primary base): mint headline and intro, mint cards with
-       deep ocean headings and black text, same as the /esa state cards. -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">Your Tuesday, if your child were at bina</h2>
-      <p class="mb-8 max-w-2xl">
-        The school day fits your time zone, so this shape holds whether you are in {copy.state} or
-        three flights away from it.
-      </p>
-      <ol class="grid gap-4 sm:grid-cols-2">
-        {
-          school.dayInLife.map((d) => (
-            <li class="card-bina-mint p-6">
-              <p class="font-display text-title-sm text-deep-ocean">{d.time}</p>
-              <p class="mt-2 text-body-lg">{d.what}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <!-- reviews: mint section, deep ocean cards with mint text (5.43) -->
-  <section class="theme-mint">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">Families who made this exact decision</h2>
-      <p class="mb-8 max-w-2xl">
-        Copied word for word, nothing trimmed. There are
-        {' '}{reviewData.reviews.length - reviews.length} more on
-        {' '}<a href="/reviews" class="font-bold underline">our reviews page</a>, including the platforms
-        where we do not control what gets published.
-      </p>
-      <div class="grid gap-4 md:grid-cols-3">
-        {
-          reviews.map((r) => (
-            <figure class="flex h-full flex-col rounded-lg bg-deep-ocean p-6 text-mint">
-              <blockquote class="grow whitespace-pre-line text-body-xl">{r.body}</blockquote>
-              <figcaption class="mt-4 border-t-2 border-current/30 pt-3 font-display text-body-md font-bold">
-                {r.roleLabel} · {sourceLabel[r.source]}
-                {reviewDate(r.date) ? ` · ${reviewDate(r.date)}` : ''}
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ: this state's questions first, then the ones every family asks -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="eyebrow-bina mb-2">
-        {copy.state} questions
-      </p>
-      <h2 class="mb-8 text-title-xl sm:text-title-3xl">The questions {copy.state} families actually ask</h2>
-      <Accordion items={questions} />
-    </div>
-  </section>
-
-  <!-- close -->
+  <!-- close: before the FAQ, so the FAQ is the last section -->
   <CtaBlock>
-    <h2 class="cta-title text-title-xl sm:text-title-3xl">
-      One call tells you whether this works for your family
-    </h2>
+    <h2 class="cta-title text-title-xl sm:text-title-3xl"><BrandText text={ctaTitle} /></h2>
     <p class="cta-copy">
       We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
       whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
     </p>
     <div class="cta-actions">
+      <a href={copy.callUrl ?? '#'} class="btn-bina-secondary">Book an ESA call</a>
       <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
     </div>
-    <p class="mt-6 text-body-lg">
-      Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold underline">admissions@thebinaschool.com</a>
-    </p>
-    <p class="mx-auto mt-6 max-w-2xl text-body-lg">
-      In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
-      {' '}<a href="/esa" class="font-bold underline">See all five →</a>
-    </p>
   </CtaBlock>
 
-  <!-- where every number came from -->
+  <!-- FAQ: the last section before the footer -->
   <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-12">
-      <h2 class="mb-4 font-display text-title-sm">Where these numbers come from</h2>
-      <ul class="grid gap-2 text-body-lg">
-        <li>
-          <strong>{copy.state} program details and dates</strong> — the bina team's ESA database, checked
-          against {copy.state}'s own program site. {copy.state} sets the rules and can change them;
-          <a href={program.officialUrl} rel="noopener" class="font-bold underline"> the official program site</a> is the final word.
-        </li>
-        <li>
-          <strong>Tuition</strong> — published on
-          <a href={school.tuitionUrl} class="font-bold underline"> thebinaschool.com/tuition</a>. The monthly figure
-          on this page is simple arithmetic: yearly tuition minus the base award, divided by 12, before
-          sibling discounts. Awards for children with special needs are higher in several states.
-        </li>
-        <li>
-          <strong>{survey.headline.recommendAvg} out of 10</strong> — our own family survey,
-          {' '}{survey.surveyA.n} families, {survey.surveyA.responseRatePct}% response rate. Families who
-          answer a survey are more positive than those who do not; every score, including our weakest, is
-          on <a href="/family-survey" class="font-bold underline">the survey page</a>.
-        </li>
-        <li>
-          <strong>+{results.headline.readGrowthAvg} reading points</strong> — STAR assessments,
-          Oct '25 to May '26, the {results.headline.pairedN} students assessed at both points at the same
-          level. Aggregates only, on <a href="/student-results" class="font-bold underline">the results page</a>.
-        </li>
-        <li>
-          <strong>Reviews</strong> — copied verbatim from Niche, where we cannot edit or remove anything.
-          The full set is on <a href="/reviews" class="font-bold underline">our reviews page</a>.
-        </li>
-      </ul>
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">FAQ</h2>
+      <Accordion items={questions} />
     </div>
   </section>
+
 
   <p slot="footer-note" class="max-w-2xl text-body-md">
     {program.prog} is run by the state of {copy.state}, not by bina. Program amounts, eligibility and

@@ -8,7 +8,8 @@
     "thebinaschool.com's homepage still names only Utah, Arizona and Wyoming, and the upstream ESA_State_Database.xlsx never got the Wyoming and New Hampshire approvals. Both lag these pages.",
     "New Hampshire's 'who' said 'families under the state income limit' — wrong since SB 295 (2025) removed the 350% FPL cap. Corrected here to universal with the 12,500-student statewide cap. Push the correction back into the upstream database.",
     "Awards quoted are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount.",
-    "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold."
+    "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold.",
+    "ARIZONA COPY — 2026-11-04 (Zeyu, from the Notion 'Arizona ESA page: content draft (approved template)'): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — the hero's $7,000–$8,000 top-up line, the quarterly 'you pay' figure, Pre-K funding, the Dates line, unused funds rolling over, what Monet/Jose's support covers, the order of steps 3 and 4, the sibling discount, the IEP/504 line, 'Families in 40+ countries'. Still missing, so left off the page: the ESA call booking link (CTA button points at '#', step 1 has no link), bina's exact ClassWallet listing name / vendor ID (step 2 says 'Search for bina.'), and the class-size wording (bullet omitted). Also open: whether the 2% ClassWallet processing fee shows in the numbers."
   ],
   "school": {
     "tuitionYearly": 10769,
@@ -119,10 +120,6 @@
     {
       "q": "Can I use ESA money for bina alongside other things?",
       "a": "That depends on your state's rules and your award, not on us. Tuition for an online school is an approved category in the states listed here; whether there is room left over for other purchases is a question for your state's handbook, and we will point you at the exact page."
-    },
-    {
-      "q": "We live in a state that isn't listed here. Can we still join bina?",
-      "a": "Yes — families join bina from all over the world without any state funding. These pages cover only the states where we can accept your state's money today; we are working on more, and new programs are approved most years. Email us your state and we will tell you straight where it stands and let you know if that changes."
     }
   ],
   "reviewIds": [
@@ -138,37 +135,136 @@
       "esaMin": 7000,
       "esaMax": 8000,
       "pill": "Arizona ESA · bina is an approved provider",
-      "h1": "Arizona families can use ESA funds toward a bina education",
-      "intro": "Arizona's Empowerment Scholarship Account gives your family $7,000–$8,000 per child, per year to spend on approved education — and bina is an approved provider. You spend it through ClassWallet, the state pays us directly, and you cover the remainder. Arizona has no annual deadline, so this is a decision you can make in any month of the year.",
+      "h1": "Arizona families can use their ESA toward a bina education",
       "gate": [
         "bina is an approved Arizona ESA provider",
-        "$7,000–$8,000 per child, per year",
+        "Your ESA covers about $7,000–$8,000 a year. You top up the rest.",
         "You spend it through ClassWallet"
       ],
-      "coverTitle": "Arizona's own handbook approves what bina is",
-      "coverBody": "The ESA handbook lists “tuition or fees for a nonpublic online learning program” as an approved expense — the exact category bina sits in. You are not hoping a reviewer stretches a rule.",
-      "timingTitle": "Arizona is open all year, and the date you sign moves your money",
-      "timingBody": "There is no annual deadline — applications run year-round. Funding runs in quarters — Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun — and your funding starts in the quarter you sign your contract, with money arriving between the 15th and 30th of that quarter's first month. Signing with bina earlier puts you in an earlier funding quarter. Of the five states on this site, Arizona is the easiest one to start in mid-year.",
       "faq": [
         {
-          "q": "Is bina really an approved Arizona ESA expense, or are we hoping a reviewer agrees?",
-          "a": "It is written into the state's own handbook. Arizona lists “tuition or fees for a nonpublic online learning program” as an approved expense, and ClassWallet has a built-in category for it. You are not relying on a reviewer stretching a rule."
+          "q": "Is bina an approved Arizona ESA school?",
+          "a": "Yes. bina has been an approved school on ClassWallet since November 2024, and the Arizona Department of Education confirmed our registration in June 2026."
         },
         {
-          "q": "$7,000–$8,000 doesn't cover $10,769. What do I actually pay?",
-          "a": "The difference — roughly $230 to $315 a month, before $1,500 off for each additional child. We put your exact number in writing before you commit. Awards for a child with special needs are higher in Arizona, sometimes much higher, which can close the gap entirely."
+          "q": "Does the ESA cover all of bina's tuition?",
+          "a": "It covers most of it. On the yearly plan, families usually top up about $231–$314 a month, depending on their award."
         },
         {
-          "q": "Can we start mid-year?",
-          "a": "Yes, and Arizona is the best state on this site for it. There is no annual deadline; your funding quarter is set by the date you sign, and the quarters end on Sep 30, Dec 31, Mar 31 and Jun 30. Sign earlier, get funded sooner."
+          "q": "Is there an application deadline?",
+          "a": "Arizona accepts applications all year. The date you sign your ESA agreement sets which quarter your funding starts, so applying earlier means funding starts sooner."
         },
         {
           "q": "How long does approval take?",
-          "a": "Up to 30 days. You pre-register with the Arizona Department of Education, then set up ClassWallet and link your bank. We tell you what to have ready so none of that stalls."
+          "a": "Up to 45 days after you apply, according to the Arizona Department of Education."
+        },
+        {
+          "q": "How does bina get paid?",
+          "a": "We send you an invoice. You create an order in ClassWallet, the state reviews it and pays bina directly, usually within about a week."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Monet and Jose from our admissions team guide you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "My child is in public school now. Can we still apply?",
+          "a": "Yes. Your child can apply while in public school and studies with bina once your ESA is active."
+        },
+        {
+          "q": "What if my child has an IEP or 504 plan?",
+          "a": "Arizona may give a larger award for children with qualifying needs, which can lower your top-up. We'll go through your numbers with you."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Empowerment Scholarship Account (ESA) is run by the state of Arizona, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://www.azed.gov/esa"
+          }
         }
       ],
       "seoTitle": "ESA-Approved Online School in Arizona | bina",
-      "seoDesc": "bina is an approved Arizona ESA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Use your $7,000–$8,000 ESA toward tuition."
+      "seoDesc": "bina is an approved Arizona ESA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Use your $7,000–$8,000 ESA toward tuition.",
+      "heroBadge": "Approved Arizona ESA school",
+      "moneyTitle": "What you pay with your Arizona ESA",
+      "ctaTitle": "See how your Arizona ESA works at bina",
+      "callStep": {
+        "t": "Book an ESA call with Monet or Jose",
+        "d": "We go through your award, your top-up and a start date."
+      },
+      "qualifies": {
+        "title": "Can your family use the Arizona ESA?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in Arizona."
+          },
+          {
+            "k": "Grade",
+            "v": "Any child from kindergarten to grade 12 can apply. bina teaches from Pre-K to Grade 10. Pre-K funding is available for children with a qualifying disability."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit."
+          },
+          {
+            "k": "School",
+            "v": "Your child doesn't need to have attended public school before. While using ESA funds, your child studies with bina instead of a public or charter school."
+          },
+          {
+            "k": "Dates",
+            "v": "Arizona accepts applications all year. Processing can take up to 45 days. Funding runs in quarters (ending Sep 30, Dec 31, Mar 31 and Jun 30), and the date you sign your ESA agreement sets the quarter your funding starts."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "The Arizona ESA in plain words",
+        "body": "The Empowerment Scholarship Account is run by the Arizona Department of Education. When your child is approved, the state puts money into an account for your child's education every quarter. You spend it through ClassWallet on approved expenses, and tuition at an online school like bina is one of them. Unused funds roll over while your child stays in the program."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Monet and Jose from our admissions team walk you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply to the Arizona ESA on the state portal",
+            "Talks you through your numbers before you apply, so you know your top-up"
+          ],
+          [
+            "Set up your ClassWallet account",
+            "Sends you a ready-to-use invoice with everything the state needs"
+          ],
+          [
+            "Create the payment order in ClassWallet",
+            "Follows up with you until the payment clears and your child starts"
+          ]
+        ]
+      },
+      "classWallet": {
+        "title": "How to find and pay bina in ClassWallet",
+        "steps": [
+          "Log in to ClassWallet.",
+          "Search for bina.",
+          "Create an order using the invoice bina sends you.",
+          "The state approves the order and pays bina directly."
+        ],
+        "videoUrl": "https://youtu.be/8wc8PsG5z9U",
+        "videoLabel": "Watch ClassWallet's parent walkthrough"
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "linkLabel": "Explore bina →",
+        "linkUrl": "https://thebinaschool.com"
+      },
+      "faqOnly": true
     },
     {
       "slug": "utah",
@@ -178,16 +274,11 @@
       "esaMax": 8000,
       "pill": "Utah Fits All · bina is an approved provider",
       "h1": "Utah families can use Utah Fits All funds toward a bina education",
-      "intro": "The Utah Fits All Scholarship awards $8,000 per child, per year, paid into your Odyssey account to spend on approved education — and bina is an approved provider. Awards are limited and the window is once a year, so the useful thing to know today is when it opens and what to have ready.",
       "gate": [
         "bina is an approved Utah Fits All provider",
         "$8,000 per child, per year",
         "You spend it through Odyssey"
       ],
-      "coverTitle": "$8,000 covers most of a bina year",
-      "coverBody": "Utah pays the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina.",
-      "timingTitle": "The next window opens Mar 1, 2027 — and awards are limited",
-      "timingBody": "Utah law sets the same dates every year: Mar 1 for returning students and their siblings, Apr 1 for new students, and the portal closes May 1. The 2026–27 window closed on May 1, 2026, so the next one runs Mar 1 – May 1, 2027. Not everyone who applies is funded, so families who don't want to lose a year start at bina now and apply the day the window opens — we keep your paperwork ready for it.",
       "faq": [
         {
           "q": "The window is closed. Is there any point talking to you now?",
@@ -217,16 +308,11 @@
       "esaMax": 5000,
       "pill": "Idaho Parental Choice Tax Credit · bina qualifies",
       "h1": "Idaho families can claim back up to $5,000 of a bina education",
-      "intro": "Idaho's Parental Choice Tax Credit is a refund, not a wallet: you enroll at bina, you pay tuition, you submit the receipts, and Idaho pays you back up to $5,000 per child — $7,500 for a child with a disability. bina tuition qualifies. Because the claim is built on receipts, starting school earlier costs you nothing in eligibility.",
       "gate": [
         "bina tuition qualifies for the credit",
         "Up to $5,000 per child ($7,500 for special needs)",
         "Paid to you — as a refund or an advance"
       ],
-      "coverTitle": "This one is a refund, not a wallet",
-      "coverBody": "Idaho does not pay bina directly. You enroll, you pay tuition, you submit the receipts — and the state returns up to $5,000 per child as a refundable credit or an advance payment. We produce the receipts you need without you having to ask twice.",
-      "timingTitle": "The next window runs Jan 15 – Mar 15, 2027 — first come, first served",
-      "timingBody": "You apply through your Idaho Taxpayer Access Point (TAP) account between Jan 15 and Mar 15, 2027. The money is handed out in the order applications arrive, and from 2027 priority goes first to families who received the credit the year before, then to households at or below 300% of the federal poverty level. Both 2026 windows have closed. Families joining now enroll and pay directly, and we have your receipts and enrollment letter ready for January.",
       "faq": [
         {
           "q": "Does Idaho pay bina, or pay me?",
@@ -260,16 +346,11 @@
       "esaMax": 7000,
       "pill": "Wyoming Steamboat Legacy · bina is an approved provider",
       "h1": "Wyoming families can use ESA funds toward a bina education",
-      "intro": "The Steamboat Legacy Scholarship puts $7,000 per child, per year into your Odyssey account to spend on approved education — and bina is an approved provider. Renewing families get an extra $1,750 in rollover funds on top. Wyoming runs one short window a year, which makes knowing the date the whole game.",
       "gate": [
         "bina is an approved Wyoming ESA provider",
         "$7,000 per child, per year (+$1,750 rollover when you renew)",
         "You spend it through Odyssey"
       ],
-      "coverTitle": "$7,000 lands in your Odyssey account, and bina is in the list",
-      "coverBody": "Wyoming deposits the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina. Renewing families get an extra $1,750 in rollover funds on top.",
-      "timingTitle": "Wyoming has not published the 2027–28 dates — expect early July 2027",
-      "timingBody": "For 2026–27 the application opened at 9 a.m. on Jul 6, 2026 and ran to the end of July, eligibility was verified by the end of July, and funds landed in Odyssey by Sep 1. The Wyoming Department of Education has not announced the 2027–28 window yet, so plan for early July 2027 — we would rather tell you that than invent a date. Families who want bina this year enroll and pay directly, and we line your funding up for the next cycle and tell you the day the date is published.",
       "faq": [
         {
           "q": "You don't know the 2027 dates. Why should I trust the rest of this page?",
@@ -303,16 +384,11 @@
       "esaMax": 5000,
       "pill": "New Hampshire EFA · bina is an approved provider",
       "h1": "New Hampshire families can use EFA funds toward a bina education",
-      "intro": "New Hampshire's Education Freedom Account gives your family about $5,000 per child, per year through ClassWallet — and bina is an approved provider. The income cap was removed in 2025, so every New Hampshire family is eligible, and applications run all year. Enrollment is capped statewide at 12,500 students, which is the one reason to move early.",
       "gate": [
         "bina is an approved New Hampshire EFA provider",
         "About $5,000 per child, per year",
         "You spend it through ClassWallet"
       ],
-      "coverTitle": "A rolling program, paid in four installments",
-      "coverBody": "The EFA accepts applications all year and pays into your ClassWallet account in September, November, January and April — which lines up with how bina bills, so you are never asked for money the state hasn't sent yet.",
-      "timingTitle": "Rolling all year — but Jul 15, 2027 is the deadline that decides your award size",
-      "timingBody": "For a full 2027–28 award your application must be complete and verified by Jul 15, 2027, so send your documents by Jul 1 to leave time for verification. Miss it and you can still get a prorated award for the year already underway, right through the end of February. Decisions take about 30 days, or up to two months if the state asks for more paperwork, and funds arrive in four installments — September, November, January and April. The sensible order is to talk to us first and apply with your bina numbers in hand.",
       "faq": [
         {
           "q": "I thought the EFA had an income limit.",

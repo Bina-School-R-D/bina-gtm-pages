@@ -7,7 +7,8 @@
  * what it asserts now, and the change was deliberate:
  *   - was: all 50 states are pages, and a state page is /esa with the URL changed.
  *   - now: ONLY states bina can accept are pages; the other 45 redirect to /esa; and a
- *          state page is the merged page (hero → how it works → money → process → FAQ).
+ *          state page is the merged page (hero → money → process → CTA → FAQ; layout from
+ *          Zeyu's Arizona copy, 2026-11-04, with Notion-sourced sections where a state has them).
  * Keep the static-not-query-parameter rule from the original — that part still holds.
  *
  * Dependency-free on purpose: node + the built files, nothing else.
@@ -131,22 +132,23 @@ for (const name of served) {
   const d = byState[name];
   for (const text of [
     copy.h1, // hero
-    copy.intro,
-    landing.howItWorks.fundingTitle, // how it works
-    landing.howItWorks.schoolTitle,
-    d.howMuch === undefined ? '' : copy.coverTitle, // the money
+    copy.heroBadge,
+    copy.moneyTitle ?? `What you pay with ${copy.state}'s funding`, // the money
     'per child, per year',
     'a full year at bina, on the yearly plan',
     'Before you enroll — during bina admissions', // process
     'After you enroll',
-    'Talk to bina first',
+    'From application to first day',
+    copy.callStep ? copy.callStep.t : 'Talk to bina first',
     `Apply for the ${d.prog}`,
     'Get approved and funded',
     'Enroll at bina',
-    copy.timingTitle,
     d.applyWindow,
     d.approval,
-    d.who,
+    copy.qualifies ? copy.qualifies.title : d.who, // who qualifies
+    copy.howEsa?.title,
+    copy.classWallet?.title,
+    copy.about?.title,
     d.applyUrl,
     d.officialUrl,
     'id="process"',
@@ -165,7 +167,7 @@ for (const name of served) {
   }
   // This state's own FAQ leads, and every question is really on the page.
   if (!copy.faq || copy.faq.length < 3) fail(`${where}: fewer than 3 state-specific FAQ entries`);
-  for (const f of [...(copy.faq || []), ...landing.faq]) must(pages[name], f.q, where);
+  for (const f of [...(copy.faq || []), ...(copy.faqOnly ? [] : landing.faq)]) must(pages[name], f.q, where);
   // Idaho is a reimbursement; the other four are paid to bina. Never mix the two up.
   const reimbursed = copy.tier === 'reimbursed';
   must(pages[name], reimbursed ? 'Pay bina, then claim it back' : 'Pay tuition from your account', where);

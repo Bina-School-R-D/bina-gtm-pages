@@ -6,7 +6,8 @@
  * Colors come from the section theme, so it works on any background.
  */
 interface Props {
-  items: { q: string; a: string }[];
+  /** `link` turns one phrase of the answer into a link (the phrase must appear in `a`). */
+  items: { q: string; a: string; link?: { text: string; url: string } }[];
 }
 const { items } = Astro.props;
 ---
@@ -24,7 +25,17 @@ const { items } = Astro.props;
             +
           </span>
         </summary>
-        <p class="max-w-3xl pb-5 pr-10">{f.a}</p>
+        <p class="max-w-3xl pb-5 pr-10">
+          {f.link && f.a.includes(f.link.text) ? (
+            <>
+              {f.a.slice(0, f.a.indexOf(f.link.text))}
+              <a href={f.link.url} rel="noopener" class="font-bold underline">{f.link.text}</a>
+              {f.a.slice(f.a.indexOf(f.link.text) + f.link.text.length)}
+            </>
+          ) : (
+            f.a
+          )}
+        </p>
       </details>
     ))
   }

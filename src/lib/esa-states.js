@@ -62,21 +62,24 @@ function payStep(d, reimbursed) {
   return {
     who: 'both',
     t: 'Pay tuition from your account',
-    d: `bina is an approved ${d.prog} provider, so ${d.s} pays bina directly from your ${d.platform} account — nothing comes out of your pocket. Where your award doesn't cover full tuition, you pay only the difference.`,
+    d: `bina is an approved ${d.prog} provider, so ${d.s} pays bina directly from your ${d.platform} account. Where your award doesn't cover full tuition, you pay the difference.`,
   };
 }
 
 /** The numbered step groups. Numbering runs across all groups. */
-export function numberedSteps(d, reimbursed) {
+export function numberedSteps(d, reimbursed, callStep) {
   const groups = [
     {
       label: 'Before you enroll — during bina admissions',
       steps: [
-        {
-          who: 'bina',
-          t: 'Talk to bina first',
-          d: `One call. We tell you what bina costs, what the ${d.prog} covers in ${d.s}, and what is left for you — before you fill in anything.`,
-        },
+        // A state's own call step (Arizona: the named ESA call) replaces the generic one.
+        callStep
+          ? { who: 'bina', ...callStep }
+          : {
+              who: 'bina',
+              t: 'Talk to bina first',
+              d: `One call. We tell you what bina costs, what the ${d.prog} covers in ${d.s}, and what is left for you — before you fill in anything.`,
+            },
         {
           who: 'state',
           t: `Apply for the ${d.prog}`,
@@ -133,7 +136,7 @@ export function statePage(slug) {
   const monthLow = perMonth(school.tuitionYearly - copy.esaMax);
   const monthHigh = perMonth(school.tuitionYearly - copy.esaMin);
 
-  const groups = numberedSteps(program, reimbursed);
+  const groups = numberedSteps(program, reimbursed, copy.callStep);
   const allSteps = groups.flatMap((g) => g.steps);
   const countBy = (who) => WORDS[allSteps.filter((s) => s.who === who).length];
 
@@ -144,10 +147,7 @@ export function statePage(slug) {
     tier: landing.tierCopy[copy.tier],
     badge: WINDOW_BADGE[program.windowState],
     awardLabel: copy.esaMin === copy.esaMax ? usd(copy.esaMax) : `${usd(copy.esaMin)}–${usd(copy.esaMax)}`,
-    // The base award is what we quote; several states pay more for children with special needs.
-    awardNote: /special needs|disability/i.test(program.howMuch)
-      ? 'The base award. Several states pay more for a child with special needs.'
-      : `Paid through ${program.platform}.`,
+    awardNote: reimbursed ? 'Paid back to you after you pay bina.' : `Paid through ${program.platform}.`,
     monthLabel: monthLow === monthHigh ? usd(monthHigh) : `${usd(monthLow)}–${usd(monthHigh)}`,
     gapLabel: reimbursed ? 'your net cost after the refund' : 'is what you cover yourself',
     groups,
@@ -155,8 +155,20 @@ export function statePage(slug) {
     stepsBina: countBy('bina'),
     stepsState: countBy('state'),
     stepsBoth: countBy('both'),
-    // This state's own questions lead; the ones every family asks follow.
-    questions: [...copy.faq, ...landing.faq],
+    // This state's own questions lead; the ones every family asks follow — unless the state's
+    // FAQ is a complete set of its own (Arizona, from the Notion draft).
+    questions: copy.faqOnly ? copy.faq : [...copy.faq, ...landing.faq],
+    // The money table: what a family pays on each plan after the award.
+    payRows: [
+      { plan: 'Yearly plan', tuition: school.tuitionYearly },
+      { plan: 'Quarterly plan', tuition: school.tuitionQuarterly },
+    ].map((r) => ({
+      ...r,
+      payLow: r.tuition - copy.esaMax,
+      payHigh: r.tuition - copy.esaMin,
+    })),
+    monthLow,
+    monthHigh,
     otherStates: landing.states.filter((s) => s.slug !== slug),
   };
 }

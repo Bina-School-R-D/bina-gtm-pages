@@ -1,12 +1,13 @@
 ---
 /*
- * One state's process — the numbered steps that used to live in /esa's dropdown panel,
+ * One state's process: the support table (when the state has one) and the numbered steps.
+ * Formerly the numbered steps that used to live in /esa's dropdown panel,
  * server-rendered for the state whose page this is. Replaces EsaStatePanel: with the page
  * merged (hero → how it works → money → process → FAQ) the fact tiles moved up into the
  * money section, so this block is the steps and nothing else.
  */
 import BrandText from './BrandText.astro';
-import { CHIP, CTA, CTA_LABEL } from '../lib/esa-states.js';
+import { CHIP } from '../lib/esa-states.js';
 
 interface Props {
   /** The resolved page model from statePage(). */
@@ -15,7 +16,6 @@ interface Props {
 
 const { page } = Astro.props;
 const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
-const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
 // Labels are sentence case on the page; the lib keeps its lowercase strings.
 const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
@@ -24,11 +24,38 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 <section id="process" class="theme-base scroll-mt-20">
   <div class="mx-auto max-w-5xl px-5 py-14">
     <p class="eyebrow-bina mb-2">The process</p>
-    <h2 class="mb-3 text-title-xl sm:text-title-3xl">{title} steps, and we are on the call for all of them</h2>
+    <h2 class="mb-3 text-title-xl sm:text-title-3xl">From application to first day</h2>
     <p class="mb-8 max-w-2xl">
       You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
       do together — so you never have to work out which is which on your own.
     </p>
+
+    {
+      copy.support && (
+        <div class="mb-12">
+          <h3 class="mb-2 font-display text-title-lg font-bold">{copy.support.title}</h3>
+          <p class="mb-6 max-w-2xl text-body-lg">{copy.support.lead}</p>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[32rem] text-left text-body-lg">
+              <thead>
+                <tr class="border-b border-mint">
+                  <th class="w-1/2 py-2 pr-6 font-display text-label uppercase text-hl">What you do</th>
+                  <th class="w-1/2 py-2 font-display text-label uppercase text-hl">What <span class="normal-case">bina</span> does</th>
+                </tr>
+              </thead>
+              <tbody>
+                {copy.support.rows.map(([you, bina]) => (
+                  <tr class="border-b border-mint align-top">
+                    <td class="py-3 pr-6">{you}</td>
+                    <td class="py-3">{bina}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    }
 
     <div class="grid gap-8">
       {
@@ -69,11 +96,5 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       *Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.
     </p>
 
-    <div class="mt-10">
-      <p class="eyebrow-bina mb-3">Timing</p>
-      <h3 class="mb-3 font-display text-title-sm">{copy.timingTitle}</h3>
-      <p>{copy.timingBody}</p>
-      <a href={CTA} class="btn-bina mt-6">{CTA_LABEL}</a>
-    </div>
   </div>
 </section>
