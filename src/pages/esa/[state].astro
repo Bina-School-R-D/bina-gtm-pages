@@ -219,17 +219,18 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   <!-- PAYING BINA IN CLASSWALLET (states with Notion copy) -->
   {
     copy.classWallet && (
-      <section class="theme-mint">
+      <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
           <p class="eyebrow-bina mb-2">Paying <span class="normal-case">bina</span> in ClassWallet</p>
           <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.classWallet.title} /></h2>
-          <ol class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- A plain numbered list (lagoon badges on dark), same pattern as "What you do". -->
+          <ol class="m-0 grid list-none gap-4 p-0">
             {copy.classWallet.steps.map((t, i) => (
-              <li class="card-bina-solid flex flex-col gap-3 p-6">
-                <span class="grid h-9 w-9 place-items-center rounded-full bg-mint font-display text-body-md font-bold text-deep-ocean" aria-hidden="true">
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">
                   {i + 1}
                 </span>
-                <span class="text-body-lg"><BrandText text={t} /></span>
+                <span class="pt-1 font-display font-bold leading-snug"><BrandText text={t} /></span>
               </li>
             ))}
           </ol>
