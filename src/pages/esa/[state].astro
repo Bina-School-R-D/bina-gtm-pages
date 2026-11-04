@@ -157,7 +157,7 @@ const otherStatesHtml = otherStates
           <p class="mt-2 font-display font-bold">a full year at bina, on the yearly plan</p>
           <p class="mt-1 text-body-lg">
             {usd(school.tuitionQuarterly)} on the quarterly plan ·
-            <a href={school.tuitionUrl} class="underline">tuition page</a>
+            <a href={school.tuitionUrl} class="font-bold underline">tuition page</a>
           </p>
         </div>
         <div class="rounded-lg bg-deep-ocean p-6 text-mint">
@@ -340,11 +340,11 @@ const otherStatesHtml = otherStates
         <li>
           <strong>{copy.state} program details and dates</strong> — the bina team's ESA database, checked
           against {copy.state}'s own program site. {copy.state} sets the rules and can change them;
-          <a href={program.officialUrl} rel="noopener" class="underline"> the official program site</a> is the final word.
+          <a href={program.officialUrl} rel="noopener" class="font-bold underline"> the official program site</a> is the final word.
         </li>
         <li>
           <strong>Tuition</strong> — published on
-          <a href={school.tuitionUrl} class="underline"> thebinaschool.com/tuition</a>. The monthly figure
+          <a href={school.tuitionUrl} class="font-bold underline"> thebinaschool.com/tuition</a>. The monthly figure
           on this page is simple arithmetic: yearly tuition minus the base award, divided by 12, before
           sibling discounts. Awards for children with special needs are higher in several states.
         </li>
@@ -352,16 +352,16 @@ const otherStatesHtml = otherStates
           <strong>{survey.headline.recommendAvg} out of 10</strong> — our own family survey,
           {' '}{survey.surveyA.n} families, {survey.surveyA.responseRatePct}% response rate. Families who
           answer a survey are more positive than those who do not; every score, including our weakest, is
-          on <a href="/family-survey" class="underline">the survey page</a>.
+          on <a href="/family-survey" class="font-bold underline">the survey page</a>.
         </li>
         <li>
           <strong>+{results.headline.readGrowthAvg} reading points</strong> — STAR assessments,
           Oct '25 to May '26, the {results.headline.pairedN} students assessed at both points at the same
-          level. Aggregates only, on <a href="/student-results" class="underline">the results page</a>.
+          level. Aggregates only, on <a href="/student-results" class="font-bold underline">the results page</a>.
         </li>
         <li>
           <strong>Reviews</strong> — copied verbatim from Niche, where we cannot edit or remove anything.
-          The full set is on <a href="/reviews" class="underline">our reviews page</a>.
+          The full set is on <a href="/reviews" class="font-bold underline">our reviews page</a>.
         </li>
       </ul>
     </div>
@@ -370,7 +370,7 @@ const otherStatesHtml = otherStates
   <p slot="footer-note" class="max-w-2xl text-body-md">
     {program.prog} is run by the state of {copy.state}, not by bina. Program amounts, eligibility and
     deadlines are subject to change — always confirm with
-    <a href={program.officialUrl} rel="noopener" class="underline">the official program site</a> before
+    <a href={program.officialUrl} rel="noopener" class="font-bold underline">the official program site</a> before
     you rely on a number here.
   </p>
 </BaseLayout>
