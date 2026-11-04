@@ -33,8 +33,8 @@ const explainers = [
 ];
 
 // ---- distribution curves (built at compile time — pure static SVG) ----
-// Charts sit in the mint section (mint / black / deep ocean — bina Foundation, three colors).
-// Oct is an unfilled black outline, May is filled deep ocean; direct labels carry identity, not hue.
+// Charts sit on the dark section (primary base / mint / lagoon — three colors, Zeyu 2026-11-04).
+// Oct is a dashed mint line, May a solid lagoon line, no fills; direct labels sit over each peak.
 const W = 640;
 const H = 230;
 const PAD = 14;
@@ -69,6 +69,8 @@ function buildCurveChart(subject) {
     mayLine: gaussianPath(may.mean, may.sd, xMin, xMax, yMax, false),
     octMeanX: xPos(oct.mean, xMin, xMax),
     mayMeanX: xPos(may.mean, xMin, xMax),
+    octPeakY: H - PAD - ((1 / (oct.sd * Math.sqrt(2 * Math.PI))) / yMax) * (H - 2 * PAD - 26),
+    mayPeakY: H - PAD - ((1 / (may.sd * Math.sqrt(2 * Math.PI))) / yMax) * (H - 2 * PAD - 26),
     oct,
     may,
   };
@@ -173,8 +175,8 @@ const tenureBars = tenure.map((b, i) => {
     </div>
   </section>
 
-  <!-- distribution curves -->
-  <section class="theme-mint">
+  <!-- distribution curves: dark section, thin mint outline around each chart (Zeyu's mockup, 2026-11-04) -->
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <p class="eyebrow-bina mb-2">One year of growth</p>
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">The whole school moved forward</h2>
@@ -188,21 +190,19 @@ const tenureBars = tenure.map((b, i) => {
           curveCards.map((c) => {
             const ch = charts[c.key];
             return (
-              <figure class="curve-card">
-                <figcaption class="mb-1 flex items-baseline justify-between gap-3">
-                  <span class="font-display text-title-sm">{c.title}</span>
-                  <span class={`font-display text-title-sm${c.accent}`}>
-                    +{c.growth} pts avg growth
-                  </span>
+              <figure class="curve-card rounded-lg border border-mint p-6 sm:p-8">
+                <figcaption class="mb-2 font-display text-title-sm">
+                  {c.title}
+                  <span class="ml-2 text-hl">+{c.growth} pts</span> avg growth
                 </figcaption>
-                <p class="mb-3 text-body-lg">STAR scaled scores, {headline.pairedN} students</p>
-                <p class="mb-2 flex gap-5 font-display text-body-md font-bold">
+                <p class="mb-4 text-body-lg">STAR scaled scores, {headline.pairedN} students</p>
+                <p class="mb-3 flex gap-5 font-display text-body-md font-bold md:hidden">
                   <span class="inline-flex items-center gap-2">
-                    <span class="h-3.5 w-3.5 rounded-full border-2 border-black"></span>
+                    <span class="w-6 border-t-2 border-dashed border-mint"></span>
                     Oct '25
                   </span>
-                  <span class="inline-flex items-center gap-2">
-                    <span class="h-3.5 w-3.5 rounded-full border-2 border-black bg-deep-ocean"></span>
+                  <span class="inline-flex items-center gap-2 text-hl">
+                    <span class="w-6 border-t-[3px] border-lagoon"></span>
                     May '26
                   </span>
                 </p>
@@ -212,48 +212,41 @@ const tenureBars = tenure.map((b, i) => {
                   aria-label={`${c.title}: distribution of scores shifted right from October to May; average grew ${c.growth} points`}
                   class="w-full"
                 >
-                  <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#000" stroke-width="2" />
+                  <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#D8F6C8" stroke-width="1.5" />
                   <g class="curve-oct">
-                    <path d={ch.octArea} fill="none" />
-                    <path d={ch.octLine} fill="none" stroke="#000" stroke-width="2" />
-                    <line x1={ch.octMeanX} y1={H - PAD} x2={ch.octMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                    <path d={ch.octLine} fill="none" stroke="#D8F6C8" stroke-width="4" stroke-dasharray="10 9" stroke-linecap="round" />
                   </g>
                   <g class="curve-may">
-                    <path d={ch.mayArea} fill="#025EB9" fill-opacity="0.55" />
-                    <path d={ch.mayLine} fill="none" stroke="#000" stroke-width="2" />
-                    <line x1={ch.mayMeanX} y1={H - PAD} x2={ch.mayMeanX} y2="40" stroke="#000" stroke-width="1.5" stroke-dasharray="5 4" />
+                    <path d={ch.mayLine} fill="none" stroke="#55EED4" stroke-width="5" stroke-linecap="round" />
                   </g>
-                  <text x={ch.octMeanX - 8} y="30" text-anchor="end" class="chart-label max-md:hidden">Oct '25</text>
-                  <text x={ch.mayMeanX + 8} y="30" text-anchor="start" class="chart-label max-md:hidden">May '26</text>
+                  <text x={ch.octMeanX - 6} y={Math.min(ch.octPeakY, ch.mayPeakY) - 14} text-anchor="end" class="chart-label max-md:hidden">Oct '25</text>
+                  <text x={ch.mayMeanX + 6} y={Math.min(ch.octPeakY, ch.mayPeakY) - 14} text-anchor="start" class="chart-label text-lagoon max-md:hidden">May '26</text>
                 </svg>
-                <details class="mt-3">
-                  <summary class="cursor-pointer font-display text-body-lg font-bold">See the numbers</summary>
-                  <table class="mt-2 w-full text-left text-body-lg">
-                    <thead>
-                      <tr class="border-b-2 border-line font-display">
-                        <th class="py-1 pr-3">Point</th>
-                        <th class="py-1 pr-3">Average scaled score</th>
-                        <th class="py-1">Students</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="border-b border-line">
-                        <td class="py-1 pr-3">Oct '25</td>
-                        <td class="py-1 pr-3">{ch.oct.mean}</td>
-                        <td class="py-1">{ch.oct.n}</td>
-                      </tr>
-                      <tr>
-                        <td class="py-1 pr-3">May '26</td>
-                        <td class="py-1 pr-3">{ch.may.mean}</td>
-                        <td class="py-1">{ch.may.n}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p class="mt-2 text-body-lg">
-                    Average growth (+{c.growth}) is the average of each student's own change, so it
-                    can differ slightly from subtracting the rounded averages above.
-                  </p>
-                </details>
+                <table class="mt-6 w-full text-left text-body-lg">
+                  <thead>
+                    <tr class="border-b border-mint">
+                      <th class="py-2 pr-3 align-bottom font-display text-label uppercase text-hl">Point</th>
+                      <th class="py-2 pr-3 align-bottom font-display text-label uppercase text-hl">Average scaled score</th>
+                      <th class="py-2 align-bottom font-display text-label uppercase text-hl">Students</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-mint">
+                      <td class="whitespace-nowrap py-3 pr-3">Oct '25</td>
+                      <td class="py-3 pr-3">{ch.oct.mean}</td>
+                      <td class="py-3">{ch.oct.n}</td>
+                    </tr>
+                    <tr class="border-b border-mint">
+                      <td class="whitespace-nowrap py-3 pr-3">May '26</td>
+                      <td class="py-3 pr-3">{ch.may.mean}</td>
+                      <td class="py-3">{ch.may.n}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="mt-4 text-body-lg text-hl">
+                  *Average growth (+{c.growth}) is the average of each student's own change, so it
+                  can differ slightly from subtracting the rounded averages above.
+                </p>
               </figure>
             );
           })
