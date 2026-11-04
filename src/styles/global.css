@@ -224,16 +224,16 @@
     color: var(--t-solid-fg);
   }
 
-  /* Mint card — filled mint, no stroke, deep ocean text (5.43), 24px corners. For card grids
-     on a dark section: the section then runs primary base / mint / deep ocean. Anything inside
+  /* Mint card — filled mint, no stroke, 24px corners. Body text black (17.94); headline items
+     (name, number, tag, link) in deep ocean (5.43) via text-hl / pill-bina. Anything inside
      that reads the theme (text-hl, pill-bina, border-line) turns deep ocean. */
   .card-bina-mint {
     @apply rounded-[24px];
-    --t-fg: var(--color-deep-ocean);
+    --t-fg: var(--color-black);
     --t-hl: var(--color-deep-ocean);
     --t-line: var(--color-deep-ocean);
     background-color: var(--color-mint);
-    color: var(--color-deep-ocean);
+    color: var(--color-black);
   }
 
   /* Tag / pill — uppercase label style in the section highlight. Decorative tags don't count
