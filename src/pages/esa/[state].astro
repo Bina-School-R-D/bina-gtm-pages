@@ -241,9 +241,12 @@ const otherStatesHtml = otherStates
   </section>
 
   <!-- projection: picture your own week -->
-  <section class="theme-deep-ocean">
+  <!-- bina Foundation "stats on clover": deep ocean headline (large only, 3.85), deep ocean cards
+       with clover headings (20px bold = large) and mint text (5.43). The intro is body text, so it
+       is black (12.71); deep ocean would fail as body text on clover. -->
+  <section class="theme-clover">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">Your Tuesday, if your child were at bina</h2>
+      <h2 class="mb-3 text-title-xl text-deep-ocean sm:text-title-3xl">Your Tuesday, if your child were at bina</h2>
       <p class="mb-8 max-w-2xl">
         The school day fits your time zone, so this shape holds whether you are in {copy.state} or
         three flights away from it.
@@ -251,9 +254,9 @@ const otherStatesHtml = otherStates
       <ol class="grid gap-4 sm:grid-cols-2">
         {
           school.dayInLife.map((d) => (
-            <li class="card-bina p-5">
-              <p class="eyebrow-bina">{d.time}</p>
-              <p class="mt-1">{d.what}</p>
+            <li class="rounded-lg bg-deep-ocean p-6 text-mint">
+              <p class="font-display text-title-sm font-bold text-clover">{d.time}</p>
+              <p class="mt-2">{d.what}</p>
             </li>
           ))
         }
