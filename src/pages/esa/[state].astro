@@ -72,6 +72,22 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
     </div>
   </header>
 
+  <!-- HOW THE ESA WORKS (states with Notion copy) -->
+  {
+    copy.howEsa && (
+      <!-- A clover card on the dark section, built like the closing CTA block (left-aligned: it is a paragraph to read). -->
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <div class="theme-clover rounded-lg px-6 py-12 sm:px-12 sm:py-16">
+            <p class="eyebrow-line mb-2">How the {copy.state} ESA works</p>
+            <h2 class="mb-4 text-title-xl sm:text-title-3xl">{copy.howEsa.title}</h2>
+            <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <!-- THE MONEY: dark section, mint stat cards (the /student-results tiles): deep ocean number and claim, black detail -->
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
@@ -199,22 +215,6 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
               );
             })}
           </dl>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- HOW THE ESA WORKS (states with Notion copy) -->
-  {
-    copy.howEsa && (
-      <!-- A clover card on the dark section, built like the closing CTA block (left-aligned: it is a paragraph to read). -->
-      <section class="theme-base">
-        <div class="mx-auto max-w-5xl px-5 py-14">
-          <div class="theme-clover rounded-lg px-6 py-12 sm:px-12 sm:py-16">
-            <p class="eyebrow-line mb-2">How the {copy.state} ESA works</p>
-            <h2 class="mb-4 text-title-xl sm:text-title-3xl">{copy.howEsa.title}</h2>
-            <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
-          </div>
         </div>
       </section>
     )
