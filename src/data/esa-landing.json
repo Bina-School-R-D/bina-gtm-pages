@@ -238,7 +238,12 @@
         "linkLabel": "Explore bina →",
         "linkUrl": "https://thebinaschool.com"
       },
-      "faqOnly": true
+      "faqOnly": true,
+      "gateHeads": [
+        "Approved provider",
+        "$7,000–$8,000 a year",
+        "Paid via ClassWallet"
+      ]
     },
     {
       "slug": "utah",
@@ -273,7 +278,12 @@
       ],
       "seoTitle": "Utah Fits All Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition.",
-      "awardPrefix": "Up to"
+      "awardPrefix": "Up to",
+      "gateHeads": [
+        "Approved provider",
+        "$8,000 a year",
+        "Paid via Odyssey"
+      ]
     },
     {
       "slug": "idaho",
@@ -313,7 +323,12 @@
       "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
       "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition.",
       "awardPrefix": "Up to",
-      "cardTag": "Jan 15 – Mar 15, 2027"
+      "cardTag": "Jan 15 – Mar 15, 2027",
+      "gateHeads": [
+        "Tuition qualifies",
+        "Up to $5,000",
+        "Paid back to you"
+      ]
     },
     {
       "slug": "wyoming",
@@ -352,7 +367,12 @@
       ],
       "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer.",
-      "cardTag": "2027–28 dates coming soon"
+      "cardTag": "2027–28 dates coming soon",
+      "gateHeads": [
+        "Approved provider",
+        "$7,000 a year",
+        "Paid via Odyssey"
+      ]
     },
     {
       "slug": "new-hampshire",
@@ -391,7 +411,12 @@
       ],
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
-      "awardPrefix": "About"
+      "awardPrefix": "About",
+      "gateHeads": [
+        "Approved provider",
+        "About $3,800–$5,800",
+        "Paid via ClassWallet"
+      ]
     }
   ],
   "tierCopy": {
