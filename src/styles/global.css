@@ -208,11 +208,11 @@
      Primary: lemon + black text. Secondary: black + lemon text.
      Hover is always dragon fruit with black text. 2px black outline always.
      One primary per section. On lemon use secondary; on black / primary base use primary. */
-  /* Responsive (Zeyu, 2026-11-04): the library's two sizes only — Small on phones
-     (16px label, 40px tall, 8px corners), Large from 640px up (24px label, 16px corners). */
+  /* Responsive (Zeyu, 2026-11-04): Small on phones (16px label, 48px tall — a comfortable
+     tap target, 8px corners), Large from 640px up (24px label, 16px corners). */
   .btn-bina,
   .btn-bina-secondary {
-    @apply inline-flex min-h-10 items-center justify-center whitespace-nowrap cursor-pointer
+    @apply inline-flex min-h-12 items-center justify-center whitespace-nowrap cursor-pointer
       rounded-sm border-2 border-black px-4 py-2 font-display text-button-sm font-bold
       no-underline transition-colors duration-200 ease-out
       sm:rounded-lg sm:px-6 sm:py-4 sm:text-button-lg;
@@ -221,10 +221,10 @@
   .btn-bina-secondary { @apply bg-black text-lemon; }
   .btn-bina:hover,
   .btn-bina-secondary:hover { @apply bg-dragon-fruit text-black; }
-  /* Small at every width (the nav CTA): 16px label, 40px tall, 8px corners. */
+  /* Small at every width (the nav CTA): 16px label, 48px tall, 8px corners. */
   .btn-sm,
   .btn-sm:is(.btn-bina, .btn-bina-secondary) {
-    @apply min-h-10 rounded-sm px-4 py-0 text-button-sm;
+    @apply min-h-12 rounded-sm px-4 py-0 text-button-sm;
   }
 
   /* Card — always filled, never outlined (Zeyu, 2026-11-04). The fill and text come from the
