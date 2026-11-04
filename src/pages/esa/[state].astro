@@ -113,7 +113,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
             <div class="grid gap-4 md:grid-cols-2">
               {payRows.map((r, i) => (
                 <div class="card-bina-mint p-6 sm:p-8">
-                  <p class="mb-5 font-display text-title-sm text-hl">{r.plan}</p>
+                  <p class="mb-5 font-display text-title-sm">{r.plan}</p>
                   <dl class="grid gap-2 text-body-lg">
                     <div class="flex items-baseline justify-between gap-4">
                       <dt><span class="normal-case">bina</span> tuition (per year)</dt>
@@ -126,7 +126,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
                     <div class="pt-2">
                       <dt class="font-display font-bold">You pay</dt>
                       <dd>
-                        <span class="block font-display text-title-xl font-bold text-hl">
+                        <span class="block font-display text-title-xl font-bold">
                           {usd(r.payLow)}–{usd(r.payHigh)}<span class="text-body-xl"> a year</span>
                         </span>
                         {/* Every plan shows what parents pay per month: the yearly top-up divided by 12. */}
