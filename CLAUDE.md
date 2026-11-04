@@ -82,6 +82,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Step lists | Lagoon cards on dark, black text, big number left, outlined black tag right, group label above each group. | `EsaProcess` |
 | Charts & tables | No card around them — they sit on the section. On phones, a chart whose labels would drop under 14px gets an HTML bar-list version below `md`. | — |
 | Accordions / FAQs | Full-width rows, thin line under each, question in body-xl Regular, "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
+| Number and check badges | Filled, never outlined: lagoon circle with a black number or ✓ on dark sections, deep ocean circle with mint on mint. | — |
 | Notes | A note under a block starts with `*`, no box, no icon (lagoon on dark, black on light). A single highlighted fact is a check-line: filled circle + bold text. | — |
 | Dividers | No decorative rules between blocks (hero checklist, closing section). Only list rows (accordions, tables) get lines. | — |
 | Links | Text links are bold and underlined. **Hover: the underline thickens to 3px and moves closer, in the link's own color** (set once in `global.css`, unlayered so it beats Tailwind's decoration utilities). Whole-card links thicken the underline of their "→" line. Buttons keep the dragon-fruit hover. | global `a:hover` rule |
