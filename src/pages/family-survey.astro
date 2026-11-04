@@ -38,12 +38,13 @@ const {
 // if a fifth option ever appears), starting at 12 o'clock, clockwise in data order.
 const PIE_R = 80;
 const pieCirc = 2 * Math.PI * PIE_R;
-const PIE_GAP = 3; // dark gap between slices, in px of arc
+const PIE_GAP = 6; // dark gap between slices, in px of arc
+const PIE_W = 44; // ring thickness; round caps add PIE_W / 2 at each end, so each dash is shortened by PIE_W
 const pieColors = ['#55EED4', '#025EB9', '#FFE916', '#FF8A3D', '#FE49C1'];
 let pieAcc = 0;
 const pieSlices = future.map((f, i) => {
   const len = (f.pct / 100) * pieCirc;
-  const slice = { ...f, color: pieColors[i % pieColors.length], dash: `${Math.max(0, len - PIE_GAP)} ${pieCirc}`, offset: -pieAcc };
+  const slice = { ...f, color: pieColors[i % pieColors.length], dash: `${Math.max(0.1, len - PIE_GAP - PIE_W)} ${pieCirc}`, offset: -(pieAcc + PIE_GAP / 2 + PIE_W / 2) };
   pieAcc += len;
   return slice;
 });
@@ -229,7 +230,8 @@ const faq = [
                 r={PIE_R}
                 fill="none"
                 stroke={sl.color}
-                stroke-width="44"
+                stroke-width={PIE_W}
+                stroke-linecap="round"
                 stroke-dasharray={sl.dash}
                 stroke-dashoffset={sl.offset}
                 transform="rotate(-90 110 110)"
