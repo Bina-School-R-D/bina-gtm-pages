@@ -74,7 +74,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 
 | Element | Rule | Class / component |
 |---|---|---|
-| Section width | Every section and the footer share one container and one left/right edge; all text left-aligned; no centered closing sections. Narrow things get a `max-w-*` inside it. | `mx-auto max-w-5xl px-5` |
+| Section width | Every section and the footer share one container and one left/right edge; all text left-aligned; no centered closing sections. **The footer is the one exception: its text is centered** (Zeyu, 2026-11-04). Narrow things get a `max-w-*` inside it. | `mx-auto max-w-5xl px-5` |
 | Hero | Top line is an uppercase label in the section's text color (never a pill). One word of the `h1` may be colored — deep ocean, no underline (grape on sky blue, where deep ocean fails). No divider lines in the hero. | `eyebrow-line` |
 | Labels | Eyebrows above headings, group labels, tags: uppercase, bold, letter-spaced, 14px. **`bina` stays lowercase inside an uppercase label** — wrap it. | `eyebrow-bina`, `pill-bina`, `label-bina`, `<BrandText text={…} />` or `<span class="normal-case">bina</span>` |
 | Cards | **Always filled, never outlined.** The fill comes from the section: mint card on dark, deep ocean card on mint, black card on lemon/lagoon/clover/tangerine/sky, mint card on deep ocean. Inside, `text-hl`, `pill-bina` and `border-line` switch to the card's colors. | `card-bina-solid` (`card-bina-mint` = the mint card with deep ocean name/number/tag and black body) |
