@@ -18,11 +18,31 @@
   "npsBenchmark": {
     "worldClassFrom": 70,
     "parentBands": [
-      { "label": "critical", "from": 0, "to": 15 },
-      { "label": "needs improvement", "from": 15, "to": 40 },
-      { "label": "good", "from": 40, "to": 55 },
-      { "label": "great", "from": 55, "to": 70 },
-      { "label": "world class", "from": 70, "to": 100 }
+      {
+        "label": "critical",
+        "from": 0,
+        "to": 15
+      },
+      {
+        "label": "needs improvement",
+        "from": 15,
+        "to": 40
+      },
+      {
+        "label": "good",
+        "from": 40,
+        "to": 55
+      },
+      {
+        "label": "great",
+        "from": 55,
+        "to": 70
+      },
+      {
+        "label": "world class",
+        "from": 70,
+        "to": 100
+      }
     ],
     "correlations": {
       "tuitionValue": 0.66,
@@ -134,7 +154,7 @@
       "pct": 9
     },
     {
-      "label": "More social connection with other kids",
+      "label": "More social connection with other children",
       "pct": 9
     },
     {
@@ -173,7 +193,7 @@
       "region": "United Kingdom"
     },
     {
-      "label": "Regional exams (EQAO, VCE, Matric, NWEA)",
+      "label": "Regional exams: EQAO, VCE, Matric, NWEA",
       "pct": 6,
       "region": "Canada, Australia, South Africa"
     }
