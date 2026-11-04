@@ -103,8 +103,8 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       <!-- The money table (Arizona, from the Notion draft): numbers computed from the data files. -->
       {
         copy.moneyTitle && (
-          <div class="mt-10 overflow-x-auto">
-            <table class="w-full min-w-[36rem] text-left text-body-lg">
+          <div class="mt-10 hidden sm:block">
+            <table class="w-full text-left text-body-lg">
               <thead>
                 <tr class="border-b border-black">
                   <th class="py-2 pr-4"><span class="sr-only">Plan</span></th>
@@ -127,6 +127,27 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
                 ))}
               </tbody>
             </table>
+          </div>
+        )
+      }
+      {
+        copy.moneyTitle && (
+          <!-- Phones: the same table, one plan per block, so "You pay" never scrolls off-screen. -->
+          <div class="mt-10 grid gap-6 sm:hidden">
+            {payRows.map((r, i) => (
+              <dl class="border-b border-black pb-5 text-body-lg">
+                <dt class="mb-3 font-display text-title-sm">{r.plan}</dt>
+                <dd class="flex justify-between gap-4 py-1"><span><span class="normal-case">bina</span> tuition (per year)</span><span>{usd(r.tuition)}</span></dd>
+                <dd class="flex justify-between gap-4 py-1"><span>{copy.state} ESA gives you</span><span>{awardLabel}</span></dd>
+                <dd class="flex justify-between gap-4 py-1 font-bold">
+                  <span>You pay</span>
+                  <span class="text-right">
+                    {usd(r.payLow)}–{usd(r.payHigh)} a year
+                    {i === 0 && <span class="block font-normal">about {usd(monthLow)}–{usd(monthHigh)} a month</span>}
+                  </span>
+                </dd>
+              </dl>
+            ))}
           </div>
         )
       }
