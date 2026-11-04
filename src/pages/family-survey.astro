@@ -199,22 +199,22 @@ const faq = [
       </p>
 
       <figure>
-        <ul class="grid gap-4">
+        <!-- Same pattern as the seven scores: label left, lagoon bar, lagoon value. Each bar is its
+             share of 100%, so the four add up honestly. -->
+        <ul class="m-0 grid list-none gap-5 p-0">
           {
             future.map((f) => (
-              <li>
-                <p class="mb-1 flex items-baseline justify-between gap-3">
-                  <span>{f.label}</span>
+              <li class="grid items-center gap-x-8 gap-y-2 sm:grid-cols-[16rem_1fr]">
+                <p class="font-display font-bold">{f.label}</p>
+                <div class="flex items-center gap-4">
+                  <span class="block h-10 flex-none rounded-sm bg-lagoon" style={`width:${f.pct * 0.8}%`} aria-hidden="true"></span>
                   <span class="font-display text-title-sm text-hl">{f.pct}%</span>
-                </p>
-                <span class="block h-4 w-full rounded-sm border-2 border-line" aria-hidden="true">
-                  <span class="block h-full bg-hl" style={`width:${f.pct}%`}></span>
-                </span>
+                </div>
               </li>
             ))
           }
         </ul>
-        <figcaption class="mt-4 text-body-lg">One choice per family.</figcaption>
+        <figcaption class="mt-8 text-body-lg">One choice per family.</figcaption>
       </figure>
     </div>
   </section>
