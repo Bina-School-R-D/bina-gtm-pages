@@ -36,17 +36,30 @@ const {
 // ---- priorities donut: one choice per family, so the four slices add up to 100%. Slices alternate
 // one palette color each (Zeyu, 2026-11-04: lagoon, deep ocean, lemon, tangerine, then dragon fruit
 // if a fifth option ever appears), starting at 12 o'clock, clockwise in data order.
-const PIE_R = 80;
-const pieCirc = 2 * Math.PI * PIE_R;
-const PIE_GAP = 6; // dark gap between slices, in px of arc
-const PIE_W = 44; // ring thickness; round caps add PIE_W / 2 at each end, so each dash is shortened by PIE_W
+// Each slice is an annular sector drawn as a filled path. A same-color stroke with round joins
+// softens the corners slightly (radius PIE_CORNER), and the shape is inset by that radius so every
+// slice still covers exactly its share.
+const PIE_C = 110;
+const PIE_OUT = 102;
+const PIE_IN = 58;
+const PIE_GAP = 5; // dark gap between slices, in px
+const PIE_CORNER = 5;
 const pieColors = ['#55EED4', '#025EB9', '#FFE916', '#FF8A3D', '#FE49C1'];
+const pt = (r: number, ang: number) =>
+  `${(PIE_C + r * Math.sin(ang)).toFixed(2)} ${(PIE_C - r * Math.cos(ang)).toFixed(2)}`;
 let pieAcc = 0;
 const pieSlices = future.map((f, i) => {
-  const len = (f.pct / 100) * pieCirc;
-  const slice = { ...f, color: pieColors[i % pieColors.length], dash: `${Math.max(0.1, len - PIE_GAP - PIE_W)} ${pieCirc}`, offset: -(pieAcc + PIE_GAP / 2 + PIE_W / 2) };
-  pieAcc += len;
-  return slice;
+  const a0 = (pieAcc / 100) * 2 * Math.PI;
+  const a1 = ((pieAcc + f.pct) / 100) * 2 * Math.PI;
+  pieAcc += f.pct;
+  const ro = PIE_OUT - PIE_CORNER;
+  const ri = PIE_IN + PIE_CORNER;
+  const pad = PIE_GAP / 2 + PIE_CORNER;
+  const o0 = a0 + pad / ro, o1 = a1 - pad / ro;
+  const i0 = a0 + pad / ri, i1 = a1 - pad / ri;
+  const large = o1 - o0 > Math.PI ? 1 : 0;
+  const d = `M ${pt(ro, o0)} A ${ro} ${ro} 0 ${large} 1 ${pt(ro, o1)} L ${pt(ri, i1)} A ${ri} ${ri} 0 ${large} 0 ${pt(ri, i0)} Z`;
+  return { ...f, color: pieColors[i % pieColors.length], d };
 });
 
 // ---- recommendation donut: ring fills to the average score out of 10 ----
@@ -224,18 +237,7 @@ const faq = [
             class="mx-auto w-56 sm:w-64"
           >
             {pieSlices.map((sl) => (
-              <circle
-                cx="110"
-                cy="110"
-                r={PIE_R}
-                fill="none"
-                stroke={sl.color}
-                stroke-width={PIE_W}
-                stroke-linecap="round"
-                stroke-dasharray={sl.dash}
-                stroke-dashoffset={sl.offset}
-                transform="rotate(-90 110 110)"
-              />
+              <path d={sl.d} fill={sl.color} stroke={sl.color} stroke-width={PIE_CORNER * 2} stroke-linejoin="round" />
             ))}
           </svg>
           <ul class="m-0 grid list-none gap-5 p-0">
