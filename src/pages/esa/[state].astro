@@ -250,9 +250,9 @@ const otherStatesHtml = otherStates
   </section>
 
   <!-- projection: picture your own week -->
-  <!-- Clover section: black headline and intro (12.71), black cards with
-       clover headings (12.71) and mint text (17.94). -->
-  <section class="theme-clover">
+  <!-- Dark section (primary base): mint headline and intro, mint cards with
+       deep ocean headings and black text, same as the /esa state cards. -->
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">Your Tuesday, if your child were at bina</h2>
       <p class="mb-8 max-w-2xl">
@@ -262,9 +262,9 @@ const otherStatesHtml = otherStates
       <ol class="grid gap-4 sm:grid-cols-2">
         {
           school.dayInLife.map((d) => (
-            <li class="rounded-lg bg-black p-6 text-mint">
-              <p class="font-display text-title-sm text-clover">{d.time}</p>
-              <p class="mt-2">{d.what}</p>
+            <li class="card-bina-mint p-6">
+              <p class="font-display text-title-sm text-deep-ocean">{d.time}</p>
+              <p class="mt-2 text-body-lg">{d.what}</p>
             </li>
           ))
         }
