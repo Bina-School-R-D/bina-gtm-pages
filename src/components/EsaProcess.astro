@@ -20,10 +20,10 @@ const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
 const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
 
-<!-- Dark section, mint step cards with black text (Zeyu, 2026-11-04). -->
-<section id="process" class="theme-base scroll-mt-20">
+<!-- Mint section: black headings and labels, deep ocean step cards with mint text, deep ocean badges (Zeyu, 2026-11-04 — the /student-results STAR colors). -->
+<section id="process" class="theme-mint scroll-mt-20">
   <div class="mx-auto max-w-5xl px-5 py-14">
-    <p class="eyebrow-bina mb-2">The process</p>
+    <p class="eyebrow-line mb-2">The process</p>
     <h2 class="mb-3 text-title-xl sm:text-title-3xl">From application to first day</h2>
     <p class="mb-8 max-w-2xl">
       You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
@@ -43,7 +43,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
               <ol class="m-0 grid list-none gap-4 p-0">
                 {copy.support.rows.map(([you], i) => (
                   <li class="flex items-start gap-4">
-                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">{i + 1}</span>
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint" aria-hidden="true">{i + 1}</span>
                     <span class="pt-1 font-display font-bold leading-snug">{you}</span>
                   </li>
                 ))}
@@ -54,7 +54,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
               <ul class="m-0 grid list-none gap-4 p-0">
                 {copy.support.rows.map(([, bina]) => (
                   <li class="flex items-start gap-4">
-                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint" aria-hidden="true">✓</span>
                     <span class="pt-1 leading-snug">{bina}</span>
                   </li>
                 ))}
@@ -69,10 +69,10 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       {
         groups.map((g) => (
           <div>
-            <p class="eyebrow-bina mb-3"><BrandText text={g.label} /></p>
+            <p class="eyebrow-line mb-3"><BrandText text={g.label} /></p>
             <ol class="m-0 grid list-none gap-4 p-0">
               {g.steps.map((step) => (
-                <li class="flex items-center gap-5 rounded-lg bg-mint px-5 py-5 text-black sm:gap-7 sm:px-7">
+                <li class="flex items-center gap-5 rounded-lg bg-deep-ocean px-5 py-5 text-mint sm:gap-7 sm:px-7">
                   <span class="w-8 flex-none text-center font-display text-title-3xl sm:text-display-sm" aria-hidden="true">
                     {step.n}
                   </span>
@@ -81,7 +81,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                       <strong class="font-display text-title-md">
                         <span class="sr-only">Step {step.n}: </span>{step.t}
                       </strong>
-                      <span class="inline-flex flex-none items-center rounded-full border-2 border-black px-3 py-1 font-display text-label uppercase">
+                      <span class="inline-flex flex-none items-center rounded-full border-2 border-mint px-3 py-1 font-display text-label uppercase">
                         <BrandText text={step.who === 'state' ? `On ${copy.state}'s site` : sentence(CHIP[step.who].label)} />
                       </span>
                     </span>
@@ -100,7 +100,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       }
     </div>
 
-    <p class="mt-6 text-body-lg text-hl">
+    <p class="mt-6 text-body-lg">
       *Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.
     </p>
 
