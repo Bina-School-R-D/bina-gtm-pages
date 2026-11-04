@@ -25,7 +25,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
   <div class="mx-auto max-w-5xl px-5 py-14">
     <p class="eyebrow-bina mb-2">The process</p>
     <h2 class="mb-3 text-title-xl sm:text-title-3xl">From application to first day</h2>
-    <p class="mb-8 max-w-2xl">
+    <p class="mb-8">
       You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
       do together — so you never have to work out which is which on your own.
     </p>
@@ -34,7 +34,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       copy.support && (
         <div class="mb-12">
           <h3 class="mb-2 font-display text-title-lg font-bold">{copy.support.title}</h3>
-          <p class="mb-6 max-w-2xl text-body-lg">{copy.support.lead}</p>
+          <p class="mb-6 text-body-lg">{copy.support.lead}</p>
           <!-- Two columns, no cards (Zeyu, 2026-11-04 — the old "how the funding works / what you
                get" structure): your steps as a numbered list, bina's part as a checklist. -->
           <div class="grid gap-10 md:grid-cols-2 md:gap-16">
