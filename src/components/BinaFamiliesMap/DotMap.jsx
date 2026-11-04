@@ -331,7 +331,7 @@ export default function DotMap({
                   className="bsm-dot-active"
                   r={activePoint.rpx * unit * (activePoint.rpx > 14 ? 1.06 : 1.2)}
                   fill={activePoint.color}
-                  stroke="#D8F6C8"
+                  stroke="#FFFFFF"
                   strokeWidth={1.5 * unit}
                 />
               </g>

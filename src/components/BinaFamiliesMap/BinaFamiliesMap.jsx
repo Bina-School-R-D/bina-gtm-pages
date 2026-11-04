@@ -46,7 +46,7 @@ export default function BinaFamiliesMap({
         mapLabel: 'Map of the places current bina families live in',
         items: current,
         radiusOf: (c) => studentDotRadius(c.students),
-        colorOf: (c) => colorById[c.continent] || '#D8F6C8',
+        colorOf: (c) => colorById[c.continent] || '#FFFFFF',
         describe: (c) => `${c.label}: ${plural(c.students, 'student')}`,
       },
       exploring: {

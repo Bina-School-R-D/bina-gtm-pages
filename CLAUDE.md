@@ -67,6 +67,8 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 
 These pages are moving to the main domain. Workflow: restyle here on a branch → preview → design approval → port each approved page to thebinaschool.com (via the `bina-website` skill / stage host) → redirect the go.bina.school URL to its new home. Keep `/esa/<state>` static-page rules, attribution and consent behavior intact through the move. Design passes are **visual only**: never change `src/lib/` logic, data values, the lead payload or tracking during a restyle.
 
+**`/families-map` is excluded from the rebrand** (Zeyu, 2026-11-04): it will be redesigned separately. Leave its page, `src/components/BinaFamiliesMap/` and its pinned Rund Text fonts (`public/fonts/RundText-Regular/Medium/Bold.woff2`) exactly as they are until then.
+
 ## 🔴 Brand rule
 
 The company name is always lowercase: `bina`, `bina school`, `thebinaschool.com`, `hello@thebinaschool.com`. Ages are **4–15**. Scan every page for capitalized `Bina` before shipping.

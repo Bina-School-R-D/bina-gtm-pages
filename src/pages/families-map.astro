@@ -26,18 +26,31 @@ import BinaFamiliesMap from '../components/BinaFamiliesMap';
 </BaseLayout>
 
 <style is:global>
-  /* Dark primary base with mint text — the default bina Foundation theme. */
+  /* The map is designed for the main site's dark #1C1C1C background. */
   body {
-    background: var(--color-primary-base);
-    color: var(--color-mint);
+    background: #1c1c1c;
+    color: #fff;
+  }
+
+  /* Pinned to its pre-rebrand type on purpose: this page is excluded from the bina Foundation
+     restyle and will be redesigned separately. Keep these until then. */
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+  body {
+    font-family: "Rund Text", "Arial", sans-serif;
+    line-height: 1.6;
+  }
+  .families-map h1 {
+    letter-spacing: -0.01em;
   }
 </style>
 
 <style>
   h1 {
-    font-size: clamp(2.5rem, 10vw, 3rem); /* title-4xl */
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
     font-weight: 700;
-    color: var(--color-lagoon);
-    line-height: 1.1;
+    color: #03cb5b;
+    line-height: 1;
   }
 </style>
