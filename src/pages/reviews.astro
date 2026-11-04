@@ -286,14 +286,14 @@ const monthYear = (iso: string | null) =>
                 );
               }
               return (
-                <div class:list={['wall-cell card-bina-solid flex flex-col p-6', spanFor(idx)]}>
+                <div class:list={['wall-cell flex flex-col rounded-lg bg-deep-ocean p-6 text-mint', spanFor(idx)]}>
                   <p class="mb-2 font-display text-body-xl font-bold">
                     Want to see the numbers too?
                   </p>
                   <p class="mb-4 text-body-lg">
                     {surveyN} families rated bina out of 10, and every score is published.
                   </p>
-                  <a href="/family-survey" class="mt-auto self-start font-display font-bold text-hl underline underline-offset-4">See the family survey →</a>
+                  <a href="/family-survey" class="btn-bina btn-sm mt-auto self-start">See the family survey →</a>
                 </div>
               );
             }
