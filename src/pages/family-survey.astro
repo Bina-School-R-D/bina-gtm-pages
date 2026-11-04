@@ -34,15 +34,16 @@ const {
 */
 
 // ---- priorities donut: one choice per family, so the four slices add up to 100%. Slices alternate
-// lagoon and mint (the section's own colors), starting at 12 o'clock, clockwise in data order.
+// one palette color each (Zeyu, 2026-11-04: lagoon, deep ocean, lemon, tangerine, then dragon fruit
+// if a fifth option ever appears), starting at 12 o'clock, clockwise in data order.
 const PIE_R = 80;
 const pieCirc = 2 * Math.PI * PIE_R;
 const PIE_GAP = 3; // dark gap between slices, in px of arc
-const pieColors = ['#55EED4', '#D8F6C8'];
+const pieColors = ['#55EED4', '#025EB9', '#FFE916', '#FF8A3D', '#FE49C1'];
 let pieAcc = 0;
 const pieSlices = future.map((f, i) => {
   const len = (f.pct / 100) * pieCirc;
-  const slice = { ...f, color: pieColors[i % 2], dash: `${Math.max(0, len - PIE_GAP)} ${pieCirc}`, offset: -pieAcc };
+  const slice = { ...f, color: pieColors[i % pieColors.length], dash: `${Math.max(0, len - PIE_GAP)} ${pieCirc}`, offset: -pieAcc };
   pieAcc += len;
   return slice;
 });

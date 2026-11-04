@@ -41,7 +41,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 **Rules**
 - **No white.** Mint does every job white used to do.
 - **Every text pairing passes WCAG 2.2 AA**, and only pairings listed in the library's "Text on background" table are allowed. Don't guess: check the table.
-- **One theme per section: background + text + one highlight. Three colors max.** A section is a band from one background change to the next. Cards reuse those colors and never add a fourth. CTA buttons/blocks, decorative tags, imagery and the logo don't count.
+- **One theme per section: background + text + one highlight. Three colors max.** **Exception: a chart whose slices need telling apart** (the `/family-survey` priorities donut) uses lagoon, deep ocean, lemon, tangerine, dragon fruit in that order, with a legend that names every slice and figure (Zeyu, 2026-11-04). A section is a band from one background change to the next. Cards reuse those colors and never add a fourth. CTA buttons/blocks, decorative tags, imagery and the logo don't count.
 - **Use the theme classes, not raw color pairs.** Each sets `--t-bg/--t-fg/--t-hl/--t-line/--t-solid-*`, and every component reads them:
 
 | Class | Background / text / highlight |
