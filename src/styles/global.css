@@ -55,6 +55,8 @@
      nothing on these pages may be smaller than 14px (Zeyu, 2026-11-04). body-sm and label/md/sm
      are deliberately not defined. */
   --text-label: 14px;       --text-label--line-height: 1.2;      --text-label--letter-spacing: 0.1em; --text-label--font-weight: 700;
+  /* The library's label/lg at its own 12px — only for the state-card tags on /esa (Zeyu, 2026-11-04). */
+  --text-label-sm: 12px;    --text-label-sm--line-height: 1.2;   --text-label-sm--letter-spacing: 0.1em; --text-label-sm--font-weight: 700;
   --text-button-lg: 24px;   --text-button-lg--line-height: 1.2;  --text-button-lg--font-weight: 700;
   --text-button-sm: 16px;   --text-button-sm--line-height: 1.2;  --text-button-sm--font-weight: 700;
 
