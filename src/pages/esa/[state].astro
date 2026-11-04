@@ -241,9 +241,8 @@ const otherStatesHtml = otherStates
   </section>
 
   <!-- projection: picture your own week -->
-  <!-- bina Foundation "stats on clover": deep ocean headline (large only, 3.85), deep ocean cards
-       with clover headings (20px bold = large) and mint text (5.43). The intro is body text, so it
-       is black (12.71); deep ocean would fail as body text on clover. -->
+  <!-- Clover section: deep ocean headline (large only, 3.85), black intro (12.71), black cards with
+       clover headings (12.71) and mint text (17.94). -->
   <section class="theme-clover">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl text-deep-ocean sm:text-title-3xl">Your Tuesday, if your child were at bina</h2>
@@ -254,7 +253,7 @@ const otherStatesHtml = otherStates
       <ol class="grid gap-4 sm:grid-cols-2">
         {
           school.dayInLife.map((d) => (
-            <li class="rounded-lg bg-deep-ocean p-6 text-mint">
+            <li class="rounded-lg bg-black p-6 text-mint">
               <p class="font-display text-title-sm font-bold text-clover">{d.time}</p>
               <p class="mt-2">{d.what}</p>
             </li>
@@ -328,7 +327,7 @@ const otherStatesHtml = otherStates
       <p class="mt-6 text-body-md">
         Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold text-hl underline">admissions@thebinaschool.com</a>
       </p>
-      <p class="mt-8 border-t border-line pt-6 text-body-md">
+      <p class="mt-8 text-body-md">
         In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
         {' '}<a href="/esa" class="font-bold text-hl underline">See all five →</a>
       </p>
