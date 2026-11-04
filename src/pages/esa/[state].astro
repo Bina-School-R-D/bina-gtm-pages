@@ -100,54 +100,38 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
         </div>
       </div>
 
-      <!-- The money table (Arizona, from the Notion draft): numbers computed from the data files. -->
+      <!-- What you pay, per plan (Arizona, from the Notion draft): one card per plan, worked out
+           like a receipt — tuition, minus the award, then what is left. Numbers come from the data files. -->
       {
         copy.moneyTitle && (
-          <div class="mt-10 hidden sm:block">
-            <table class="w-full text-left text-body-lg">
-              <thead>
-                <tr class="border-b border-mint">
-                  <th class="py-2 pr-4"><span class="sr-only">Plan</span></th>
-                  <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl"><span class="normal-case">bina</span> tuition (per year)</th>
-                  <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl">{copy.state} ESA gives you</th>
-                  <th class="py-2 align-bottom font-display text-label uppercase text-hl">You pay</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payRows.map((r, i) => (
-                  <tr class="border-b border-mint align-top">
-                    <th scope="row" class="py-3 pr-4 font-display font-bold">{r.plan}</th>
-                    <td class="py-3 pr-4">{usd(r.tuition)}</td>
-                    <td class="py-3 pr-4">{awardLabel}</td>
-                    <td class="py-3">
-                      {usd(r.payLow)}–{usd(r.payHigh)} a year
-                      {i === 0 && <> (about {usd(monthLow)}–{usd(monthHigh)} a month)</>}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )
-      }
-      {
-        copy.moneyTitle && (
-          <!-- Phones: the same table, one plan per block, so "You pay" never scrolls off-screen. -->
-          <div class="mt-10 grid gap-6 sm:hidden">
-            {payRows.map((r, i) => (
-              <dl class="border-b border-mint pb-5 text-body-lg">
-                <dt class="mb-3 font-display text-title-sm">{r.plan}</dt>
-                <dd class="flex justify-between gap-4 py-1"><span><span class="normal-case">bina</span> tuition (per year)</span><span>{usd(r.tuition)}</span></dd>
-                <dd class="flex justify-between gap-4 py-1"><span>{copy.state} ESA gives you</span><span>{awardLabel}</span></dd>
-                <dd class="flex justify-between gap-4 py-1 font-bold">
-                  <span>You pay</span>
-                  <span class="text-right">
-                    {usd(r.payLow)}–{usd(r.payHigh)} a year
-                    {i === 0 && <span class="block font-normal">about {usd(monthLow)}–{usd(monthHigh)} a month</span>}
-                  </span>
-                </dd>
-              </dl>
-            ))}
+          <div class="mt-10">
+            <h3 class="mb-5 font-display text-title-lg font-bold">Your top-up, plan by plan</h3>
+            <div class="grid gap-4 md:grid-cols-2">
+              {payRows.map((r, i) => (
+                <div class="card-bina-mint p-6 sm:p-8">
+                  <p class="mb-5 font-display text-title-sm text-hl">{r.plan}</p>
+                  <dl class="grid gap-2 text-body-lg">
+                    <div class="flex items-baseline justify-between gap-4">
+                      <dt><span class="normal-case">bina</span> tuition (per year)</dt>
+                      <dd class="font-display font-bold">{usd(r.tuition)}</dd>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-4 border-b border-black pb-3">
+                      <dt>{copy.state} ESA gives you</dt>
+                      <dd class="font-display font-bold">− {awardLabel}</dd>
+                    </div>
+                    <div class="pt-2">
+                      <dt class="font-display font-bold">You pay</dt>
+                      <dd>
+                        <span class="block font-display text-title-xl font-bold text-hl">
+                          {usd(r.payLow)}–{usd(r.payHigh)}<span class="text-body-xl"> a year</span>
+                        </span>
+                        {i === 0 && <span class="block">about {usd(monthLow)}–{usd(monthHigh)} a month</span>}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              ))}
+            </div>
           </div>
         )
       }
