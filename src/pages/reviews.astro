@@ -160,14 +160,12 @@ const monthYear = (iso: string | null) =>
                   class="inline-flex items-center gap-1.5 rounded-full border-2 border-line px-3 py-1.5 font-display text-label uppercase no-underline transition-colors duration-200 hover:bg-black hover:text-lagoon"
                 >
                   {sourceLogo[src.key] ? (
-                    <img
-                      src={sourceLogo[src.key]}
-                      alt=""
-                      width="18"
-                      height="18"
-                      class="h-[1.125rem] w-[1.125rem] shrink-0"
-                      loading="lazy"
-                    />
+                    <!-- The logo as a mask filled with the text color, so it turns lagoon with the label on hover. -->
+                    <span
+                      aria-hidden="true"
+                      class="badge-logo h-[1.125rem] w-[1.125rem] shrink-0 bg-current"
+                      style={`--logo:url(${sourceLogo[src.key]})`}
+                    ></span>
                   ) : (
                     <span
                       aria-hidden="true"
@@ -493,6 +491,10 @@ const monthYear = (iso: string | null) =>
     /* "See more" reads as the site's text links (bold, underlined, arrow; hover thickens the
        underline), not a pill button. It sits bottom-left, on a strip of the card's own color so
        the faded text behind it never shows through. */
+    .badge-logo {
+      -webkit-mask: var(--logo) center / contain no-repeat;
+      mask: var(--logo) center / contain no-repeat;
+    }
     .review-more {
       position: absolute;
       left: 1.75rem;
