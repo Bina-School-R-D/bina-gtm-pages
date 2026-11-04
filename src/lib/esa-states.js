@@ -193,7 +193,7 @@ export function chooserStates() {
         // One line: what the family pays, and how it reaches bina (Zeyu, 2026-11-04).
         payLabel:
           s.tier === 'reimbursed'
-            ? `~${month} per month after your credit to bina, the state reimburses you`
+            ? `~${month} per month to bina first, then the state reimburses you`
             : `~${month} per month to bina through ${program.platform}`,
       };
     })
