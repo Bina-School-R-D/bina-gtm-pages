@@ -187,7 +187,8 @@ for (const name of served) {
   mustNot(index, 'id="result"', where);
   mustNot(index, 'box.innerHTML', where);
   // 8 — the retired tiers are gone from the built output entirely.
-  for (const gone of ['Coming soon', 'possible for some families — ask us', "doesn't have a program you can use"])
+  // 'Coming soon' came back on 2026-11-04 as a text list (Akis) — never as links to a redirect, which check 3 enforces.
+  for (const gone of ['possible for some families — ask us', "doesn't have a program you can use"])
     mustNot(index, gone, where);
 }
 

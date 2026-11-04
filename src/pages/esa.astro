@@ -2,22 +2,26 @@
 /*
  * /esa — the chooser across the five states where bina can accept state funding.
  *
- * It used to be a 50-state dropdown that explained the process. Both jobs moved onto the
- * state pages (hero → how it works → the money → the process → that state's FAQ), so this
- * page has one job: get a family to their state in one click, and give the honest answer to
- * everyone else. The 45 states we cannot serve redirect here (astro.config.mjs).
+ * Rebuilt 2026-11-04 from the Notion 'Main ESA page: content draft (/esa)' (restructured Nov 2
+ * after Akis's feedback): hero → choose your state (approved cards, then coming soon, then
+ * other ways to use state funding, all together) → how it works → getting to know bina →
+ * CTA → FAQ. Only the five approved states are pages; the 45 others redirect here
+ * (astro.config.mjs), and the coming-soon and other-ways states are text, never links to a
+ * redirect.
  */
+import Accordion from '../components/Accordion.astro';
+import BrandText from '../components/BrandText.astro';
 import CtaBlock from '../components/CtaBlock.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import landing from '../data/esa-landing.json';
 import { CTA, CTA_LABEL, chooserStates, stateSlug } from '../lib/esa-states.js';
 
-const { school, howItWorks } = landing;
+const { index: c } = landing;
 const states = chooserStates();
 // Valid destinations for the legacy ?state= redirect below.
 const slugs = Object.fromEntries(states.map((s) => [stateSlug(s.state), true]));
-const names = states.map((s) => s.state);
-const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+// Two cards on the first row, three on the second, so no state sits alone (md and up).
+const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
 ---
 
 <BaseLayout
@@ -28,57 +32,60 @@ const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 
 >
   <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
-      <p class="eyebrow-line mb-5">ESA funding for families</p>
+      <p class="eyebrow-line mb-5">{c.kicker}</p>
       <h1 class="mb-5 max-w-3xl text-title-3xl sm:text-display-sm">
-        Five states can put public education money toward
-        <span class="text-deep-ocean">bina</span>
+        Use your state's ESA toward a <span class="text-deep-ocean">bina</span> education
       </h1>
-      <p class="mb-8 max-w-2xl text-body-xl">
-        {nameList} give families public education dollars — an
-        <strong>Education Savings Account</strong> or its equivalent — and bina is approved in all
-        five. Pick your state for the award, the deadlines and every step of the process.
-      </p>
-      <p class="max-w-2xl text-body-lg">
-        These are the only states listed, because these are the only states where we can take your
-        funding today. We would rather show you five honest pages than fifty hopeful ones.
-      </p>
+      <p class="mb-10 max-w-2xl text-body-xl"><BrandText text={c.line} /></p>
+      <ul class="grid gap-3 sm:grid-cols-3">
+        {
+          c.checks.map((g) => (
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+              <span class="font-display font-bold leading-snug">{g}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </header>
 
-  <!-- the five states -->
+  <!-- choose your state: approved cards, then the two text lists, all together (Akis) -->
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-title-xl sm:text-title-3xl">Find your state</h2>
-      <p class="mb-8 max-w-2xl">
-        Every state runs its own program, with its own money, deadlines and rules. Each page shows
-        what your state pays, what is left for you, and who does what at every step.
-      </p>
+      <h2 class="mb-3 text-title-xl sm:text-title-3xl">{c.findTitle}</h2>
+      <p class="mb-10 max-w-2xl">{c.findLine}</p>
 
-      <ul class="grid list-none gap-4 p-0 md:grid-cols-2">
+      <h3 class="mb-5 font-display text-title-lg font-bold">{c.approvedTitle}</h3>
+      <ul class="grid list-none gap-4 p-0 md:grid-cols-6">
         {
-          states.map((s) => (
-            <li>
+          states.map((s, i) => (
+            <li class={span(i)}>
               <a
                 href={`/esa/${s.slug}`}
                 class="card-bina-mint flex h-full flex-col p-6 transition-transform hover:-translate-y-0.5"
               >
                 <span class="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <strong class="font-display text-title-lg font-bold text-hl">{s.state}</strong>
-                  <span class="pill-bina">
-                    {s.badge.label}
-                  </span>
+                  <span class="pill-bina">{s.badge.label}</span>
                 </span>
-                <span class="mb-4 block font-display text-body-lg font-bold">
-                  {s.program.prog}
-                </span>
+                <span class="mb-4 block font-display text-body-lg font-bold">{s.program.prog}</span>
                 <span class="mb-4 grid gap-2 text-body-lg">
-                  <span class="flex items-baseline gap-2">
-                    <strong class="font-display text-title-md font-bold text-hl">{s.awardLabel}</strong>
+                  <span>
+                    <strong class="block font-display text-title-md font-bold text-hl">{s.awardLabel}</strong>
                     <span>per child, per year</span>
                   </span>
                   <span>
+                    <strong class="font-bold">You pay:</strong> {s.payLabel}
+                  </span>
+                  <span>
                     {s.tier === 'reimbursed'
-                      ? 'You pay bina, the state pays you back'
+                      ? 'You pay bina, the state reimburses you'
                       : `Paid to bina through ${s.program.platform}`}
                   </span>
                 </span>
@@ -90,84 +97,99 @@ const nameList = names.slice(0, -1).join(', ') + ' and ' + names[names.length - 
           ))
         }
       </ul>
-    </div>
-  </section>
 
-  <!-- how it works, once, for everyone -->
-  <section class="theme-mint">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <!-- the two lists: plain text on the dark section, so they never read as approved states -->
+      <div class="mt-12 grid gap-10 border-t border-line pt-10 md:grid-cols-2">
         <div>
-          <p class="eyebrow-bina mb-2">
-            How it works
-          </p>
-          <h2 class="mb-6 text-title-xl sm:text-title-3xl">{howItWorks.fundingTitle}</h2>
-          <ol class="grid gap-5">
+          <h3 class="mb-2 font-display text-title-lg font-bold">{c.soon.title}</h3>
+          <p class="mb-4 text-body-lg"><BrandText text={c.soon.line} /></p>
+          <ul class="grid gap-2">
             {
-              howItWorks.fundingSteps.map((s, i) => (
-                <li class="flex gap-4">
-                  <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <h3 class="mb-1 text-title-sm">{s.t}</h3>
-                    <p class="text-body-lg">{s.d}</p>
-                  </span>
+              c.soon.states.map((st) => (
+                <li class="font-display font-bold text-hl">
+                  {st.url ? <a href={st.url} class="underline">{st.name} →</a> : st.name}
                 </li>
               ))
             }
-          </ol>
-          <p class="mt-6 text-body-lg">
-            Your state's page has the rest: the exact dates, who approves what, and the number you
-            are left paying.
-          </p>
+          </ul>
         </div>
         <div>
-          <p class="eyebrow-bina mb-2">
-            The school
-          </p>
-          <h2 class="mb-4 text-title-xl sm:text-title-3xl">{howItWorks.schoolTitle}</h2>
-          <p class="mb-6">{howItWorks.schoolLead}</p>
+          <h3 class="mb-2 font-display text-title-lg font-bold">{c.other.title}</h3>
+          <p class="mb-4 text-body-lg"><BrandText text={c.other.line} /></p>
           <ul class="grid gap-3">
             {
-              howItWorks.schoolPoints.map((p) => (
-                <li class="flex items-start gap-3">
-                  <span
-                    class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint"
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </span>
-                  <span class="leading-snug">{p}</span>
+              c.other.states.map((st) => (
+                <li class="text-body-lg">
+                  <strong class="font-display font-bold text-hl">{st.name}:</strong>{' '}
+                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={st.text} /> →</a> : <BrandText text={st.text} />}
                 </li>
               ))
             }
           </ul>
         </div>
       </div>
+
+      <p class="mt-10 text-body-lg">
+        {c.ask.line} <a href={c.ask.url} class="font-bold underline">{c.ask.label}</a>
+      </p>
     </div>
   </section>
 
-  <!-- the honest answer for every other state -->
+  <!-- how it works -->
+  <section class="theme-mint">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
+      <ol class="grid gap-6 md:grid-cols-3">
+        {
+          c.howSteps.map((st, i) => (
+            <li class="flex gap-4">
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint">
+                {i + 1}
+              </span>
+              <span>
+                <h3 class="mb-1 text-title-sm"><BrandText text={st.t} /></h3>
+                <p class="text-body-lg"><BrandText text={st.d} /></p>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- getting to know bina -->
+  <section class="theme-lagoon">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-6 text-title-xl sm:text-title-3xl"><BrandText text={c.aboutTitle} /></h2>
+      <ul class="mb-6 grid gap-3">
+        {
+          c.aboutBullets.map((b) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+              <span class="font-display font-bold leading-snug">{b}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={c.aboutLinkUrl} target="_blank" rel="noopener" class="text-body-xl font-bold underline">{c.aboutLinkLabel}</a>
+    </div>
+  </section>
+
   <CtaBlock>
-      <h2 class="cta-title text-title-xl sm:text-title-3xl">Not in one of those five states?</h2>
-      <p class="mx-auto mb-4 max-w-2xl">
-        You can still join bina — families do, from all over the world, with no state funding at all.
-        What you cannot do yet is pay us with your state's money.
-      </p>
-      <p class="cta-copy">
-        We are working on more states, and new programs are approved most years. Some states require
-        a physical campus or locally licensed teachers, which takes longer than paperwork. Email us
-        your state and we will tell you straight where it stands — and let you know if that changes.
-      </p>
-      <div class="cta-actions">
-        <a
-          href="mailto:admissions@thebinaschool.com?subject=ESA%20funding%20in%20my%20state"
-          class="btn-bina-secondary">Email us about your state</a
-        >
-        <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
-      </div>
+    <h2 class="cta-title mb-8 text-title-xl sm:text-title-3xl"><BrandText text={c.ctaTitle} /></h2>
+    <div class="cta-actions">
+      <a href="#" class="btn-bina-secondary">Book an ESA call</a>
+      <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
+    </div>
   </CtaBlock>
+
+  <!-- FAQ: the last section before the footer -->
+  <section class="theme-base">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">FAQ</h2>
+      <Accordion items={c.faq} />
+    </div>
+  </section>
 
   <p slot="footer-note" class="max-w-2xl text-body-md">
     Each program is run by its own state, not by bina. Program amounts, eligibility and deadlines are

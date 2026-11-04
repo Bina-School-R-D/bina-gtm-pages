@@ -179,12 +179,17 @@ export function chooserStates() {
     .map((s) => {
       const program = programFor(s.state);
       if (!program) throw new Error(`No esa-states.json entry for ${s.state}.`);
+      const award = s.esaMin === s.esaMax ? usd(s.esaMax) : `${usd(s.esaMin)}–${usd(s.esaMax)}`;
+      // What the family tops up per month on the yearly plan; the larger award gives the smaller number.
+      const low = Math.round((landing.school.tuitionYearly - s.esaMax) / 12);
+      const high = Math.round((landing.school.tuitionYearly - s.esaMin) / 12);
+      const month = low === high ? usd(low) : `${usd(low)}–${usd(high)}`;
       return {
         ...s,
         program,
-        badge: WINDOW_BADGE[program.windowState],
-        awardLabel:
-          s.esaMin === s.esaMax ? usd(s.esaMax) : `${usd(s.esaMin)}–${usd(s.esaMax)}`,
+        badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
+        awardLabel: s.awardPrefix ? `${s.awardPrefix} ${award}` : award,
+        payLabel: `About ${month} a month${s.tier === 'reimbursed' ? ' after your credit' : ''}`,
       };
     })
     .sort(

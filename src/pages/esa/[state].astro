@@ -69,8 +69,8 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
     </div>
   </header>
 
-  <!-- THE MONEY: award, tuition, and the remainder we are not hiding -->
-  <section class="theme-mint">
+  <!-- THE MONEY: dark section, mint stat cards (the /student-results tiles): deep ocean number and claim, black detail -->
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <p class="eyebrow-bina mb-2">
         {program.prog} · {tier.label}
@@ -78,22 +78,22 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       <h2 class="mb-8 text-title-xl sm:text-title-3xl">{moneyTitle}</h2>
 
       <div class="grid gap-4 md:grid-cols-3">
-        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-          <p class="font-display text-title-2xl font-bold">{awardLabel}</p>
-          <p class="mt-2 font-display font-bold">per child, per year</p>
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-2xl font-bold text-hl">{awardLabel}</p>
+          <p class="mt-2 font-display font-bold text-hl">per child, per year</p>
           <p class="mt-1 text-body-lg">{awardNote}</p>
         </div>
-        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-          <p class="font-display text-title-2xl font-bold">{usd(school.tuitionYearly)}</p>
-          <p class="mt-2 font-display font-bold">a full year at bina, on the yearly plan</p>
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-2xl font-bold text-hl">{usd(school.tuitionYearly)}</p>
+          <p class="mt-2 font-display font-bold text-hl">a full year at bina, on the yearly plan</p>
           <p class="mt-1 text-body-lg">
             {usd(school.tuitionQuarterly)} on the quarterly plan ·
             <a href={school.tuitionUrl} class="font-bold underline">tuition page</a>
           </p>
         </div>
-        <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-          <p class="font-display text-title-2xl font-bold">{monthLabel}<span class="text-body-xl">/mo</span></p>
-          <p class="mt-2 font-display font-bold">{gapLabel}</p>
+        <div class="card-bina-mint p-6">
+          <p class="font-display text-title-2xl font-bold text-hl">{monthLabel}<span class="text-body-xl">/mo</span></p>
+          <p class="mt-2 font-display font-bold text-hl">{gapLabel}</p>
           <p class="mt-1 text-body-lg">
             before {usd(school.siblingDiscount)} off per additional child
           </p>
@@ -106,7 +106,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
           <div class="mt-10 hidden sm:block">
             <table class="w-full text-left text-body-lg">
               <thead>
-                <tr class="border-b border-black">
+                <tr class="border-b border-mint">
                   <th class="py-2 pr-4"><span class="sr-only">Plan</span></th>
                   <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl"><span class="normal-case">bina</span> tuition (per year)</th>
                   <th class="py-2 pr-4 align-bottom font-display text-label uppercase text-hl">{copy.state} ESA gives you</th>
@@ -115,7 +115,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
               </thead>
               <tbody>
                 {payRows.map((r, i) => (
-                  <tr class="border-b border-black align-top">
+                  <tr class="border-b border-mint align-top">
                     <th scope="row" class="py-3 pr-4 font-display font-bold">{r.plan}</th>
                     <td class="py-3 pr-4">{usd(r.tuition)}</td>
                     <td class="py-3 pr-4">{awardLabel}</td>
@@ -135,7 +135,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
           <!-- Phones: the same table, one plan per block, so "You pay" never scrolls off-screen. -->
           <div class="mt-10 grid gap-6 sm:hidden">
             {payRows.map((r, i) => (
-              <dl class="border-b border-black pb-5 text-body-lg">
+              <dl class="border-b border-mint pb-5 text-body-lg">
                 <dt class="mb-3 font-display text-title-sm">{r.plan}</dt>
                 <dd class="flex justify-between gap-4 py-1"><span><span class="normal-case">bina</span> tuition (per year)</span><span>{usd(r.tuition)}</span></dd>
                 <dd class="flex justify-between gap-4 py-1"><span>{copy.state} ESA gives you</span><span>{awardLabel}</span></dd>
@@ -157,20 +157,20 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       <div class="mt-12">
         <h3 class="mb-5 font-display text-title-lg font-bold">Who can apply, and where the money sits</h3>
         <dl class="grid gap-4 sm:grid-cols-3">
-          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm">Who qualifies</dt>
+          <div class="card-bina-mint p-6">
+            <dt class="font-display text-title-sm text-hl">Who qualifies</dt>
             <dd class="mt-2">{program.who}</dd>
           </div>
-          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm">How you spend it</dt>
+          <div class="card-bina-mint p-6">
+            <dt class="font-display text-title-sm text-hl">How you spend it</dt>
             <dd class="mt-2">
               {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
             </dd>
           </div>
-          <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm">Official program</dt>
+          <div class="card-bina-mint p-6">
+            <dt class="font-display text-title-sm text-hl">Official program</dt>
             <dd class="mt-2">
-              <a href={program.officialUrl} rel="noopener" class="font-bold underline underline-offset-4">{copy.state}'s own site →</a>
+              <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
             </dd>
           </div>
         </dl>

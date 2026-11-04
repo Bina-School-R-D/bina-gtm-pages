@@ -9,7 +9,8 @@
     "New Hampshire's 'who' said 'families under the state income limit' — wrong since SB 295 (2025) removed the 350% FPL cap. Corrected here to universal with the 12,500-student statewide cap. Push the correction back into the upstream database.",
     "Awards quoted are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount.",
     "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold.",
-    "ARIZONA COPY — 2026-11-04 (Zeyu, from the Notion 'Arizona ESA page: content draft (approved template)'): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — the hero's $7,000–$8,000 top-up line, the quarterly 'you pay' figure, Pre-K funding, the Dates line, unused funds rolling over, what Monet/Jose's support covers, the order of steps 3 and 4, the sibling discount, the IEP/504 line, 'Families in 40+ countries'. Still missing, so left off the page: the ESA call booking link (CTA button points at '#', step 1 has no link), bina's exact ClassWallet listing name / vendor ID (step 2 says 'Search for bina.'), and the class-size wording (bullet omitted). Also open: whether the 2% ClassWallet processing fee shows in the numbers."
+    "ARIZONA COPY — 2026-11-04 (Zeyu, from the Notion 'Arizona ESA page: content draft (approved template)'): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — the hero's $7,000–$8,000 top-up line, the quarterly 'you pay' figure, Pre-K funding, the Dates line, unused funds rolling over, what Monet/Jose's support covers, the order of steps 3 and 4, the sibling discount, the IEP/504 line, 'Families in 40+ countries'. Still missing, so left off the page: the ESA call booking link (CTA button points at '#', step 1 has no link), bina's exact ClassWallet listing name / vendor ID (step 2 says 'Search for bina.'), and the class-size wording (bullet omitted). Also open: whether the 2% ClassWallet processing fee shows in the numbers.",
+    "/esa COPY — 2026-11-04 (Zeyu, from the Notion 'Main ESA page: content draft (/esa)', restructured Nov 2 after Akis's feedback): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — New Hampshire's $3,800–$5,800 award and $414–$581 top-up (also changed on the New Hampshire page), Utah 'Up to $8,000', Idaho 'Up to $5,000' and its after-credit figure, Arkansas on the coming-soon list, and bina's provider status for Georgia (applied), Louisiana (in progress) and South Carolina (blocked 2026–27). Missing, so left off: the coming-soon and other-ways states have no page to link to (thebinaschool.com/esa/<state> serves the homepage for any state), the ESA call booking link (button points at '#'), and the class-size wording (bullet omitted). Open: how to describe Idaho, a tax credit, on an 'ESA' page."
   ],
   "school": {
     "tuitionYearly": 10769,
@@ -72,32 +73,6 @@
         "time": "Anytime",
         "what": "You are close enough to see the learning happen, without becoming the teacher."
       }
-    ]
-  },
-  "howItWorks": {
-    "fundingTitle": "How the funding works, in brief",
-    "fundingSteps": [
-      {
-        "t": "Your state decides, not bina",
-        "d": "You apply to your state's own program on its own website. bina cannot apply on your behalf and cannot influence the decision — but we tell you exactly what to put where, and what your numbers will be, before you start."
-      },
-      {
-        "t": "bina is already on the approved side",
-        "d": "The part most families worry about — whether the school they picked is allowed — is already settled in these five states. That is the whole reason this page exists for your state and not for others."
-      },
-      {
-        "t": "The award rarely covers everything",
-        "d": "We publish the remainder on your state's page rather than letting you discover it at the paperwork stage. It is a monthly figure, and there is $1,500 off for each additional child."
-      }
-    ],
-    "schoolTitle": "What you get for it",
-    "schoolLead": "Not a curriculum in a box and not a video library. A school: a class, a timetable, the same teachers every day, and a Family Success person who knows your child's name.",
-    "schoolPoints": [
-      "An average class of 6–8 children with two teachers in the room, capped at 12",
-      "Five hours a day, five days a week, about 200 school days a year",
-      "Certified teachers, report cards and assessments — Cognia accredited, a registered Cambridge International School",
-      "A timetable that fits your time zone, wherever you are",
-      "Ages 4 to 15, with clubs and a community your child belongs to"
     ]
   },
   "faq": [
@@ -298,7 +273,8 @@
         }
       ],
       "seoTitle": "Utah Fits All Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition."
+      "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition.",
+      "awardPrefix": "Up to"
     },
     {
       "slug": "idaho",
@@ -336,7 +312,9 @@
         }
       ],
       "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
-      "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition."
+      "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition.",
+      "awardPrefix": "Up to",
+      "cardTag": "Jan 15 – Mar 15, 2027"
     },
     {
       "slug": "wyoming",
@@ -374,19 +352,20 @@
         }
       ],
       "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer."
+      "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer.",
+      "cardTag": "2027–28 dates coming soon"
     },
     {
       "slug": "new-hampshire",
       "state": "New Hampshire",
       "tier": "funded",
-      "esaMin": 5000,
-      "esaMax": 5000,
+      "esaMin": 3800,
+      "esaMax": 5800,
       "pill": "New Hampshire EFA · bina is an approved provider",
       "h1": "New Hampshire families can use EFA funds toward a bina education",
       "gate": [
         "bina is an approved New Hampshire EFA provider",
-        "About $5,000 per child, per year",
+        "About $3,800–$5,800 per child, per year",
         "You spend it through ClassWallet"
       ],
       "faq": [
@@ -403,8 +382,8 @@
           "a": "Funds land in your ClassWallet account in four installments — September, November, January and April. That lines up with how bina bills, so you are not asked for money the state hasn't sent yet."
         },
         {
-          "q": "About $5,000 against $10,769 — what is my share?",
-          "a": "About $480 a month, before $1,500 off for each additional child. We put your exact figure in writing before you commit."
+          "q": "About $3,800–$5,800 against $10,769 — what is my share?",
+          "a": "About $414–$581 a month, before $1,500 off for each additional child. We put your exact figure in writing before you commit."
         },
         {
           "q": "How long does a decision take?",
@@ -412,7 +391,8 @@
         }
       ],
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition."
+      "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
+      "awardPrefix": "About"
     }
   ],
   "tierCopy": {
@@ -424,5 +404,122 @@
       "label": "Reimbursed",
       "note": "You pay bina, then the state pays you back against the receipts."
     }
+  },
+  "index": {
+    "kicker": "ESA funding for families",
+    "title": "Use your state's ESA toward a bina education",
+    "line": "An Education Savings Account (ESA) is money your state sets aside for your child's education. In five states, families can put it toward a year at bina.",
+    "checks": [
+      "Approved in Arizona, New Hampshire, Idaho, Utah and Wyoming",
+      "Your state's award covers most of your tuition",
+      "Our admissions team guides you through every step"
+    ],
+    "findTitle": "Choose your state",
+    "findLine": "Each state runs its own program, with its own award, dates and payment route. Find yours below.",
+    "approvedTitle": "Use your ESA at bina today",
+    "soon": {
+      "title": "Coming soon to more states",
+      "line": "We're working on approval in these states. In the meantime, families can join bina with direct tuition.",
+      "states": [
+        {
+          "name": "West Virginia",
+          "url": null
+        },
+        {
+          "name": "Arkansas",
+          "url": null
+        }
+      ]
+    },
+    "other": {
+      "title": "Other ways to use your state's funding",
+      "line": "In these states, families can put their scholarship toward part of their bina costs. Our team will walk you through what's possible.",
+      "states": [
+        {
+          "name": "Florida",
+          "text": "families with an FES-UA scholarship can be reimbursed for bina tutoring",
+          "url": null
+        },
+        {
+          "name": "Georgia",
+          "text": "Promise Scholarship funds can go toward individual bina courses",
+          "url": null
+        },
+        {
+          "name": "Louisiana",
+          "text": "LA GATOR funds can go toward individual bina courses",
+          "url": null
+        },
+        {
+          "name": "South Carolina",
+          "text": "Education Scholarship Trust Fund money can go toward individual bina courses",
+          "url": null
+        }
+      ]
+    },
+    "ask": {
+      "line": "Don't see your state? Families anywhere can join bina with direct tuition.",
+      "label": "Ask us about your state →",
+      "url": "mailto:admissions@thebinaschool.com?subject=ESA%20funding%20in%20my%20state"
+    },
+    "howTitle": "How ESA funding works at bina",
+    "howSteps": [
+      {
+        "t": "You apply to your state.",
+        "d": "Each family applies on its state's own website. Before you apply, we go through your numbers with you so you know your award and your top-up."
+      },
+      {
+        "t": "bina is already approved.",
+        "d": "In the five approved states, bina is an approved school, so your award can go straight to your tuition."
+      },
+      {
+        "t": "Your award covers most of your tuition.",
+        "d": "You top up the rest each month, with $1,500 off for each additional child. Your state's page shows the exact amount."
+      }
+    ],
+    "aboutTitle": "Getting to know bina",
+    "aboutBullets": [
+      "Live online school for ages 4 to 15, from Pre-K to Grade 10",
+      "Cambridge and Cognia accredited, CIS member",
+      "Five hours a day, five days a week, on a timetable that fits your time zone",
+      "A Family Success contact who knows your child by name"
+    ],
+    "aboutLinkLabel": "Explore bina →",
+    "aboutLinkUrl": "https://thebinaschool.com",
+    "ctaTitle": "See what a year at bina costs with your ESA",
+    "faq": [
+      {
+        "q": "What is an ESA?",
+        "a": "An Education Savings Account is money your state puts aside for your child's education. You can spend it on approved expenses, including tuition at an approved school like bina."
+      },
+      {
+        "q": "Which states can I use at bina?",
+        "a": "Arizona, New Hampshire, Idaho, Utah and Wyoming. Choose your state above for the details."
+      },
+      {
+        "q": "Does the award cover all of bina's tuition?",
+        "a": "It covers most of it. You top up the rest each month. Each state page shows the exact amount."
+      },
+      {
+        "q": "Who applies, me or bina?",
+        "a": "You apply to your state's program on its official website. We go through the application with you and send everything the state needs from bina."
+      },
+      {
+        "q": "Will someone help me through the process?",
+        "a": "Yes. Monet and Jose from our admissions team guide you from your first question to your first payment."
+      },
+      {
+        "q": "Do you offer a sibling discount?",
+        "a": "Yes. Each additional child gets $1,500 off tuition."
+      },
+      {
+        "q": "My state isn't listed yet. Can my child still join bina?",
+        "a": "Yes. Families in any state can join bina with direct tuition. See \"Coming soon\" above for the states we're working on."
+      },
+      {
+        "q": "Is bina responsible for these programs?",
+        "a": "Each ESA program is run by its own state, not by bina. Amounts, eligibility and deadlines are set by the state and can change. Always confirm with your state's official program site before you rely on a number here."
+      }
+    ]
   }
 }
