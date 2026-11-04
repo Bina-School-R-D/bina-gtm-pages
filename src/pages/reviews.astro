@@ -381,7 +381,7 @@ const monthYear = (iso: string | null) =>
                 </div>
 
                 <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
-                  See more…
+                  See more →
                 </button>
 
                 <dialog id={`dlg-${r.id}`} class="review-dialog card-bina-solid">
@@ -489,25 +489,31 @@ const monthYear = (iso: string | null) =>
     }
 
     /* "See more" sits on top of the fade, bottom-right of the card. */
+    /* "See more" reads as the site's text links (bold, underlined, arrow; hover thickens the
+       underline), not a pill button. It sits bottom-left, on a strip of the card's own color so
+       the faded text behind it never shows through. */
     .review-more {
       position: absolute;
-      right: 1.25rem;
-      bottom: 0.9rem;
+      left: 1.75rem;
+      right: 1.75rem;
+      bottom: 0;
+      padding: 0.4rem 0 0.9rem;
       cursor: pointer;
-      border: 2px solid var(--t-line);
-      border-radius: 9999px;
+      border: 0;
       background: var(--card-bg, var(--t-bg));
-      padding: 0.1rem 0.65rem;
+      text-align: left;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 1rem;
       color: var(--t-fg);
-      white-space: nowrap;
-      transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      transition: text-decoration-thickness 0.15s ease-out, text-underline-offset 0.15s ease-out;
     }
     .review-more:hover {
-      background: var(--color-lagoon);
-      color: var(--color-black);
+      text-decoration-thickness: 3px;
+      text-underline-offset: 3px;
     }
 
     /* The full review, in a native dialog — no library, Esc and backdrop close for free. */
