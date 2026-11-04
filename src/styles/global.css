@@ -245,6 +245,13 @@
     color: var(--t-hl);
   }
 
+  /* Hero eyebrow line — plain uppercase line in the section's text color, no outline.
+     Used at the top of every page hero (Zeyu, 2026-11-04). */
+  .eyebrow-line {
+    @apply font-display text-body-md font-bold uppercase tracking-[0.1em];
+    color: var(--t-fg);
+  }
+
   /* Eyebrow label above a heading */
   .eyebrow-bina {
     @apply font-display text-label-lg font-bold uppercase;
