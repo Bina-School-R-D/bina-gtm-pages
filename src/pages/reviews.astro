@@ -110,12 +110,8 @@ ordered.forEach((review, i) => {
   if (i === middle) wall.push({ kind: 'cta', at: 1 });
   wall.push({ kind: 'review', review });
 });
-// Fill the last row: the final cell widens to close any gap (3 columns at xl, 2 at md).
-const lastSpan = [
-  wall.length % 2 === 1 ? 'md:col-span-2' : '',
-  wall.length % 3 === 1 ? 'xl:col-span-3' : wall.length % 3 === 2 ? 'xl:col-span-2' : 'xl:col-span-1',
-].join(' ');
-const spanFor = (idx: number) => (idx === wall.length - 1 ? lastSpan : '');
+// Every card keeps the same width (Zeyu, 2026-11-04: the stretched last card was removed).
+const spanFor = (_idx: number) => '';
 
 // Chromatic tints, cycled. Literal classes so Tailwind picks them up.
 // Cards reuse the section's colors (bina Foundation: no fourth color), so no tints.
