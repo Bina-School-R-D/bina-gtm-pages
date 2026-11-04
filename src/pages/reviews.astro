@@ -1,8 +1,10 @@
 ---
 import CtaBlock from '../components/CtaBlock.astro';
+import BrandText from '../components/BrandText.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
+import { CTA, CTA_LABEL } from '../lib/esa-states.js';
 
 const { headline, sources, reviews, registry, beyond } = data;
 
@@ -99,12 +101,21 @@ const wall: WallItem[] = [];
 // The article and the reel open the wall and stay put under every filter — they are the two
 // things a parent made unprompted, and neither is a review, so neither is counted as one.
 beyond.forEach((item) => wall.push({ kind: 'feature', item }));
+// Notion draft (2026-11-04): the review ask after the first 7 reviews, the survey card in the
+// middle of the list. The "Reading about it only goes so far" card is gone: the CTA card at the
+// end does that job.
+const middle = Math.floor(ordered.length / 2);
 ordered.forEach((review, i) => {
-  if (i === 5) wall.push({ kind: 'cta', at: 0 });
-  if (i === 13) wall.push({ kind: 'cta', at: 2 });
-  if (i === 20) wall.push({ kind: 'cta', at: 1 });
+  if (i === 7) wall.push({ kind: 'cta', at: 0 });
+  if (i === middle) wall.push({ kind: 'cta', at: 1 });
   wall.push({ kind: 'review', review });
 });
+// Fill the last row: the final cell widens to close any gap (3 columns at xl, 2 at md).
+const lastSpan = [
+  wall.length % 2 === 1 ? 'md:col-span-2' : '',
+  wall.length % 3 === 1 ? 'xl:col-span-3' : wall.length % 3 === 2 ? 'xl:col-span-2' : 'xl:col-span-1',
+].join(' ');
+const spanFor = (idx: number) => (idx === wall.length - 1 ? lastSpan : '');
 
 // Chromatic tints, cycled. Literal classes so Tailwind picks them up.
 // Cards reuse the section's colors (bina Foundation: no fourth color), so no tints.
@@ -125,21 +136,22 @@ const monthYear = (iso: string | null) =>
   title="bina Reviews — What Families Actually Say About Us"
   description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
+  ctaHref={CTA}
+  ctaLabel="Start your bina journey"
 >
   <!-- hero: one claim, one line, one CTA -->
   <header class="theme-sky-blue">
     <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
       <p class="eyebrow-line mb-5">Reviews</p>
-      <h1 class="mb-5 max-w-3xl text-title-4xl sm:text-display-md">
+      <h1 class="mb-5 text-title-4xl sm:text-display-md">
         What parents say
         <span class="text-grape">about bina</span>
       </h1>
-      <p class="mb-8 max-w-xl text-body-xl sm:text-body-xl">
-        Their words, not ours — every one of them copied whole from a site we don't control.
+      <p class="mb-8 text-body-xl">
+        <BrandText text="Reviews from bina families, copied word for word from Niche, Trustpilot and the families who gave us permission to share them." />
       </p>
-      <a href={SITE} class="btn-bina">Visit bina</a>
 
-      <nav aria-label="Where bina is reviewed" class="mt-8">
+      <nav aria-label="Where bina is reviewed">
         <ul class="flex flex-wrap items-center gap-2">
           {
             barSources.map((src) => (
@@ -202,7 +214,7 @@ const monthYear = (iso: string | null) =>
         class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
       >
         {
-          wall.map((item) => {
+          wall.map((item, idx) => {
             if (item.kind === 'feature') {
               const f = item.item;
               return (
@@ -212,6 +224,7 @@ const monthYear = (iso: string | null) =>
                   rel="noopener noreferrer"
                   class:list={[
                     'wall-cell card-bina-solid relative flex flex-col px-7 py-5 no-underline',
+                    spanFor(idx),
                   ]}
                 >
                   <div class="mb-2 flex shrink-0 items-center gap-2.5">
@@ -263,12 +276,12 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class="wall-cell flex flex-col rounded-lg border-2 border-black bg-lemon p-6 text-black">
+                  <div class:list={['wall-cell flex flex-col rounded-lg border-2 border-black bg-lemon p-6 text-black', spanFor(idx)]}>
                     <p class="mb-2 font-display text-body-xl font-bold">
-                      Already a bina family?
+                      Already a <span class="normal-case">bina</span> family?
                     </p>
                     <p class="mb-4 text-body-lg">
-                      Your honest opinion is what the next family reads before they dare to switch.
+                      Your review helps the next family find their way to bina.
                     </p>
                     <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
                       Write a review
@@ -276,28 +289,15 @@ const monthYear = (iso: string | null) =>
                   </div>
                 );
               }
-              if (item.at === 2) {
-                return (
-                  <div class="wall-cell flex flex-col rounded-lg border-2 border-black bg-lagoon p-6 text-black">
-                    <p class="mb-2 font-display text-body-xl font-bold">
-                      Reading about it only goes so far.
-                    </p>
-                    <p class="mb-4 text-body-lg">
-                      See how bina teaches and whether these families are right about us.
-                    </p>
-                    <a href={SITE} class="btn-bina btn-sm mt-auto self-start">Visit bina</a>
-                  </div>
-                );
-              }
               return (
-                <div class="wall-cell card-bina-solid flex flex-col p-6">
+                <div class:list={['wall-cell card-bina-solid flex flex-col p-6', spanFor(idx)]}>
                   <p class="mb-2 font-display text-body-xl font-bold">
-                    Stories are one thing. Scores are another.
+                    Want to see the numbers too?
                   </p>
                   <p class="mb-4 text-body-lg">
-                    {surveyN} families rated us out of 10. We published every score, worst included.
+                    {surveyN} families rated bina out of 10, and every score is published.
                   </p>
-                  <a href="/family-survey" class="mt-auto self-start font-display font-bold text-hl underline underline-offset-4">See the scores →</a>
+                  <a href="/family-survey" class="mt-auto self-start font-display font-bold text-hl underline underline-offset-4">See the family survey →</a>
                 </div>
               );
             }
@@ -314,6 +314,7 @@ const monthYear = (iso: string | null) =>
                 class:list={[
                   'review-card wall-cell card-bina-solid relative flex flex-col px-7 py-5',
                   tint,
+                  spanFor(idx),
                 ]}
                 data-role={r.role}
                 data-themes={r.themes.join(' ')}
@@ -444,45 +445,15 @@ const monthYear = (iso: string | null) =>
   </section>
 
 
-  <!-- CTA -->
+  <!-- CTA: the last section before the footer -->
   <CtaBlock>
-      <h2 class="cta-title text-title-xl sm:text-title-3xl">
-        Read all you like — then come and see for yourself
-      </h2>
-      <p class="cta-copy">
-        See how bina teaches, meet the teachers these families keep naming, and decide for yourself
-        whether the reviews hold up.
-      </p>
-      <div class="cta-actions">
-        <a href="/family-survey" class="btn-bina-secondary">See the family survey</a>
-        <a href={SITE} class="btn-bina">Visit bina</a>
-      </div>
+    <h2 class="cta-title text-title-xl sm:text-title-3xl"><BrandText text="See if bina is right for your child" /></h2>
+    <p class="cta-copy">See how bina teaches and meet the teachers these families talk about.</p>
+    <div class="cta-actions">
+      <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
+    </div>
   </CtaBlock>
 
-  <p slot="footer-note" class="text-body-md">
-    Every quote here comes from the Growth team's testimonial registry, which holds {registry.total}
-    entries; only the {registry.approved} marked approved for public use are published, and the {
-      registry.needsPermission
-    } awaiting a family's consent plus the {registry.needsRetrieval} not yet transcribed are not on
-    this page. Reviews are copied verbatim and by hand — {headline.nicheCount} from
-    <a href={NICHE} rel="noopener" class="font-bold underline">bina's Niche page</a>, {
-      headline.trustpilotPublished
-    } from <a href={TRUSTPILOT} rel="noopener" class="font-bold underline">bina's Trustpilot page</a> (both
-    last read 21 August 2026) and {site.length} from families who gave permission to be quoted on
-    thebinaschool.com. This page is not a live feed, so read the source for the current picture.
-    Niche reports 21 reviews, of which 20 carry review text. Trustpilot reports {
-      headline.trustpilotCount
-    } and a {headline.trustpilotScore} TrustScore — Trustpilot's own weighted score, not an average of
-    the reviews shown. Three Trustpilot entries are deliberately not reproduced: two are the same
-    families' Niche reviews cross-posted, and one is a review of an unrelated trading firm. bina
-    cannot add, edit or remove reviews on Niche, Trustpilot or world-schools.com, and has never
-    offered anything in exchange for a review. Reviewers are self-selecting and their experiences are their own. Niche
-    lists bina as PK–6; bina teaches ages 4–15. The {recommendAvg}/10 and NPS {nps} figures come from
-    bina's own survey of {surveyN} families, and the {npsTopBand}+ parent band is Independent School
-    Management's, not ours — <a href="/family-survey" class="font-bold underline">
-      method, sources and every score here</a
-    >. NPS® is a registered trademark of Bain &amp; Company, Fred Reichheld and Satmetrix Systems.
-  </p>
 
   <!-- With JS off, cards grow to fit and nothing is faded, so no review is ever unreachable. -->
   <noscript>
