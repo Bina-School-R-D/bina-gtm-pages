@@ -128,7 +128,7 @@ const monthYear = (iso: string | null) =>
   <!-- hero: one claim, one line, one CTA -->
   <header class="theme-sky-blue">
     <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
-      <p class="eyebrow-line mb-5">reviews</p>
+      <p class="eyebrow-line mb-5">Reviews</p>
       <h1 class="mb-5 max-w-3xl text-title-4xl sm:text-display-md">
         What parents say
         <span class="text-grape">about bina</span>
@@ -162,7 +162,7 @@ const monthYear = (iso: string | null) =>
                     <span
                       aria-hidden="true"
                       class:list={[
-                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-black text-label-sm text-sky-blue',
+                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-black text-body-sm text-sky-blue',
                       ]}
                     >
                       {src.mark}
@@ -226,13 +226,13 @@ const monthYear = (iso: string | null) =>
                       <span class="block truncate font-display text-body-md font-bold">
                         {f.who}
                       </span>
-                      <span class="block truncate text-label-md leading-tight">
+                      <span class="block truncate text-body-sm leading-tight">
                         {f.platform}
                       </span>
                     </span>
                   </div>
 
-                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-label-md font-display font-bold underline underline-offset-2">
+                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-body-sm font-display font-bold underline underline-offset-2">
                     {f.cta}
                     <svg
                       aria-hidden="true"
@@ -330,7 +330,7 @@ const monthYear = (iso: string | null) =>
                     <span class="block truncate font-display text-body-md font-bold">
                       {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                     </span>
-                    <span class="block truncate text-label-md leading-tight">
+                    <span class="block truncate text-body-sm leading-tight">
                       {r.author && r.roleLabel}
                       {r.country && ` · ${r.country}`}
                       {r.author && when && ' · '}
@@ -340,7 +340,7 @@ const monthYear = (iso: string | null) =>
                   </span>
                 </div>
 
-                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-label-md">
+                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-body-sm">
                   <a
                     href={sourceUrl[r.source]}
                     target="_blank"

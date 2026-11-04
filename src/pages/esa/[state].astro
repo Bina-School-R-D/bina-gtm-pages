@@ -170,17 +170,17 @@ const otherStatesHtml = otherStates
         <h3 class="mb-4 font-display text-title-sm">Who can apply, and where the money sits</h3>
         <dl class="grid gap-4 sm:grid-cols-3">
           <div>
-            <dt class="font-display text-body-md font-bold uppercase">Who qualifies</dt>
+            <dt class="font-display text-body-md font-bold">Who qualifies</dt>
             <dd class="mt-1">{program.who}</dd>
           </div>
           <div>
-            <dt class="font-display text-body-md font-bold uppercase">How you spend it</dt>
+            <dt class="font-display text-body-md font-bold">How you spend it</dt>
             <dd class="mt-1">
               {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
             </dd>
           </div>
           <div>
-            <dt class="font-display text-body-md font-bold uppercase">Official program</dt>
+            <dt class="font-display text-body-md font-bold">Official program</dt>
             <dd class="mt-1">
               <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
             </dd>

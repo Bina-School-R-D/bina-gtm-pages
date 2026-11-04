@@ -236,25 +236,25 @@
     color: var(--color-black);
   }
 
-  /* Tag / pill — uppercase label style in the section highlight. Decorative tags don't count
+  /* Tag / pill — sentence-case label in the section highlight (no all-caps labels anywhere — Zeyu, 2026-11-04). Decorative tags don't count
      toward a section's three colors, but their text still has to pass. */
   .pill-bina {
     @apply inline-flex items-center rounded-full border-2 px-3 py-1
-      font-display text-label-lg font-bold uppercase;
+      font-display text-body-sm font-bold;
     border-color: var(--t-hl);
     color: var(--t-hl);
   }
 
-  /* Hero eyebrow line — plain uppercase line in the section's text color, no outline.
+  /* Hero eyebrow line — plain sentence-case line in the section's text color, no outline.
      Used at the top of every page hero (Zeyu, 2026-11-04). */
   .eyebrow-line {
-    @apply font-display text-body-md font-bold uppercase tracking-[0.1em];
+    @apply font-display text-body-md font-bold;
     color: var(--t-fg);
   }
 
   /* Eyebrow label above a heading */
   .eyebrow-bina {
-    @apply font-display text-label-lg font-bold uppercase;
+    @apply font-display text-body-md font-bold;
     color: var(--t-hl);
   }
 
