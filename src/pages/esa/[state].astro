@@ -51,14 +51,17 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
         }
       </div>
 
-      <!-- Key-fact cards (Zeyu, 2026-11-04, option A): a big headline a skimmer can take in,
-           with the full sentence underneath. Black cards on lagoon, lagoon text. -->
-      <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-3">
+      <ul class="grid gap-3 sm:grid-cols-3">
         {
-          copy.gate.map((g, i) => (
-            <li class="card-bina-solid p-5 sm:p-6">
-              <p class="mb-2 font-display text-title-md font-bold sm:text-title-lg">{copy.gateHeads?.[i]}</p>
-              <p class="text-body-lg"><BrandText text={g} /></p>
+          copy.gate.map((g) => (
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold text-lagoon"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+              <span class="font-display font-bold leading-snug">{g}</span>
             </li>
           ))
         }
