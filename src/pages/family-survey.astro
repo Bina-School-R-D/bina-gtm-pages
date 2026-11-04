@@ -33,21 +33,6 @@ const {
   response rate and survey scope appear only in the methodology section and the footer.
 */
 
-// ---- dimension bars: honest full 0–10 axis, one color (deep ocean), reference line at 8 ----
-const DW = 640;
-const DROW = 44;
-const DLABEL = 250;
-const DRIGHT = 84; // room for "9.55/10" value labels
-const DTOP = 26; // room for the 8/10 marker label
-const DH = DTOP + dimensions.length * DROW + 26;
-const dAxisY = DTOP + dimensions.length * DROW + 2;
-const dBars = dimensions.map((d, i) => ({
-  ...d,
-  y: DTOP + i * DROW + 4,
-  w: (d.score / 10) * (DW - DLABEL - DRIGHT),
-}));
-const dEightX = DLABEL + 0.8 * (DW - DLABEL - DRIGHT);
-
 // ---- recommendation donut: ring fills to the average score out of 10 ----
 const RING_R = 89;
 const ringCirc = 2 * Math.PI * RING_R;
@@ -151,7 +136,7 @@ const faq = [
   </section>
 
   <!-- how it feels to be here -->
-  <section class="theme-mint">
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">
         And this is how it feels to be here: all seven scores above 8 out of 10
@@ -161,88 +146,33 @@ const faq = [
         one the average of all their answers.
       </p>
 
+      <!-- Lagoon horizontal bars on dark, the /student-results "time with bina" pattern (Zeyu,
+           2026-11-04). Honest axis: each bar is its score out of the full 0–10 track. -->
       <figure>
-        <svg
-          viewBox={`0 0 ${DW} ${DH}`}
-          role="img"
-          aria-label={`Family ratings out of 10, all above 8: ${dimensions.map((d) => `${d.label} ${d.score}`).join('; ')}`}
-          class="hidden w-full md:block"
-        >
-          {
-            dBars.map((d) => (
-              <g class="dim-bar">
-                <text x="0" y={d.y + DROW / 2 - 6} class="chart-label-sm">
-                  {d.label}
-                </text>
-                <rect
-                  x={DLABEL}
-                  y={d.y + 4}
-                  width={DW - DLABEL - DRIGHT}
-                  height={DROW - 20}
-                  rx="6"
-                  fill="#000"
-                  fill-opacity="0.06"
-                />
-                <rect
-                  class="dim-fill"
-                  x={DLABEL}
-                  y={d.y + 4}
-                  width={d.w}
-                  height={DROW - 20}
-                  rx="6"
-                  fill="#025EB9"
-                  stroke="#000"
-                  stroke-width="2"
-                />
-                <text x={DW - DRIGHT + 10} y={d.y + DROW / 2 - 5} class="chart-label">
-                  {d.score}<tspan class="chart-label-suffix">/10</tspan>
-                </text>
-              </g>
-            ))
-          }
-          <line x1={DLABEL} y1={dAxisY} x2={DW - DRIGHT} y2={dAxisY} stroke="#000" stroke-width="2" />
-          <line
-            x1={dEightX}
-            y1="20"
-            x2={dEightX}
-            y2={dAxisY}
-            stroke="#000"
-            stroke-width="2"
-            stroke-dasharray="6 5"
-          />
-          <text x={dEightX} y="14" text-anchor="middle" class="chart-label">8/10</text>
-          <text x={DLABEL} y={DH - 4} class="chart-label-sm">0</text>
-          <text x={DW - DRIGHT} y={DH - 4} text-anchor="end" class="chart-label-sm">10</text>
-        </svg>
-        <!-- Phones: the same chart as an HTML list, so labels stay readable (16px+). Full 0–10 axis, 8/10 marked. -->
-        <ul class="grid gap-5 md:hidden">
+        <ul class="m-0 grid list-none gap-5 p-0" aria-label="Family ratings out of 10">
           {
             dimensions.map((d) => (
-              <li>
-                <p class="mb-2 flex items-baseline justify-between gap-3">
-                  <span>{d.label}</span>
-                  <span class="font-display font-bold">{d.score}<span class="font-normal">/10</span></span>
-                </p>
-                <span class="relative block h-5 rounded-sm border-2 border-black" aria-hidden="true">
-                  <span class="block h-full bg-deep-ocean" style={`width:${d.score * 10}%`}></span>
-                  <span class="absolute inset-y-[-6px] left-[80%] border-l-2 border-dashed border-black"></span>
-                </span>
+              <li class="grid items-center gap-x-8 gap-y-2 sm:grid-cols-[16rem_1fr]">
+                <p class="font-display font-bold">{d.label}</p>
+                <div class="flex items-center gap-4">
+                  <span class="block h-10 flex-none rounded-sm bg-lagoon" style={`width:${d.score * 8}%`} aria-hidden="true"></span>
+                  <span class="font-display text-title-sm text-hl">{d.score}<span class="text-body-lg font-normal">/10</span></span>
+                </div>
               </li>
             ))
           }
         </ul>
-        <p class="mt-4 text-body-lg md:hidden">Each bar runs 0 to 10; the dashed line marks 8/10.</p>
       </figure>
     </div>
   </section>
 
   <!-- who's here -->
-  <section class="theme-sky-blue">
+  <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">Your child would be in good company here</h2>
       <div class="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-center">
         <div>
-          <p class="font-display text-display-md font-bold leading-none sm:text-display-lg">
+          <p class="font-display text-display-md font-bold leading-none text-hl sm:text-display-lg">
             <span data-count={fit.roundedPct} class="stat-tile-inline">{fit.roundedPct}</span>%
           </p>
         </div>
