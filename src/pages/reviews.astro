@@ -276,14 +276,14 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class:list={['wall-cell flex flex-col rounded-lg border-2 border-black bg-lemon p-6 text-black', spanFor(idx)]}>
+                  <div class:list={['wall-cell flex flex-col rounded-lg bg-deep-ocean p-6 text-mint', spanFor(idx)]}>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Already a <span class="normal-case">bina</span> family?
                     </p>
                     <p class="mb-4 text-body-lg">
                       Your review helps the next family find their way to bina.
                     </p>
-                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
+                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina btn-sm mt-auto self-start">
                       Write a review
                     </a>
                   </div>
