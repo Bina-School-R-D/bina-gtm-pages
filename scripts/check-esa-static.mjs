@@ -151,7 +151,10 @@ for (const name of served) {
     d.officialUrl,
     'id="process"',
   ]) {
-    if (text) must(pages[name], text, where);
+    // Copy may carry inline markup (e.g. <span class="normal-case">bina</span> keeps the brand
+    // lowercase inside an uppercase label), so accept a match in the raw HTML or in its text.
+    if (!text || pages[name] === null) continue;
+    if (!pages[name].includes(text)) must(pages[name].replace(/<[^>]+>/g, ''), text, where);
   }
   // The award has to be the same number the database holds — the page computes the remainder
   // from it, so a mismatch here is a wrong price in front of a parent.

@@ -10,6 +10,8 @@
  * Program facts come from esa-states.json only; sales copy from esa-landing.json; proof
  * numbers are imported from the other pages' data files and never re-typed.
  */
+import Accordion from '../../components/Accordion.astro';
+import BrandText from '../../components/BrandText.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EsaProcess from '../../components/EsaProcess.astro';
 import landing from '../../data/esa-landing.json';
@@ -50,7 +52,7 @@ const otherStatesHtml = otherStates
   <!-- HERO: the claim, the funding gate, and what this page is -->
   <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-      <p class="eyebrow-line mb-5">{copy.pill}</p>
+      <p class="eyebrow-line mb-5"><BrandText text={copy.pill} /></p>
       <h1 class="mb-5 max-w-3xl text-title-3xl sm:text-display-sm">{copy.h1}</h1>
       <p class="mb-8 max-w-2xl text-body-xl sm:text-body-xl">{copy.intro}</p>
 
@@ -171,17 +173,17 @@ const otherStatesHtml = otherStates
         <h3 class="mb-5 font-display text-title-lg font-bold">Who can apply, and where the money sits</h3>
         <dl class="grid gap-4 sm:grid-cols-3">
           <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm font-semibold">Who qualifies</dt>
+            <dt class="font-display text-title-sm">Who qualifies</dt>
             <dd class="mt-2">{program.who}</dd>
           </div>
           <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm font-semibold">How you spend it</dt>
+            <dt class="font-display text-title-sm">How you spend it</dt>
             <dd class="mt-2">
               {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
             </dd>
           </div>
           <div class="rounded-lg bg-deep-ocean p-6 text-mint">
-            <dt class="font-display text-title-sm font-semibold">Official program</dt>
+            <dt class="font-display text-title-sm">Official program</dt>
             <dd class="mt-2">
               <a href={program.officialUrl} rel="noopener" class="font-bold underline underline-offset-4">{copy.state}'s own site →</a>
             </dd>
@@ -261,7 +263,7 @@ const otherStatesHtml = otherStates
         {
           school.dayInLife.map((d) => (
             <li class="rounded-lg bg-black p-6 text-mint">
-              <p class="font-display text-title-sm font-bold text-clover">{d.time}</p>
+              <p class="font-display text-title-sm text-clover">{d.time}</p>
               <p class="mt-2">{d.what}</p>
             </li>
           ))
@@ -303,20 +305,7 @@ const otherStatesHtml = otherStates
         {copy.state} questions
       </p>
       <h2 class="mb-8 text-title-xl sm:text-title-3xl">The questions {copy.state} families actually ask</h2>
-      <!-- Accordion: full-width rows, thin divider under each, "+" on the right that turns into "×" when open. -->
-      <div>
-        {
-          questions.map((f) => (
-            <details class="group border-b border-line">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-body-xl [&::-webkit-details-marker]:hidden">
-                <span>{f.q}</span>
-                <span class="flex-none text-title-md leading-none transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
-              </summary>
-              <p class="max-w-3xl pb-5 pr-10">{f.a}</p>
-            </details>
-          ))
-        }
-      </div>
+      <Accordion items={questions} />
     </div>
   </section>
 

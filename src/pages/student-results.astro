@@ -1,4 +1,5 @@
 ---
+import Accordion from '../components/Accordion.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import results from '../data/student-results.json';
 
@@ -135,28 +136,28 @@ const tenureBars = tenure.map((b, i) => {
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card-bina p-6 stat-tile">
+        <div class="card-bina-solid p-6 stat-tile">
           <p class="font-display text-title-4xl font-bold text-hl">
             +<span data-count={headline.readGrowthAvg}>0</span>
           </p>
           <p class="mt-2 font-display font-bold">points of reading growth</p>
           <p class="mt-1 text-body-lg">average per student in one school year¹</p>
         </div>
-        <div class="card-bina p-6 stat-tile">
+        <div class="card-bina-solid p-6 stat-tile">
           <p class="font-display text-title-4xl font-bold text-hl">
             +<span data-count={headline.mathGrowthAvg}>0</span>
           </p>
           <p class="mt-2 font-display font-bold">points of math growth</p>
           <p class="mt-1 text-body-lg">average per student in one school year¹</p>
         </div>
-        <div class="card-bina p-6 stat-tile">
+        <div class="card-bina-solid p-6 stat-tile">
           <p class="font-display text-title-4xl font-bold text-hl">
             <span data-count={headline.readAtAbovePct}>0</span>%
           </p>
           <p class="mt-2 font-display font-bold">at or above the national reading benchmark</p>
           <p class="mt-1 text-body-lg">of {headline.readAtAboveN} students assessed in spring '26</p>
         </div>
-        <div class="card-bina p-6 stat-tile">
+        <div class="card-bina-solid p-6 stat-tile">
           <p class="font-display text-title-4xl font-bold text-hl">
             <span data-count={headline.readGrewPct}>0</span>%
           </p>
@@ -186,10 +187,10 @@ const tenureBars = tenure.map((b, i) => {
           curveCards.map((c) => {
             const ch = charts[c.key];
             return (
-              <figure class="card-bina curve-card p-6">
+              <figure class="curve-card">
                 <figcaption class="mb-1 flex items-baseline justify-between gap-3">
-                  <span class="font-display text-title-sm font-bold">{c.title}</span>
-                  <span class={`font-display text-title-sm font-bold${c.accent}`}>
+                  <span class="font-display text-title-sm">{c.title}</span>
+                  <span class={`font-display text-title-sm${c.accent}`}>
                     +{c.growth} pts avg growth
                   </span>
                 </figcaption>
@@ -271,7 +272,7 @@ const tenureBars = tenure.map((b, i) => {
         <a href={SITE} class="font-bold underline underline-offset-4">Visit bina to learn more</a>.
       </p>
 
-      <div class="card-bina p-6 sm:p-8">
+      <div class="card-bina-solid p-6 sm:p-8">
         <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="Your child's level">
           {
             levels.map((l, i) => (
@@ -296,7 +297,7 @@ const tenureBars = tenure.map((b, i) => {
   <!-- tenure chart -->
   <section class="theme-lemon">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="eyebrow-bina mb-2">Time with bina</p>
+      <p class="eyebrow-bina mb-2">Time with <span class="normal-case">bina</span></p>
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">The longer at bina, the further ahead in reading</h2>
       <p class="mb-8 max-w-2xl">
         Every group of bina students reads above the U.S. national average — and the gap widens the
@@ -304,7 +305,7 @@ const tenureBars = tenure.map((b, i) => {
         national average.
       </p>
 
-      <figure class="card-bina p-6 sm:p-8">
+      <figure>
         <svg
           viewBox={`0 0 ${TW} ${TH}`}
           role="img"
@@ -344,7 +345,7 @@ const tenureBars = tenure.map((b, i) => {
               <li>
                 <p class="mb-2 flex items-baseline justify-between gap-3">
                   <span>{b.label} at bina</span>
-                  <span class="font-display text-title-sm font-bold">+{b.aboveNational}</span>
+                  <span class="font-display text-title-sm">+{b.aboveNational}</span>
                 </p>
                 <span class="block h-5 rounded-sm border-2 border-black" aria-hidden="true">
                   <span class="block h-full bg-grape" style={`width:${(b.aboveNational / tMax) * 100}%`}></span>
@@ -374,7 +375,7 @@ const tenureBars = tenure.map((b, i) => {
       </p>
 
       <div class="mb-6 grid gap-4 md:grid-cols-3">
-        <div class="card-bina flex flex-col gap-2 p-6">
+        <div class="card-bina-solid flex flex-col gap-2 p-6">
           <span class="pill-bina self-start">Independent</span>
           <p class="font-display text-body-xl font-bold">Built and scored outside bina</p>
           <p class="text-body-lg">
@@ -382,7 +383,7 @@ const tenureBars = tenure.map((b, i) => {
             either.
           </p>
         </div>
-        <div class="card-bina flex flex-col gap-2 p-6">
+        <div class="card-bina-solid flex flex-col gap-2 p-6">
           <span class="pill-bina self-start">Adaptive</span>
           <p class="font-display text-body-xl font-bold">It finds each child's real level</p>
           <p class="text-body-lg">
@@ -390,7 +391,7 @@ const tenureBars = tenure.map((b, i) => {
             genuinely do.
           </p>
         </div>
-        <div class="card-bina flex flex-col gap-2 p-6">
+        <div class="card-bina-solid flex flex-col gap-2 p-6">
           <span class="pill-bina self-start">Nationally normed</span>
           <p class="font-display text-body-xl font-bold">Compared to U.S. peers, not to us</p>
           <p class="text-body-lg">
@@ -399,22 +400,7 @@ const tenureBars = tenure.map((b, i) => {
         </div>
       </div>
 
-      <div class="grid gap-3 sm:grid-cols-2">
-        {
-          explainers.map((e) => (
-            <details class="card-bina group overflow-hidden p-0">
-              <summary class="flex cursor-pointer items-center gap-3 p-5 font-display font-bold">
-                <span class={`h-8 w-2 flex-none rounded-full${e.accent}`} />
-                <span class="flex-1">{e.q}</span>
-                <span class="flex-none font-display text-title-sm transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
-                  +
-                </span>
-              </summary>
-              <p class="border-t-2 border-line px-5 pb-5 pt-4 text-body-lg">{e.a}</p>
-            </details>
-          ))
-        }
-      </div>
+      <Accordion items={explainers} />
     </div>
   </section>
 
@@ -543,8 +529,8 @@ const tenureBars = tenure.map((b, i) => {
 
     function bigStat(value, label, note) {
       return `
-        <div class="rounded-lg border-2 border-line p-5">
-          <p class="font-display text-title-3xl font-bold text-hl">${value}</p>
+        <div class="rounded-lg bg-deep-ocean p-5 text-mint">
+          <p class="font-display text-title-3xl font-bold">${value}</p>
           <p class="mt-1 font-display font-bold">${label}</p>
           <p class="mt-1 text-body-lg">${note}</p>
         </div>`;

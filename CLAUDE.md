@@ -55,11 +55,38 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | `theme-deep-ocean` | deep ocean / mint / mint (lemon for large text only) |
 | `theme-sky-blue` `theme-clover` `theme-tangerine` `theme-watermelon` `theme-dragon-fruit` | bright / black / black cards carrying the background color |
 
-- **Components:** `btn-bina` (primary: lemon + black), `btn-bina-secondary` (black + lemon), `btn-sm` modifier. Hover is always dragon fruit with black text, 2px black outline. **One primary per section**; on lemon use secondary; on black/primary base use primary. **When two buttons sit side by side, the secondary goes on the left and the primary on the right** (Zeyu, 2026-11-04 — e.g. "← Back" | "Continue →"). Labels in sentence case, verb first, no icons. `card-bina` (outlined in `--t-line`), `card-bina-solid` (filled, reusing the section's colors), `card-bina-mint` (mint fill, no stroke, 24px corners: deep ocean for the name, number and tag, black for body text and links; the `/esa` state cards), `pill-bina` and `eyebrow-bina` (sentence-case label in the highlight), `eyebrow-line` (the hero's top line: plain sentence-case 14px bold in the section's text color, no outline; every page hero uses it, never a pill — Zeyu, 2026-11-04; one highlighted word in the hero headline is colored deep ocean with no underline, or grape on sky blue, where deep ocean fails contrast), `input-bina` (outlined, never white-filled). Theme-aware utilities: `text-fg`, `text-hl`, `bg-hl`, `border-line`, `decoration-hl`.
-- **Typography:** one family, **Rund Display** (Regular, SemiBold, Bold only; no Black/900). Use the scale: `text-display-lg/md/sm` (88/72/64, the one big statement), `text-title-4xl…sm` (48→20, section + card headings), `text-body-xl…sm` (18→12), `text-button-lg/sm`.
-- **No all-caps labels** (Zeyu, 2026-11-04): eyebrows, tags, pills and field labels are sentence case on every page, even though the library's `label` styles are uppercase. Keep `bina` lowercase at the start of a label.
-- **Layout:** every section (and the footer) uses the same container, `mx-auto max-w-5xl px-5`, and all text is left-aligned, so every band's content shares one left and right edge (Zeyu, 2026-11-04). Narrow things (a form, a paragraph) get a `max-w-*` inside that container, never a narrower or centered container. No centered closing sections.
-- **Text sizes** (Zeyu, 2026-11-04): content text (paragraphs, card text, notes, captions, tables, answers) is **16px minimum** (`text-body-lg`); the review quote cards on `/esa/<state>` are 18px. Labels (eyebrows, tags, author/date lines, chart labels, calendar grid) and the footer may be 14px (`text-body-md`). **Nothing on any page is below 14px** — `text-body-sm` (12px) is not used. Tags use Rund Display **Medium (500)**.
+- **Typography — the library's table, enforced by the tokens:** one family, **Rund Display**. Each `text-*` token carries its size, line height and weight, so don't add weight classes that fight it:
+
+| Token | Size | Weight | Use |
+|---|---|---|---|
+| `text-display-lg/md/sm` | 88/72/64 | Bold | the one big statement; hero `h1` is `text-title-3xl sm:text-display-sm` |
+| `text-title-4xl…md` | 48→24 | Bold | section `h2` = `text-title-xl sm:text-title-3xl`; big numbers = `text-title-4xl` |
+| `text-title-sm` | 20 | SemiBold | card and step headings |
+| `text-body-xl` | 18 | Regular | default body (set on `body`); review quote cards on `/esa/<state>` |
+| `text-body-lg` | 16 | Regular | **minimum for any content text**: card text, notes, captions, tables, answers |
+| `text-body-md` | 14 | Regular | footer and footer notes only |
+| `text-label` | 14 | Bold, UPPERCASE, 10% tracking | every label and tag (see below) |
+| `text-button-lg/sm` | 24/16 | Bold | buttons |
+
+  **Nothing on any page is below 14px, at any screen width** (Zeyu, 2026-11-04). The library's label/lg (12px) is raised to 14px; `body-sm` and `label/md`/`label/sm` are not defined. Medium (500) is loaded but unused.
+
+### Page patterns (set on `/esa` and `/esa/<state>`, Zeyu 2026-11-04 — apply to every page)
+
+| Element | Rule | Class / component |
+|---|---|---|
+| Section width | Every section and the footer share one container and one left/right edge; all text left-aligned; no centered closing sections. Narrow things get a `max-w-*` inside it. | `mx-auto max-w-5xl px-5` |
+| Hero | Top line is an uppercase label in the section's text color (never a pill). One word of the `h1` may be colored — deep ocean, no underline (grape on sky blue, where deep ocean fails). No divider lines in the hero. | `eyebrow-line` |
+| Labels | Eyebrows above headings, group labels, tags: uppercase, bold, letter-spaced, 14px. **`bina` stays lowercase inside an uppercase label** — wrap it. | `eyebrow-bina`, `pill-bina`, `label-bina`, `<BrandText text={…} />` or `<span class="normal-case">bina</span>` |
+| Cards | **Always filled, never outlined.** The fill comes from the section: mint card on dark, deep ocean card on mint, black card on lemon/lagoon/clover/tangerine/sky, mint card on deep ocean. Inside, `text-hl`, `pill-bina` and `border-line` switch to the card's colors. | `card-bina-solid` (`card-bina-mint` = the mint card with deep ocean name/number/tag and black body) |
+| Stats | Big number + a one-line claim. On tangerine: black cards, tangerine numbers, lagoon text. | `card-bina-solid` |
+| Step lists | Lagoon cards on dark, black text, big number left, outlined black tag right, group label above each group. | `EsaProcess` |
+| Charts & tables | No card around them — they sit on the section. On phones, a chart whose labels would drop under 14px gets an HTML bar-list version below `md`. | — |
+| Accordions / FAQs | Full-width rows, thin line under each, question in body-xl Regular, "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
+| Notes | A note under a block starts with `*`, no box, no icon (lagoon on dark, black on light). A single highlighted fact is a check-line: filled circle + bold text. | — |
+| Dividers | No decorative rules between blocks (hero checklist, closing section). Only list rows (accordions, tables) get lines. | — |
+| Buttons | Primary lemon / secondary black, both 24px (`btn-bina`); `btn-sm` only in the nav. **Two side by side: secondary left, primary right.** One primary per section. Hover dragon fruit. | `btn-bina`, `btn-bina-secondary` |
+| Inputs | Outlined in the card's line color, never white-filled; errors in a passing color (grape on mint). | `input-bina` |
+| Nav | Full-width black bar, logo and CTA at the window edges (not in the content column). | `BaseLayout` |
 - **Radii:** `rounded-lg` 16px, `rounded-sm` 8px. These are the only two the library defines.
 - **Logo:** directly on black, primary base or a dark, calm area of a photo only. Anywhere else, use the black round/square container version. Never recolor, outline or stretch it. Favicon = the b mark on lagoon. The peeking logo goes only on the bottom edge of a layout, large.
 - **Landscapes** sit on a colorful sky (never black/base), edge to edge at the bottom; they close a bright hero into a dark section. No text on the land.
@@ -128,7 +155,7 @@ There is no homepage — `/` redirects to thebinaschool.com (see `astro.config.m
 
 Ad-hoc lead-gen campaign forms (Tally replacements) are a **standard page type**, not one-offs. `/book-adventure` is the reference implementation. Every new campaign page follows it:
 
-1. Multi-step wizard in one `card-bina` (intro → contact → qualify → redirect), plain inline script, no framework island. Form fields use `.input-bina` (defined in `global.css`); access inputs via `form.elements` (`form.name` is the form's own attribute — a real bug otherwise).
+1. Multi-step wizard in one `card-bina-solid` (intro → contact → qualify → redirect), plain inline script, no framework island. Form fields use `.input-bina` (defined in `global.css`); access inputs via `form.elements` (`form.name` is the form's own attribute — a real bug otherwise).
 2. On final submit, `navigator.sendBeacon` posts the lead to the shared n8n **`[S] A4. Campaign Intake`** webhook (`https://binaschool.app.n8n.cloud/webhook/s-a4-campaign-intake`) as a `text/plain` blob (avoids a CORS preflight; the workflow parses JSON from the raw body), then `location.assign`s the redirect — capture is fire-and-forget and must never block or break the redirect.
 3. Payload contract: `{ campaign, submission_id, name, email, phone, child_name, age_group, redirect_url, page_url, referrer, utm_* }`. `campaign` = the page slug; `submission_id` = `${campaign}-${crypto.randomUUID()}` (the workflow's dedupe key). New campaigns reuse the same webhook — a new page needs **zero** n8n changes.
 4. Anti-bot: off-screen honeypot input (`website`) — if filled, skip the beacon but still redirect.

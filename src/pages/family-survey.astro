@@ -1,4 +1,5 @@
 ---
+import Accordion from '../components/Accordion.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import survey from '../data/family-survey.json';
 
@@ -158,7 +159,7 @@ const explainers = [
         average of all their answers.
       </p>
 
-      <figure class="card-bina p-6 sm:p-8">
+      <figure>
         <svg
           viewBox={`0 0 ${DW} ${DH}`}
           role="img"
@@ -266,7 +267,7 @@ const explainers = [
         four ways. Whichever one is yours, you'll find plenty of parents here who chose the same.
       </p>
 
-      <figure class="card-bina p-6 sm:p-8">
+      <figure>
         <ul class="grid gap-4">
           {
             future.map((f) => (
@@ -299,7 +300,7 @@ const explainers = [
 
       <div class="grid gap-4 md:grid-cols-2">
         <div class="card-bina-solid p-8">
-          <p class="font-display text-title-sm font-bold">Want to see everything?</p>
+          <p class="font-display text-title-sm">Want to see everything?</p>
           <p class="mt-3">
             You'll be in good company. <strong
               >{involvement[0].pct}% of bina parents look at their child's progress every week</strong
@@ -308,7 +309,7 @@ const explainers = [
           </p>
         </div>
         <div class="card-bina-solid p-8">
-          <p class="font-display text-title-sm font-bold">Not every week? That's alright.</p>
+          <p class="font-display text-title-sm">Not every week? That's alright.</p>
           <p class="mt-3">
             Some weeks there simply isn't a spare hour, and your child is looked after exactly the
             same. Teaching is our job, not yours — only <strong
@@ -332,22 +333,22 @@ const explainers = [
       </p>
 
       <div class="grid gap-4 md:grid-cols-2">
-        <div class="card-bina p-8">
+        <div class="card-bina-solid p-8">
           <p class="font-display text-display-sm font-bold text-hl">
             {dimensions[0].score}<span class="text-title-md font-bold text-fg">/10</span>
           </p>
-          <p class="mt-3 font-display text-title-sm font-bold">You'll be heard</p>
+          <p class="mt-3 font-display text-title-sm">You'll be heard</p>
           <p class="mt-3">
             The fair worry about any online school is that nobody will really know your child, and
             nobody will pick up when you ask. Communication is the single thing our families rate
             highest of all seven — above the learning, above their overall satisfaction.
           </p>
         </div>
-        <div class="card-bina p-8">
+        <div class="card-bina-solid p-8">
           <p class="font-display text-display-sm font-bold text-hl">
             {dimensions[1].score}<span class="text-title-md font-bold text-fg">/10</span>
           </p>
-          <p class="mt-3 font-display text-title-sm font-bold">Your child will want to log on</p>
+          <p class="mt-3 font-display text-title-sm">Your child will want to log on</p>
           <p class="mt-3">
             Joy is the one families rate second highest, and it's the one that makes everything else
             possible. A child who's happy at school learns more than one who's enduring it — and
@@ -418,7 +419,7 @@ const explainers = [
         early to decide, which we think is a perfectly good answer.
       </p>
 
-      <div class="card-bina overflow-x-auto p-6 sm:p-8">
+      <div class="overflow-x-auto">
         <table class="w-full min-w-[26rem] text-left">
           <thead>
             <tr class="border-b-2 border-line font-display">
@@ -457,25 +458,7 @@ const explainers = [
         This is our own survey of our own families, so you should know exactly how it was run before
         deciding what it's worth.
       </p>
-      <div class="grid max-w-3xl grid-cols-1 gap-3">
-        {
-          explainers.map((e) => (
-            <details class="card-bina group overflow-hidden p-0">
-              <summary class="flex cursor-pointer items-center gap-3 p-5 font-display font-bold">
-                <span class={`h-8 w-2 flex-none rounded-full${e.accent}`} />
-                <span class="flex-1">{e.q}</span>
-                <span
-                  class="flex-none font-display text-title-sm transition-transform duration-200 group-open:rotate-45"
-                  aria-hidden="true"
-                >
-                  +
-                </span>
-              </summary>
-              <p class="border-t-2 border-line px-5 pb-5 pt-4 text-body-lg">{e.a}</p>
-            </details>
-          ))
-        }
-      </div>
+      <Accordion items={explainers} />
       <p class="mt-8 max-w-2xl">
         Want the harder numbers instead — how much our students actually learn, marked by someone
         other than us?

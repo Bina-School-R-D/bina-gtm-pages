@@ -36,26 +36,27 @@
   --font-display: "Rund Display", system-ui, sans-serif;
   --font-sans: "Rund Display", system-ui, sans-serif;
 
-  /* Type scale — text-display-lg, text-title-xl, text-body-lg, text-label-lg … */
-  --text-display-lg: 88px;  --text-display-lg--line-height: 1;
-  --text-display-md: 72px;  --text-display-md--line-height: 1;
-  --text-display-sm: 64px;  --text-display-sm--line-height: 1;
-  --text-title-4xl: 48px;   --text-title-4xl--line-height: 1.1;
-  --text-title-3xl: 40px;   --text-title-3xl--line-height: 1.1;
-  --text-title-2xl: 36px;   --text-title-2xl--line-height: 1.1;
-  --text-title-xl: 32px;    --text-title-xl--line-height: 1.1;
-  --text-title-lg: 28px;    --text-title-lg--line-height: 1.1;
-  --text-title-md: 24px;    --text-title-md--line-height: 1.1;
-  --text-title-sm: 20px;    --text-title-sm--line-height: 1.1;
+  /* Type scale — the bina Foundation typography table. Each token carries its own weight, so
+     `text-title-sm` is SemiBold and `text-body-lg` Regular without extra classes. */
+  --text-display-lg: 88px;  --text-display-lg--line-height: 1;   --text-display-lg--font-weight: 700;
+  --text-display-md: 72px;  --text-display-md--line-height: 1;   --text-display-md--font-weight: 700;
+  --text-display-sm: 64px;  --text-display-sm--line-height: 1;   --text-display-sm--font-weight: 700;
+  --text-title-4xl: 48px;   --text-title-4xl--line-height: 1.1;  --text-title-4xl--font-weight: 700;
+  --text-title-3xl: 40px;   --text-title-3xl--line-height: 1.1;  --text-title-3xl--font-weight: 700;
+  --text-title-2xl: 36px;   --text-title-2xl--line-height: 1.1;  --text-title-2xl--font-weight: 700;
+  --text-title-xl: 32px;    --text-title-xl--line-height: 1.1;   --text-title-xl--font-weight: 700;
+  --text-title-lg: 28px;    --text-title-lg--line-height: 1.1;   --text-title-lg--font-weight: 700;
+  --text-title-md: 24px;    --text-title-md--line-height: 1.1;   --text-title-md--font-weight: 700;
+  --text-title-sm: 20px;    --text-title-sm--line-height: 1.1;   --text-title-sm--font-weight: 600;
   --text-body-xl: 18px;     --text-body-xl--line-height: 1.5;
   --text-body-lg: 16px;     --text-body-lg--line-height: 1.5;
   --text-body-md: 14px;     --text-body-md--line-height: 1.5;
-  --text-body-sm: 12px;     --text-body-sm--line-height: 1.5;
-  --text-label-lg: 12px;    --text-label-lg--line-height: 1.2; --text-label-lg--letter-spacing: 0.1em;
-  --text-label-md: 11px;    --text-label-md--line-height: 1.2; --text-label-md--letter-spacing: 0.12em;
-  --text-label-sm: 10px;    --text-label-sm--line-height: 1.2; --text-label-sm--letter-spacing: 0.09em;
-  --text-button-lg: 24px;   --text-button-lg--line-height: 1.2;
-  --text-button-sm: 16px;   --text-button-sm--line-height: 1.2;
+  /* Label: the guideline's label/lg (bold, uppercase, 10% tracking, 120%) set at 14px, because
+     nothing on these pages may be smaller than 14px (Zeyu, 2026-11-04). body-sm and label/md/sm
+     are deliberately not defined. */
+  --text-label: 14px;       --text-label--line-height: 1.2;      --text-label--letter-spacing: 0.1em; --text-label--font-weight: 700;
+  --text-button-lg: 24px;   --text-button-lg--line-height: 1.2;  --text-button-lg--font-weight: 700;
+  --text-button-sm: 16px;   --text-button-sm--line-height: 1.2;  --text-button-sm--font-weight: 700;
 
   /* Radii — the only two the library defines */
   --radius-lg: 16px;
@@ -78,7 +79,8 @@
 /*   --t-fg   body text                                                */
 /*   --t-hl   highlight that is also safe as small text on --t-bg      */
 /*   --t-line card / input / divider stroke                            */
-/*   --t-solid-bg / --t-solid-fg  a filled card, reusing the 3 colors  */
+/*   --t-solid-bg / --t-solid-fg / --t-solid-hl  the filled card for    */
+/*   this section (background, text, highlight) — reuses its colors     */
 /* ------------------------------------------------------------------ */
 @layer base {
   /* Dark — the default. mint 14.56, lagoon 11.82 on primary base. */
@@ -87,8 +89,9 @@
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lagoon);
     --t-line: var(--color-lagoon);
-    --t-solid-bg: transparent;
-    --t-solid-fg: var(--color-mint);
+    --t-solid-bg: var(--color-mint);
+    --t-solid-fg: var(--color-black);
+    --t-solid-hl: var(--color-deep-ocean);
   }
   /* Black — mint 17.94, lagoon 14.57 */
   .theme-black {
@@ -96,8 +99,9 @@
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lagoon);
     --t-line: var(--color-lagoon);
-    --t-solid-bg: transparent;
-    --t-solid-fg: var(--color-mint);
+    --t-solid-bg: var(--color-mint);
+    --t-solid-fg: var(--color-black);
+    --t-solid-hl: var(--color-deep-ocean);
   }
   /* Lagoon — black 14.57, grape 6.00; black cards with lagoon text 14.57 */
   .theme-lagoon {
@@ -107,6 +111,7 @@
     --t-line: var(--color-black);
     --t-solid-bg: var(--color-black);
     --t-solid-fg: var(--color-lagoon);
+    --t-solid-hl: var(--color-lagoon);
   }
   /* Lemon — black 16.92, grape 6.97; black cards with lemon text. Use the SECONDARY button here. */
   .theme-lemon {
@@ -116,6 +121,7 @@
     --t-line: var(--color-black);
     --t-solid-bg: var(--color-black);
     --t-solid-fg: var(--color-lemon);
+    --t-solid-hl: var(--color-lemon);
   }
   /* Mint — black 17.94, deep ocean 5.43; deep ocean cards with mint text 5.43 */
   .theme-mint {
@@ -125,6 +131,7 @@
     --t-line: var(--color-black);
     --t-solid-bg: var(--color-deep-ocean);
     --t-solid-fg: var(--color-mint);
+    --t-solid-hl: var(--color-mint);
   }
   /* Grape — mint 7.39, lemon 6.97 */
   .theme-grape {
@@ -132,8 +139,9 @@
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lemon);
     --t-line: var(--color-lemon);
-    --t-solid-bg: transparent;
+    --t-solid-bg: var(--color-black);
     --t-solid-fg: var(--color-mint);
+    --t-solid-hl: var(--color-lemon);
   }
   /* Deep ocean — mint 5.43; mint cards with deep ocean text 5.43 */
   .theme-deep-ocean {
@@ -143,6 +151,7 @@
     --t-line: var(--color-mint);
     --t-solid-bg: var(--color-mint);
     --t-solid-fg: var(--color-deep-ocean);
+    --t-solid-hl: var(--color-deep-ocean);
   }
   /* Bright two-color themes — black text, black cards carrying the background color as text */
   .theme-sky-blue   { --t-bg: var(--color-sky-blue);     --t-solid-fg: var(--color-sky-blue); }
@@ -155,6 +164,7 @@
     --t-hl: var(--color-black);
     --t-line: var(--color-black);
     --t-solid-bg: var(--color-black);
+    --t-solid-hl: var(--t-solid-fg);
   }
 
   [class*="theme-"] {
@@ -213,15 +223,16 @@
     @apply min-h-10 rounded-sm px-4 py-0 text-button-sm;
   }
 
-  /* Card — outlined in the section's stroke color, no fill, no fourth color. */
-  .card-bina {
-    @apply rounded-lg border-2;
-    border-color: var(--t-line);
-  }
-  /* Filled card — reuses the section's colors (e.g. black card with lagoon text on lagoon). */
+  /* Card — always filled, never outlined (Zeyu, 2026-11-04). The fill and text come from the
+     section theme (--t-solid-*): mint card on dark, deep ocean card on mint, black card on lemon,
+     lagoon and the bright colors, mint card on deep ocean. Inside the card the theme variables
+     switch to the card's colors, so text-hl, pill-bina and border-line keep passing contrast. */
   .card-bina-solid {
-    @apply rounded-lg border-2;
-    border-color: var(--t-line);
+    @apply rounded-lg;
+    --t-fg: var(--t-solid-fg);
+    --t-hl: var(--t-solid-hl, var(--t-solid-fg));
+    --t-line: var(--t-solid-fg);
+    --card-bg: var(--t-solid-bg);
     background-color: var(--t-solid-bg);
     color: var(--t-solid-fg);
   }
@@ -238,25 +249,26 @@
     color: var(--color-black);
   }
 
-  /* Tag / pill — sentence-case label in the section highlight (no all-caps labels anywhere — Zeyu, 2026-11-04). Decorative tags don't count
-     toward a section's three colors, but their text still has to pass. */
+  /* Labels — uppercase, bold, 10% tracking, 14px (guideline label/lg at the 14px floor).
+     Keep "bina" lowercase inside a label: wrap it with <BrandText>. */
+  .label-bina {
+    @apply font-display text-label uppercase;
+  }
+  /* Tag / pill — an outlined label in the section highlight. Decorative tags don't count toward a
+     section's three colors, but their text still has to pass. */
   .pill-bina {
-    @apply inline-flex items-center rounded-full border-2 px-3 py-1
-      font-display text-body-md font-medium;
+    @apply inline-flex items-center rounded-full border-2 px-3 py-1 font-display text-label uppercase;
     border-color: var(--t-hl);
     color: var(--t-hl);
   }
-
-  /* Hero eyebrow line — plain sentence-case line in the section's text color, no outline.
-     Used at the top of every page hero (Zeyu, 2026-11-04). */
+  /* Hero eyebrow line — a label in the section's text color, top of every page hero. */
   .eyebrow-line {
-    @apply font-display text-body-md font-bold;
+    @apply font-display text-label uppercase;
     color: var(--t-fg);
   }
-
-  /* Eyebrow label above a heading */
+  /* Eyebrow label above a section heading, in the section highlight. */
   .eyebrow-bina {
-    @apply font-display text-body-md font-bold;
+    @apply font-display text-label uppercase;
     color: var(--t-hl);
   }
 
