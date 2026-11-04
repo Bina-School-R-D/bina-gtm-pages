@@ -84,11 +84,6 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                   <span>
                     <strong class="font-bold">You pay:</strong> {s.payLabel}
                   </span>
-                  <span>
-                    {s.tier === 'reimbursed'
-                      ? 'You pay bina, the state reimburses you'
-                      : `Paid to bina through ${s.program.platform}`}
-                  </span>
                 </span>
                 <span class="mt-auto font-bold underline decoration-2 underline-offset-4">
                   bina for {s.state} families →

@@ -190,7 +190,11 @@ export function chooserStates() {
         badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
         // '~' (an estimate) sits tight against the number; word prefixes like 'Up to' take a space.
         awardLabel: s.awardPrefix ? `${s.awardPrefix}${s.awardPrefix === '~' ? '' : ' '}${award}` : award,
-        payLabel: `~${month} per month${s.tier === 'reimbursed' ? ' after your credit' : ''}`,
+        // One line: what the family pays, and how it reaches bina (Zeyu, 2026-11-04).
+        payLabel:
+          s.tier === 'reimbursed'
+            ? `~${month} per month after your credit to bina, the state reimburses you`
+            : `~${month} per month to bina through ${program.platform}`,
       };
     })
     .sort(
