@@ -33,6 +33,20 @@ const {
   response rate and survey scope appear only in the methodology section and the footer.
 */
 
+// ---- priorities donut: one choice per family, so the four slices add up to 100%. Slices alternate
+// lagoon and mint (the section's own colors), starting at 12 o'clock, clockwise in data order.
+const PIE_R = 80;
+const pieCirc = 2 * Math.PI * PIE_R;
+const PIE_GAP = 3; // dark gap between slices, in px of arc
+const pieColors = ['#55EED4', '#D8F6C8'];
+let pieAcc = 0;
+const pieSlices = future.map((f, i) => {
+  const len = (f.pct / 100) * pieCirc;
+  const slice = { ...f, color: pieColors[i % 2], dash: `${Math.max(0, len - PIE_GAP)} ${pieCirc}`, offset: -pieAcc };
+  pieAcc += len;
+  return slice;
+});
+
 // ---- recommendation donut: ring fills to the average score out of 10 ----
 const RING_R = 89;
 const ringCirc = 2 * Math.PI * RING_R;
@@ -199,21 +213,39 @@ const faq = [
       </p>
 
       <figure>
-        <!-- Same pattern as the seven scores: label left, lagoon bar, lagoon value. Each bar is its
-             share of 100%, so the four add up honestly. -->
-        <ul class="m-0 grid list-none gap-5 p-0">
-          {
-            future.map((f) => (
-              <li class="grid items-center gap-x-8 gap-y-2 sm:grid-cols-[16rem_1fr]">
-                <p class="font-display font-bold">{f.label}</p>
-                <div class="flex items-center gap-4">
-                  <span class="block h-10 flex-none rounded-sm bg-lagoon" style={`width:${f.pct * 0.8}%`} aria-hidden="true"></span>
-                  <span class="font-display text-title-sm text-hl">{f.pct}%</span>
-                </div>
+        <!-- A donut, because it is one choice per family and the four shares make a whole (Zeyu,
+             2026-11-04). Legend carries every label and figure, so nothing depends on color alone. -->
+        <div class="grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-16">
+          <svg
+            viewBox="0 0 220 220"
+            role="img"
+            aria-label={`What matters most for their child's future: ${future.map((f) => `${f.label} ${f.pct}%`).join('; ')}`}
+            class="mx-auto w-56 sm:w-64"
+          >
+            {pieSlices.map((sl) => (
+              <circle
+                cx="110"
+                cy="110"
+                r={PIE_R}
+                fill="none"
+                stroke={sl.color}
+                stroke-width="44"
+                stroke-dasharray={sl.dash}
+                stroke-dashoffset={sl.offset}
+                transform="rotate(-90 110 110)"
+              />
+            ))}
+          </svg>
+          <ul class="m-0 grid list-none gap-5 p-0">
+            {pieSlices.map((sl) => (
+              <li class="flex items-center gap-4">
+                <span class="h-6 w-6 flex-none rounded-sm" style={`background:${sl.color}`} aria-hidden="true"></span>
+                <span class="flex-1 font-display font-bold">{sl.label}</span>
+                <span class="font-display text-title-sm text-hl">{sl.pct}%</span>
               </li>
-            ))
-          }
-        </ul>
+            ))}
+          </ul>
+        </div>
         <figcaption class="mt-8 text-body-lg">One choice per family.</figcaption>
       </figure>
     </div>
