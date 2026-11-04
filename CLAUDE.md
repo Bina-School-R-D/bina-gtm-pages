@@ -84,6 +84,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Accordions / FAQs | Full-width rows, thin line under each, question in body-xl Regular, "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
 | Notes | A note under a block starts with `*`, no box, no icon (lagoon on dark, black on light). A single highlighted fact is a check-line: filled circle + bold text. | — |
 | Dividers | No decorative rules between blocks (hero checklist, closing section). Only list rows (accordions, tables) get lines. | — |
+| Links | Text links are bold and underlined. **Hover: the underline thickens to 3px and moves closer, in the link's own color** (set once in `global.css`, unlayered so it beats Tailwind's decoration utilities). Whole-card links thicken the underline of their "→" line. Buttons keep the dragon-fruit hover. | global `a:hover` rule |
 | Buttons | Primary lemon / secondary black, both 24px (`btn-bina`); `btn-sm` only in the nav. **Two side by side: secondary left, primary right.** One primary per section. Hover dragon fruit. | `btn-bina`, `btn-bina-secondary` |
 | Inputs | Outlined in the card's line color, never white-filled; errors in a passing color (grape on mint). | `input-bina` |
 | Nav | Full-width black bar, logo and CTA at the window edges (not in the content column). | `BaseLayout` |
