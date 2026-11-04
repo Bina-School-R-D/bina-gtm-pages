@@ -188,7 +188,8 @@ export function chooserStates() {
         ...s,
         program,
         badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
-        awardLabel: s.awardPrefix ? `${s.awardPrefix} ${award}` : award,
+        // '~' (an estimate) sits tight against the number; word prefixes like 'Up to' take a space.
+        awardLabel: s.awardPrefix ? `${s.awardPrefix}${s.awardPrefix === '~' ? '' : ' '}${award}` : award,
         payLabel: `About ${month} a month${s.tier === 'reimbursed' ? ' after your credit' : ''}`,
       };
     })

@@ -234,9 +234,7 @@
           "Live online school from Pre-K to Grade 10",
           "Cambridge and Cognia accredited, CIS member",
           "Families in 40+ countries"
-        ],
-        "linkLabel": "Explore bina →",
-        "linkUrl": "https://thebinaschool.com"
+        ]
       },
       "faqOnly": true
     },
@@ -391,7 +389,7 @@
       ],
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
-      "awardPrefix": "About"
+      "awardPrefix": "~"
     }
   ],
   "tierCopy": {
@@ -483,8 +481,6 @@
       "Five hours a day, five days a week, on a timetable that fits your time zone",
       "A Family Success contact who knows your child by name"
     ],
-    "aboutLinkLabel": "Explore bina →",
-    "aboutLinkUrl": "https://thebinaschool.com",
     "ctaTitle": "See what a year at bina costs with your ESA",
     "faq": [
       {

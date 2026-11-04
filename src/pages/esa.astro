@@ -174,8 +174,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
   <section class="theme-base">
     <div class="mx-auto grid max-w-5xl gap-10 px-5 py-16 md:grid-cols-[1fr_1.6fr] md:gap-16">
       <div>
-        <h2 class="mb-6 text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={c.aboutTitle} /></h2>
-        <a href={c.aboutLinkUrl} target="_blank" rel="noopener" class="text-body-xl font-bold underline">{c.aboutLinkLabel}</a>
+        <h2 class="text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={c.aboutTitle} /></h2>
       </div>
       <ul class="m-0 grid list-none gap-5 p-0 md:pt-2">
         {c.aboutBullets.map((b) => (
