@@ -129,6 +129,9 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
                           {usd(r.payLow)}–{usd(r.payHigh)}<span class="text-body-xl"> a year</span>
                         </span>
                         {i === 0 && <span class="block">~{usd(monthLow)}–{usd(monthHigh)} a month</span>}
+                        {i === 1 && (
+                          <span class="block">~{usd(Math.round(r.payLow / 4))}–{usd(Math.round(r.payHigh / 4))} a quarter</span>
+                        )}
                       </dd>
                     </div>
                   </dl>
