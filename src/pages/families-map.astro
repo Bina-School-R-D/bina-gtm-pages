@@ -31,6 +31,19 @@ import BinaFamiliesMap from '../components/BinaFamiliesMap';
     background: #1c1c1c;
     color: #fff;
   }
+
+  /* Pinned to its pre-rebrand type on purpose: this page is excluded from the bina Foundation
+     restyle and will be redesigned separately. Keep these until then. */
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+  body {
+    font-family: "Rund Text", "Arial", sans-serif;
+    line-height: 1.6;
+  }
+  .families-map h1 {
+    letter-spacing: -0.01em;
+  }
 </style>
 
 <style>

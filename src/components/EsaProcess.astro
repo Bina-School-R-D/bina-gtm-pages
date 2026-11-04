@@ -15,69 +15,64 @@ interface Props {
 const { page } = Astro.props;
 const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
 const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
+// Labels are sentence case on the page; the lib keeps its lowercase strings.
+const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
 
-<section id="process" class="scroll-mt-20 border-t-2 border-coal-black">
-  <div class="mx-auto max-w-4xl px-5 py-14">
-    <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-      The process
-    </p>
-    <h2 class="mb-3 text-3xl sm:text-4xl">{title} steps, and we are on the call for all of them</h2>
-    <p class="mb-8 max-w-2xl text-coal-900">
+<!-- Dark section, lagoon step cards with black text (Zeyu's mockup, 2026-11-04). -->
+<section id="process" class="theme-base scroll-mt-20">
+  <div class="mx-auto max-w-5xl px-5 py-14">
+    <p class="eyebrow-bina mb-2">The process</p>
+    <h2 class="mb-3 text-title-xl sm:text-title-3xl">{title} steps, and we are on the call for all of them</h2>
+    <p class="mb-8 max-w-2xl">
       You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
       do together — so you never have to work out which is which on your own.
     </p>
 
-    <div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">
+    <div class="grid gap-8">
       {
         groups.map((g) => (
-          <>
-            <p class="bg-coal-black px-5 py-2 font-display text-xs font-bold uppercase tracking-widest text-bina-yellow sm:px-6">
-              {g.label}
-            </p>
-            <ul class="m-0 list-none p-0">
+          <div>
+            <p class="mb-3 font-display text-body-lg text-hl">{g.label}</p>
+            <ol class="m-0 grid list-none gap-4 p-0">
               {g.steps.map((step) => (
-                <li class="flex gap-4 border-t-2 border-coal-black bg-white px-5 py-5 sm:px-6">
-                  <span class="grid h-10 w-10 flex-none place-items-center rounded-xl border-2 border-coal-black bg-bina-yellow font-display text-lg font-black">
+                <li class="flex items-center gap-5 rounded-lg bg-lagoon px-5 py-5 text-black sm:gap-7 sm:px-7">
+                  <span class="w-8 flex-none text-center font-display text-title-3xl font-normal sm:text-display-sm" aria-hidden="true">
                     {step.n}
                   </span>
-                  <span class="min-w-0">
-                    <span class="mb-1 flex flex-wrap items-center gap-2">
-                      <strong class="font-display text-base">{step.t}</strong>
-                      <span
-                        class={`inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ${CHIP[step.who].cls}`}
-                      >
-                        {step.who === 'state' ? `on ${copy.state}'s site` : CHIP[step.who].label}
+                  <span class="min-w-0 flex-1">
+                    <span class="mb-2 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                      <strong class="font-display text-title-md font-semibold">
+                        <span class="sr-only">Step {step.n}: </span>{step.t}
+                      </strong>
+                      <span class="inline-flex flex-none items-center rounded-full border-2 border-black px-3 py-1 font-display text-body-md">
+                        {step.who === 'state' ? `On ${copy.state}'s site` : sentence(CHIP[step.who].label)}
                       </span>
                     </span>
-                    <span class="block text-sm text-coal-900">{step.d}</span>
+                    <span class="block text-body-md">{step.d}</span>
                     {step.url && (
-                      <a
-                        href={step.url}
-                        rel="noopener"
-                        class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4"
-                      >
+                      <a href={step.url} rel="noopener" class="mt-2 inline-flex text-body-md underline underline-offset-4">
                         {step.urlLabel}
                       </a>
                     )}
                   </span>
                 </li>
               ))}
-            </ul>
-          </>
+            </ol>
+          </div>
         ))
       }
-      <p class="border-t-2 border-coal-black bg-white px-5 py-3 text-sm text-coal-900 sm:px-6">
-        Funding renews each school year — we send you fresh paperwork every season, so renewing
-        takes minutes.
-      </p>
     </div>
 
-    <div class="card-bina mt-8 p-6 sm:p-8">
-      <p class="mb-2 font-display text-xs font-bold uppercase tracking-widest text-bina-pink">Timing</p>
-      <h3 class="mb-2 font-display text-xl">{copy.timingTitle}</h3>
-      <p class="text-coal-1000">{copy.timingBody}</p>
-      <a href={CTA} class="btn-bina mt-5">{CTA_LABEL}</a>
+    <p class="mt-6 text-body-lg text-hl">
+      *Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.
+    </p>
+
+    <div class="mt-10">
+      <p class="eyebrow-bina mb-3">Timing</p>
+      <h3 class="mb-3 font-display text-title-sm font-bold">{copy.timingTitle}</h3>
+      <p>{copy.timingBody}</p>
+      <a href={CTA} class="btn-bina mt-6">{CTA_LABEL}</a>
     </div>
   </div>
 </section>

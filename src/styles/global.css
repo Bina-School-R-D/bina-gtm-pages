@@ -1,99 +1,272 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* bina design tokens — extracted from thebinaschool.com (Tailwind v4) */
-/* Keep in sync with the main site. Re-extract if the site rebrands.   */
+/* bina Foundation tokens (Tailwind v4)                                */
+/* Source of truth: the Figma bina Foundation Library, published as    */
+/* the "bina Foundation" design system artifact:                       */
+/* https://claude.ai/artifact/QCWK6m47YnCzuwQSem3cov                   */
+/* Never add a color that is not in that library. See CLAUDE.md.       */
 /* ------------------------------------------------------------------ */
 @theme {
-  --font-display: "Rund Display", "Arial", sans-serif;
-  --font-sans: "Rund Text", "Arial", sans-serif;
+  /* Tailwind's default palette is switched off on purpose: only bina colors
+     generate classes, so an off-brand `text-gray-500` simply does nothing. */
+  --color-*: initial;
 
-  /* Coal (text / surfaces) */
-  --color-coal-black: #000000;
-  --color-coal-1000: #262626;
-  --color-coal-900: #313131;
+  /* Neutrals */
+  --color-primary-base: #1c1c1c; /* default dark background — never text */
+  --color-black: #000000;        /* text on light/bright backgrounds; cards on bright backgrounds */
+  --color-mint: #d8f6c8;         /* replaces white: body text on dark, background for long black text */
 
-  /* Chromatic accents (as used on the live site) */
-  --color-bina-grass: #03ecc5;
-  --color-bina-mint: #06e1bd;
-  --color-bina-yellow: #f7d928;
-  --color-bina-yellow-bright: #fcde2d;
-  --color-bina-purple: #b38cff;
-  --color-bina-pink: #fe48c2;
-  --color-bina-green: #03cb5b;
-  --color-bina-blue: #33afff;
-  --color-bina-red: #ff605b;
-  --color-bina-orange: #fe6c23;
+  /* Palette */
+  --color-lagoon: #55eed4;       /* primary accent */
+  --color-lemon: #ffe916;        /* CTA color */
+  --color-grape: #632aa8;
+  --color-deep-ocean: #025eb9;
+  --color-sky-blue: #78c0fe;
+  --color-tangerine: #ff8a3d;
+  --color-watermelon: #ff7a71;
+  --color-dragon-fruit: #fe49c1; /* button hover */
+  --color-clover: #64e27b;
+  --color-poppy: #f24500;
 
-  /* Radii — the site leans on large, friendly corners */
-  --radius-card: 1.875rem; /* 30px cards */
-  --radius-cta: 1rem;
+  /* Decorative only: the plate behind third-party logos. Never text, icons or the bina logo. */
+  --color-deco-white: #ffffff;
+
+  /* One family for everything */
+  --font-display: "Rund Display", system-ui, sans-serif;
+  --font-sans: "Rund Display", system-ui, sans-serif;
+
+  /* Type scale — text-display-lg, text-title-xl, text-body-lg, text-label-lg … */
+  --text-display-lg: 88px;  --text-display-lg--line-height: 1;
+  --text-display-md: 72px;  --text-display-md--line-height: 1;
+  --text-display-sm: 64px;  --text-display-sm--line-height: 1;
+  --text-title-4xl: 48px;   --text-title-4xl--line-height: 1.1;
+  --text-title-3xl: 40px;   --text-title-3xl--line-height: 1.1;
+  --text-title-2xl: 36px;   --text-title-2xl--line-height: 1.1;
+  --text-title-xl: 32px;    --text-title-xl--line-height: 1.1;
+  --text-title-lg: 28px;    --text-title-lg--line-height: 1.1;
+  --text-title-md: 24px;    --text-title-md--line-height: 1.1;
+  --text-title-sm: 20px;    --text-title-sm--line-height: 1.1;
+  --text-body-xl: 18px;     --text-body-xl--line-height: 1.5;
+  --text-body-lg: 16px;     --text-body-lg--line-height: 1.5;
+  --text-body-md: 14px;     --text-body-md--line-height: 1.5;
+  --text-body-sm: 12px;     --text-body-sm--line-height: 1.5;
+  --text-label-lg: 12px;    --text-label-lg--line-height: 1.2; --text-label-lg--letter-spacing: 0.1em;
+  --text-label-md: 11px;    --text-label-md--line-height: 1.2; --text-label-md--letter-spacing: 0.12em;
+  --text-label-sm: 10px;    --text-label-sm--line-height: 1.2; --text-label-sm--letter-spacing: 0.09em;
+  --text-button-lg: 24px;   --text-button-lg--line-height: 1.2;
+  --text-button-sm: 16px;   --text-button-sm--line-height: 1.2;
+
+  /* Radii — the only two the library defines */
+  --radius-lg: 16px;
+  --radius-sm: 8px;
 }
 
-/* Rund Display — headings */
+/* Rund Display — the only family. The library ships Regular, SemiBold and Bold. */
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Display"; src: url(/fonts/RundDisplay-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
 
-/* Rund Text — body copy */
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-SemiBold.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Rund Text"; src: url(/fonts/RundText-Black.woff2) format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
-
+/* ------------------------------------------------------------------ */
+/* Section themes                                                      */
+/* Every section (a band from one background change to the next) uses */
+/* exactly one theme: background, text, highlight — three colors max.  */
+/* Every pair below is in the library's "Text on background" table.   */
+/*   --t-bg   background                                               */
+/*   --t-fg   body text                                                */
+/*   --t-hl   highlight that is also safe as small text on --t-bg      */
+/*   --t-line card / input / divider stroke                            */
+/*   --t-solid-bg / --t-solid-fg  a filled card, reusing the 3 colors  */
+/* ------------------------------------------------------------------ */
 @layer base {
+  /* Dark — the default. mint 14.56, lagoon 11.82 on primary base. */
+  :root, .theme-base {
+    --t-bg: var(--color-primary-base);
+    --t-fg: var(--color-mint);
+    --t-hl: var(--color-lagoon);
+    --t-line: var(--color-lagoon);
+    --t-solid-bg: transparent;
+    --t-solid-fg: var(--color-mint);
+  }
+  /* Black — mint 17.94, lagoon 14.57 */
+  .theme-black {
+    --t-bg: var(--color-black);
+    --t-fg: var(--color-mint);
+    --t-hl: var(--color-lagoon);
+    --t-line: var(--color-lagoon);
+    --t-solid-bg: transparent;
+    --t-solid-fg: var(--color-mint);
+  }
+  /* Lagoon — black 14.57, grape 6.00; black cards with lagoon text 14.57 */
+  .theme-lagoon {
+    --t-bg: var(--color-lagoon);
+    --t-fg: var(--color-black);
+    --t-hl: var(--color-grape);
+    --t-line: var(--color-black);
+    --t-solid-bg: var(--color-black);
+    --t-solid-fg: var(--color-lagoon);
+  }
+  /* Lemon — black 16.92, grape 6.97; black cards with lemon text. Use the SECONDARY button here. */
+  .theme-lemon {
+    --t-bg: var(--color-lemon);
+    --t-fg: var(--color-black);
+    --t-hl: var(--color-grape);
+    --t-line: var(--color-black);
+    --t-solid-bg: var(--color-black);
+    --t-solid-fg: var(--color-lemon);
+  }
+  /* Mint — black 17.94, deep ocean 5.43; deep ocean cards with mint text 5.43 */
+  .theme-mint {
+    --t-bg: var(--color-mint);
+    --t-fg: var(--color-black);
+    --t-hl: var(--color-deep-ocean);
+    --t-line: var(--color-black);
+    --t-solid-bg: var(--color-deep-ocean);
+    --t-solid-fg: var(--color-mint);
+  }
+  /* Grape — mint 7.39, lemon 6.97 */
+  .theme-grape {
+    --t-bg: var(--color-grape);
+    --t-fg: var(--color-mint);
+    --t-hl: var(--color-lemon);
+    --t-line: var(--color-lemon);
+    --t-solid-bg: transparent;
+    --t-solid-fg: var(--color-mint);
+  }
+  /* Deep ocean — mint 5.43; mint cards with deep ocean text 5.43 */
+  .theme-deep-ocean {
+    --t-bg: var(--color-deep-ocean);
+    --t-fg: var(--color-mint);
+    --t-hl: var(--color-mint);
+    --t-line: var(--color-mint);
+    --t-solid-bg: var(--color-mint);
+    --t-solid-fg: var(--color-deep-ocean);
+  }
+  /* Bright two-color themes — black text, black cards carrying the background color as text */
+  .theme-sky-blue   { --t-bg: var(--color-sky-blue);     --t-solid-fg: var(--color-sky-blue); }
+  .theme-clover     { --t-bg: var(--color-clover);       --t-solid-fg: var(--color-clover); }
+  .theme-tangerine  { --t-bg: var(--color-tangerine);    --t-solid-fg: var(--color-tangerine); }
+  .theme-watermelon { --t-bg: var(--color-watermelon);   --t-solid-fg: var(--color-watermelon); }
+  .theme-dragon-fruit { --t-bg: var(--color-dragon-fruit); --t-solid-fg: var(--color-dragon-fruit); }
+  .theme-sky-blue, .theme-clover, .theme-tangerine, .theme-watermelon, .theme-dragon-fruit {
+    --t-fg: var(--color-black);
+    --t-hl: var(--color-black);
+    --t-line: var(--color-black);
+    --t-solid-bg: var(--color-black);
+  }
+
+  [class*="theme-"] {
+    background-color: var(--t-bg);
+    color: var(--t-fg);
+  }
+
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-coal-1000 font-sans antialiased;
-    line-height: 1.6;
+    @apply font-sans antialiased text-body-xl;
+    background-color: var(--t-bg);
+    color: var(--t-fg);
   }
   h1, h2, h3, h4 {
-    @apply font-display font-bold text-coal-black;
+    @apply font-display font-bold;
+    color: inherit;
     text-wrap: balance;
     line-height: 1.1;
-    letter-spacing: -0.01em;
+  }
+  a { color: inherit; }
+  :focus-visible {
+    outline: 3px solid var(--t-hl);
+    outline-offset: 3px;
   }
 }
 
+@layer utilities {
+  /* Theme-aware text and fills, so a component works in any section. */
+  .text-fg { color: var(--t-fg); }
+  .text-hl { color: var(--t-hl); }
+  .bg-fg { background-color: var(--t-fg); }
+  .bg-hl { background-color: var(--t-hl); }
+  .border-line { border-color: var(--t-line); }
+  .decoration-hl { text-decoration-color: var(--t-hl); }
+}
+
 @layer components {
-  /* Primary CTA — exact behavior from the live site:
-     yellow → pink on hover → red on press, chunky black border */
-  .btn-bina {
-    @apply inline-flex items-center justify-center gap-2 cursor-pointer
-      rounded-2xl border-2 border-coal-black bg-bina-yellow text-coal-black
-      px-6 py-3 font-display font-bold no-underline
-      transition-colors duration-300 ease-out
-      hover:bg-bina-pink active:bg-bina-red;
+  /* Buttons — bina Component Library.
+     Primary: lemon + black text. Secondary: black + lemon text.
+     Hover is always dragon fruit with black text. 2px black outline always.
+     One primary per section. On lemon use secondary; on black / primary base use primary. */
+  .btn-bina,
+  .btn-bina-secondary {
+    @apply inline-flex items-center justify-center whitespace-nowrap cursor-pointer
+      rounded-lg border-2 border-black px-6 py-4 font-display text-button-lg font-bold
+      no-underline transition-colors duration-200 ease-out;
   }
-  .btn-bina-ghost {
-    @apply inline-flex items-center justify-center gap-2 cursor-pointer
-      rounded-2xl border-2 border-coal-black bg-white text-coal-black
-      px-6 py-3 font-display font-bold no-underline
-      transition-colors duration-300 ease-out
-      hover:bg-bina-grass active:bg-bina-mint;
+  .btn-bina { @apply bg-lemon text-black; }
+  .btn-bina-secondary { @apply bg-black text-lemon; }
+  .btn-bina:hover,
+  .btn-bina-secondary:hover { @apply bg-dragon-fruit text-black; }
+  /* Small: 16px label, 40px tall, 8px corners — mobile and dense layouts. */
+  .btn-sm {
+    @apply min-h-10 rounded-sm px-4 py-0 text-button-sm;
   }
 
-  /* Card — 30px corners, chunky border */
+  /* Card — outlined in the section's stroke color, no fill, no fourth color. */
   .card-bina {
-    @apply rounded-[1.875rem] border-2 border-coal-black bg-white;
+    @apply rounded-lg border-2;
+    border-color: var(--t-line);
+  }
+  /* Filled card — reuses the section's colors (e.g. black card with lagoon text on lagoon). */
+  .card-bina-solid {
+    @apply rounded-lg border-2;
+    border-color: var(--t-line);
+    background-color: var(--t-solid-bg);
+    color: var(--t-solid-fg);
   }
 
-  /* Small pill (the site uses black pills with chromatic text) */
+  /* Mint card — filled mint, no stroke, 24px corners. Body text black (17.94); headline items
+     (name, number, tag, link) in deep ocean (5.43) via text-hl / pill-bina. Anything inside
+     that reads the theme (text-hl, pill-bina, border-line) turns deep ocean. */
+  .card-bina-mint {
+    @apply rounded-[24px];
+    --t-fg: var(--color-black);
+    --t-hl: var(--color-deep-ocean);
+    --t-line: var(--color-deep-ocean);
+    background-color: var(--color-mint);
+    color: var(--color-black);
+  }
+
+  /* Tag / pill — sentence-case label in the section highlight (no all-caps labels anywhere — Zeyu, 2026-11-04). Decorative tags don't count
+     toward a section's three colors, but their text still has to pass. */
   .pill-bina {
-    @apply inline-flex items-center rounded-full bg-coal-black px-4 py-1
-      font-display font-bold text-bina-pink;
+    @apply inline-flex items-center rounded-full border-2 px-3 py-1
+      font-display text-body-sm font-bold;
+    border-color: var(--t-hl);
+    color: var(--t-hl);
   }
 
-  /* Form field — matches the ESA select; use on every campaign form */
+  /* Hero eyebrow line — plain sentence-case line in the section's text color, no outline.
+     Used at the top of every page hero (Zeyu, 2026-11-04). */
+  .eyebrow-line {
+    @apply font-display text-body-md font-bold;
+    color: var(--t-fg);
+  }
+
+  /* Eyebrow label above a heading */
+  .eyebrow-bina {
+    @apply font-display text-body-md font-bold;
+    color: var(--t-hl);
+  }
+
+  /* Form field — outlined, never filled white. */
   .input-bina {
-    @apply w-full rounded-2xl border-2 border-coal-black bg-white px-4 py-4
-      font-display text-lg font-bold text-coal-black placeholder:font-medium
-      placeholder:text-coal-900/50
-      focus-visible:outline-4 focus-visible:outline-bina-pink;
+    @apply w-full rounded-lg border-2 bg-transparent px-4 py-4
+      font-display text-body-xl font-bold placeholder:font-normal placeholder:opacity-60;
+    border-color: var(--t-line);
+    color: var(--t-fg);
+  }
+  .input-bina:focus-visible {
+    outline: 3px solid var(--t-hl);
+    outline-offset: 2px;
   }
 }
