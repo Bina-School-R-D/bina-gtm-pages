@@ -26,7 +26,6 @@ const page = statePage(Astro.props.slug);
 const { copy, program, reimbursed, tier, awardLabel, monthLabel, questions, payRows } = page;
 const { school } = landing;
 // Per-state copy with a neutral fallback, so a state without its new copy yet still reads right.
-const moneyTitle = copy.moneyTitle ?? `What you pay with ${copy.state}'s funding`;
 const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina`;
 ---
 
@@ -94,13 +93,13 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       <p class="eyebrow-bina mb-2">
         {program.prog} · {tier.label}
       </p>
-      <h2 class="mb-6 text-title-xl sm:text-title-3xl">{moneyTitle}</h2>
 
       <!-- The answer first (Zeyu, 2026-11-04, option A): one big "you pay" line, with the inputs in
            a small line under it. The plan cards below show the working. -->
-      <p class="font-display text-title-2xl font-bold sm:text-title-4xl">
+      <!-- The section heading is the answer itself (Zeyu, 2026-11-04: "What you pay with your … ESA" removed). -->
+      <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
         You pay <span class="text-hl">~{monthLabel}</span> a month
-      </p>
+      </h2>
       <p class="mt-2 text-body-lg">
         on the bina yearly plan, {reimbursed ? `after ${copy.state} pays you back ${awardLabel}` : `after ${copy.state}'s ${awardLabel} award`}
       </p>
