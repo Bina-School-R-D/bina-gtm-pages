@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/school-calendar.json';
 import { calendarMonths, startDates } from '../lib/school-calendar.js';
+import { CTA } from '../lib/esa-states.js';
 
 const months = calendarMonths();
 const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -39,7 +40,12 @@ const cellStyle = (c) => {
     <div class="cal-toggle">
       <label class="handover">
         <span>Sign-up date</span>
-        <input type="date" id="handover" class="handover-input" />
+        <!-- The date reads "4 Nov 2026" (Zeyu, 2026-11-05). The native picker sits invisibly on top,
+             so a click or tap still opens the device's own calendar. -->
+        <span class="handover-field">
+          <span class="handover-text" id="handover-text" aria-hidden="true"></span>
+          <input type="date" id="handover" class="handover-input" />
+        </span>
       </label>
       <label class="switch">
         <input type="checkbox" id="starts-toggle" />
@@ -92,6 +98,9 @@ const cellStyle = (c) => {
         <li><span class="k k-open">00</span> Your child can start</li>
         <li class="key-next" id="key-next"></li>
       </ul>
+      <p class="cal-cta">
+        Ready to pick a start date? <a href={CTA}>Start your bina journey →</a>
+      </p>
       <a href="https://thebinaschool.com" class="cal-logo" aria-label="bina — home">
         <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
       </a>
@@ -126,10 +135,26 @@ const cellStyle = (c) => {
         : 'No start dates left this school year for that sign-up date.';
     }
     const params = new URLSearchParams(location.search);
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const handoverText = document.getElementById('handover-text');
+    const showDate = (iso) => {
+      const [y, m, d] = iso.split('-').map(Number);
+      handoverText.textContent = `${d} ${MONTHS[m - 1]} ${y}`;
+    };
+    // Clicking anywhere on the field opens the picker (Chrome needs showPicker for that).
+    handover.addEventListener('click', () => {
+      try {
+        handover.showPicker();
+      } catch (_) {
+        /* older browsers open it on their own */
+      }
+    });
     handover.value = isIso(params.get('signup')) ? params.get('signup') : today;
+    showDate(handover.value);
     applyHandover(handover.value);
     handover.addEventListener('change', () => {
       const iso = isIso(handover.value) ? handover.value : today;
+      showDate(iso);
       applyHandover(iso);
       if (iso === today) params.delete('signup');
       else params.set('signup', iso);
@@ -274,17 +299,36 @@ const cellStyle = (c) => {
     font-weight: 700;
     color: var(--muted);
   }
-  .handover-input {
-    font: inherit;
+  .handover-field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 700;
     color: var(--color-mint);
     background: var(--color-black);
     border: 2px solid var(--color-lagoon);
     border-radius: 999px;
-    padding: 0.2rem 0.75rem;
+    padding: 0.2rem 0.85rem;
+  }
+  .handover-field::after {
+    content: '';
+    width: 0.9rem;
+    height: 0.9rem;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .handover-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
     color-scheme: dark;
   }
-  .handover-input:focus-visible {
+  .handover-field:focus-within {
     outline: 3px solid var(--color-lagoon);
     outline-offset: 2px;
   }
@@ -453,8 +497,18 @@ const cellStyle = (c) => {
   .k-show { border-radius: 999px; }
   .k-open { background: var(--color-lemon); border-color: var(--color-lemon); color: var(--color-black); }
   .key-next { color: var(--color-lemon); }
+  .cal-cta {
+    margin: 0 0 0 auto;
+    color: var(--color-mint);
+    font-size: 1rem;
+  }
+  .cal-cta a {
+    color: var(--color-mint);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
   .cal-logo {
-    margin-left: auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
