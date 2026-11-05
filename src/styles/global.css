@@ -90,7 +90,7 @@
     --t-bg: var(--color-primary-base);
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lagoon);
-    --t-line: var(--color-lagoon);
+    --t-line: var(--color-mint); /* dividers are neutral, never the accent (Zeyu, 2026-11-05) */
     --t-solid-bg: var(--color-mint);
     --t-solid-fg: var(--color-black);
     --t-solid-hl: var(--color-deep-ocean);
@@ -100,7 +100,7 @@
     --t-bg: var(--color-black);
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lagoon);
-    --t-line: var(--color-lagoon);
+    --t-line: var(--color-mint); /* dividers are neutral, never the accent (Zeyu, 2026-11-05) */
     --t-solid-bg: var(--color-mint);
     --t-solid-fg: var(--color-black);
     --t-solid-hl: var(--color-deep-ocean);
@@ -140,7 +140,7 @@
     --t-bg: var(--color-grape);
     --t-fg: var(--color-mint);
     --t-hl: var(--color-lemon);
-    --t-line: var(--color-lemon);
+    --t-line: var(--color-mint);
     --t-solid-bg: var(--color-black);
     --t-solid-fg: var(--color-mint);
     --t-solid-hl: var(--color-lemon);
