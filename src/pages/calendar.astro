@@ -153,7 +153,7 @@ const cellStyle = (c) => {
           </div>
         )}
         {m.name === 'July' && (
-          /* Phones only: the logo fills the empty spot beside July, bottom left (Zeyu, 2026-11-05).
+          /* Phones only: the logo fills the empty spot beside July, bottom right (Zeyu, 2026-11-05).
              It sits on the black panel, so no container is needed. */
           <a href="https://thebinaschool.com" class="month-logo-cell" aria-label="bina — home">
             <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
@@ -697,7 +697,7 @@ const cellStyle = (c) => {
     }
     .month-art { justify-self: center; width: 7.5rem; height: auto; }
     .month-art-cell { display: grid; place-items: center; }
-    .month-logo-cell { display: flex; align-items: flex-end; justify-content: flex-start; padding-left: 0.5rem; }
+    .month-logo-cell { display: flex; align-items: flex-end; justify-content: flex-end; }
     .month-logo-cell img { width: 5.5rem; height: auto; }
     .cal-foot .cal-logo { display: none; } /* the footer logo moves into the panel on phones */
   }
