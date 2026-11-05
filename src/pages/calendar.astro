@@ -66,7 +66,6 @@ const cellStyle = (c) => {
     </div>
 
     <header class="cal-head">
-      <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="204" height="186" />
       <div class="cal-title">
         <h1>bina calendar {yearLabel}</h1>
         <p class="cal-intro">
@@ -75,21 +74,27 @@ const cellStyle = (c) => {
           biome they'll start in.
         </p>
       </div>
-      <img src="/images/calendar/year-27.png" alt="2027" class="cal-art" width="216" height="199" />
     </header>
 
-    <ul class="key key-calendar">
-      {LEGEND.map((l) => (
-        <li>
-          <span class:list={['k', l.k]}>00</span>
-          <span><strong>{l.label}</strong><span class="k-note">{l.note}</span></span>
-        </li>
-      ))}
-    </ul>
-    <ul class="key key-starts">
-      <li><span class="k k-open">00</span> <strong>Your child can start</strong></li>
-      <li class="key-next" id="key-next"></li>
-    </ul>
+    <!-- The year art sits either side of the legend, on the same line (Zeyu, 2026-11-05). -->
+    <div class="cal-legend">
+        <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="204" height="186" />
+      <div class="cal-legend-keys">
+      <ul class="key key-calendar">
+        {LEGEND.map((l) => (
+          <li>
+            <span class:list={['k', l.k]}>00</span>
+            <span><strong>{l.label}</strong><span class="k-note">{l.note}</span></span>
+          </li>
+        ))}
+      </ul>
+      <ul class="key key-starts">
+        <li><span class="k k-open">00</span> <strong>Your child can start</strong></li>
+        <li class="key-next" id="key-next"></li>
+      </ul>
+      </div>
+        <img src="/images/calendar/year-27.png" alt="2027" class="cal-art" width="216" height="199" />
+    </div>
 
     <div class="cal-grid">
       {months.map((m) => (
@@ -363,12 +368,41 @@ const cellStyle = (c) => {
   }
 
   /* ---- header ---- */
-  .cal-head {
+  .cal-legend {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.25rem;
+  }
+  .cal-legend .key { margin: 0; gap: 1rem 2rem; }
+  .cal-legend .key li { max-width: 15rem; }
+  .cal-legend .cal-art { width: clamp(4.5rem, 10vw, 10rem); }
+  /* Too narrow for one row: a tidy 2 × 2 grid instead of a ragged wrap. */
+  @media (max-width: 1300px) {
+    .cal-legend .key-calendar {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      justify-content: center;
+    }
+    .cal[data-mode='starts'] .cal-legend .key-calendar { display: none; }
+  }
+  @media (max-width: 640px) {
+    .cal-legend .key-calendar { grid-template-columns: 1fr; justify-content: stretch; }
+    .cal-legend .key li { max-width: none; }
+  }
+  .cal-legend .cal-art:last-child { justify-self: end; }
+  @media (max-width: 640px) {
+    .cal-legend { grid-template-columns: 1fr; }
+    .cal-legend .cal-art { display: none; }
+  }
+  .cal-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 1.25rem;
   }
   .cal-title {
     text-align: center;
@@ -384,7 +418,7 @@ const cellStyle = (c) => {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-lagoon);
+    color: var(--color-mint);
     font-size: clamp(2rem, 5vw, 4.5rem); /* display-sm/md/lg range */
     letter-spacing: -0.02em;
     line-height: 1;
@@ -394,9 +428,7 @@ const cellStyle = (c) => {
     width: clamp(4.5rem, 13vw, 12.5rem);
     height: auto;
   }
-  .cal-head .cal-art:last-child {
-    justify-self: end;
-  }
+
 
   /* ---- months ---- */
   .cal-grid {
@@ -409,7 +441,7 @@ const cellStyle = (c) => {
   }
   @media (max-width: 640px) {
     .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
-    .cal-head { gap: 0.25rem; }
+    .cal-head { gap: 0.25rem; margin-top: 1.5rem; }
   }
   .month h2 {
     margin: 0 0 0.5rem;
