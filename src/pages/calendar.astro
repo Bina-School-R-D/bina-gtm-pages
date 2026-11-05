@@ -5,6 +5,16 @@ import { calendarMonths, startDates } from '../lib/school-calendar.js';
 import { CTA } from '../lib/esa-states.js';
 
 const months = calendarMonths();
+const yearLabel = data.schoolYear.replace('/', '–'); // "2026–27"
+
+// Legend copy from the Notion 'Calendar page: content draft' (2026-11-05). "School break" and the
+// intro line are 🔍 placeholders until admissions confirms the break weeks.
+const LEGEND = [
+  { k: 'k-start', label: 'Start of a new biome', note: 'The first day of a new themed unit, and a good day to join' },
+  { k: 'k-unit', label: 'Biome unit', note: 'A school day within that biome' },
+  { k: 'k-show', label: 'Final Project Showcase', note: "Children present what they've made during the biome" },
+  { k: 'k-break', label: 'School break', note: 'No classes' },
+];
 const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 // bina Foundation palette per biome — display only. The biome dates and the colors in
@@ -57,9 +67,29 @@ const cellStyle = (c) => {
 
     <header class="cal-head">
       <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="195" height="124" />
-      <h1>bina calendar</h1>
+      <div class="cal-title">
+        <h1>bina calendar {yearLabel}</h1>
+        <p class="cal-intro">
+          The bina school year is built around biomes: themed units where children explore one part of
+          the natural world through every subject. Pick a date to see when your child can join and which
+          biome they'll start in.
+        </p>
+      </div>
       <img src="/images/calendar/year-27.png" alt="2027" class="cal-art" width="182" height="130" />
     </header>
+
+    <ul class="key key-calendar">
+      {LEGEND.map((l) => (
+        <li>
+          <span class:list={['k', l.k]}>00</span>
+          <span><strong>{l.label}</strong><span class="k-note">{l.note}</span></span>
+        </li>
+      ))}
+    </ul>
+    <ul class="key key-starts">
+      <li><span class="k k-open">00</span> <strong>Your child can start</strong></li>
+      <li class="key-next" id="key-next"></li>
+    </ul>
 
     <div class="cal-grid">
       {months.map((m) => (
@@ -89,15 +119,6 @@ const cellStyle = (c) => {
     </div>
 
     <footer class="cal-foot">
-      <ul class="key key-calendar">
-        <li><span class="k k-start">00</span> Start of a new biome</li>
-        <li><span class="k k-unit">00</span> Biome Unit</li>
-        <li><span class="k k-show">00</span> Final Project Showcase</li>
-      </ul>
-      <ul class="key key-starts">
-        <li><span class="k k-open">00</span> Your child can start</li>
-        <li class="key-next" id="key-next"></li>
-      </ul>
       <p class="cal-cta">
         Ready to pick a start date? <a href={CTA}>Start your bina journey →</a>
       </p>
@@ -349,12 +370,22 @@ const cellStyle = (c) => {
     gap: 1rem;
     margin-bottom: 1.25rem;
   }
+  .cal-title {
+    text-align: center;
+  }
+  .cal-intro {
+    max-width: 44rem;
+    margin: 0.75rem auto 0;
+    font-size: 1rem; /* body-lg */
+    line-height: 1.5;
+    color: var(--text);
+  }
   .cal-head h1 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 700;
     color: var(--color-lagoon);
-    font-size: clamp(2.5rem, 6.4vw, 5.5rem); /* display-lg max */
+    font-size: clamp(2rem, 5vw, 4.5rem); /* display-sm/md/lg range */
     letter-spacing: -0.02em;
     line-height: 1;
     text-align: center;
@@ -464,22 +495,36 @@ const cellStyle = (c) => {
     padding-top: 1.75rem;
     border-top: 1px solid var(--color-mint);
   }
+  /* Legend sits under the title, next to the calendar it explains (Notion draft, 2026-11-05). */
   .key {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 2.5rem;
-    margin: 0;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem 2.5rem;
+    margin: 0 0 2.25rem;
     padding: 0;
     list-style: none;
-    color: var(--muted);
-    font-weight: 700;
-    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.35;
   }
   .key li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.7rem;
+    max-width: 17rem;
+  }
+  .key strong {
+    display: block;
+    font-weight: 700;
+  }
+  .k-note {
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .key { flex-direction: column; align-items: stretch; gap: 0.9rem; }
+    .key li { max-width: none; }
   }
   .k {
     display: inline-flex;
@@ -490,11 +535,14 @@ const cellStyle = (c) => {
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: 0.3rem;
-    border: 1.5px solid var(--muted);
-    color: var(--muted);
+    flex: none;
+    border: 1.5px solid var(--color-mint);
+    color: var(--color-mint);
   }
   .k-unit { background: var(--color-mint); border-color: var(--color-mint); color: var(--color-black); }
   .k-show { border-radius: 999px; }
+  /* School break: a plain weekday number, no fill, no ring. */
+  .k-break { border-color: transparent; }
   .k-open { background: var(--color-lemon); border-color: var(--color-lemon); color: var(--color-black); }
   .key-next { color: var(--color-lemon); }
   .cal-cta {
