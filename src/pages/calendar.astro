@@ -48,15 +48,33 @@ const cellStyle = (c) => {
 >
   <div class="cal" data-mode="calendar">
     <div class="cal-toggle">
-      <label class="handover">
-        <span>Sign-up date</span>
-        <!-- The date reads "4 Nov 2026" (Zeyu, 2026-11-05). The native picker sits invisibly on top,
-             so a click or tap still opens the device's own calendar. -->
-        <span class="handover-field">
-          <span class="handover-text" id="handover-text" aria-hidden="true"></span>
-          <input type="date" id="handover" class="handover-input" />
-        </span>
-      </label>
+      <!-- Our own date picker (Zeyu, 2026-11-05): the browser's pop-up can't take bina's colors or
+           font. The hidden input keeps the value and the change event the rest of the page uses. -->
+      <div class="handover">
+        <span id="handover-label">Sign-up date</span>
+        <div class="handover-wrap">
+          <button type="button" class="handover-field" id="handover-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="dp" aria-labelledby="handover-label handover-text">
+            <span class="handover-text" id="handover-text"></span>
+          </button>
+          <input type="hidden" id="handover" />
+          <div class="dp" id="dp" role="dialog" aria-label="Choose a sign-up date" hidden>
+            <div class="dp-head">
+              <button type="button" class="dp-nav dp-prev" data-step="-1" aria-label="Previous month"></button>
+              <p class="dp-title" id="dp-title" aria-live="polite"></p>
+              <button type="button" class="dp-nav dp-next" data-step="1" aria-label="Next month"></button>
+            </div>
+            <table class="dp-grid" role="grid" aria-labelledby="dp-title">
+              <thead>
+                <tr>{weekdays.map((w) => <th scope="col">{w}</th>)}</tr>
+              </thead>
+              <tbody id="dp-body"></tbody>
+            </table>
+            <div class="dp-foot">
+              <button type="button" class="dp-today" id="dp-today">Today</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <label class="switch">
         <input type="checkbox" id="starts-toggle" />
         <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
@@ -171,14 +189,87 @@ const cellStyle = (c) => {
       const [y, m, d] = iso.split('-').map(Number);
       handoverText.textContent = `${d} ${MONTHS[m - 1]} ${y}`;
     };
-    // Clicking anywhere on the field opens the picker (Chrome needs showPicker for that).
-    handover.addEventListener('click', () => {
-      try {
-        handover.showPicker();
-      } catch (_) {
-        /* older browsers open it on their own */
+    // ---- date picker ----
+    const btn = document.getElementById('handover-btn');
+    const dp = document.getElementById('dp');
+    const dpTitle = document.getElementById('dp-title');
+    const dpBody = document.getElementById('dp-body');
+    const FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const pad = (n) => String(n).padStart(2, '0');
+    const toIso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const fromIso = (iso) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+    let focusDate = new Date();
+
+    function renderPicker() {
+      const y = focusDate.getFullYear();
+      const m = focusDate.getMonth();
+      dpTitle.textContent = `${FULL[m]} ${y}`;
+      const lead = (new Date(y, m, 1).getDay() + 6) % 7; // Monday first, like the calendar
+      const days = new Date(y, m + 1, 0).getDate();
+      const focusIso = toIso(focusDate);
+      let html = '<tr>';
+      for (let i = 0; i < lead; i++) html += '<td></td>';
+      for (let d = 1; d <= days; d++) {
+        const iso = `${y}-${pad(m + 1)}-${pad(d)}`;
+        const sel = iso === handover.value;
+        const cls = ['dp-day', sel && 'is-sel', iso === today && 'is-today'].filter(Boolean).join(' ');
+        html += `<td role="gridcell" aria-selected="${sel}"><button type="button" class="${cls}" data-iso="${iso}" tabindex="${iso === focusIso ? 0 : -1}" aria-label="${d} ${FULL[m]} ${y}${iso === today ? ', today' : ''}"${iso === today ? ' aria-current="date"' : ''}>${d}</button></td>`;
+        if ((lead + d) % 7 === 0 && d < days) html += '</tr><tr>';
       }
+      dpBody.innerHTML = html + '</tr>';
+    }
+    const focusDay = () => dpBody.querySelector('[tabindex="0"]')?.focus();
+    function openPicker() {
+      focusDate = fromIso(handover.value);
+      renderPicker();
+      dp.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      focusDay();
+    }
+    function closePicker(refocus = true) {
+      if (dp.hidden) return;
+      dp.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      if (refocus) btn.focus();
+    }
+    function choose(iso) {
+      handover.value = iso;
+      handover.dispatchEvent(new Event('change'));
+      closePicker();
+    }
+    btn.addEventListener('click', () => (dp.hidden ? openPicker() : closePicker()));
+    dp.querySelectorAll('.dp-nav').forEach((b) =>
+      b.addEventListener('click', () => {
+        focusDate = new Date(focusDate.getFullYear(), focusDate.getMonth() + Number(b.dataset.step), 1);
+        renderPicker();
+      }),
+    );
+    document.getElementById('dp-today').addEventListener('click', () => choose(today));
+    dpBody.addEventListener('click', (e) => {
+      const day = e.target.closest('.dp-day');
+      if (day) choose(day.dataset.iso);
     });
+    dpBody.addEventListener('keydown', (e) => {
+      const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      const d = new Date(focusDate);
+      if (e.key in moves) d.setDate(d.getDate() + moves[e.key]);
+      else if (e.key === 'PageUp') d.setMonth(d.getMonth() - 1);
+      else if (e.key === 'PageDown') d.setMonth(d.getMonth() + 1);
+      else if (e.key === 'Home') d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+      else if (e.key === 'End') d.setDate(d.getDate() + (6 - ((d.getDay() + 6) % 7)));
+      else return;
+      e.preventDefault();
+      focusDate = d;
+      renderPicker();
+      focusDay();
+    });
+    dp.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); closePicker(); }
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!dp.hidden && !e.target.closest('.handover-wrap')) closePicker(false);
+    });
+
     handover.value = isIso(params.get('signup')) ? params.get('signup') : today;
     showDate(handover.value);
     applyHandover(handover.value);
@@ -352,19 +443,132 @@ const cellStyle = (c) => {
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
   }
-  .handover-input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
+  .handover-field {
+    font: inherit;
+    font-weight: 700;
     cursor: pointer;
-    color-scheme: dark;
   }
-  .handover-field:focus-within {
+  .handover-field:focus-visible {
     outline: 3px solid var(--color-lagoon);
     outline-offset: 2px;
   }
+  .handover-wrap {
+    position: relative;
+  }
+
+  /* ---- date picker pop-up: black panel, mint text, lagoon selected day, mint ring on today ---- */
+  .dp {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 20;
+    width: max-content;
+    padding: 1rem;
+    background: var(--color-black);
+    color: var(--color-mint);
+    border: 1.5px solid var(--color-mint);
+    border-radius: 16px;
+    font-family: var(--font-display);
+  }
+  .dp[hidden] { display: none; }
+  /* Stacked top bar: centre the pop-up on the whole bar, so it never runs off a phone screen. */
+  @media (max-width: 900px) {
+    .cal-toggle { position: relative; }
+    .handover-wrap { position: static; }
+    .dp { top: 3.25rem; left: 50%; transform: translateX(-50%); }
+  }
+  .dp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .dp-title {
+    margin: 0;
+    font-size: 1.25rem; /* title-sm */
+    font-weight: 600;
+  }
+  .dp-nav {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-mint);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dp-nav::before {
+    content: '';
+    width: 1.1rem;
+    height: 1.1rem;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 5l-7 7 7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 5l-7 7 7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .dp-next::before { transform: scaleX(-1); }
+  .dp-nav:hover { color: var(--color-lagoon); }
+  .dp-grid {
+    border-collapse: separate;
+    border-spacing: 0.15rem;
+  }
+  .dp-grid th {
+    width: 2.5rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem; /* label */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+  .dp-grid :global(td) { padding: 0; }
+  :global(.dp-day) {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1.5px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-mint);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  :global(.dp-day:hover) { border-color: var(--color-mint); }
+  :global(.dp-day.is-today) { border-color: var(--color-mint); }
+  :global(.dp-day.is-sel) {
+    background: var(--color-lagoon);
+    border-color: var(--color-lagoon);
+    color: var(--color-black);
+    font-weight: 700;
+  }
+  :global(.dp-day:focus-visible),
+  .dp-nav:focus-visible,
+  .dp-today:focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 2px;
+  }
+  .dp-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+  .dp-today {
+    border: 0;
+    background: transparent;
+    padding: 0.25rem 0.5rem;
+    color: var(--color-lagoon);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .dp-today:hover { text-decoration-thickness: 3px; text-underline-offset: 2px; }
   .cal-info {
     margin: 0;
     padding: 0.25rem 0.875rem;
