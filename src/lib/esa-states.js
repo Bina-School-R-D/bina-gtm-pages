@@ -86,7 +86,7 @@ export function numberedSteps(d, reimbursed, callStep) {
           t: `Apply for the ${d.prog}`,
           d: d.applyWindow,
           url: d.applyUrl,
-          urlLabel: `Apply on ${d.s}'s site ↗`,
+          urlLabel: `Apply on ${d.s}'s site →`,
         },
         { who: 'state', t: 'Get approved and funded', d: d.approval },
       ],
