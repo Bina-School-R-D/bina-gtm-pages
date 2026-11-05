@@ -290,9 +290,13 @@
     border-color: var(--t-line);
     color: var(--t-fg);
   }
+  /* Active field: the outline itself turns the card's highlight (deep ocean on a mint card) and
+     thickens, instead of a second ring outside it (Zeyu, 2026-11-05). */
+  .input-bina:focus,
   .input-bina:focus-visible {
-    outline: 3px solid var(--t-hl);
-    outline-offset: 2px;
+    outline: none;
+    border-color: var(--t-hl);
+    box-shadow: 0 0 0 1px var(--t-hl);
   }
 }
 
