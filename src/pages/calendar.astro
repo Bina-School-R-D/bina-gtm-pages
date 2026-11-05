@@ -163,15 +163,17 @@ const cellStyle = (c) => {
       ))}
     </div>
 
+    <!-- Desktop/tablet: the logo sits in the panel's bottom-right corner, under July (Zeyu, 2026-11-05).
+         Phones use the spot beside July instead. -->
+    <a href="https://thebinaschool.com" class="panel-logo" aria-label="bina — home">
+      <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
+    </a>
     </div>
 
     <footer class="cal-foot">
       <p class="cal-cta">
         Ready to pick a start date? <a href={CTA}>Start your bina journey →</a>
       </p>
-      <a href="https://thebinaschool.com" class="cal-logo" aria-label="bina — home">
-        <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
-      </a>
     </footer>
   </div>
 
@@ -601,6 +603,7 @@ const cellStyle = (c) => {
 
   /* ---- header ---- */
   .cal-panel {
+    position: relative;
     --bg: var(--color-black);
     background: var(--color-black);
     border-radius: 16px; /* rounded-lg */
@@ -684,6 +687,12 @@ const cellStyle = (c) => {
     .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
     .cal-head { gap: 0.25rem; margin-top: 2.5rem; }
   }
+  .panel-logo {
+    position: absolute;
+    right: clamp(1.25rem, 2.5vw, 2.5rem);
+    bottom: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+  .panel-logo img { width: 6rem; height: auto; display: block; }
   .month-art-row,
   .month-art-cell,
   .month-logo-cell { display: none; }
@@ -699,7 +708,7 @@ const cellStyle = (c) => {
     .month-art-cell { display: grid; place-items: center; }
     .month-logo-cell { display: flex; align-items: flex-end; justify-content: flex-end; }
     .month-logo-cell img { width: 5.5rem; height: auto; }
-    .cal-foot .cal-logo { display: none; } /* the footer logo moves into the panel on phones */
+    .panel-logo { display: none; }
   }
   .month h2 {
     margin: 0 0 0.5rem;
