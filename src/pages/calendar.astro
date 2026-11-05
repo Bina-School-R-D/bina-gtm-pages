@@ -76,6 +76,8 @@ const cellStyle = (c) => {
       </div>
     </header>
 
+    <!-- Legend + months sit in one black rounded panel (Zeyu, 2026-11-05). -->
+    <div class="cal-panel">
     <!-- The year art sits either side of the legend, on the same line (Zeyu, 2026-11-05). -->
     <div class="cal-legend">
         <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="204" height="186" />
@@ -121,6 +123,8 @@ const cellStyle = (c) => {
           ))}
         </section>
       ))}
+    </div>
+
     </div>
 
     <footer class="cal-foot">
@@ -368,6 +372,15 @@ const cellStyle = (c) => {
   }
 
   /* ---- header ---- */
+  .cal-panel {
+    --bg: var(--color-black);
+    background: var(--color-black);
+    border-radius: 16px; /* rounded-lg */
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+  @media (max-width: 640px) {
+    .cal-panel { padding: 1.25rem 0.75rem; border-radius: 8px; }
+  }
   .cal-legend {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
