@@ -190,15 +190,14 @@ const cellStyle = (c) => {
 </BaseLayout>
 
 <style>
-  /* Dark primary base with mint text — the default bina Foundation theme. Muted and dim
-     are mint at lower strength, not new greys. */
+  /* Dark primary base with mint text — the default bina Foundation theme. Solid brand
+     colours only: mint for text and lines, weekends in a lighter weight, no faded tints. */
   :global(body) {
     background: var(--color-primary-base);
   }
   .cal {
     --bg: var(--color-primary-base);
-    --muted: color-mix(in srgb, var(--color-mint) 75%, transparent);
-    --dim: color-mix(in srgb, var(--color-mint) 45%, transparent);
+    --muted: var(--color-mint);
     --text: var(--color-mint);
     background: var(--bg);
     color: var(--text);
@@ -403,7 +402,8 @@ const cellStyle = (c) => {
   }
   .dow.wknd,
   .d.wknd {
-    color: var(--dim);
+    color: var(--color-mint);
+    font-weight: 400;
   }
   .d {
     display: flex;
@@ -462,7 +462,7 @@ const cellStyle = (c) => {
     gap: 1rem 2rem;
     margin-top: 2.5rem;
     padding-top: 1.75rem;
-    border-top: 1px solid var(--dim);
+    border-top: 1px solid var(--color-mint);
   }
   .key {
     display: flex;
@@ -493,7 +493,7 @@ const cellStyle = (c) => {
     border: 1.5px solid var(--muted);
     color: var(--muted);
   }
-  .k-unit { background: var(--muted); color: var(--bg); }
+  .k-unit { background: var(--color-mint); border-color: var(--color-mint); color: var(--color-black); }
   .k-show { border-radius: 999px; }
   .k-open { background: var(--color-lemon); border-color: var(--color-lemon); color: var(--color-black); }
   .key-next { color: var(--color-lemon); }
