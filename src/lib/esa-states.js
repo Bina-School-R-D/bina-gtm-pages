@@ -16,7 +16,8 @@ import landing from '../data/esa-landing.json';
 export const WEBSITE = 'https://thebinaschool.com';
 export const EMAIL = 'admissions@thebinaschool.com';
 export const CTA = 'https://form.thebinaschool.com/new';
-export const CTA_LABEL = 'Start your bina journey →';
+// Button label: no arrow on buttons (Zeyu, 2026-11-05); text links keep theirs.
+export const CTA_LABEL = 'Start your bina journey';
 
 /** State name → URL slug. All 50 names are ASCII words, so spaces are the only join. */
 export const stateSlug = (name) => name.toLowerCase().replace(/\s+/g, '-');
