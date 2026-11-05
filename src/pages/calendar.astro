@@ -117,6 +117,10 @@ const cellStyle = (c) => {
     </div>
 
     <div class="cal-grid">
+      <!-- Phones only: the 26 art sits on top of August, in its own row so September stays level (Zeyu, 2026-11-05). -->
+      <div class="month-art-row" aria-hidden="true">
+        <img src="/images/calendar/year-26.png" alt="" class="month-art" width="204" height="186" />
+      </div>
       {months.map((m) => (
         <section class="month" aria-label={m.name}>
           <h2>{m.name}</h2>
@@ -663,6 +667,17 @@ const cellStyle = (c) => {
   @media (max-width: 640px) {
     .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
     .cal-head { gap: 0.25rem; margin-top: 2.5rem; }
+  }
+  .month-art-row { display: none; }
+  @media (max-width: 640px) {
+    .month-art-row {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 0.75rem;
+      margin-bottom: -1.25rem; /* sit close to August's heading */
+    }
+    .month-art { justify-self: center; width: 7.5rem; height: auto; }
   }
   .month h2 {
     margin: 0 0 0.5rem;
