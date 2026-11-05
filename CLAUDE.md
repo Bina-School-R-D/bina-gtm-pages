@@ -68,7 +68,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | `text-label` | 14 | Bold, UPPERCASE, 10% tracking | every label and tag (see below) |
 | `text-button-lg/sm` | 24/16 | Bold | buttons |
 
-  **Nothing on any page is below 14px, at any screen width** (Zeyu, 2026-11-04). The library's label/lg (12px) is raised to 14px — **one exception: the state-card tags on `/esa` use label/lg at 12px (`text-label-sm`, Zeyu, 2026-11-04)**; `body-sm` and `label/md`/`label/sm` are not defined. Medium (500) is used only on the `/esa` state cards ("per child, per year", the text after "You pay:") and the source names in the `/reviews` rating badges (Zeyu, 2026-11-04).
+  **Nothing on any page is below 14px, at any screen width** (Zeyu, 2026-11-04). The library's label/lg (12px) is raised to 14px — **one exception: the state-card tags on `/esa` use label/lg at 12px (`text-label-sm`, Zeyu, 2026-11-04)**; `body-sm` and `label/md`/`label/sm` are not defined. Medium (500) is used for FAQ questions, the `/esa` state cards ("per child, per year", the text after "You pay:") and the source names in the `/reviews` rating badges (Zeyu, 2026-11-04/05).
 
 ### Page patterns (set on `/esa` and `/esa/<state>`, Zeyu 2026-11-04 — apply to every page)
 
@@ -81,7 +81,7 @@ Tokens live in `src/styles/global.css`. Tailwind's default palette is **switched
 | Stats | Big number + a one-line claim. Dark section, mint cards: deep ocean number, bold deep ocean claim, black detail line (`/student-results`, `/esa/<state>` proof). | `card-bina-mint` / `card-bina-solid` |
 | Step lists | Mint section, deep ocean cards with mint text, big number left, outlined mint tag right, black group label above each group; any number/✓ badges in the section are deep ocean with mint (Zeyu, 2026-11-04). | `EsaProcess` |
 | Charts & tables | No filled card around them — they sit on the section. On a dark section a chart may sit in a thin mint outline, with a dashed-mint vs solid-lagoon line pair, no fills, and its data table open below (lagoon uppercase headers, mint row lines) — `/student-results` growth curves (Zeyu, 2026-11-04). Bar charts are HTML horizontal bars on dark: lagoon bars, bold group label + student count on the left, lagoon value after the bar, true zero baseline — same at every width (`/student-results` tenure). On phones, a chart whose labels would drop under 14px gets an HTML bar-list or legend version below `md`. | — |
-| Accordions / FAQs | Full-width rows, thin line under each, question in body-xl Regular, "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
+| Accordions / FAQs | Full-width rows, thin line under each, question in title-sm (20px) Medium, answer in body-lg (16px), "+" on the right that turns into "×". No cards, no accent bars. | `<Accordion items={[{q,a}]} />` |
 | Number and check badges | Filled, never outlined: lagoon circle with a black number or ✓ on dark sections, deep ocean circle with mint on mint. | — |
 | Notes | A note under a block starts with `*`, no box, no icon (lagoon on dark, black on light). A single highlighted fact is a check-line: filled circle + bold text. | — |
 | Dividers | No decorative rules between blocks (hero checklist, closing section). Only list rows (accordions, tables, checklists) get lines. **Divider lines are a neutral color, never the accent:** mint on dark, black on light — never lagoon (Zeyu, 2026-11-05). Set by `--t-line`, so use `border-line`. | `border-line` |

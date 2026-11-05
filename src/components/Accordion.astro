@@ -2,7 +2,7 @@
 /*
  * The one accordion style for every page (the /esa/<state> FAQ, Zeyu 2026-11-04):
  * full-width rows, a thin divider in the section's line color under each, the question in
- * body-xl Regular, and a "+" on the right that turns into "×" when open. No cards, no accent bars.
+ * title-sm (20px) Medium and the answer in body-lg (16px), so the question reads first (Zeyu, 2026-11-05), and a "+" on the right that turns into "×" when open. No cards, no accent bars.
  * Colors come from the section theme, so it works on any background.
  */
 interface Props {
@@ -16,7 +16,7 @@ const { items } = Astro.props;
   {
     items.map((f) => (
       <details class="group border-b border-line">
-        <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-body-xl [&::-webkit-details-marker]:hidden">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-title-sm font-medium [&::-webkit-details-marker]:hidden">
           <span>{f.q}</span>
           <span
             class="flex-none text-title-md leading-none transition-transform duration-200 group-open:rotate-45"
@@ -25,7 +25,7 @@ const { items } = Astro.props;
             +
           </span>
         </summary>
-        <p class="max-w-3xl pb-5 pr-10">
+        <p class="max-w-3xl pb-5 pr-10 text-body-lg">
           {f.link && f.a.includes(f.link.text) ? (
             <>
               {f.a.slice(0, f.a.indexOf(f.link.text))}
