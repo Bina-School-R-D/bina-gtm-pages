@@ -320,6 +320,10 @@ const steps = [
       redirect();
     });
 
-    show(1);
+    // Preview only: ?step=2 or ?step=3 opens that step directly, so a design review can link to
+    // it. Limited to local hosts, so the live page always starts at step 1.
+    const previewStep = Number(params.get('step'));
+    const localHost = /^(localhost|127\.0\.0\.1)$/.test(location.hostname || '');
+    show(localHost && (previewStep === 2 || previewStep === 3) ? previewStep : 1);
   </script>
 </BaseLayout>
