@@ -239,11 +239,10 @@ const cellStyle = (c) => {
   }
 
   /* ---- toggle ---- */
-  /* Toggle sits dead centre; the sign-up line has its own slot on the right, and is only
-     made invisible (never removed), so switching on moves nothing — not the toggle, not the grid. */
+  /* The info line is only made invisible (never removed), so switching on moves nothing. */
   .cal-toggle {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 0.5rem 1.25rem;
     min-height: 2.75rem;
@@ -252,11 +251,14 @@ const cellStyle = (c) => {
     grid-column: 1;
     justify-self: start;
   }
+  /* Toggle on the right edge (Zeyu, 2026-11-05); its info line sits just left of it. */
   .cal-toggle .switch {
-    grid-column: 2;
+    grid-column: 3;
+    grid-row: 1;
   }
   .cal-toggle .cal-info {
-    grid-column: 3;
+    grid-column: 2;
+    grid-row: 1;
     justify-self: end;
   }
   .cal-info.is-off {
@@ -271,11 +273,13 @@ const cellStyle = (c) => {
     .cal-toggle .switch,
     .cal-toggle .cal-info {
       grid-column: 1;
+      grid-row: auto;
       justify-self: center;
     }
   }
   .switch {
     display: inline-flex;
+    flex-direction: row-reverse; /* text first, toggle on its right (Zeyu, 2026-11-05) */
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
@@ -537,8 +541,7 @@ const cellStyle = (c) => {
     justify-content: space-between;
     gap: 1rem 2rem;
     margin-top: 2.5rem;
-    padding-top: 1.75rem;
-    border-top: 1px solid var(--color-mint);
+    /* no rule above the footer (Zeyu, 2026-11-05) */
   }
   /* Legend sits under the title, next to the calendar it explains (Notion draft, 2026-11-05). */
   .key {
