@@ -21,12 +21,12 @@ const steps = [
   noindex={true}
 >
   <!-- hero -->
-  <header class="theme-lemon">
+  <header class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-16">
       <p class="eyebrow-line mb-5"><span class="normal-case">bina</span> Adventure · ages 4–15</p>
       <h1 class="mb-4 max-w-2xl text-title-3xl sm:text-display-sm">
         Book a bina
-        <span class="text-deep-ocean">Adventure</span>
+        <span class="text-lagoon">Adventure</span>
       </h1>
       <p class="max-w-2xl text-body-xl">
         A live, 60-minute group class where your child experiences bina firsthand — no commitment,
@@ -39,23 +39,31 @@ const steps = [
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-12">
       <!-- progress -->
-      <ol id="progress" class="mb-6 flex flex-wrap gap-2" aria-label="Booking steps">
+      <!-- progress: numbered circles joined by dashed lines, label under each (Zeyu, 2026-11-05).
+           Reached steps fill lagoon; the rest are lagoon outlines. -->
+      <ol id="progress" class="mb-10 flex max-w-2xl list-none items-start p-0" aria-label="Booking steps">
         {
-          steps.map((s) => (
-            <li
-              data-step-pill={s.n}
-              class="inline-flex items-center gap-2 rounded-full border-2 border-line px-4 py-1.5 font-display text-label uppercase transition-colors duration-200 data-[active]:bg-lagoon data-[active]:text-black"
-            >
-              <span>{s.n}</span> {s.label}
-            </li>
+          steps.map((s, i) => (
+            <>
+              {i > 0 && (
+                <li aria-hidden="true" class="mt-5 h-0 flex-1 border-t-2 border-dashed border-lagoon"></li>
+              )}
+              <li data-step-pill={s.n} class="step-dot group flex w-24 flex-none flex-col items-center gap-2 text-center">
+                <span class="grid h-10 w-10 place-items-center rounded-full border-2 border-lagoon font-display text-body-lg font-bold text-mint transition-colors duration-200 group-data-[active]:bg-lagoon group-data-[active]:text-black">
+                  {s.n}
+                </span>
+                <span class="font-display text-body-lg font-bold text-mint group-data-[active]:text-lagoon">{s.label}</span>
+              </li>
+            </>
           ))
         }
       </ol>
 
-      <div class="card-bina-solid max-w-2xl p-6 sm:p-10">
+      <!-- "card-bina" has no styles; it is the hook the step script (and check-go-lead-event) scrolls to. -->
+      <div class="card-bina card-bina-solid max-w-2xl p-6 sm:p-10">
         <!-- step 1 · intro -->
         <div data-step="1">
-          <h2 class="mb-4 text-title-lg sm:text-title-xl">What is a bina Adventure class?</h2>
+          <h2 class="mb-4 text-title-lg text-hl sm:text-title-xl">What is a bina Adventure class?</h2>
           <p class="mb-4">{intro.whatItIs}</p>
           <p class="mb-8">{intro.whyItMatters}</p>
           <button type="button" data-next class="btn-bina w-full sm:w-auto">
@@ -65,7 +73,7 @@ const steps = [
 
         <!-- step 2 · contact -->
         <form data-step="2" hidden novalidate>
-          <h2 class="mb-6 text-title-lg sm:text-title-xl">First, a bit about you</h2>
+          <h2 class="mb-6 text-title-lg text-hl sm:text-title-xl">First, a bit about you</h2>
 
           <label for="parent-name" class="mb-2 block font-display text-title-sm">Your name</label>
           <input
@@ -121,7 +129,7 @@ const steps = [
 
         <!-- step 3 · child + age group -->
         <form data-step="3" hidden novalidate>
-          <h2 class="mb-6 text-title-lg sm:text-title-xl">Now, about your child</h2>
+          <h2 class="mb-6 text-title-lg text-hl sm:text-title-xl">Now, about your child</h2>
 
           <label for="child-name" class="mb-2 block font-display text-title-sm">
             Your child's first name
