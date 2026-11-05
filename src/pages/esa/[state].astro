@@ -87,9 +87,6 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   <!-- THE MONEY: dark section — the answer in one line, then one card per plan, then a note -->
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="eyebrow-bina mb-2">
-        {program.prog} · {tier.label}
-      </p>
 
       <!-- The answer first (Zeyu, 2026-11-04, option A): one big "you pay" line, with the inputs in
            a small line under it. The plan cards below show the working. -->
@@ -97,7 +94,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
         You pay <span class="text-hl">~{monthLabel}</span> a month
       </h2>
-      <p class="mt-2 text-body-lg">
+      <p class="mt-2 font-display text-title-md font-normal">
         on the bina yearly plan, {reimbursed ? `after ${copy.state} pays you back ${awardLabel}` : `after ${copy.state}'s ${awardLabel} award`}
       </p>
 
@@ -179,7 +176,6 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
     copy.qualifies && (
       <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
-          <p class="eyebrow-bina mb-2">Who qualifies</p>
           <h2 class="mb-8 text-title-xl sm:text-title-3xl">{copy.qualifies.title}</h2>
           <!-- A checklist, not cards: one row per condition, ✓ + label on the left, and the
                first sentence (the answer) in bold so a scanner gets it without reading on. -->
