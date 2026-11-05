@@ -121,7 +121,8 @@ const cellStyle = (c) => {
       <div class="month-art-row" aria-hidden="true">
         <img src="/images/calendar/year-26.png" alt="" class="month-art" width="204" height="186" />
       </div>
-      {months.map((m) => (
+      {months.map((m, i) => (
+        <Fragment>
         <section class="month" aria-label={m.name}>
           <h2>{m.name}</h2>
           <div class="days">
@@ -144,6 +145,14 @@ const cellStyle = (c) => {
             <p class="biome-key" style={`--c:${tone(b.name).color}`}>Start of biome: {b.name}</p>
           ))}
         </section>
+        {m.name === 'December' && (
+          /* Phones only: the 27 art takes January's old spot next to December, and January starts
+             a new row (Zeyu, 2026-11-05). */
+          <div class="month-art-cell" aria-hidden="true">
+            <img src="/images/calendar/year-27.png" alt="" class="month-art" width="216" height="199" />
+          </div>
+        )}
+        </Fragment>
       ))}
     </div>
 
@@ -668,7 +677,8 @@ const cellStyle = (c) => {
     .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
     .cal-head { gap: 0.25rem; margin-top: 2.5rem; }
   }
-  .month-art-row { display: none; }
+  .month-art-row,
+  .month-art-cell { display: none; }
   @media (max-width: 640px) {
     .month-art-row {
       display: grid;
@@ -678,6 +688,7 @@ const cellStyle = (c) => {
       margin-bottom: -1.25rem; /* sit close to August's heading */
     }
     .month-art { justify-self: center; width: 7.5rem; height: auto; }
+    .month-art-cell { display: grid; place-items: center; }
   }
   .month h2 {
     margin: 0 0 0.5rem;
