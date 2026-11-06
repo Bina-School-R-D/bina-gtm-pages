@@ -210,12 +210,11 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'feature') {
               const f = item.item;
               return (
-                <a
-                  href={f.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <!-- Like the review cards: the card itself doesn't react to hover; only the
+                     platform link fades (Zeyu, 2026-11-06). -->
+                <div
                   class:list={[
-                    'wall-cell card-bina-solid relative flex flex-col px-7 py-5 no-underline',
+                    'wall-cell card-bina-solid relative flex flex-col px-7 py-5',
                     spanFor(idx),
                   ]}
                 >
@@ -238,7 +237,12 @@ const monthYear = (iso: string | null) =>
                     </span>
                   </div>
 
-                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-body-md font-display font-bold underline underline-offset-2">
+                  <a
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mb-2 inline-flex shrink-0 items-center gap-1 self-start text-body-md font-display font-bold underline underline-offset-2"
+                  >
                     {f.cta}
                     <svg
                       aria-hidden="true"
@@ -254,14 +258,14 @@ const monthYear = (iso: string | null) =>
                       <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
                     </svg>
                     <span class="sr-only">(opens in a new tab)</span>
-                  </p>
+                  </a>
 
                   <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-lg font-bold">
                     {f.title}
                   </p>
 
                   <div class="review-body min-h-0 text-body-lg">{f.detail}</div>
-                </a>
+                </div>
               );
             }
 
