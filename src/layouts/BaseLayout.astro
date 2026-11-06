@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import BrandText from '../components/BrandText.astro';
 
 interface Props {
   title: string;
@@ -27,29 +28,63 @@ const {
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
-// Footer links: the thebinaschool.com footer, column by column (copied 2026-11-06).
+// Footer links: the grouped ("column") footer built for thebinaschool.com on the stage branch
+// edit/zeyu/go-pages-design (Akis asked for grouped columns; not on the main site's production
+// yet). Same groups, labels and order; restyled to bina Foundation (Zeyu, 2026-11-06).
+// Main-site links are absolute; the go.bina pages stay relative so they follow the pages when
+// they move to the main domain.
 const M = 'https://thebinaschool.com';
-const footerColumns = [
-  [
-    { label: 'What type of school is best?', href: `${M}/what-type-of-school-is-best` },
-    { label: 'Homeschooling guides — USA', href: `${M}/homeschooling-guides` },
-    { label: 'Homeschooling guides — Europe', href: `${M}/homeschooling-guides-europe` },
-    { label: 'Education Savings Account', href: `${M}/esa` },
-  ],
-  [
-    { label: 'Education', href: `${M}/education` },
-    { label: 'Primary School', href: `${M}/primary-school` },
-    { label: 'Middle School', href: `${M}/middle-school` },
-    { label: 'Open Positions', href: `${M}/careers` },
-    { label: 'Blog', href: `${M}/blog` },
-    { label: 'Join the bina school partner program', href: 'https://form.thebinaschool.com/new-partner', external: true },
-  ],
-  [
-    { label: 'Imprint', href: `${M}/imprint` },
-    { label: 'Privacy', href: `${M}/privacy` },
-    { label: 'Legal', href: `${M}/legal` },
-    { label: 'Partner T&Cs', href: `${M}/partner-program-terms` },
-  ],
+type FooterLink = { label: string; href: string; external?: boolean };
+const footerGroups: { title: string; links: FooterLink[] }[] = [
+  {
+    title: 'School',
+    links: [
+      { label: 'Education', href: `${M}/education` },
+      { label: 'Primary School', href: `${M}/primary-school` },
+      { label: 'Middle School', href: `${M}/middle-school` },
+      { label: 'Teachers', href: `${M}/teachers` },
+    ],
+  },
+  {
+    title: 'Join bina',
+    links: [
+      { label: 'Admissions', href: `${M}/admissions` },
+      { label: 'Tuition', href: `${M}/tuition` },
+      { label: 'Open House', href: `${M}/open-house` },
+      { label: 'Education Savings Account', href: '/esa' },
+    ],
+  },
+  {
+    title: 'Results & reviews',
+    links: [
+      { label: 'Student results', href: '/student-results' },
+      { label: 'Family survey', href: '/family-survey' },
+      { label: 'Reviews', href: '/reviews' },
+    ],
+  },
+  {
+    title: 'Guides',
+    links: [
+      { label: 'What type of school is best?', href: `${M}/what-type-of-school-is-best` },
+      { label: 'Homeschooling guides — USA', href: `${M}/homeschooling-guides` },
+      { label: 'Homeschooling guides — Europe', href: `${M}/homeschooling-guides-europe` },
+      { label: 'Blog', href: `${M}/blog` },
+    ],
+  },
+  {
+    title: 'About bina',
+    links: [
+      { label: 'About us', href: `${M}/about` },
+      { label: 'Open Positions', href: `${M}/careers` },
+      { label: 'Join the bina school partner program', href: 'https://form.thebinaschool.com/new-partner', external: true },
+    ],
+  },
+];
+const footerLegalLinks: FooterLink[] = [
+  { label: 'Imprint', href: `${M}/imprint` },
+  { label: 'Privacy', href: `${M}/privacy` },
+  { label: 'Legal', href: `${M}/legal` },
+  { label: 'Partner T&Cs', href: `${M}/partner-program-terms` },
 ];
 const socials = [
   { label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/company/thebinaschool' },
@@ -196,32 +231,43 @@ const socials = [
     </main>
 
     {!bare && (
-    <!-- Footer: the thebinaschool.com footer (links, big logo art, Follow-us rail), in bina
-         Foundation colors — mint tagline, lagoon links, lagoon rail, the new peeking logo at the bottom (Zeyu, 2026-11-06). Main-site
-         links are absolute. Change it on the main site first, then mirror it here. -->
+    <!-- Footer (Zeyu, 2026-11-06): the main site's grouped footer — tagline column, one column per
+         group (2 on phones, 3 from 640px, tagline + 5 from 1024px), the legal links in one row above
+         the peeking logo behind a thin line, and the Follow-us rail. Black / mint / lagoon: mint
+         tagline, group titles and legal links (the old purple), lagoon group links (the old
+         turquoise). -->
     <footer
-      class:list={['theme-black relative z-10 overflow-hidden pt-10 md:pt-12', flushFooter ? 'mt-0' : 'mt-20']}
+      class:list={['theme-black relative z-10 overflow-hidden pt-12 md:pt-16', flushFooter ? 'mt-0' : 'mt-20']}
     >
       <div class="px-5 sm:px-10">
-        <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-5 sm:gap-x-8 md:mb-10">
-          <p class="font-display text-title-sm font-medium text-mint xl:text-title-md xl:font-medium">
+        <div class="mb-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-8 md:mb-12 lg:grid-cols-[1.4fr_repeat(5,minmax(0,1fr))]">
+          <p class="col-span-2 font-display text-title-sm font-medium text-mint sm:col-span-3 lg:col-span-1">
             A global, mobile, whole schooling experience for 4–15 year olds that fits your family everywhere
           </p>
-          <div aria-hidden="true" class="hidden sm:block"></div>
-          {footerColumns.map((col) => (
-            <ul class="flex flex-col gap-3">
-              {col.map((l) => (
-                <li>
-                  <a
-                    href={l.href}
-                    {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    class="font-display text-body-xl font-medium text-lagoon underline decoration-transparent xl:text-title-sm xl:font-medium"
-                  >{l.label}</a>
-                </li>
-              ))}
-            </ul>
+          {footerGroups.map((g) => (
+            <nav aria-label={g.title}>
+              <h2 class="mb-4 font-display text-label uppercase text-mint"><BrandText text={g.title} /></h2>
+              <ul class="flex flex-col gap-3">
+                {g.links.map((l) => (
+                  <li>
+                    <a
+                      href={l.href}
+                      {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      class="font-display text-body-lg font-medium text-lagoon underline decoration-transparent xl:text-body-xl xl:font-medium"
+                    >{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           ))}
         </div>
+        <ul class="mb-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 md:mb-10">
+          {footerLegalLinks.map((l) => (
+            <li>
+              <a href={l.href} class="font-display text-body-lg font-medium text-mint underline decoration-transparent xl:text-body-xl xl:font-medium">{l.label}</a>
+            </li>
+          ))}
+        </ul>
         {Astro.slots.has('footer-note') && <div class="mb-8 md:mb-10"><slot name="footer-note" /></div>}
       </div>
       <img src="/images/peeking-logo.svg" loading="lazy" decoding="async" alt="bina" width="440" height="125" class="block h-auto w-full" />
