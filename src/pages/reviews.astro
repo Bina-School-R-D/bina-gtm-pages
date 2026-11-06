@@ -155,10 +155,10 @@ const monthYear = (iso: string | null) =>
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-deep-ocean px-3 py-1.5 font-display text-label uppercase text-deep-ocean no-underline transition-colors duration-200 hover:border-black hover:bg-black hover:text-lagoon"
+                  class="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 font-display text-label uppercase text-lagoon no-underline transition-colors duration-200 hover:bg-dragon-fruit hover:text-black"
                 >
                   {sourceLogo[src.key] ? (
-                    <!-- The logo as a mask filled with the text color, so it turns lagoon with the label on hover. -->
+                    <!-- The logo as a mask filled with the text color, so it matches the label color. -->
                     <span
                       aria-hidden="true"
                       class="badge-logo h-[1.125rem] w-[1.125rem] shrink-0 bg-current"
@@ -168,7 +168,7 @@ const monthYear = (iso: string | null) =>
                     <span
                       aria-hidden="true"
                       class:list={[
-                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-black text-body-md text-lagoon',
+                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-lagoon text-body-md text-black',
                       ]}
                     >
                       {src.mark}
