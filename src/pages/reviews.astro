@@ -379,7 +379,7 @@ const monthYear = (iso: string | null) =>
                 </div>
 
                 <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
-                  See more →
+                  <span class="review-more-label">See more →</span>
                 </button>
 
                 <dialog id={`dlg-${r.id}`} class="review-dialog card-bina-solid">
@@ -509,14 +509,17 @@ const monthYear = (iso: string | null) =>
       font-weight: 700;
       font-size: 1rem;
       color: var(--t-fg);
+    }
+    /* Hover: the label fades to 80%, like every link (Zeyu, 2026-11-06). The label fades, not the
+       button, because the button's own fill covers the faded review text behind it. */
+    .review-more-label {
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
       text-underline-offset: 4px;
-      transition: text-decoration-thickness 0.15s ease-out, text-underline-offset 0.15s ease-out;
+      transition: opacity 0.15s ease-out;
     }
-    .review-more:hover {
-      text-decoration-thickness: 3px;
-      text-underline-offset: 3px;
+    .review-more:hover .review-more-label {
+      opacity: 0.8;
     }
 
     /* The full review, in a native dialog — no library, Esc and backdrop close for free. */
