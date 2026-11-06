@@ -233,7 +233,7 @@ const socials = [
     {!bare && (
     <!-- Footer (Zeyu, 2026-11-06): the main site's grouped footer — tagline column, one column per
          group (2 on phones, 3 from 640px, tagline + 5 from 1024px), the legal links in one row above
-         the peeking logo behind a thin line, and the Follow-us rail. Black / mint / lagoon: mint
+         the peeking logo (no divider line), and the Follow-us rail. Black / mint / lagoon: mint
          tagline, group titles and legal links (the old purple), lagoon group links (the old
          turquoise). -->
     <footer
@@ -261,7 +261,7 @@ const socials = [
             </nav>
           ))}
         </div>
-        <ul class="mb-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 md:mb-10">
+        <ul class="mb-8 flex flex-wrap gap-x-6 gap-y-2 md:mb-10">
           {footerLegalLinks.map((l) => (
             <li>
               <a href={l.href} class="font-display text-body-lg font-medium text-mint underline decoration-transparent xl:text-body-xl xl:font-medium">{l.label}</a>
