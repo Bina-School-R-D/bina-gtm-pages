@@ -80,7 +80,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                       <strong class="font-display text-title-md">
                         <span class="sr-only">Step {step.n}: </span>{step.t}
                       </strong>
-                      <span class="inline-flex flex-none items-center rounded-full bg-black px-3 py-1 font-display text-label uppercase text-mint">
+                      <span class="inline-flex flex-none items-center rounded-full bg-mint px-3 py-1 font-display text-label uppercase text-deep-ocean">
                         <BrandText text={step.who === 'state' ? `On ${copy.state}'s site` : sentence(CHIP[step.who].label)} />
                       </span>
                     </span>
