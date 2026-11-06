@@ -67,10 +67,9 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
         {
           states.map((s, i) => (
             <li class={span(i)}>
-              <a
-                href={`/esa/${s.slug}`}
-                class="card-bina-mint flex h-full flex-col p-6 transition-transform hover:-translate-y-0.5"
-              >
+              <!-- The card itself doesn't react to hover; only the link at the bottom fades, like every
+                   other link (Zeyu, 2026-11-06). -->
+              <div class="card-bina-mint flex h-full flex-col p-6">
                 <!-- Tag above the name, so every card starts the same way whatever the tag length. -->
                 <span class="mb-3 self-start pill-bina text-label-sm !border-black !bg-black !text-mint">{s.badge.label}</span>
                 <strong class="mb-1 block font-display text-title-lg font-bold text-hl">{s.state}</strong>
@@ -84,10 +83,10 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                     <strong class="font-bold">You pay:</strong> <span class="font-display font-medium">{s.payLabel}</span>
                   </span>
                 </span>
-                <span class="mt-auto font-bold underline decoration-2 underline-offset-4">
+                <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
                   bina for {s.state} families →
-                </span>
-              </a>
+                </a>
+              </div>
             </li>
           ))
         }
