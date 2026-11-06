@@ -1,0 +1,331 @@
+---
+// Public, read-only copy of the bina Foundation design system (brand rules + tokens),
+// for people who can't open the claude.ai design-system artifact. Content lives in
+// src/data/design-system.json; Figma is the source of truth — see _source there.
+// The page follows its own rules: each band is one theme of at most three colors.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ds from '../data/design-system.json';
+
+const hex = Object.fromEntries(ds.colors.map((c) => [c.name, c.hex]));
+const swatch = (name: string) => hex[name.replace(' (CTA block)', '')] ?? '#1C1C1C';
+const sections = [
+  ['principles', 'Principles'],
+  ['colors', 'Colors'],
+  ['pairings', 'Text on background'],
+  ['limits', 'Combination limits'],
+  ['type', 'Typography'],
+  ['logo', 'Logo'],
+  ['button', 'Button'],
+  ['landscape', 'Landscape'],
+  ['people', 'People'],
+  ['collages', 'Collages'],
+  ['templates', 'Templates'],
+];
+---
+
+<BaseLayout
+  title="bina Foundation | Design system"
+  description="The bina Foundation design system: colors, contrast pairings, typography, logo, button and imagery rules."
+  noindex={true}
+  bare={true}
+>
+  <header class="band hero">
+    <div class="wrap">
+      <p class="label">Design system</p>
+      <h1>bina Foundation</h1>
+      <p class="lead">The rules and tokens behind every bina layout. Figma is the source of truth; logos, fonts and imagery download from the <a href={ds.notion}>Brand Assets library in Notion</a>.</p>
+      <nav aria-label="Sections">
+        {sections.map(([id, name]) => <a href={`#${id}`}>{name}</a>)}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="principles" class="band dark">
+      <div class="wrap">
+        <h2>Four principles</h2>
+        <ol class="rules">
+          {ds.principles.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="colors" class="band mint">
+      <div class="wrap">
+        <h2>Colors</h2>
+        <p>Thirteen palette colors plus decorative white. Click a hex to copy it.</p>
+        <ul class="swatches">
+          {ds.colors.map((c) => (
+            <li>
+              <span class="chip" style={`background:${c.hex}`}></span>
+              <div>
+                <strong>{c.name}</strong>
+                <button type="button" class="copy" data-copy={c.hex}>{c.hex}</button>
+                <code>--{c.token}</code>
+                <p>{c.usage}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="pairings" class="band dark">
+      <div class="wrap">
+        <h2>Text on background</h2>
+        <p><strong>Body</strong> = 4.5:1 or higher, any size. <strong>Large only</strong> = 3:1 or higher, headlines from 24px (19px bold). Any pairing not listed fails and is not allowed. Color-blind markers come from simulating red-, green- and blue-blindness.</p>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Background</th><th>Body text</th><th>Large only</th></tr></thead>
+            <tbody>
+              {ds.pairings.map(([bg, body, large]) => (
+                <tr>
+                  <th scope="row"><span class="dot" style={`background:${hex[bg]}`}></span>{bg}</th>
+                  <td>{body}</td>
+                  <td>{large}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="limits" class="band lagoon">
+      <div class="wrap">
+        <h2>Combination limits: three colors per section</h2>
+        <ol class="rules">
+          {ds.combinationLimits.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="type" class="band dark">
+      <div class="wrap">
+        <h2>Typography</h2>
+        <p>One family: Rund Display. Display is the one big statement on a layout, 64px and up. Title is for section and card headings, 20–48px. Body is for reading text, label for small uppercase tags.</p>
+        <div class="scroll">
+          <table class="type">
+            <thead><tr><th>Token</th><th>Size</th><th>Weight</th><th>Line height</th><th>Sample</th></tr></thead>
+            <tbody>
+              {ds.type.map(([name, size, weight, lh, note]) => (
+                <tr>
+                  <th scope="row"><code>{name}</code></th>
+                  <td>{size}px</td>
+                  <td>{weight === 700 ? 'Bold' : weight === 600 ? 'SemiBold' : 'Regular'}</td>
+                  <td>{Math.round((lh as number) * 100)}%{note && <><br /><small>{note}</small></>}</td>
+                  <td>
+                    <span
+                      class="sample"
+                      style={`font-size:${size}px;font-weight:${weight};line-height:${lh};${String(name).startsWith('label') ? 'text-transform:uppercase;letter-spacing:.1em;' : ''}`}
+                    >bina school</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <h3>Radius</h3>
+        <ul class="plain">
+          {ds.radius.map(([n, v, u]) => <li><code>{n}</code> {v} — {u}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section id="logo" class="band dark">
+      <div class="wrap">
+        <h2>Logo</h2>
+        <p>{ds.logo.intro}</p>
+        <ol class="rules">
+          {ds.logo.principles.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+        <dl class="defs">
+          {ds.logo.versions.map(([h, b]) => <><dt>{h}</dt><dd>{b}</dd></>)}
+        </dl>
+        <h3>Files</h3>
+        <p>Use the files as they are: never redraw, recolor, outline or stretch them. Download SVG and PNG from the <a href={ds.notion}>Notion Brand Assets library</a> (Logos).</p>
+        <dl class="defs">
+          {ds.logo.files.map(([h, b]) => <><dt><code>{h}</code></dt><dd>{b}</dd></>)}
+        </dl>
+      </div>
+    </section>
+
+    <section id="button" class="band lagoon">
+      <div class="wrap">
+        <h2>Button</h2>
+        <p>Two types, two states and two sizes, each with a 2px black outline so it holds its shape on any background.</p>
+        <div class="buttons">
+          <button type="button" class="b b-primary b-lg">Start your bina journey</button>
+          <button type="button" class="b b-secondary b-lg">Start your bina journey</button>
+          <button type="button" class="b b-primary b-sm">Start your bina journey</button>
+          <button type="button" class="b b-secondary b-sm">Start your bina journey</button>
+        </div>
+        <p class="hint">Hover any button to see the dragon fruit hover state.</p>
+        <dl class="defs">
+          {ds.button.types.map(([h, b]) => <><dt>{h}</dt><dd>{b}</dd></>)}
+          <dt>Hover</dt><dd>{ds.button.states}</dd>
+          {ds.button.sizes.map(([h, b]) => <><dt>{h}</dt><dd>{b}</dd></>)}
+        </dl>
+        <ol class="rules">
+          {ds.button.rules.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="landscape" class="band dark">
+      <div class="wrap">
+        <h2>Landscape</h2>
+        <p>Cut-out landscapes form the horizon of bina layouts: the land in front, a palette color as the sky behind. A landscape is imagery, so it doesn't count toward a section's three colors, but its sky color does.</p>
+        <ol class="rules">
+          {ds.landscape.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="people" class="band mint">
+      <div class="wrap">
+        <h2>People in our imagery</h2>
+        <p>Who we show, how we show them, and what we never show. These apply to photos, collages and illustrations.</p>
+        {ds.people.map((g) => (
+          <>
+            <h3>{g.group}</h3>
+            <ul class="rules">
+              {g.rules.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+            </ul>
+          </>
+        ))}
+      </div>
+    </section>
+
+    <section id="collages" class="band dark">
+      <div class="wrap">
+        <h2>Collages</h2>
+        <p>{ds.collages.intro}</p>
+        <ol class="rules">
+          {ds.collages.rules.map(([h, b]) => <li><strong>{h}</strong> {b}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="templates" class="band dark">
+      <div class="wrap">
+        <h2>Templates</h2>
+        <p>Worked examples of the color rules. Each names its three colors and the contrast of every pair. The editable templates live in the Figma bina Foundation Library.</p>
+        {ds.templates.map((t) => (
+          <>
+            <h3>{t.name}</h3>
+            <div class="tpl">
+              {t.rows.map(([name, bg, text, hi, pairs]) => (
+                <article>
+                  <div class="mini" style={`background:${swatch(bg)};color:${swatch(text)}`}>
+                    <span>{name}</span>
+                    <i style={`background:${swatch(hi)}`}></i>
+                  </div>
+                  <p class="tri">Background: {bg} · Text: {text} · Highlight: {hi}</p>
+                  <p>{pairs}</p>
+                </article>
+              ))}
+            </div>
+          </>
+        ))}
+        <h3>Stats page, sectioned</h3>
+        <p>{ds.statsPage}</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="band dark foot">
+    <div class="wrap">
+      <p>bina Foundation, copied from the design-system library on November 3, 2026. Figma is the source of truth. Questions: <a href="mailto:hello@thebinaschool.com">hello@thebinaschool.com</a></p>
+    </div>
+  </footer>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      const v = b.dataset.copy!;
+      try {
+        await navigator.clipboard.writeText(v);
+        b.textContent = 'Copied';
+        setTimeout(() => (b.textContent = v), 1200);
+      } catch {}
+    });
+  });
+</script>
+
+<style is:global>
+  body { background: #1c1c1c; margin: 0; }
+</style>
+
+<style>
+  /* Palette tokens from the bina Foundation library (src/data/design-system.json). */
+  .band { --base: #1c1c1c; --black: #000; --mint: #d8f6c8; --lagoon: #55eed4; --lemon: #ffe916; --dragon: #fe49c1; font-family: 'Rund Display', system-ui, sans-serif; padding: 64px 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  /* Themes: three colors each — background, text, highlight. */
+  .hero { background: var(--lagoon); color: var(--black); }
+  .dark { background: var(--base); color: var(--mint); --hi: var(--lagoon); }
+  .mint { background: var(--mint); color: var(--black); --hi: #632aa8; }
+  .lagoon { background: var(--lagoon); color: var(--black); --hi: var(--black); }
+
+  h1 { font-size: clamp(56px, 10vw, 88px); line-height: 1; font-weight: 700; margin: 8px 0 16px; }
+  h2 { font-size: clamp(32px, 5vw, 48px); line-height: 1.1; font-weight: 700; margin: 0 0 16px; }
+  h3 { font-size: 24px; line-height: 1.1; font-weight: 700; margin: 40px 0 12px; }
+  p, li, dd { font-size: 16px; line-height: 1.5; max-width: 72ch; }
+  .lead { font-size: 18px; }
+  a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  .dark a { color: var(--lagoon); }
+  .label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
+  small { font-size: 12px; }
+
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  nav a { text-decoration: none; background: var(--black); color: var(--lagoon); border-radius: 999px; padding: 6px 14px; font-size: 14px; font-weight: 600; }
+
+  .rules { padding-left: 1.25em; display: grid; gap: 10px; }
+  .rules strong, .defs dt { color: var(--hi); }
+  .lagoon .rules strong, .lagoon .defs dt, .mint .rules strong, .mint .defs dt { color: inherit; }
+  .plain { list-style: none; padding: 0; }
+
+  .swatches { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+  .swatches li { background: var(--black); color: var(--mint); border-radius: 16px; overflow: hidden; }
+  .swatches li > div { padding: 12px 16px 16px; }
+  .swatches strong { display: block; font-size: 20px; font-weight: 600; }
+  .swatches p { font-size: 14px; margin: 8px 0 0; }
+  .swatches code { display: block; opacity: 0.85; }
+  .chip { display: block; height: 88px; border-bottom: 2px solid var(--black); }
+  .copy { font: inherit; font-family: ui-monospace, Menlo, monospace; font-size: 14px; background: none; border: 0; padding: 0; color: var(--lemon); cursor: pointer; }
+
+  .scroll { overflow-x: auto; margin-top: 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.5; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--mint); }
+  thead th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--lagoon); }
+  tbody th { white-space: nowrap; font-weight: 700; }
+  .dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 8px; vertical-align: -2px; box-shadow: 0 0 0 1px var(--mint); }
+  .type .sample { white-space: nowrap; }
+
+  .defs { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 20px 0; }
+  .defs dt { font-weight: 700; }
+  .defs dd { margin: 0; }
+  @media (max-width: 640px) { .defs { grid-template-columns: 1fr; } .defs dd { margin-bottom: 8px; } }
+
+  .buttons { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin: 24px 0 8px; }
+  .b { font-family: inherit; font-weight: 700; line-height: 1.2; border: 2px solid var(--black); cursor: pointer; white-space: nowrap; }
+  .b-lg { font-size: 24px; padding: 16px 24px; border-radius: 16px; }
+  .b-sm { font-size: 16px; min-height: 40px; padding: 0 16px; border-radius: 8px; }
+  .b-primary { background: var(--lemon); color: var(--black); }
+  .b-secondary { background: var(--black); color: var(--lemon); }
+  .b:hover { background: var(--dragon); color: var(--black); }
+  .b:focus-visible { outline: 3px solid var(--black); outline-offset: 3px; }
+  .hint { font-size: 14px; }
+  @media (max-width: 480px) { .b { white-space: normal; } }
+
+  .tpl { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .tpl article p { font-size: 14px; margin: 8px 0 0; }
+  .tri { color: var(--lagoon); font-weight: 600; }
+  .mini { aspect-ratio: 4 / 3; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; font-weight: 700; font-size: 24px; line-height: 1.1; box-shadow: 0 0 0 1px var(--mint); }
+  .mini i { display: block; width: 56px; height: 20px; border-radius: 999px; }
+
+  .foot { padding: 32px 16px; }
+  .foot p { font-size: 14px; margin: 0; }
+</style>

@@ -1,0 +1,148 @@
+{
+  "_source": "Copied from the bina Foundation design-system artifact (claude.ai/artifact/QCWK6m47YnCzuwQSem3cov, version 1793928657-5038, last change 2026-11-03). Figma bina Foundation Library is the source of truth: change it there first, then here.",
+  "_openQuestions": [
+    "Logo SVGs are not reproduced: the artifact's asset store is writer-only. Logos link to the Notion Brand Assets library instead.",
+    "Logo clear space/minimum size and the button focus state are marked 'Proposed, pending review' in the source."
+  ],
+  "notion": "https://app.notion.com/p/415a363fa1074cfc95c02c00f46b31fa",
+  "principles": [
+    ["Figma is the source of truth.", "The bina Foundation Library defines every color. Colors from the website or anywhere else are not allowed until they are added there and approved."],
+    ["No white.", "White is never used for text, icons or the bina logo. Mint does every job white used to do."],
+    ["Every text pairing meets WCAG 2.2 AA contrast.", "A color is only used as text on a background listed for it in “Text on background”. Anything not listed is not allowed."],
+    ["Every section uses one theme.", "A background, a text color and one highlight. Three colors, no more."]
+  ],
+  "colors": [
+    { "name": "primary base", "token": "neutral-primaryBase", "hex": "#1C1C1C", "usage": "Default dark background. Never a text color: use black for text on light colors." },
+    { "name": "black", "token": "neutral-black", "hex": "#000000", "usage": "The text color on light and bright backgrounds. Also cards and panels on bright backgrounds." },
+    { "name": "mint", "token": "mint", "hex": "#D8F6C8", "usage": "Replaces white: default body text on dark backgrounds, and the background for long black text." },
+    { "name": "lagoon", "token": "lagoon", "hex": "#55EED4", "usage": "Primary accent: emphasis, highlights, backgrounds." },
+    { "name": "lemon", "token": "lemon", "hex": "#FFE916", "usage": "CTA color. Also text on dark backgrounds, grape and deep ocean." },
+    { "name": "grape", "token": "grape", "hex": "#632AA8", "usage": "Background, or text on light colors: mint, lemon, lagoon and clover (body); sky blue (large only)." },
+    { "name": "deep ocean", "token": "deepOcean", "hex": "#025EB9", "usage": "Background, or text on light colors: mint and lemon (body); lagoon, clover, sky blue and black (large only)." },
+    { "name": "sky blue", "token": "skyBlue", "hex": "#78C0FE", "usage": "Accent: text or background." },
+    { "name": "tangerine", "token": "tangerine", "hex": "#FF8A3D", "usage": "Accent: text or background." },
+    { "name": "watermelon", "token": "watermelon", "hex": "#FF7A71", "usage": "Accent: text or background." },
+    { "name": "dragon fruit", "token": "dragonFruit", "hex": "#FE49C1", "usage": "Accent: text or background." },
+    { "name": "clover", "token": "clover", "hex": "#64E27B", "usage": "Accent: text or background." },
+    { "name": "poppy", "token": "poppy", "hex": "#F24500", "usage": "Warm headline accent: bold headlines on black or primary base. Also a background for bold black headlines." },
+    { "name": "decorative white", "token": "decorative-white", "hex": "#FFFFFF", "usage": "Decorative only: decorative elements and the plate behind third-party accreditation logos. Never text, icons or the bina logo." }
+  ],
+  "pairings": [
+    ["primary base", "mint 14.56 · lemon 13.73 · lagoon 11.82 · clover 10.31 · sky blue 8.74 · tangerine 7.27 · watermelon 6.71 · dragon fruit 5.63 (large only for color-blind) · poppy 4.57 (large only for color-blind)", "—"],
+    ["black", "mint 17.94 · lemon 16.92 · lagoon 14.57 · clover 12.71 · sky blue 10.77 · tangerine 8.95 · watermelon 8.27 · dragon fruit 6.94 · poppy 5.63 (large only for color-blind)", "deep ocean 3.30"],
+    ["grape", "mint 7.39 · lemon 6.97 · lagoon 6.00 · clover 5.24", "sky blue 4.44 · tangerine 3.69 (color-blind: decorative only) · watermelon 3.41 (color-blind: decorative only)"],
+    ["deep ocean", "mint 5.43 · lemon 5.12 (large only for color-blind)", "lagoon 4.41 · clover 3.85 · black 3.30 · sky blue 3.26 (color-blind: decorative only)"],
+    ["mint", "black 17.94 · grape 7.39 · deep ocean 5.43", "poppy 3.19 (color-blind: decorative only)"],
+    ["lemon", "black 16.92 · grape 6.97 · deep ocean 5.12 (large only for color-blind)", "poppy 3.01 (color-blind: decorative only)"],
+    ["lagoon", "black 14.57 · grape 6.00", "deep ocean 4.41"],
+    ["clover", "black 12.71 · grape 5.24", "deep ocean 3.85"],
+    ["sky blue", "black 10.77", "grape 4.44 · deep ocean 3.26 (color-blind: decorative only)"],
+    ["tangerine", "black 8.95", "grape 3.69 (color-blind: decorative only)"],
+    ["watermelon", "black 8.27", "grape 3.41 (color-blind: decorative only)"],
+    ["poppy", "black 5.63 (large only for color-blind)", "mint 3.19 · lemon 3.01 (both color-blind: decorative only)"],
+    ["dragon fruit", "black 6.94", "—"]
+  ],
+  "combinationLimits": [
+    ["A section is a slide, a post, or a website band.", "On the website, a band runs from one background change to the next."],
+    ["Pick three colors: background, text, highlight.", "Any palette color counts, including black, primary base and mint. Two is fine; four is not."],
+    ["Cards reuse the section's colors.", "A card, panel or label can be filled or outlined with one of the three, but never adds a fourth."],
+    ["Every pair must pass.", "Text on the background and text on a card must both be listed in “Text on background.”"],
+    ["What doesn't count:", "CTA buttons and CTA blocks, decorative tags, illustrations, photos, collages and the logo. A CTA button or block counts as one unit; its own text still has to pass. Lemon outside a CTA counts like any other color."]
+  ],
+  "type": [
+    ["display-lg", 88, 700, 1.0, ""], ["display-md", 72, 700, 1.0, ""], ["display-sm", 64, 700, 1.0, ""],
+    ["title-4xl", 48, 700, 1.1, ""], ["title-3xl", 40, 700, 1.1, ""], ["title-2xl", 36, 700, 1.1, ""], ["title-xl", 32, 700, 1.1, ""], ["title-lg", 28, 700, 1.1, ""], ["title-md", 24, 700, 1.1, ""], ["title-sm", 20, 600, 1.1, ""],
+    ["body-xl", 18, 400, 1.5, ""], ["body-lg", 16, 400, 1.5, ""], ["body-md", 14, 400, 1.5, ""], ["body-sm", 12, 400, 1.5, ""],
+    ["label-lg", 12, 700, 1.2, "uppercase, 10% tracking"], ["label-md", 11, 700, 1.2, "uppercase, 12% tracking"], ["label-sm", 10, 700, 1.2, "uppercase, 9% tracking"],
+    ["button-lg", 24, 700, 1.2, ""], ["button-sm", 16, 700, 1.2, ""]
+  ],
+  "radius": [["radius-lg", "16px", "Large buttons."], ["radius-sm", "8px", "Small buttons."]],
+  "logo": {
+    "intro": "One wordmark, drawn in the palette colors. Each letter pairs colors from opposite ends of the palette: deep ocean with sky blue and tangerine in the b, poppy with watermelon and clover in the n, grape with mint and lemon in the a. That tension gives the wordmark its energy, and it is why the logo needs a near-black background to show every letter.",
+    "principles": [
+      ["Place it directly only on black, primary base or a dark, calm area of a photo.", "These are the only backgrounds where every letter stays clear (5.6:1 or more for every letter)."],
+      ["Everywhere else, use a container.", "On white, any palette color or a busy photo, put the logo in the black round or square container."],
+      ["Never recolor, outline, stretch or add effects.", "The letter colors come from the palette styles. White is never part of the logo."],
+      ["Proposed: clear space and minimum size.", "Clear space equal to the height of the dot on the i, on every side. Minimum width 64px on screen. Pending review."]
+    ],
+    "versions": [
+      ["Container logo", "For light backgrounds and avatars: the logo always sits inside a black circle or rounded square."],
+      ["Peeking logo", "The wordmark cut through the middle of its round letters, so it peeks up from the bottom of the page. Only on the bottom edge of a layout, large and wide (roughly half the layout width or more), on the same backgrounds as the full logo. Never in a container, never a replacement for the full logo. Use the peeking logo file — never crop the logo yourself."],
+      ["App icon", "The b mark on lagoon, for browser tabs and home screens."],
+      ["Backgrounds", "Every palette color also appears in the logo, so placing it directly on any of them makes part of a letter disappear. Use the container instead."]
+    ],
+    "files": [
+      ["bina-logo.svg", "The main wordmark. Directly on black, primary base or a dark, calm area of a photo only."],
+      ["bina-peeking-logo.svg", "Cut through its round letters. Only along the bottom edge of a layout, large and wide."],
+      ["bina-logo-round.svg, bina-logo-square.svg", "The wordmark in a black container, for white, palette colors, photos and avatars."],
+      ["bina-favicon.svg, bina-webclip.svg", "The b mark on lagoon, for browser tabs and home screens."]
+    ]
+  },
+  "button": {
+    "types": [["Primary", "Lemon with black text (16.92). The main action."], ["Secondary", "Black with lemon text (16.92). A second action, or the main action on a lemon background."]],
+    "states": "Hover is always dragon fruit with black text (6.94), for both types. It is the only state that changes color.",
+    "sizes": [["Large", "24px label (button-lg), corner radius radius-lg, for web."], ["Small", "16px label (button-sm), 40px tall, corner radius radius-sm, for mobile and dense layouts. Don't scale buttons to other sizes."]],
+    "rules": [
+      ["One primary button per section.", "It marks the main action. Everything else is secondary or a text link."],
+      ["Labels: sentence case, verb first, a few words.", "For example “Start your bina journey.” No icons: the label carries the action."],
+      ["Backgrounds:", "primary works on dark backgrounds and every palette color except lemon; on lemon, use secondary. Secondary blends into black and primary base, so use primary there."],
+      ["A button counts as a CTA unit,", "outside a section's three colors."],
+      ["Proposed: a focus state for keyboard users.", "A visible ring around the button when it's reached with the keyboard. Pending review."]
+    ]
+  },
+  "landscape": [
+    ["Always on a colorful sky.", "The sky behind the land is a palette color, like lagoon, sky blue, lemon or mint. Never black or primary base."],
+    ["Anchored to the bottom, edge to edge.", "The land touches both sides and the bottom of the layout. Never floating, boxed or cropped at the top."],
+    ["The transition from a bright header to a dark section.", "On the website, a landscape closes the bright hero: its ground meets the dark section below."],
+    ["No text on the land.", "Text sits in the sky area and uses a pair from “Text on background” for that sky color."]
+  ],
+  "people": [
+    { "group": "Connection", "rules": [
+      ["Children are never alone.", "Every child appears with at least one other person, or with an animal."],
+      ["Interaction is the subject.", "The point of interest is what people are doing together: playing, building, talking, helping. Interaction between people comes first; with animals is also fine."],
+      ["Children's faces stay covered in photo-based imagery.", "In photos and photo collages, a child's face is never fully visible: seen from behind or in profile, partly hidden by an object, a hand, a mask or a costume. Vary the way faces are covered. Illustrated characters are exempt."]
+    ]},
+    { "group": "Who we show", "rules": [
+      ["Groups are racially and gender diverse.", "Every group of three or more people is mixed. Across a page, post set or campaign, the mix covers many backgrounds."],
+      ["Many kinds of families.", "Grandparent and child, two mums, two dads, single parents, large families, and more."],
+      ["People with disabilities are part of the picture.", "Include visible and non-visible disabilities regularly, as part of the activity rather than its focus."]
+    ]},
+    { "group": "Real and imaginary", "rules": [
+      ["Real animals meet mythical creatures.", "Real animals alongside unicorns, sphinxes, fauns, mermaids, dragons and griffins. Creatures are friendly and curious, never menacing."]
+    ]},
+    { "group": "Never", "rules": [
+      ["No weapons, nothing scary.", "No guns or other weapons, no horror, gore or threatening scenes."],
+      ["No cultural appropriation.", "Never use another culture's sacred symbols, dress, rituals or patterns as decoration or costume."]
+    ]}
+  ],
+  "collages": {
+    "intro": "A bina collage is one scene built from many pieces: children, animals, a biome and the stuff of learning, in a mix of analog and digital media. Everything in “People in our imagery” applies here too.",
+    "rules": [
+      ["At least two children, always interacting.", "Every collage shows two or more children doing something together: building, exploring, reading, playing. Never side by side and ignoring each other."],
+      ["Always multiracial.", "The children in a collage are always of different racial backgrounds."],
+      ["Gender inclusive.", "Mix genders across a set, and avoid stereotyped roles: girls build and code, boys care and create, anyone can lead."],
+      ["Every collage combines three ingredients into one scene.", "Animals, real or mythical · the biome: its landscape and what makes it recognizable, like a desert's dunes or an ocean's reef · texture: nature (leaves, bark, water, sand) or school and science (fractions, music notes, maps, children's drawings, written stories)."],
+      ["Mixed media, in equal balance.", "Analog and digital, high-tech and low-tech, side by side: paper cut-outs, paint and handwriting next to screens, devices and digital graphics. Neither side should dominate."],
+      ["AI makes elements, never the whole collage.", "AI can create individual pieces, like a texture, a creature or an object, which a designer then composes by hand. The full scene is always assembled by a person."]
+    ]
+  },
+  "templates": [
+    { "name": "Instagram carousel: “Make the number”", "rows": [
+      ["What you need", "lemon", "black", "dragon fruit", "Black text on lemon 16.92; dragon fruit card titles on black 6.94 and black numerals on dragon fruit badges; card body reuses lemon on black 16.92."],
+      ["What to do", "lagoon", "black", "lemon", "Black text on lagoon 14.57; lemon text on black cards 16.92; black numerals on lemon badges."],
+      ["One number, many ways", "grape", "lemon", "black", "Lemon headline on grape 6.97; lemon equations on black pills 16.92."],
+      ["CTA post", "lagoon", "black", "lemon (CTA block)", "The lemon card is a CTA block: one unit outside the three, its own pairs pass. Inside: black headline on lemon 16.92, grape highlight 6.97, black button with lemon text 16.92. Outside: black on lagoon 14.57."],
+      ["Why it matters", "dragon fruit", "black", "lemon", "Card titles reuse the background color (dragon fruit on black 6.94); card body in the lemon highlight (16.92)."],
+      ["Ask this", "lemon", "black", "grape", "Grape headline on lemon 6.97; black quote on lemon 16.92."],
+      ["Make it work for you", "sky blue", "black", "dragon fruit", "Black text on sky blue 10.77; dragon fruit card titles on black 6.94 and black numerals on dragon fruit badges; card body reuses sky blue on black 10.77."]
+    ]},
+    { "name": "Deck slides (16:9)", "rows": [
+      ["Stats on clover", "clover", "deep ocean", "mint", "Deep ocean headline on clover 3.85 (large text only); deep ocean cards with clover numbers 3.85 (large text) and mint captions 5.43."],
+      ["Stats on tangerine", "tangerine", "black", "lagoon", "Black headline on tangerine 8.95; black cards reuse tangerine for the numbers 8.95, with lagoon captions 14.57."]
+    ]},
+    { "name": "Blog article (desktop, 1440px)", "rows": [
+      ["Long-form reading", "primary base", "mint", "lagoon", "Mint body text on primary base 14.56 at 20px, line height 160%, in a 720px column (about 70 characters per line). Lagoon for links and eyebrow labels (11.82). Takeaways box, table rules and FAQ dividers reuse mint. Closing CTA block is tangerine with black text (8.95); its lemon button gets a black outline."]
+    ]}
+  ],
+  "statsPage": "Each section gets its own background and theme, three colors at most. Lagoon hero → deep ocean stats → dark charts → lemon levels → dark bars → mint explainers → dark closing. Hero: black on lagoon 14.57, deep ocean highlight 4.41 (large text only). Deep ocean: mint cards with deep ocean numbers 5.43, mint footnote 5.43. Lemon: black text 16.92; pills in deep ocean (5.12), the selected one filled deep ocean with lemon text, all at 20px bold so they count as large text. Mint: black text 17.94, deep ocean cards with mint text 5.43. Dark sections: mint 14.56 and lagoon 11.82."
+}
