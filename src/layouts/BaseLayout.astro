@@ -26,6 +26,37 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// Footer links: the thebinaschool.com footer, column by column (copied 2026-11-06).
+const M = 'https://thebinaschool.com';
+const footerColumns = [
+  [
+    { label: 'What type of school is best?', href: `${M}/what-type-of-school-is-best` },
+    { label: 'Homeschooling guides — USA', href: `${M}/homeschooling-guides` },
+    { label: 'Homeschooling guides — Europe', href: `${M}/homeschooling-guides-europe` },
+    { label: 'Education Savings Account', href: `${M}/esa` },
+  ],
+  [
+    { label: 'Education', href: `${M}/education` },
+    { label: 'Primary School', href: `${M}/primary-school` },
+    { label: 'Middle School', href: `${M}/middle-school` },
+    { label: 'Open Positions', href: `${M}/careers` },
+    { label: 'Blog', href: `${M}/blog` },
+    { label: 'Join the bina school partner program', href: 'https://form.thebinaschool.com/new-partner', external: true },
+  ],
+  [
+    { label: 'Imprint', href: `${M}/imprint` },
+    { label: 'Privacy', href: `${M}/privacy` },
+    { label: 'Legal', href: `${M}/legal` },
+    { label: 'Partner T&Cs', href: `${M}/partner-program-terms` },
+  ],
+];
+const socials = [
+  { label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/company/thebinaschool' },
+  { label: 'YouTube', icon: 'youtube', href: 'https://www.youtube.com/@thebinaschool3759' },
+  { label: 'TikTok', icon: 'tiktok', href: 'https://www.tiktok.com/@bina.school' },
+  { label: 'Instagram', icon: 'instagram', href: 'https://www.instagram.com/thebinaschool' },
+];
 ---
 
 <!doctype html>
@@ -165,18 +196,49 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </main>
 
     {!bare && (
+    <!-- Footer: the thebinaschool.com footer (links, big logo art, Follow-us rail), in bina
+         Foundation colors — mint tagline, lagoon links, lagoon rail, the new peeking logo at the bottom (Zeyu, 2026-11-06). Main-site
+         links are absolute. Change it on the main site first, then mirror it here. -->
     <footer
-      class:list={['theme-black py-12', flushFooter ? 'mt-0' : 'mt-20']}
+      class:list={['theme-black relative z-10 overflow-hidden pt-10 md:pt-12', flushFooter ? 'mt-0' : 'mt-20']}
     >
-      <div class="mx-auto flex max-w-5xl flex-col items-center gap-4 px-5 text-center">
-        <p class="text-body-md">
-          <a href="https://thebinaschool.com/privacy" class="font-bold text-lagoon underline underline-offset-4">Privacy</a>
-          ·
-          <a href="https://thebinaschool.com/legal" class="font-bold text-lagoon underline underline-offset-4">Terms &amp; Conditions</a>
-        </p>
-        <slot name="footer-note" />
+      <div class="px-5 sm:px-10">
+        <div class="mb-6 grid grid-cols-1 gap-8 sm:grid-cols-5 sm:gap-x-8 md:mb-10">
+          <p class="font-display text-title-sm font-medium text-mint xl:text-title-md xl:font-medium">
+            A global, mobile, whole schooling experience for 4–15 year olds that fits your family everywhere
+          </p>
+          <div aria-hidden="true" class="hidden sm:block"></div>
+          {footerColumns.map((col) => (
+            <ul class="flex flex-col gap-3">
+              {col.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    class="font-display text-body-xl font-medium text-lagoon underline decoration-transparent xl:text-title-sm xl:font-medium"
+                  >{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+        {Astro.slots.has('footer-note') && <div class="mb-8 md:mb-10"><slot name="footer-note" /></div>}
       </div>
+      <img src="/images/peeking-logo.svg" loading="lazy" decoding="async" alt="bina" width="440" height="125" class="block h-auto w-full" />
     </footer>
+
+    <!-- Right-edge "Follow us" rail, tablet and up — same as the main site, on lagoon. -->
+    <aside
+      aria-label="Follow us on social media"
+      class="fixed bottom-[10%] right-0 z-[900] hidden flex-col items-center gap-[1.1rem] rounded-l-lg bg-lagoon px-[0.7rem] py-5 md:flex"
+    >
+      {socials.map((s) => (
+        <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} class="block transition-transform duration-200 ease-out hover:scale-110">
+          <img src={`/images/social/${s.icon}.svg`} alt="" aria-hidden="true" width="26" height="26" class="h-[1.6rem] w-[1.6rem] object-contain" />
+        </a>
+      ))}
+      <span class="mt-1 rotate-180 font-display text-body-md leading-none text-black [writing-mode:vertical-rl]">Follow us</span>
+    </aside>
     )}
 
   </body>
