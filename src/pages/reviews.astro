@@ -114,8 +114,9 @@ ordered.forEach((review, i) => {
 // Every card keeps the same width (Zeyu, 2026-11-04: the stretched last card was removed).
 const spanFor = (_idx: number) => '';
 
-// Review and feature cards are sky blue, watermelon or clover (Zeyu, 2026-11-06), set by grid
-// position in the style block so no two neighbouring cards share a color. CTA cards are lemon.
+// Chromatic tints, cycled. Literal classes so Tailwind picks them up.
+// Cards reuse the section's colors (bina Foundation: no fourth color), so no tints.
+const tints = [''];
 
 const monthYear = (iso: string | null) =>
   iso
@@ -216,7 +217,6 @@ const monthYear = (iso: string | null) =>
                   rel="noopener noreferrer"
                   class:list={[
                     'wall-cell card-bina-solid relative flex flex-col px-7 py-5 no-underline',
-                    'tinted',
                     spanFor(idx),
                   ]}
                 >
@@ -269,34 +269,35 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class:list={['wall-cell flex flex-col rounded-lg bg-lemon p-6 text-black', spanFor(idx)]}>
+                  <div class:list={['wall-cell flex flex-col rounded-lg bg-deep-ocean p-6 text-mint', spanFor(idx)]}>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Already a <span class="normal-case">bina</span> family?
                     </p>
                     <p class="mb-4 text-body-lg">
                       Your review helps the next family find their way to bina.
                     </p>
-                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
+                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina btn-sm mt-auto self-start">
                       Write a review
                     </a>
                   </div>
                 );
               }
               return (
-                <div class:list={['wall-cell flex flex-col rounded-lg bg-lemon p-6 text-black', spanFor(idx)]}>
+                <div class:list={['wall-cell flex flex-col rounded-lg bg-deep-ocean p-6 text-mint', spanFor(idx)]}>
                   <p class="mb-2 font-display text-body-xl font-bold">
                     Want to see the numbers too?
                   </p>
                   <p class="mb-4 text-body-lg">
                     {surveyN} families rated bina out of 10, and every score is published.
                   </p>
-                  <a href="/family-survey" class="btn-bina-secondary btn-sm mt-auto self-start">See the family survey</a>
+                  <a href="/family-survey" class="btn-bina btn-sm mt-auto self-start">See the family survey</a>
                 </div>
               );
             }
 
             const r = item.review;
             const i = ordered.indexOf(r);
+            const tint = tints[i % tints.length];
             const initial = r.author ? r.author.charAt(0) : sourceInitial[r.source];
             const when = monthYear(r.date);
             const paras = r.body.split('\n\n').filter(Boolean);
@@ -305,7 +306,7 @@ const monthYear = (iso: string | null) =>
               <article
                 class:list={[
                   'review-card wall-cell card-bina-solid relative flex flex-col px-7 py-5',
-                  'tinted',
+                  tint,
                   spanFor(idx),
                 ]}
                 data-role={r.role}
@@ -471,38 +472,6 @@ const monthYear = (iso: string | null) =>
       .wall-cell {
         height: 15rem;
       }
-    }
-
-    /* Card colors: bright fill, black text, black stars and lines. Each color is
-       (column + row) mod 3 of the card's grid position, so no card matches the one beside or
-       above it, at 1, 2 or 3 columns. Lemon CTA cards take a position but keep their own fill. */
-    #review-wall > .tinted {
-      --t-solid-fg: var(--color-black);
-      --t-solid-hl: var(--color-black);
-    }
-    @media (max-width: 767.98px) {
-      #review-wall > .tinted:nth-child(3n + 1) { --t-solid-bg: var(--color-sky-blue); }
-      #review-wall > .tinted:nth-child(3n + 2) { --t-solid-bg: var(--color-watermelon); }
-      #review-wall > .tinted:nth-child(3n + 3) { --t-solid-bg: var(--color-clover); }
-    }
-    @media (min-width: 768px) and (max-width: 1279.98px) {
-      #review-wall > .tinted:nth-child(6n + 1) { --t-solid-bg: var(--color-sky-blue); }
-      #review-wall > .tinted:nth-child(6n + 2) { --t-solid-bg: var(--color-watermelon); }
-      #review-wall > .tinted:nth-child(6n + 3) { --t-solid-bg: var(--color-watermelon); }
-      #review-wall > .tinted:nth-child(6n + 4) { --t-solid-bg: var(--color-clover); }
-      #review-wall > .tinted:nth-child(6n + 5) { --t-solid-bg: var(--color-clover); }
-      #review-wall > .tinted:nth-child(6n + 6) { --t-solid-bg: var(--color-sky-blue); }
-    }
-    @media (min-width: 1280px) {
-      #review-wall > .tinted:nth-child(9n + 1) { --t-solid-bg: var(--color-sky-blue); }
-      #review-wall > .tinted:nth-child(9n + 2) { --t-solid-bg: var(--color-watermelon); }
-      #review-wall > .tinted:nth-child(9n + 3) { --t-solid-bg: var(--color-clover); }
-      #review-wall > .tinted:nth-child(9n + 4) { --t-solid-bg: var(--color-watermelon); }
-      #review-wall > .tinted:nth-child(9n + 5) { --t-solid-bg: var(--color-clover); }
-      #review-wall > .tinted:nth-child(9n + 6) { --t-solid-bg: var(--color-sky-blue); }
-      #review-wall > .tinted:nth-child(9n + 7) { --t-solid-bg: var(--color-clover); }
-      #review-wall > .tinted:nth-child(9n + 8) { --t-solid-bg: var(--color-sky-blue); }
-      #review-wall > .tinted:nth-child(9n + 9) { --t-solid-bg: var(--color-watermelon); }
     }
 
     /* Three lines of review: two solid, the third fading out to nothing. */
