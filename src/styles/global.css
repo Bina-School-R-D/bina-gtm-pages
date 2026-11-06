@@ -301,25 +301,17 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Link hover — every text link on every page (Zeyu, 2026-11-04).      */
-/* The underline thickens and drops closer to the text, in the link's */
-/* own color, so the cue shows on every background and card without   */
-/* adding a color. Buttons keep their own hover (dragon fruit).        */
-/* Unlayered on purpose: it must win over Tailwind's decoration-*     */
-/* utilities.                                                          */
+/* Link hover — every link on every page, text and whole-card links   */
+/* (Zeyu, 2026-11-06): the thebinaschool.com footer-link hover, a fade */
+/* to 80% opacity. Buttons and links with their own hover fill        */
+/* (the /reviews rating tags) keep theirs.                            */
 /* ------------------------------------------------------------------ */
-a:not([class*="btn-bina"]) {
+a:not([class*="btn-bina"]):not([class*="hover:bg-"]) {
   text-decoration-skip-ink: auto;
-  transition:
-    text-decoration-thickness 0.15s ease-out,
-    text-underline-offset 0.15s ease-out;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
 }
-a:not([class*="btn-bina"]):not([class*="card-bina"]):not(.no-underline):hover,
-a[class*="card-bina"]:hover .underline {
-  text-decoration-line: underline;
-  text-decoration-thickness: 3px;
-  text-decoration-color: currentColor;
-  text-underline-offset: 3px;
+a:not([class*="btn-bina"]):not([class*="hover:bg-"]):hover {
+  opacity: 0.8;
 }
 @media (prefers-reduced-motion: reduce) {
   a { transition: none; }
