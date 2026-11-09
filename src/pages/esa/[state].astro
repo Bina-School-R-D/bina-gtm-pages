@@ -44,17 +44,18 @@ const money = copy.money;
   <!-- HERO: the claim, the funding gate, and what this page is -->
   <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-      <div class="mb-10 flex flex-wrap items-end gap-x-6 gap-y-4">
-        <h1 class="max-w-3xl text-title-3xl sm:text-display-sm">
-          {copy.h1}
-        </h1>
+      <!-- The badge sits above the title (Zeyu, 2026-11-10). -->
+      <div class="mb-10 flex flex-col items-start gap-5">
         {
           copy.heroBadge && (
-            <span class="mb-2 inline-flex max-w-full items-center rounded-full bg-black px-4 py-2 font-display text-label uppercase text-lagoon">
+            <span class="inline-flex max-w-full items-center rounded-full bg-black px-4 py-2 font-display text-label uppercase text-lagoon">
               <BrandText text={copy.heroBadge} />
             </span>
           )
         }
+        <h1 class="max-w-3xl text-title-3xl sm:text-display-sm">
+          {copy.h1}
+        </h1>
       </div>
 
       {/* A one-line intro (West Virginia) or the three checks (the other states). */}
