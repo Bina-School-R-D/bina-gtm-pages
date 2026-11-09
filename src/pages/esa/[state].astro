@@ -250,7 +250,8 @@ const money = copy.money;
   {
     copy.covered && (
       <section class="theme-base">
-        <div class="mx-auto max-w-5xl px-5 py-14">
+        <!-- Bottom padding matches the visible gap above the heading (two dark sections, 2 × 56px). -->
+        <div class="mx-auto max-w-5xl px-5 pt-14 pb-28">
           <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.covered.title} /></h2>
           <ul class="m-0 grid max-w-3xl list-none gap-4 p-0">
             {copy.covered.items.map((t) => (
