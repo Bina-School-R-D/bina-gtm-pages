@@ -154,6 +154,21 @@
       "officialUrl": "https://hopescholarshipwv.gov",
       "binaUrl": "https://go.bina.school/esa/west-virginia",
       "_note": "Added 2026-11-09: stakeholder confirmed bina as an approved Hope Scholarship provider and asked for the page. Facts from the Notion 'West Virginia Hope Scholarship page: content draft' (Jose's guide, the ESA State Database and hopescholarshipwv.gov, checked Nov 1, 2026). The award is marked to confirm with Monet/Jose."
+    },
+    {
+      "s": "Florida",
+      "prog": "Family Empowerment Scholarship for Students with Unique Abilities (FES-UA)",
+      "status": "partial",
+      "who": "Florida students with a qualifying unique ability (an IEP or a qualifying diagnosis), aged 3 to 21. No income limit.",
+      "howMuch": "Depends on the child's grade, county and needs.",
+      "platform": "EMA (Step Up For Students)",
+      "applyWindow": "New 2026–27 applications close November 15, 2026; accept by December 15, 2026.",
+      "windowState": "annual",
+      "applyUrl": "https://apply.stepupforstudents.org",
+      "approval": "Reimbursement requests take up to 60 days once all documents are in.",
+      "officialUrl": "https://www.stepupforstudents.org/scholarships/unique-abilities/",
+      "binaUrl": "https://go.bina.school/esa/florida",
+      "_note": "Added 2026-11-09 as a partial-support page (not an approved state): bina is reimbursed as part-time tutoring through FES-UA. From the Notion 'Florida FES-UA page: content draft (partial support template)'. Not shown as an approved-state card on /esa; linked from 'Other ways to use your state's funding'."
     }
   ]
 }

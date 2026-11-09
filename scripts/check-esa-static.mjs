@@ -124,32 +124,31 @@ for (const name of served) {
   mustNot(pages[name], '<title>ESA Funding for bina — Parent Guide</title>', where);
 }
 
-// 5 — the merged page structure is present on every served state, server-rendered.
+// 5 — every state page carries its Notion draft's structure, server-rendered (2026-11-09: the
+// copy, not a shared template, decides which sections exist).
 for (const name of served) {
   const slug = slugify(name);
   const where = `/esa/${slug}`;
   const copy = landing.states.find((s) => s.slug === slug);
   const d = byState[name];
+  const steps = (copy.process?.groups || []).flatMap((g) => g.steps);
+  if (steps.length === 0) fail(`${where}: no steps in esa-landing.json (process.groups)`);
   for (const text of [
-    copy.h1, // hero
+    copy.h1,
     copy.heroBadge,
-    'You pay <span class="text-hl">about ', // the answer line ("about" replaced "~", 2026-11-09)
-    'on the bina yearly plan',
-    'Before you enroll — during bina admissions', // process
-    'After you enroll',
-    'From application to first day',
-    copy.callStep ? copy.callStep.t : 'Talk to bina first',
-    `Apply for the ${d.prog}`,
-    // A state's own step text (copy.stepText, Arizona) replaces the generic title/text.
-    copy.stepText?.['3']?.t ?? 'Get approved and funded',
-    'Enroll at bina',
-    copy.stepText?.['2']?.d ?? d.applyWindow,
-    copy.stepText?.['3']?.d ?? d.approval,
-    copy.qualifies ? copy.qualifies.title : d.who, // who qualifies
+    ...(copy.gate || []),
+    copy.money ? (copy.money.youPay || copy.money.title) : null,
+    copy.qualifies?.title,
     copy.howEsa?.title,
-    copy.classWallet?.title,
+    copy.covered?.title,
+    copy.support?.title,
+    copy.process?.title,
+    ...steps.map((st) => st.t),
+    copy.portal?.title,
+    copy.invoice?.title,
     copy.about?.title,
-    d.applyUrl,
+    copy.cta?.title,
+    copy.callUrl,
     d.officialUrl,
     'id="process"',
   ]) {
@@ -158,21 +157,20 @@ for (const name of served) {
     if (!text || pages[name] === null) continue;
     if (!pages[name].includes(text)) must(pages[name].replace(/<[^>]+>/g, ''), text, where);
   }
-  // The award has to be the same number the database holds — the page computes the remainder
-  // from it, so a mismatch here is a wrong price in front of a parent.
-  for (const n of new Set([copy.esaMin, copy.esaMax])) {
-    const money = '$' + n.toLocaleString('en-US');
-    if (!d.howMuch.includes(money))
-      fail(`${where}: esa-landing.json says ${money} but esa-states.json says "${d.howMuch}"`);
+  // The award has to be the same number the database holds. Partial-support pages (Florida)
+  // have no single award.
+  if (copy.tier !== 'partial') {
+    if (!copy.money) fail(`${where}: an approved state needs its money section`);
+    for (const n of new Set([copy.esaMin, copy.esaMax])) {
+      const money = '$' + n.toLocaleString('en-US');
+      if (!d.howMuch.includes(money))
+        fail(`${where}: esa-landing.json says ${money} but esa-states.json says "${d.howMuch}"`);
+    }
   }
-  // This state's own FAQ leads, and every question is really on the page.
-  if (!copy.faq || copy.faq.length < 3) fail(`${where}: fewer than 3 state-specific FAQ entries`);
-  for (const f of [...(copy.faq || []), ...(copy.faqOnly ? [] : landing.faq)]) must(pages[name], f.q, where);
-  // Idaho is a reimbursement; the other four are paid to bina. Never mix the two up.
-  const reimbursed = copy.tier === 'reimbursed';
-  // A state's own step-5 title (copy.stepText, West Virginia) replaces the generic one.
-  must(pages[name], copy.stepText?.['5']?.t ?? (reimbursed ? 'Pay bina, then claim it back' : 'Pay tuition from your account'), where);
-  mustNot(pages[name], reimbursed ? 'Pay tuition from your account' : 'Pay bina, then claim it back', where);
+  // Every question is really on the page, and the last one is the disclaimer.
+  if (!copy.faq || copy.faq.length < 3) fail(`${where}: fewer than 3 FAQ entries`);
+  for (const f of copy.faq || []) must(pages[name], f.q, where);
+  if (copy.faq?.at(-1)?.q !== 'Is bina responsible for this program?') fail(`${where}: the FAQ must end with the disclaimer`);
 }
 
 // 6 — the index is a chooser with static destinations, and the legacy ?state= link still lands.

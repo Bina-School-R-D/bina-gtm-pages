@@ -70,19 +70,21 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
             <li class={span(i)}>
               <!-- The card itself doesn't react to hover; only the link at the bottom fades, like every
                    other link (Zeyu, 2026-11-06). -->
+              <!-- The Notion table's columns, word for word (2026-11-09): program, award, what you pay,
+                   when to apply and how bina gets paid. The "when" text is too long for a tag, so it
+                   is a row like the others. -->
               <div class="card-bina-mint flex h-full flex-col p-6">
-                <!-- Tag above the name, so every card starts the same way whatever the tag length. -->
-                <span class="mb-3 self-start pill-bina text-label-sm !border-black !bg-black !text-mint">{s.badge.label}</span>
                 <strong class="mb-1 block font-display text-title-lg font-bold text-hl">{s.state}</strong>
                 <span class="mb-4 block font-display text-body-lg font-bold">{s.program.prog}</span>
-                <span class="mb-4 grid gap-2 text-body-lg">
+                <span class="mb-5 grid gap-2 text-body-lg">
                   <span class="flex flex-wrap items-baseline gap-x-2">
-                    <strong class="font-display text-title-md font-bold text-hl">{s.awardLabel}</strong>
+                    <strong class="font-display text-title-md font-bold text-hl">{s.card.award}</strong>
                     <span class="font-display font-medium text-hl">per child, per year</span>
                   </span>
-                  <span>
-                    <strong class="font-bold">You pay:</strong> <span class="font-display font-medium">{s.payLabel}</span>
-                  </span>
+                  {s.card.awardNote && <span class="font-display font-medium text-hl">{s.card.awardNote}</span>}
+                  <span><strong class="font-bold">You pay:</strong> <span class="font-display font-medium">{s.card.pay}</span></span>
+                  <span><strong class="font-bold">When to apply:</strong> <span class="font-display font-medium">{s.card.when}</span></span>
+                  <span><strong class="font-bold">How <span class="normal-case">bina</span> gets paid:</strong> <span class="font-display font-medium">{s.card.paid}</span></span>
                 </span>
                 <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
                   bina for {s.state} families →
@@ -92,47 +94,31 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
           ))
         }
       </ul>
-
+      <p class="mt-5 text-body-lg">{c.approvedNote}</p>
     </div>
   </section>
 
-  <!-- the other two lists: their own mint band, directly under the approved cards; "How ESA
-       funding works" follows it (stakeholder, 2026-11-09: nothing between approved, coming soon
-       and other ways). Coming-soon states
-       are filled chips; other-ways states are rows with a line under each. Text only — no links
-       to redirects (check-esa-static enforces it). -->
+  <!-- "Other ways to use your state's funding", in its own mint band directly under the approved
+       cards, then "Ask us about your state"; "How ESA funding works" follows (Notion, Nov 2/9).
+       A state links only to a real page (check-esa-static enforces it). -->
   <section class="theme-mint">
     <div class="mx-auto max-w-5xl px-5 py-14">
-      <div class="grid gap-12 md:grid-cols-[1fr_1.5fr] md:gap-16">
-        <div>
-          <h3 class="mb-2 font-display text-title-lg font-bold">{c.soon.title}</h3>
-          <p class="mb-6 text-body-lg"><BrandText text={c.soon.line} /></p>
-          <ul class="m-0 flex list-none flex-wrap gap-3 p-0">
-            {
-              c.soon.states.map((st) => (
-                <li class="rounded-full bg-deep-ocean px-5 py-2 font-display text-body-xl font-bold text-mint">
-                  {st.url ? <a href={st.url} class="underline">{st.name} →</a> : st.name}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div>
-          <h3 class="mb-2 font-display text-title-lg font-bold">{c.other.title}</h3>
-          <p class="mb-6 text-body-lg"><BrandText text={c.other.line} /></p>
-          <dl class="m-0 border-t border-line">
-            {
-              c.other.states.map((st) => (
-                <div class="grid gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[10rem_1fr]">
-                  <dt class="font-display text-title-sm text-hl">{st.name}</dt>
-                  <dd class="m-0 text-body-lg">
-                    {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={st.text} /> →</a> : <BrandText text={sentence(st.text)} />}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-        </div>
+      <!-- "Coming soon" was removed on 2026-11-09 (Arkansas stays off until the state confirms). -->
+      <div class="max-w-3xl">
+        <h3 class="mb-2 font-display text-title-lg font-bold">{c.other.title}</h3>
+        <p class="mb-6 text-body-lg"><BrandText text={c.other.line} /></p>
+        <dl class="m-0 border-t border-line">
+          {
+            c.other.states.map((st) => (
+              <div class="grid gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[10rem_1fr]">
+                <dt class="font-display text-title-sm text-hl">{st.name}</dt>
+                <dd class="m-0 text-body-lg">
+                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={sentence(st.text)} /> →</a> : <BrandText text={sentence(st.text)} />}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
       </div>
 
       <p class="mt-12 flex items-start gap-3 font-display text-body-xl font-bold">
@@ -190,7 +176,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
   <CtaBlock>
     <h2 class="cta-title mb-8 text-title-xl sm:text-title-3xl"><BrandText text={c.ctaTitle} /></h2>
     <div class="cta-actions">
-      <a href="#" class="btn-bina-secondary">Book an ESA call</a>
+      <a href={c.callUrl} class="btn-bina-secondary">Book an ESA call</a>
       <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
     </div>
   </CtaBlock>

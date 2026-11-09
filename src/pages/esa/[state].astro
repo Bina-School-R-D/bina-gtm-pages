@@ -16,17 +16,23 @@ import BrandText from '../../components/BrandText.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EsaProcess from '../../components/EsaProcess.astro';
 import landing from '../../data/esa-landing.json';
-import { CTA, CTA_LABEL, statePage, usd } from '../../lib/esa-states.js';
+import { CTA, CTA_LABEL, statePage } from '../../lib/esa-states.js';
 
 export function getStaticPaths() {
   return landing.states.map((s) => ({ params: { state: s.slug }, props: { slug: s.slug } }));
 }
 
 const page = statePage(Astro.props.slug);
-const { copy, program, reimbursed, tier, awardLabel, monthLabel, questions, payRows } = page;
-const { school } = landing;
-// Per-state copy with a neutral fallback, so a state without its new copy yet still reads right.
-const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina`;
+// Every section's copy is the state's Notion draft, word for word (esa-landing.json, 2026-11-09).
+const { copy, questions } = page;
+// Split a sentence around one linked phrase ({ text, url }), for links inside step and note text.
+const linked = (t, link) => {
+  const at = link ? t.indexOf(link.text) : -1;
+  return at === -1
+    ? { before: t, text: '', url: '', after: '' }
+    : { before: t.slice(0, at), text: link.text, url: link.url, after: t.slice(at + link.text.length) };
+};
+const money = copy.money;
 ---
 
 <BaseLayout
@@ -52,7 +58,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
       </div>
 
       {/* A one-line intro (West Virginia) or the three checks (the other states). */}
-      {copy.heroLine && <p class="max-w-3xl text-body-xl"><BrandText text={copy.heroLine} /></p>}
+      {copy.heroLine && <p class:list={['max-w-3xl text-body-xl', copy.gate && 'mb-8']}><BrandText text={copy.heroLine} /></p>}
       {copy.gate && (
       <ul class="grid gap-3 sm:grid-cols-3">
         {
@@ -73,125 +79,117 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
     </div>
   </header>
 
-  <!-- THE MONEY: dark section — the answer in one line, then one card per plan, then a note -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
+  <!-- THE MONEY (approved states): the heading and intro line, one card per row of the Notion
+       table (tuition, minus the award, then what you pay), an optional mid-year table, then notes. -->
+  {
+    money && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          {money.youPay ? (
+            <>
+              <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
+                You pay <span class="text-hl">{money.youPay}</span> a month
+              </h2>
+              <p class="mt-2 font-display text-title-md font-normal"><BrandText text={money.line} /></p>
+            </>
+          ) : (
+            <>
+              <h2 class="text-title-xl sm:text-title-3xl">{money.title}</h2>
+              <p class="mt-3 max-w-3xl text-body-xl"><BrandText text={money.line} /></p>
+            </>
+          )}
 
-      <!-- The answer first (Zeyu, 2026-11-04, option A): one big "you pay" line, with the inputs in
-           a small line under it. The plan cards below show the working. -->
-      <!-- The section heading is the answer itself (Zeyu, 2026-11-04: "What you pay with your … ESA" removed). -->
-      <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
-        You pay <span class="text-hl">about {monthLabel}</span> a month
-      </h2>
-      <p class="mt-2 font-display text-title-md font-normal">
-        on the bina yearly plan, {reimbursed ? `after ${copy.state} pays you back ${awardLabel}` : `after ${copy.state}'s ${awardLabel} award`}
-      </p>
-      {copy.moneyLine && <p class="mt-4 max-w-3xl text-body-xl"><BrandText text={copy.moneyLine} /></p>}
-
-      <!-- What you pay, per plan (Arizona, from the Notion draft): one card per plan, worked out
-           like a receipt — tuition, minus the award, then what is left. Numbers come from the data files. -->
-      {
-        copy.moneyTitle && (
-          <div class="mt-10">
-            <h3 class="mb-5 font-display text-title-lg font-bold">Your top-up, plan by plan</h3>
-            <div class="grid gap-4 md:grid-cols-2">
-              {payRows.map((r, i) => (
-                <div class="card-bina-mint p-6 sm:p-8">
-                  <p class="mb-5 font-display text-title-sm">{r.plan}</p>
-                  <dl class="grid gap-2 text-body-lg">
-                    <div class="flex items-baseline justify-between gap-4">
-                      <dt><span class="normal-case">bina</span> tuition (per year)</dt>
-                      <dd class="font-display font-bold">{usd(r.tuition)}</dd>
-                    </div>
-                    <div class="flex items-baseline justify-between gap-4 border-b border-black pb-3">
-                      <dt>{copy.awardRowLabel ?? `${copy.state} ESA gives you`}</dt>
-                      <dd class="font-display font-bold">− {awardLabel}</dd>
-                    </div>
-                    <div class="pt-2">
-                      <dt class="font-display font-bold">You pay</dt>
-                      <dd>
-                        <span class="block font-display text-title-xl font-bold">
-                          {r.payLow === r.payHigh ? usd(r.payLow) : `${usd(r.payLow)}–${usd(r.payHigh)}`}<span class="text-body-xl"> a year</span>
-                        </span>
-                        {/* Every plan shows what parents pay per month: the yearly top-up divided by 12. */}
-                      <span class="block">About {r.payLow === r.payHigh ? usd(Math.round(r.payLow / 12)) : `${usd(Math.round(r.payLow / 12))}–${usd(Math.round(r.payHigh / 12))}`} a month</span>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
+          <div class="mt-10 grid gap-4 md:grid-cols-2">
+            {money.rows.map((r) => (
+              <div class="card-bina-mint p-6 sm:p-8">
+                <p class="mb-5 font-display text-title-sm">{r.plan}</p>
+                <dl class="grid gap-2 text-body-lg">
+                  <div class="flex items-baseline justify-between gap-4">
+                    <dt><span class="normal-case">bina</span> tuition (per year)</dt>
+                    <dd class="text-right font-display font-bold">{r.tuition}</dd>
+                  </div>
+                  <div class="flex items-baseline justify-between gap-4 border-b border-black pb-3">
+                    <dt>{money.awardCol}</dt>
+                    <dd class="text-right font-display font-bold">− {r.award}</dd>
+                  </div>
+                  <div class="pt-2">
+                    <dt class="font-display font-bold">You pay</dt>
+                    <dd>
+                      <span class="block font-display text-title-xl font-bold">
+                        {r.payYear}<span class="text-body-xl"> a year</span>
+                      </span>
+                      <span class="block">{r.payMonth.charAt(0).toUpperCase() + r.payMonth.slice(1)}</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
           </div>
-        )
-      }
 
-      <!-- Second table: families applying during the school year (West Virginia, Notion approved
-           draft): the same mint card as the plan cards. -->
-      {
-        copy.midYear && (
-          <div class="mt-10">
-            <p class="mb-5 max-w-3xl text-body-xl"><strong class="font-display font-bold">{copy.midYear.leadBold}</strong> {copy.midYear.lead}</p>
-            <div class="card-bina-mint overflow-x-auto p-6 sm:p-8">
-              <table class="w-full border-collapse text-left text-body-lg">
-                <thead>
-                  <tr class="border-b border-black">
-                    {copy.midYear.head.map((h) => (
-                      <th scope="col" class="pb-3 pr-4 font-display font-bold">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {copy.midYear.rows.map((row) => (
-                    <tr class="border-b border-black last:border-b-0">
-                      {row.map((cell, i) => (
-                        <td class:list={['py-3 pr-4', i === row.length - 1 && 'font-display font-bold']}>{cell}</td>
+          <!-- Second table: families applying during the school year (West Virginia): the same mint card. -->
+          {money.midYear && (
+            <div class="mt-10">
+              <p class="mb-5 max-w-3xl text-body-xl"><strong class="font-display font-bold">{money.midYear.leadBold}</strong> {money.midYear.lead}</p>
+              <div class="card-bina-mint overflow-x-auto p-6 sm:p-8">
+                <table class="w-full border-collapse text-left text-body-lg">
+                  <thead>
+                    <tr class="border-b border-black">
+                      {money.midYear.head.map((h) => (
+                        <th scope="col" class="pb-3 pr-4 font-display font-bold">{h}</th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {money.midYear.rows.map((row) => (
+                      <tr class="border-b border-black last:border-b-0">
+                        {row.map((cell, i) => (
+                          <td class:list={['py-3 pr-4', i === row.length - 1 && 'font-display font-bold']}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-4 text-body-lg">{money.midYear.after}</p>
             </div>
-            <p class="mt-4 text-body-lg">{copy.midYear.after}</p>
-          </div>
-        )
-      }
+          )}
 
-      <p class="mt-6 text-body-lg text-hl">
-        *{usd(school.siblingDiscount)} off for each additional child. Full prices are on the
-        <a href={school.tuitionUrl} class="font-bold underline">tuition page</a>.
-      </p>
-      {copy.moneyNotes?.map((n) => <p class="mt-2 text-body-lg text-hl">*<BrandText text={n} /></p>)}
+          <div class="mt-6 grid gap-2">
+            {money.notes.map((n) => {
+              const l = linked(n.t, n.link);
+              return (
+                <p class="text-body-lg text-hl">
+                  *<BrandText text={l.before} />{l.text && <a href={l.url} class="font-bold underline">{l.text}</a>}{l.after}
+                </p>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
-      <!-- Who can apply: shown until a state has its own "Who qualifies" section. -->
-      {!copy.qualifies && (
-      <div class="mt-12">
-        <h3 class="mb-5 font-display text-title-lg font-bold">Who can apply, and where the money sits</h3>
-        <dl class="grid gap-4 sm:grid-cols-3">
-          <div class="card-bina-mint p-6">
-            <dt class="font-display text-title-sm text-hl">Who qualifies</dt>
-            <dd class="mt-2">{program.who}</dd>
+  <!-- HOW THE PROGRAM WORKS, first (partial-support pages: the program before who qualifies) -->
+  {
+    copy.howEsa && copy.howEsaFirst && (
+      <!-- A mint card on the dark section (deep ocean label), built like the closing CTA block (left-aligned: it is a paragraph to read). -->
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <div class="theme-mint rounded-lg px-6 py-12 sm:px-12 sm:py-16">
+            <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl">{copy.howEsa.title}</h2>
+            <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
+            {copy.howEsa.bullets && (
+              <ul class="mt-6 grid max-w-3xl list-disc gap-2 pl-6 text-body-xl">
+                {copy.howEsa.bullets.map((b) => (
+                  <li><strong class="font-bold">{b.k}</strong> {b.v}</li>
+                ))}
+              </ul>
+            )}
           </div>
-          <div class="card-bina-mint p-6">
-            <dt class="font-display text-title-sm text-hl">How you spend it</dt>
-            <dd class="mt-2">
-              {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
-            </dd>
-          </div>
-          <div class="card-bina-mint p-6">
-            <dt class="font-display text-title-sm text-hl">Official program</dt>
-            <dd class="mt-2">
-              <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
-            </dd>
-          </div>
-        </dl>
-        <p class="mt-5">
-          *Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
-          official program site as the final word — and we will go through it with you on the call.
-        </p>
-      </div>
-      )}
-    </div>
-  </section>
+        </div>
+      </section>
+    )
+  }
 
   <!-- WHO QUALIFIES (states with Notion copy) -->
   {
@@ -227,7 +225,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
 
   <!-- HOW THE PROGRAM WORKS (states with Notion copy): after "Who qualifies" (ESA final page structure) -->
   {
-    copy.howEsa && (
+    copy.howEsa && !copy.howEsaFirst && (
       <!-- A mint card on the dark section (deep ocean label), built like the closing CTA block (left-aligned: it is a paragraph to read). -->
       <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
@@ -247,18 +245,37 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
     )
   }
 
+  <!-- WHAT CAN BE REIMBURSED (partial-support pages, Florida) -->
+  {
+    copy.covered && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.covered.title} /></h2>
+          <ul class="m-0 grid max-w-3xl list-none gap-4 p-0">
+            {copy.covered.items.map((t) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                <span class="pt-1 text-body-xl"><BrandText text={t} /></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
   <!-- PROCESS -->
   <EsaProcess page={page} />
 
-  <!-- PAYING BINA IN CLASSWALLET (states with Notion copy) -->
+  <!-- PORTAL HOW-TO: finding and paying bina in ClassWallet or Odyssey -->
   {
-    copy.classWallet && (
+    copy.portal && (
       <section class="theme-base">
         <div class="mx-auto max-w-5xl px-5 py-14">
-          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.classWallet.title} /></h2>
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.portal.title} /></h2>
           <!-- A plain numbered list (lagoon badges on dark), same pattern as "What you do". -->
           <ol class="m-0 grid list-none gap-4 p-0">
-            {copy.classWallet.steps.map((t, i) => (
+            {copy.portal.steps.map((t, i) => (
               <li class="flex items-start gap-4">
                 <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">
                   {i + 1}
@@ -267,13 +284,33 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
               </li>
             ))}
           </ol>
-          {copy.classWallet.videoUrl && (
+          {copy.portal.videoUrl && (
             <p class="mt-6 text-body-lg">
-              <a href={copy.classWallet.videoUrl} target="_blank" rel="noopener" class="font-bold underline">
-                {copy.classWallet.videoLabel} →
+              <a href={copy.portal.videoUrl} target="_blank" rel="noopener" class="font-bold underline">
+                {copy.portal.videoLabel} →
               </a>
             </p>
           )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- GETTING REIMBURSED (partial-support pages, Florida): what goes on the bina invoice -->
+  {
+    copy.invoice && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.invoice.title} /></h2>
+          <ul class="m-0 grid max-w-3xl list-none gap-4 p-0">
+            {copy.invoice.items.map((t) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                <span class="pt-1 font-display font-bold leading-snug"><BrandText text={t} /></span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-6 max-w-3xl text-body-lg"><BrandText text={copy.invoice.tips} /></p>
         </div>
       </section>
     )
@@ -315,13 +352,10 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
 
   <!-- close: before the FAQ, so the FAQ is the last section -->
   <CtaBlock>
-    <h2 class="cta-title text-title-xl sm:text-title-3xl"><BrandText text={ctaTitle} /></h2>
-    <p class="cta-copy">
-      We'll put your {copy.state} numbers next to bina's tuition, in writing, so you can decide with the
-      full picture in front of you.
-    </p>
+    <h2 class:list={['cta-title text-title-xl sm:text-title-3xl', !copy.cta.line && 'mb-8']}><BrandText text={copy.cta.title} /></h2>
+    {copy.cta.line && <p class="cta-copy"><BrandText text={copy.cta.line} /></p>}
     <div class="cta-actions">
-      <a href={copy.callUrl ?? '#'} class="btn-bina-secondary">Book an ESA call</a>
+      <a href={copy.callUrl} class="btn-bina-secondary">Book an ESA call</a>
       <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
     </div>
   </CtaBlock>

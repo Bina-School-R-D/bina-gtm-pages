@@ -36,9 +36,6 @@ export const CHIP = {
   both: { label: 'together', cls: 'bg-bina-grass' },
 };
 
-// Ordered by what a parent can act on today: rolling states first, because those are the only
-// ones where reading this in September leads anywhere this school year.
-const WINDOW_RANK = { rolling: 0, annual: 1, 'annual-unpublished': 2 };
 
 export const WINDOW_BADGE = {
   rolling: { label: 'Apply any time', cls: 'bg-bina-grass' },
@@ -136,91 +133,51 @@ export function statePage(slug) {
     throw new Error(`No esa-states.json entry for ${copy.state} — sync the ESA database first.`);
 
   // Fail the build if the database moves and this page's award drifts out of step with it.
-  for (const n of new Set([copy.esaMin, copy.esaMax])) {
+  // Partial-support pages (Florida) have no single award to check.
+  for (const n of copy.tier === 'partial' ? [] : new Set([copy.esaMin, copy.esaMax])) {
     if (!program.howMuch.includes(usd(n)))
       throw new Error(
         `${copy.state}: esa-landing.json says ${usd(n)} but esa-states.json says "${program.howMuch}" — reconcile them.`
       );
   }
 
-  const { school } = landing;
   const reimbursed = copy.tier === 'reimbursed';
-  const perMonth = (gap) => Math.round(gap / 12);
-  // esaMax is the larger award, so it produces the smaller remainder.
-  const monthLow = perMonth(school.tuitionYearly - copy.esaMax);
-  const monthHigh = perMonth(school.tuitionYearly - copy.esaMin);
 
-  // A state's own step text (Arizona, stakeholder 2026-11-09) replaces the generic title/text of
-  // that numbered step; the who-tag and any link stay.
-  const groups = numberedSteps(program, reimbursed, copy.callStep).map((g) => ({
-    ...g,
-    steps: g.steps.map((st) => ({ ...st, ...(copy.stepText?.[st.n] ?? {}) })),
-  }));
+  // Steps come from the state's Notion draft (copy.process.groups, 2026-11-09), numbered across
+  // groups; a state without its own steps falls back to the generic ones.
+  let groups;
+  if (copy.process?.groups) {
+    let n = 0;
+    groups = copy.process.groups.map((g) => ({ label: g.label, steps: g.steps.map((st) => ({ ...st, n: ++n })) }));
+  } else {
+    groups = numberedSteps(program, reimbursed, copy.callStep);
+  }
   const allSteps = groups.flatMap((g) => g.steps);
-  const countBy = (who) => WORDS[allSteps.filter((s) => s.who === who).length];
 
+  // The money, the steps and every other section are the state's Notion draft, word for word
+  // (esa-landing.json); nothing on the page is computed here any more.
   return {
     copy,
     program,
     reimbursed,
-    tier: landing.tierCopy[copy.tier],
-    badge: WINDOW_BADGE[program.windowState],
-    awardLabel: copy.esaMin === copy.esaMax ? usd(copy.esaMax) : `${usd(copy.esaMin)}–${usd(copy.esaMax)}`,
-    awardNote: reimbursed ? 'Paid back to you after you pay bina.' : `Paid through ${program.platform}.`,
-    monthLabel: monthLow === monthHigh ? usd(monthHigh) : `${usd(monthLow)}–${usd(monthHigh)}`,
-    gapLabel: reimbursed ? 'your net cost after the refund' : 'is what you cover yourself',
     groups,
     stepTotal: WORDS[allSteps.length],
-    stepsBina: countBy('bina'),
-    stepsState: countBy('state'),
-    stepsBoth: countBy('both'),
-    // This state's own questions lead; the ones every family asks follow — unless the state's
-    // FAQ is a complete set of its own (Arizona, from the Notion draft).
-    // Every state page ends its FAQ with the same disclaimer (ESA final page structure): states
-    // whose Notion FAQ already has it keep theirs; the others get it in Arizona's wording.
-    questions: withDisclaimer(copy.faqOnly ? copy.faq : [...copy.faq, ...landing.faq], program),
-    // The money table: what a family pays on each plan after the award.
-    payRows: [
-      { plan: 'Yearly plan', tuition: school.tuitionYearly },
-      { plan: 'Quarterly plan', tuition: school.tuitionQuarterly },
-    ].map((r) => ({
-      ...r,
-      payLow: r.tuition - copy.esaMax,
-      payHigh: r.tuition - copy.esaMin,
-    })),
-    monthLow,
-    monthHigh,
-    otherStates: landing.states.filter((s) => s.slug !== slug),
+    // Every state's Notion draft is a complete FAQ ending with the disclaimer; a state without
+    // one gets the disclaimer in Arizona's wording.
+    questions: withDisclaimer(copy.faq, program),
   };
 }
 
-/** The /esa chooser: one card per served state, actionable ones first. */
+/** The /esa chooser: one card per approved state, in the Notion table's order. */
 export function chooserStates() {
+  // The approved-state cards, in the order of the Notion table (2026-11-09). Each card carries
+  // the table's columns word for word (copy.card); partial-support states (Florida) are not cards.
   return landing.states
+    .filter((s) => s.tier !== 'partial')
     .map((s) => {
       const program = programFor(s.state);
       if (!program) throw new Error(`No esa-states.json entry for ${s.state}.`);
-      const award = s.esaMin === s.esaMax ? usd(s.esaMax) : `${usd(s.esaMin)}–${usd(s.esaMax)}`;
-      // What the family tops up per month on the yearly plan; the larger award gives the smaller number.
-      const low = Math.round((landing.school.tuitionYearly - s.esaMax) / 12);
-      const high = Math.round((landing.school.tuitionYearly - s.esaMin) / 12);
-      const month = low === high ? usd(low) : `${usd(low)}–${usd(high)}`;
-      return {
-        ...s,
-        program,
-        badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
-        // Word prefixes ('About', 'Up to') take a space; "About" replaced "~" (stakeholder, 2026-11-09).
-        awardLabel: s.awardPrefix ? `${s.awardPrefix} ${award}` : award,
-        // One line: what the family pays, and how it reaches bina (Zeyu, 2026-11-04).
-        payLabel:
-          s.tier === 'reimbursed'
-            ? `About ${month} per month after your credit. You pay bina first, and the state pays you back.`
-            : `About ${month} per month to bina through ${program.platform}`,
-      };
-    })
-    .sort(
-      (a, b) =>
-        WINDOW_RANK[a.program.windowState] - WINDOW_RANK[b.program.windowState] ||
-        a.state.localeCompare(b.state)
-    );
+      if (!s.card) throw new Error(`${s.state}: no chooser card copy (esa-landing.json states[].card).`);
+      return { ...s, program };
+    });
 }
