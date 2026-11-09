@@ -1,8 +1,8 @@
 ---
 /*
- * /esa/<state> — one page per state where bina can accept students. Five of them.
+ * /esa/<state> — one page per state where bina can accept students. Six of them (West Virginia added 2026-11-09).
  *
- * Layout (Zeyu, 2026-11-04 — Arizona copy first, the same template for all five):
+ * Layout (Zeyu, 2026-11-04 — Arizona copy first, the same template for every state):
  * hero → the money → the full process → CTA → FAQ. Sections whose copy lives in the team's
  * Notion page (who qualifies, how the ESA works, paying in ClassWallet, getting to know bina)
  * render only for states whose esa-landing.json entry carries them.
@@ -44,13 +44,16 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
         </h1>
         {
           copy.heroBadge && (
-            <span class="mb-2 inline-flex flex-none items-center rounded-full bg-black px-4 py-2 font-display text-label uppercase text-lagoon">
+            <span class="mb-2 inline-flex max-w-full items-center rounded-full bg-black px-4 py-2 font-display text-label uppercase text-lagoon">
               <BrandText text={copy.heroBadge} />
             </span>
           )
         }
       </div>
 
+      {/* A one-line intro (West Virginia) or the three checks (the other states). */}
+      {copy.heroLine && <p class="max-w-3xl text-body-xl"><BrandText text={copy.heroLine} /></p>}
+      {copy.gate && (
       <ul class="grid gap-3 sm:grid-cols-3">
         {
           copy.gate.map((g) => (
@@ -66,6 +69,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
           ))
         }
       </ul>
+      )}
     </div>
   </header>
 
@@ -78,6 +82,13 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
           <div class="theme-mint rounded-lg px-6 py-12 sm:px-12 sm:py-16">
             <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl">{copy.howEsa.title}</h2>
             <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
+            {copy.howEsa.bullets && (
+              <ul class="mt-6 grid max-w-3xl list-disc gap-2 pl-6 text-body-xl">
+                {copy.howEsa.bullets.map((b) => (
+                  <li><strong class="font-bold">{b.k}</strong> {b.v}</li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </section>
@@ -114,23 +125,53 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
                       <dd class="font-display font-bold">{usd(r.tuition)}</dd>
                     </div>
                     <div class="flex items-baseline justify-between gap-4 border-b border-black pb-3">
-                      <dt>{copy.state} ESA gives you</dt>
+                      <dt>{copy.awardName ?? `${copy.state} ESA`} gives you</dt>
                       <dd class="font-display font-bold">− {awardLabel}</dd>
                     </div>
                     <div class="pt-2">
                       <dt class="font-display font-bold">You pay</dt>
                       <dd>
                         <span class="block font-display text-title-xl font-bold">
-                          {usd(r.payLow)}–{usd(r.payHigh)}<span class="text-body-xl"> a year</span>
+                          {r.payLow === r.payHigh ? usd(r.payLow) : `${usd(r.payLow)}–${usd(r.payHigh)}`}<span class="text-body-xl"> a year</span>
                         </span>
                         {/* Every plan shows what parents pay per month: the yearly top-up divided by 12. */}
-                      <span class="block">About {usd(Math.round(r.payLow / 12))}–{usd(Math.round(r.payHigh / 12))} a month</span>
+                      <span class="block">About {r.payLow === r.payHigh ? usd(Math.round(r.payLow / 12)) : `${usd(Math.round(r.payLow / 12))}–${usd(Math.round(r.payHigh / 12))}`} a month</span>
                       </dd>
                     </div>
                   </dl>
                 </div>
               ))}
             </div>
+          </div>
+        )
+      }
+
+      <!-- Second table, for families applying during this school year (West Virginia, stakeholder
+           2026-11-09): the same mint card as the plan cards, one row per application window. -->
+      {
+        copy.dates && (
+          <div class="mt-10">
+            <h3 class="mb-5 font-display text-title-lg font-bold">{copy.dates.title}</h3>
+            <div class="card-bina-mint p-6 sm:p-8">
+              <table class="w-full border-collapse text-left text-body-lg">
+                <thead>
+                  <tr class="border-b border-black">
+                    {copy.dates.head.map((h) => (
+                      <th scope="col" class="pb-3 font-display font-bold">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {copy.dates.rows.map(([when, share]) => (
+                    <tr class="border-b border-black last:border-b-0">
+                      <td class="py-3 pr-4">{when}</td>
+                      <td class="py-3 font-display font-bold">{share}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-4 text-body-lg">{copy.dates.note}</p>
           </div>
         )
       }
@@ -252,10 +293,15 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
               ))}
             </ul>
             {copy.about.link && (
-              <p class="mt-8">
+              <p class="mt-8 flex flex-wrap gap-x-8 gap-y-3">
                 <a href={copy.about.link.url} target="_blank" rel="noopener noreferrer" class="font-bold underline">
                   <BrandText text={copy.about.link.label} /><span class="sr-only"> (opens in a new tab)</span>
                 </a>
+                {copy.about.link2 && (
+                  <a href={copy.about.link2.url} class="font-bold underline">
+                    <BrandText text={copy.about.link2.label} />
+                  </a>
+                )}
               </p>
             )}
           </div>

@@ -410,6 +410,164 @@
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
       "awardPrefix": "About"
+    },
+    {
+      "slug": "west-virginia",
+      "state": "West Virginia",
+      "tier": "funded",
+      "esaMin": 5435.62,
+      "esaMax": 5435.62,
+      "cardTag": "2026–27 open until Feb 28",
+      "h1": "West Virginia's Hope Scholarship: a parent's guide",
+      "heroLine": "Everything you need to know about West Virginia's education savings account: who qualifies, how much it pays and how to apply.",
+      "heroBadge": "Approved West Virginia Hope Scholarship school",
+      "seoTitle": "West Virginia Hope Scholarship: a Parent's Guide | bina",
+      "seoDesc": "Who qualifies for West Virginia's Hope Scholarship, how much it pays and how to apply, and how to use it toward bina, a live online school for ages 4 to 15.",
+      "moneyTitle": "What you pay with your Hope Scholarship",
+      "ctaTitle": "See how your Hope Scholarship works at bina",
+      "callStep": {
+        "t": "Book an ESA call with Monet or Jose",
+        "d": "We go through your award, your top-up and a start date."
+      },
+      "howEsa": {
+        "title": "The Hope Scholarship in plain words",
+        "body": "The Hope Scholarship is West Virginia's Education Savings Account (ESA), run by the West Virginia State Treasurer's Office. The state puts money into an account for your child, and you spend it on approved education costs such as private or online school tuition, tutoring, curriculum, books and therapies.",
+        "bullets": [
+          {
+            "k": "Full award for 2026–27:",
+            "v": "$5,435.62 per student"
+          },
+          {
+            "k": "How it's paid:",
+            "v": "in four quarterly deposits (by August 15, October 15, January 15 and April 15)"
+          },
+          {
+            "k": "Part-year awards:",
+            "v": "the later you apply in the school year, the smaller your first-year award (see dates below)"
+          }
+        ]
+      },
+      "dates": {
+        "title": "Application dates for 2026–27",
+        "head": [
+          "Apply between",
+          "Share of the award"
+        ],
+        "rows": [
+          [
+            "March 2 – June 15, 2026",
+            "100%"
+          ],
+          [
+            "June 16 – September 15, 2026",
+            "75%"
+          ],
+          [
+            "September 16 – November 30, 2026",
+            "50%"
+          ],
+          [
+            "December 1, 2026 – February 28, 2027",
+            "25%"
+          ],
+          [
+            "From March 2027",
+            "Full award for 2027–28"
+          ]
+        ],
+        "note": "Returning families confirm each year by June 15."
+      },
+      "qualifies": {
+        "title": "Can your family use the Hope Scholarship?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in West Virginia and stays a resident while in the program."
+          },
+          {
+            "k": "Grade",
+            "v": "Your child is enrolled in, or eligible to enroll in, a West Virginia public school from kindergarten to grade 12."
+          },
+          {
+            "k": "Kindergarten",
+            "v": "Your child is at least 5 before July 1."
+          },
+          {
+            "k": "School history",
+            "v": "From 2026–27, children already in private school or homeschool can apply too. They don't need to have attended public school first."
+          },
+          {
+            "k": "While using funds",
+            "v": "Your child isn't enrolled full time in a public school."
+          }
+        ]
+      },
+      "stepText": {
+        "2": {
+          "d": "Create an account at hopescholarshipwv.gov. Complete the online application for each child. Upload your documents: your child's birth certificate, proof of West Virginia residency and, for new kindergartners, proof of kindergarten eligibility."
+        },
+        "3": {
+          "t": "Get approved and file your Notice of Intent",
+          "d": "Once you're found eligible, file a Notice of Intent with your county superintendent. Accounts aren't funded until it's on file. Track your status and spend your funds through the Hope portal."
+        },
+        "5": {
+          "d": "[Placeholder: step 5 text to come from Monet/Jose.]"
+        }
+      },
+      "classWallet": {
+        "title": "How to pay bina with your Hope funds",
+        "steps": [
+          "[Placeholder: steps to come from Monet/Jose, including bina's Hope portal listing name.]"
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Small live classes with [class-size wording 🔍]"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        },
+        "link2": {
+          "label": "See tuition →",
+          "url": "https://thebinaschool.com/tuition"
+        }
+      },
+      "faqOnly": true,
+      "faq": [
+        {
+          "q": "Can I use the Hope Scholarship at bina today?",
+          "a": "Yes. bina is an approved Hope Scholarship school, so you can put your award toward bina tuition."
+        },
+        {
+          "q": "How much is the Hope Scholarship?",
+          "a": "The full 2026–27 award is $5,435.62 per student, paid in four quarterly deposits. Families who apply later in the school year receive a smaller first-year share."
+        },
+        {
+          "q": "Does my child need to have been in public school first?",
+          "a": "No. From 2026–27, children in private school or homeschool can apply too."
+        },
+        {
+          "q": "When should I apply?",
+          "a": "As early as possible. Applying between March 2 and June 15 gets the full award for the school year. Applications for 2027–28 open in March 2027."
+        },
+        {
+          "q": "What is a Notice of Intent?",
+          "a": "A form you file with your county superintendent once your child is found eligible. Your account is funded only after it's on file."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Hope Scholarship is run by the state of West Virginia, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://hopescholarshipwv.gov"
+          }
+        }
+      ],
+      "awardName": "Hope Scholarship"
     }
   ],
   "tierCopy": {
@@ -520,17 +678,6 @@
     "exploreLink": {
       "label": "Explore bina →",
       "url": "https://thebinaschool.com"
-    },
-    "pendingCards": [
-      {
-        "state": "West Virginia",
-        "prog": "Hope Scholarship",
-        "cardTag": "2026–27 open until Feb 28",
-        "awardLabel": "$5,435.62",
-        "payLabel": "About $444 per month to bina through the Hope portal",
-        "rank": 1,
-        "url": null
-      }
-    ]
+    }
   }
 }

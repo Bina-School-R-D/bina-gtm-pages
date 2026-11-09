@@ -1,8 +1,7 @@
 ---
 /*
  * /esa — the chooser across the six states where bina can accept state funding (West Virginia
- * added 2026-11-09 as a card only: its page is still to be written, so its link is a placeholder
- * and /esa/west-virginia keeps redirecting here).
+ * added 2026-11-09).
  *
  * Rebuilt 2026-11-04 from the Notion 'Main ESA page: content draft (/esa)' (restructured Nov 2
  * after Akis's feedback): hero → choose your state (approved cards, then coming soon, then
@@ -19,21 +18,9 @@ import landing from '../data/esa-landing.json';
 import { CTA, CTA_LABEL, chooserStates, stateSlug } from '../lib/esa-states.js';
 
 const { index: c } = landing;
-const served = chooserStates();
-// Approved states whose page isn't written yet: a card in the same style, no link (placeholder).
-const pending = (c.pendingCards ?? []).map((p) => ({
-  ...p,
-  slug: null,
-  badge: { label: p.cardTag },
-  program: { prog: p.prog },
-}));
-// Rolling states first, then the rest alphabetically (pending cards carry their window rank).
-const rank = (s) => (s.program.windowState === 'rolling' ? 0 : 1);
-const states = [...served, ...pending].sort(
-  (a, b) => (a.rank ?? rank(a)) - (b.rank ?? rank(b)) || a.state.localeCompare(b.state)
-);
+const states = chooserStates();
 // Valid destinations for the legacy ?state= redirect below.
-const slugs = Object.fromEntries(served.map((s) => [stateSlug(s.state), true]));
+const slugs = Object.fromEntries(states.map((s) => [stateSlug(s.state), true]));
 // Six cards: two rows of three (md and up).
 const span = (_i) => 'md:col-span-2';
 // Each other-ways line stands alone in its row now, so it starts with a capital.
@@ -97,16 +84,9 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                     <strong class="font-bold">You pay:</strong> <span class="font-display font-medium">{s.payLabel}</span>
                   </span>
                 </span>
-                {s.slug ? (
-                  <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
-                    bina for {s.state} families →
-                  </a>
-                ) : (
-                  <!-- Placeholder until the state's page exists: same look, not a link. -->
-                  <span class="mt-auto self-start font-bold underline decoration-2 underline-offset-4" data-placeholder-link>
-                    bina for {s.state} families →
-                  </span>
-                )}
+                <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
+                  bina for {s.state} families →
+                </a>
               </div>
             </li>
           ))
