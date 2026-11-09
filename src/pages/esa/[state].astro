@@ -92,7 +92,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
            a small line under it. The plan cards below show the working. -->
       <!-- The section heading is the answer itself (Zeyu, 2026-11-04: "What you pay with your … ESA" removed). -->
       <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
-        You pay <span class="text-hl">~{monthLabel}</span> a month
+        You pay <span class="text-hl">about {monthLabel}</span> a month
       </h2>
       <p class="mt-2 font-display text-title-md font-normal">
         on the bina yearly plan, {reimbursed ? `after ${copy.state} pays you back ${awardLabel}` : `after ${copy.state}'s ${awardLabel} award`}
@@ -124,7 +124,7 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
                           {usd(r.payLow)}–{usd(r.payHigh)}<span class="text-body-xl"> a year</span>
                         </span>
                         {/* Every plan shows what parents pay per month: the yearly top-up divided by 12. */}
-                      <span class="block">~{usd(Math.round(r.payLow / 12))}–{usd(Math.round(r.payHigh / 12))} a month</span>
+                      <span class="block">About {usd(Math.round(r.payLow / 12))}–{usd(Math.round(r.payHigh / 12))} a month</span>
                       </dd>
                     </div>
                   </dl>
@@ -245,11 +245,20 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
           <div>
             <h2 class="text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={copy.about.title} /></h2>
           </div>
-          <ul class="m-0 grid list-none gap-5 p-0 md:pt-2">
-            {copy.about.bullets.map((b) => (
-              <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
-            ))}
-          </ul>
+          <div class="md:pt-2">
+            <ul class="m-0 grid list-none gap-5 p-0">
+              {copy.about.bullets.map((b) => (
+                <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
+              ))}
+            </ul>
+            {copy.about.link && (
+              <p class="mt-8">
+                <a href={copy.about.link.url} target="_blank" rel="noopener noreferrer" class="font-bold underline">
+                  <BrandText text={copy.about.link.label} /><span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </p>
+            )}
+          </div>
         </div>
       </section>
     )
@@ -259,8 +268,8 @@ const ctaTitle = copy.ctaTitle ?? `See how ${copy.state}'s funding works at bina
   <CtaBlock>
     <h2 class="cta-title text-title-xl sm:text-title-3xl"><BrandText text={ctaTitle} /></h2>
     <p class="cta-copy">
-      We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
-      whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
+      We'll put your {copy.state} numbers next to bina's tuition, in writing, so you can decide with the
+      full picture in front of you.
     </p>
     <div class="cta-actions">
       <a href={copy.callUrl ?? '#'} class="btn-bina-secondary">Book an ESA call</a>

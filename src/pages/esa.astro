@@ -1,6 +1,8 @@
 ---
 /*
- * /esa — the chooser across the five states where bina can accept state funding.
+ * /esa — the chooser across the six states where bina can accept state funding (West Virginia
+ * added 2026-11-09 as a card only: its page is still to be written, so its link is a placeholder
+ * and /esa/west-virginia keeps redirecting here).
  *
  * Rebuilt 2026-11-04 from the Notion 'Main ESA page: content draft (/esa)' (restructured Nov 2
  * after Akis's feedback): hero → choose your state (approved cards, then coming soon, then
@@ -17,18 +19,30 @@ import landing from '../data/esa-landing.json';
 import { CTA, CTA_LABEL, chooserStates, stateSlug } from '../lib/esa-states.js';
 
 const { index: c } = landing;
-const states = chooserStates();
+const served = chooserStates();
+// Approved states whose page isn't written yet: a card in the same style, no link (placeholder).
+const pending = (c.pendingCards ?? []).map((p) => ({
+  ...p,
+  slug: null,
+  badge: { label: p.cardTag },
+  program: { prog: p.prog },
+}));
+// Rolling states first, then the rest alphabetically (pending cards carry their window rank).
+const rank = (s) => (s.program.windowState === 'rolling' ? 0 : 1);
+const states = [...served, ...pending].sort(
+  (a, b) => (a.rank ?? rank(a)) - (b.rank ?? rank(b)) || a.state.localeCompare(b.state)
+);
 // Valid destinations for the legacy ?state= redirect below.
-const slugs = Object.fromEntries(states.map((s) => [stateSlug(s.state), true]));
-// Two cards on the first row, three on the second, so no state sits alone (md and up).
-const span = (i) => (i < 2 ? 'md:col-span-3' : 'md:col-span-2');
+const slugs = Object.fromEntries(served.map((s) => [stateSlug(s.state), true]));
+// Six cards: two rows of three (md and up).
+const span = (_i) => 'md:col-span-2';
 // Each other-ways line stands alone in its row now, so it starts with a capital.
 const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
 
 <BaseLayout
-  title="ESA Funding for bina — The Five States We Can Accept"
-  description="bina can take state education funding in Arizona, New Hampshire, Idaho, Utah and Wyoming. Pick your state for the award, the deadlines and the whole process."
+  title="ESA Funding for bina — The Six States We Can Accept"
+  description="bina can take state education funding in Arizona, New Hampshire, Idaho, Utah, West Virginia and Wyoming. Pick your state for the award, the deadlines and the whole process."
   ctaHref={CTA}
   ctaLabel={CTA_LABEL}
 >
@@ -56,7 +70,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
   </header>
 
-  <!-- choose your state: the five approved-state cards -->
+  <!-- choose your state: the six approved-state cards -->
   <section class="theme-base">
     <div class="mx-auto max-w-5xl px-5 py-14">
       <h2 class="mb-3 text-title-xl sm:text-title-3xl">{c.findTitle}</h2>
@@ -83,9 +97,16 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                     <strong class="font-bold">You pay:</strong> <span class="font-display font-medium">{s.payLabel}</span>
                   </span>
                 </span>
-                <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
-                  bina for {s.state} families →
-                </a>
+                {s.slug ? (
+                  <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
+                    bina for {s.state} families →
+                  </a>
+                ) : (
+                  <!-- Placeholder until the state's page exists: same look, not a link. -->
+                  <span class="mt-auto self-start font-bold underline decoration-2 underline-offset-4" data-placeholder-link>
+                    bina for {s.state} families →
+                  </span>
+                )}
               </div>
             </li>
           ))
@@ -95,30 +116,9 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
   </section>
 
-  <!-- how it works -->
-  <section class="theme-base">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
-      <ol class="grid gap-6 md:grid-cols-3">
-        {
-          c.howSteps.map((st, i) => (
-            <li class="flex gap-4">
-              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
-                {i + 1}
-              </span>
-              <span>
-                <h3 class="mb-1 text-title-sm"><BrandText text={st.t} /></h3>
-                <p class="text-body-lg"><BrandText text={st.d} /></p>
-              </span>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <!-- the other two lists: their own mint band, after "How ESA funding works" (Zeyu, 2026-11-04 —
-       moved from directly under the approved cards), so they never read as states that work today. Coming-soon states
+  <!-- the other two lists: their own mint band, directly under the approved cards; "How ESA
+       funding works" follows it (stakeholder, 2026-11-09: nothing between approved, coming soon
+       and other ways). Coming-soon states
        are filled chips; other-ways states are rows with a line under each. Text only — no links
        to redirects (check-esa-static enforces it). -->
   <section class="theme-mint">
@@ -162,6 +162,28 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
   </section>
 
+  <!-- how it works -->
+  <section class="theme-base">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">{c.howTitle}</h2>
+      <ol class="grid gap-6 md:grid-cols-3">
+        {
+          c.howSteps.map((st, i) => (
+            <li class="flex gap-4">
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black">
+                {i + 1}
+              </span>
+              <span>
+                <h3 class="mb-1 text-title-sm"><BrandText text={st.t} /></h3>
+                <p class="text-body-lg"><BrandText text={st.d} /></p>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
   <!-- getting to know bina: same editorial split as the state pages — heading left,
        each fact as a large statement right, dark section, lagoon heading -->
   <section class="theme-base">
@@ -169,11 +191,19 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       <div>
         <h2 class="text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={c.aboutTitle} /></h2>
       </div>
-      <ul class="m-0 grid list-none gap-5 p-0 md:pt-2">
-        {c.aboutBullets.map((b) => (
-          <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
-        ))}
-      </ul>
+      <div class="md:pt-2">
+        <ul class="m-0 grid list-none gap-5 p-0">
+          {c.aboutBullets.map((b) => (
+            <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
+          ))}
+        </ul>
+        <!-- "Explore bina →" under the bullets (stakeholder, 2026-11-09), new tab. -->
+        <p class="mt-8">
+          <a href={c.exploreLink.url} target="_blank" rel="noopener noreferrer" class="font-bold underline">
+            <BrandText text={c.exploreLink.label} /><span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </p>
+      </div>
     </div>
   </section>
 

@@ -234,9 +234,29 @@
           "Live online school from Pre-K to Grade 10",
           "Cambridge and Cognia accredited, CIS member",
           "Families in 40+ countries"
-        ]
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
       },
-      "faqOnly": true
+      "faqOnly": true,
+      "heroBadge": "Approved Arizona ESA school",
+      "stepText": {
+        "2": {
+          "d": "Apply on the Arizona ESA portal with proof of residency and your child's birth certificate. Processing can take up to 45 days."
+        },
+        "3": {
+          "t": "Sign your ESA agreement and set up ClassWallet",
+          "d": "Once you're approved, sign your agreement with the state and activate your ClassWallet account. The date you sign sets the quarter your funding starts."
+        },
+        "4": {
+          "d": "Choose your start date and sign your agreement with bina for the remaining balance. We send you everything your application needs: an itemized invoice, enrollment letter and accreditation details."
+        },
+        "5": {
+          "d": "We send you an invoice. You create an order in ClassWallet, the state reviews it, and the payment goes straight to bina, usually within about a week of approval. You pay the difference."
+        }
+      }
     },
     {
       "slug": "utah",
@@ -389,7 +409,7 @@
       ],
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
-      "awardPrefix": "~"
+      "awardPrefix": "About"
     }
   ],
   "tierCopy": {
@@ -405,9 +425,9 @@
   "index": {
     "kicker": "ESA funding for families",
     "title": "Use your state's ESA toward a bina education",
-    "line": "An Education Savings Account (ESA) is money your state sets aside for your child's education. In five states, families can put it toward a year at bina.",
+    "line": "An Education Savings Account (ESA) is money your state sets aside for your child's education. In six states, families can put it toward a year at bina.",
     "checks": [
-      "Approved in Arizona, New Hampshire, Idaho, Utah and Wyoming",
+      "Approved in Arizona, New Hampshire, Idaho, Utah, West Virginia and Wyoming",
       "Your state's award covers most of your tuition",
       "Our admissions team guides you through every step"
     ],
@@ -419,10 +439,6 @@
       "line": "We're working on approval in these states. In the meantime, families can join bina with direct tuition.",
       "states": [
         {
-          "name": "West Virginia",
-          "url": null
-        },
-        {
           "name": "Arkansas",
           "url": null
         }
@@ -430,26 +446,11 @@
     },
     "other": {
       "title": "Other ways to use your state's funding",
-      "line": "In these states, families can put their scholarship toward part of their bina costs. Our team will walk you through what's possible.",
+      "line": "In some states, families can put their scholarship toward part of their bina costs. Our team will walk you through what's possible.",
       "states": [
         {
           "name": "Florida",
           "text": "families with an FES-UA scholarship can be reimbursed for bina tutoring",
-          "url": null
-        },
-        {
-          "name": "Georgia",
-          "text": "Promise Scholarship funds can go toward individual bina courses",
-          "url": null
-        },
-        {
-          "name": "Louisiana",
-          "text": "LA GATOR funds can go toward individual bina courses",
-          "url": null
-        },
-        {
-          "name": "South Carolina",
-          "text": "Education Scholarship Trust Fund money can go toward individual bina courses",
           "url": null
         }
       ]
@@ -467,7 +468,7 @@
       },
       {
         "t": "bina is already approved.",
-        "d": "In the five approved states, bina is an approved school, so your award can go straight to your tuition."
+        "d": "In the six approved states, bina is an approved school, so your award can go straight to your tuition."
       },
       {
         "t": "Your award covers most of your tuition.",
@@ -489,7 +490,7 @@
       },
       {
         "q": "Which states can I use at bina?",
-        "a": "Arizona, New Hampshire, Idaho, Utah and Wyoming. Choose your state above for the details."
+        "a": "Arizona, New Hampshire, Idaho, Utah, West Virginia and Wyoming. Choose your state above for the details."
       },
       {
         "q": "Does the award cover all of bina's tuition?",
@@ -514,6 +515,21 @@
       {
         "q": "Is bina responsible for these programs?",
         "a": "Each ESA program is run by its own state, not by bina. Amounts, eligibility and deadlines are set by the state and can change. Always confirm with your state's official program site before you rely on a number here."
+      }
+    ],
+    "exploreLink": {
+      "label": "Explore bina →",
+      "url": "https://thebinaschool.com"
+    },
+    "pendingCards": [
+      {
+        "state": "West Virginia",
+        "prog": "Hope Scholarship",
+        "cardTag": "2026–27 open until Feb 28",
+        "awardLabel": "$5,435.62",
+        "payLabel": "About $444 per month to bina through the Hope portal",
+        "rank": 1,
+        "url": null
       }
     ]
   }

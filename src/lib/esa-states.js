@@ -137,7 +137,12 @@ export function statePage(slug) {
   const monthLow = perMonth(school.tuitionYearly - copy.esaMax);
   const monthHigh = perMonth(school.tuitionYearly - copy.esaMin);
 
-  const groups = numberedSteps(program, reimbursed, copy.callStep);
+  // A state's own step text (Arizona, stakeholder 2026-11-09) replaces the generic title/text of
+  // that numbered step; the who-tag and any link stay.
+  const groups = numberedSteps(program, reimbursed, copy.callStep).map((g) => ({
+    ...g,
+    steps: g.steps.map((st) => ({ ...st, ...(copy.stepText?.[st.n] ?? {}) })),
+  }));
   const allSteps = groups.flatMap((g) => g.steps);
   const countBy = (who) => WORDS[allSteps.filter((s) => s.who === who).length];
 
@@ -189,13 +194,13 @@ export function chooserStates() {
         ...s,
         program,
         badge: s.cardTag ? { label: s.cardTag } : WINDOW_BADGE[program.windowState],
-        // '~' (an estimate) sits tight against the number; word prefixes like 'Up to' take a space.
-        awardLabel: s.awardPrefix ? `${s.awardPrefix}${s.awardPrefix === '~' ? '' : ' '}${award}` : award,
+        // Word prefixes ('About', 'Up to') take a space; "About" replaced "~" (stakeholder, 2026-11-09).
+        awardLabel: s.awardPrefix ? `${s.awardPrefix} ${award}` : award,
         // One line: what the family pays, and how it reaches bina (Zeyu, 2026-11-04).
         payLabel:
           s.tier === 'reimbursed'
-            ? `~${month} per month to bina first, then the state reimburses you`
-            : `~${month} per month to bina through ${program.platform}`,
+            ? `About ${month} per month after your credit. You pay bina first, and the state pays you back.`
+            : `About ${month} per month to bina through ${program.platform}`,
       };
     })
     .sort(

@@ -133,17 +133,18 @@ for (const name of served) {
   for (const text of [
     copy.h1, // hero
     copy.heroBadge,
-    'You pay ~', // the answer line (2026-11-04: replaced the three award/tuition/remainder cards)
+    'You pay <span class="text-hl">about ', // the answer line ("about" replaced "~", 2026-11-09)
     'on the bina yearly plan',
     'Before you enroll — during bina admissions', // process
     'After you enroll',
     'From application to first day',
     copy.callStep ? copy.callStep.t : 'Talk to bina first',
     `Apply for the ${d.prog}`,
-    'Get approved and funded',
+    // A state's own step text (copy.stepText, Arizona) replaces the generic title/text.
+    copy.stepText?.['3']?.t ?? 'Get approved and funded',
     'Enroll at bina',
-    d.applyWindow,
-    d.approval,
+    copy.stepText?.['2']?.d ?? d.applyWindow,
+    copy.stepText?.['3']?.d ?? d.approval,
     copy.qualifies ? copy.qualifies.title : d.who, // who qualifies
     copy.howEsa?.title,
     copy.classWallet?.title,

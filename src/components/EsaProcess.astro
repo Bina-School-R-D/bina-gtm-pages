@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
+const { copy, groups, stepTotal } = page;
 // Labels are sentence case on the page; the lib keeps its lowercase strings.
 const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
@@ -23,11 +23,8 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 <!-- Mint section: black headings and labels, deep ocean step cards with mint text, deep ocean badges (Zeyu, 2026-11-04 — the /student-results STAR colors). -->
 <section id="process" class="theme-mint scroll-mt-20">
   <div class="mx-auto max-w-5xl px-5 py-14">
-    <h2 class="mb-3 text-title-xl sm:text-title-3xl">From application to first day</h2>
-    <p class="mb-8">
-      You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
-      do together — so you never have to work out which is which on your own.
-    </p>
+    <!-- The "You do two on … own website" line is gone (stakeholder, 2026-11-09); the tags say it. -->
+    <h2 class="mb-8 text-title-xl sm:text-title-3xl">From application to first day</h2>
 
     {
       copy.support && (
@@ -100,7 +97,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
 
     <p class="mt-6 text-body-lg">
-      *Funding renews each school year — we send you fresh paperwork every season, so renewing takes minutes.
+      *Funding renews each school year, and we send you new paperwork each time.
     </p>
 
   </div>
