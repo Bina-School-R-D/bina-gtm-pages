@@ -24,7 +24,8 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 <section id="process" class="theme-mint scroll-mt-20">
   <div class="mx-auto max-w-5xl px-5 py-14">
     <!-- The "You do two on … own website" line is gone (stakeholder, 2026-11-09); the tags say it. -->
-    <h2 class="mb-8 text-title-xl sm:text-title-3xl">From application to first day</h2>
+    <h2 class:list={['text-title-xl sm:text-title-3xl', copy.processLine ? 'mb-3' : 'mb-8']}>From application to first day</h2>
+    {copy.processLine && <p class="mb-8 max-w-3xl"><BrandText text={copy.processLine} /></p>}
 
     {
       copy.support && (
@@ -97,7 +98,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
     </div>
 
     <p class="mt-6 text-body-lg">
-      *Funding renews each school year, and we send you new paperwork each time.
+      *{copy.processNote ?? 'Funding renews each school year, and we send you new paperwork each time.'}
     </p>
 
   </div>

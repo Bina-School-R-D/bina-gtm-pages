@@ -427,10 +427,12 @@
       "seoTitle": "West Virginia Hope Scholarship: a Parent's Guide | bina",
       "seoDesc": "Who qualifies for West Virginia's Hope Scholarship, how much it pays and how to apply, and how to use it toward bina, a live online school for ages 4 to 15.",
       "moneyTitle": "What you pay with the Hope Scholarship",
-      "ctaTitle": "See how your Hope Scholarship works at bina",
+      "ctaTitle": "See how the Hope Scholarship works at bina",
       "callStep": {
-        "t": "Book an ESA call with Monet or Jose",
-        "d": "We go through your award, your top-up and a start date."
+        "t": "Book an ESA call with our financial aid team",
+        "d": "We go through your award, your top-up and a start date.",
+        "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=west_virginia",
+        "urlLabel": "Book an ESA call →"
       },
       "howEsa": {
         "title": "The Hope Scholarship in plain words",
@@ -467,14 +469,18 @@
       },
       "stepText": {
         "2": {
-          "d": "Create an account at hopescholarshipwv.gov. Complete the online application for each child. Upload your documents: your child's birth certificate, proof of West Virginia residency and, for new kindergartners, proof of kindergarten eligibility."
+          "d": "Create an account at hopescholarshipwv.gov and complete the application for each child. Upload your child's state-issued birth certificate and proof of West Virginia residency. If your child has attended a West Virginia public school, add their WVEIS number (it's on their report card)."
         },
         "3": {
-          "t": "Get approved and file your Notice of Intent",
-          "d": "Once you're found eligible, file a Notice of Intent with your county superintendent. Accounts aren't funded until it's on file. Track your status and spend your funds through the Hope portal."
+          "t": "File your Notice of Intent",
+          "d": "Once your application shows \"Eligible\", file a Notice of Intent with your county board of education. You only file it once, and your account is funded only after it's on file."
+        },
+        "4": {
+          "d": "Choose your start date and sign your agreement with bina for the remaining balance. If your child is enrolled full time in a public school, withdraw them before they start at bina."
         },
         "5": {
-          "d": "[Placeholder: step 5 text to come from Monet/Jose.]"
+          "t": "Pay bina from your Hope account",
+          "d": "Funds arrive each quarter. We send you an invoice, you pay bina from your Hope account, and you pay the difference."
         }
       },
       "about": {
@@ -482,38 +488,50 @@
         "bullets": [
           "Live online school from Pre-K to Grade 10",
           "Cambridge and Cognia accredited, CIS member",
-          "Small live classes with [class-size wording 🔍]"
+          "Families in 40+ countries"
         ],
         "link": {
           "label": "Explore bina →",
           "url": "https://thebinaschool.com"
-        },
-        "link2": {
-          "label": "See tuition →",
-          "url": "https://thebinaschool.com/tuition"
         }
       },
       "faqOnly": true,
       "faq": [
         {
-          "q": "Can I use the Hope Scholarship at bina today?",
-          "a": "Yes. bina is an approved Hope Scholarship school, so you can put your award toward bina tuition."
+          "q": "Is bina approved for the Hope Scholarship?",
+          "a": "Yes. bina is approved for West Virginia's Hope Scholarship, so you can use your Hope funds toward bina tuition."
         },
         {
-          "q": "How much is the Hope Scholarship?",
-          "a": "The full 2026–27 award is $5,435.62 per student, paid in four quarterly deposits. Families who apply later in the school year receive a smaller first-year share."
+          "q": "Does the Hope Scholarship cover all of bina's tuition?",
+          "a": "It covers about half. With the full award, families on the yearly plan top up about $444 a month."
         },
         {
-          "q": "Does my child need to have been in public school first?",
-          "a": "No. From 2026–27, children in private school or homeschool can apply too."
-        },
-        {
-          "q": "When should I apply?",
-          "a": "As early as possible. Applying between March 2 and June 15 gets the full award for the school year. Applications for 2027–28 open in March 2027."
+          "q": "When can I apply?",
+          "a": "Applications are open all year, and the date you apply sets your first-year award. If you apply by November 30, 2026, you receive 50% of the 2026–27 award, and from December 1, 2026 to February 28, 2027, you receive 25%. From the next school year, you receive the full award."
         },
         {
           "q": "What is a Notice of Intent?",
-          "a": "A form you file with your county superintendent once your child is found eligible. Your account is funded only after it's on file."
+          "a": "A form you file with your county board of education once your application shows \"Eligible\". You file it once, and your Hope account is funded only after it's on file."
+        },
+        {
+          "q": "When does the money arrive?",
+          "a": "The state adds a quarter of the award to your account by August 15, October 15, January 15 and April 15."
+        },
+        {
+          "q": "My child is in public school now. Can we still apply?",
+          "a": "Yes. Every West Virginia K–12 student can apply. Your child can't stay enrolled full time in a public school while using Hope funds, so they move to bina once you're ready to start."
+        },
+        {
+          "q": "Is there anything I need to do each year?",
+          "a": "Yes. Confirm your child's place in the program between January 5 and June 15 each year. We send you new paperwork for it."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
         },
         {
           "q": "Is bina responsible for this program?",
@@ -573,7 +591,10 @@
             "Follows up with you until each payment clears and sends new paperwork each year"
           ]
         ]
-      }
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=west_virginia",
+      "processLine": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+      "processNote": "Funding renews each school year. Confirm your place between January 5 and June 15, and we send you new paperwork each time."
     }
   ],
   "tierCopy": {

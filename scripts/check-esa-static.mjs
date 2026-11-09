@@ -170,7 +170,8 @@ for (const name of served) {
   for (const f of [...(copy.faq || []), ...(copy.faqOnly ? [] : landing.faq)]) must(pages[name], f.q, where);
   // Idaho is a reimbursement; the other four are paid to bina. Never mix the two up.
   const reimbursed = copy.tier === 'reimbursed';
-  must(pages[name], reimbursed ? 'Pay bina, then claim it back' : 'Pay tuition from your account', where);
+  // A state's own step-5 title (copy.stepText, West Virginia) replaces the generic one.
+  must(pages[name], copy.stepText?.['5']?.t ?? (reimbursed ? 'Pay bina, then claim it back' : 'Pay tuition from your account'), where);
   mustNot(pages[name], reimbursed ? 'Pay tuition from your account' : 'Pay bina, then claim it back', where);
 }
 
