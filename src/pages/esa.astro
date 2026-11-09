@@ -113,7 +113,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
               <div class="grid gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[10rem_1fr]">
                 <dt class="font-display text-title-sm text-hl">{st.name}</dt>
                 <dd class="m-0 text-body-lg">
-                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={sentence(st.text)} /> →</a> : <BrandText text={sentence(st.text)} />}
+                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={sentence(st.text)} /></a> : <BrandText text={sentence(st.text)} />}
                 </dd>
               </div>
             ))
