@@ -111,9 +111,8 @@ ordered.forEach((review, i) => {
   if (i === middle) wall.push({ kind: 'cta', at: 1 });
   wall.push({ kind: 'review', review });
 });
-// Every review card keeps the same width (Zeyu, 2026-11-04: the stretched last card was removed).
-// At 3 columns the two sky blue in-between cards are two cards wide, so the 34 cards fill 12 full
-// rows and the wall ends evenly (stakeholder, 2026-11-09). At 2 columns 34 already ends evenly.
+// Every card in the wall is the same size, the two sky blue cards included (Zeyu, 2026-11-10);
+// at 3 columns the last row is not full, which is accepted.
 const spanFor = (_idx: number) => '';
 
 // Review and feature cards are mint (card-bina-solid on the dark section); the in-between CTA cards are sky blue
@@ -279,7 +278,7 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
+                  <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Already a <span class="normal-case">bina</span> family?
                     </p>
@@ -293,7 +292,7 @@ const monthYear = (iso: string | null) =>
                 );
               }
               return (
-                <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
+                <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
                   <p class="mb-2 font-display text-body-xl font-bold">
                     Want to see the numbers too?
                   </p>
