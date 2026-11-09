@@ -107,10 +107,10 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
       <div class="max-w-3xl">
         <h3 class="mb-2 font-display text-title-lg font-bold">{c.other.title}</h3>
         <p class="mb-6 text-body-lg"><BrandText text={c.other.line} /></p>
-        <dl class="m-0 border-t border-line">
+        <dl class="m-0">
           {
             c.other.states.map((st) => (
-              <div class="grid gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[10rem_1fr]">
+              <div class="grid gap-x-6 gap-y-1 py-2 sm:grid-cols-[10rem_1fr]">
                 <dt class="font-display text-title-sm text-hl">{st.name}</dt>
                 <dd class="m-0 text-body-lg">
                   {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={sentence(st.text)} /></a> : <BrandText text={sentence(st.text)} />}
