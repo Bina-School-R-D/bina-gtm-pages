@@ -343,7 +343,8 @@
         "award": "About $3,800–$5,800",
         "pay": "About $414–$581 a month",
         "when": "Until Feb 15 (by Jul 15 for a full award)",
-        "paid": "ClassWallet"
+        "paid": "ClassWallet",
+        "linkName": "NH"
       },
       "money": {
         "title": "What you pay with your New Hampshire EFA",

@@ -87,7 +87,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                   <span><strong class="font-bold">How <span class="normal-case">bina</span> gets paid:</strong> <span class="font-display font-medium">{s.card.paid}</span></span>
                 </span>
                 <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
-                  bina for {s.state} families →
+                  bina for {s.card.linkName ?? s.state} families →
                 </a>
               </div>
             </li>
