@@ -159,7 +159,7 @@ const money = copy.money;
             {money.notes.map((n) => {
               const l = linked(n.t, n.link);
               return (
-                <p class="text-body-lg text-hl">
+                <p class="text-body-lg text-mint">
                   *<BrandText text={l.before} />{l.text && <a href={l.url} class="font-bold underline">{l.text}</a>}{l.after}
                 </p>
               );
