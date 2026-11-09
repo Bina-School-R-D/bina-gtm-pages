@@ -1,13 +1,14 @@
 ---
 import '../styles/global.css';
 import BrandText from '../components/BrandText.astro';
+import { CTA, CTA_LABEL } from '../lib/esa-states.js';
 
 interface Props {
   title: string;
   description: string;
   /** Set true for internal / sales-enablement pages that must stay out of Google. */
   noindex?: boolean;
-  /** Optional CTA shown on the right of the nav. Defaults to the main-site apply link. */
+  /** Optional CTA shown on the right of the nav. Defaults to "Start your bina journey" → form.thebinaschool.com/new, the main site's header button. */
   ctaHref?: string;
   ctaLabel?: string;
   /** Drop the gap above the footer, for pages whose last section is already dark. */
@@ -20,8 +21,8 @@ const {
   title,
   description,
   noindex = false,
-  ctaHref = 'https://thebinaschool.com',
-  ctaLabel = 'Visit bina',
+  ctaHref = CTA,
+  ctaLabel = CTA_LABEL,
   flushFooter = false,
   bare = false,
 } = Astro.props;
@@ -239,7 +240,7 @@ const socials = [
     <footer
       class:list={['theme-black relative z-10 overflow-hidden pt-12 md:pt-16', flushFooter ? 'mt-0' : 'mt-20']}
     >
-      <div class="px-5 sm:px-10">
+      <div class="px-5 sm:px-10 min-[1120px]:pr-24">
         <div class="mb-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-8 md:mb-12 lg:grid-cols-[1.4fr_repeat(5,minmax(0,1fr))]">
           <p class="col-span-2 font-display text-title-md font-medium text-mint sm:col-span-3 lg:col-span-1 xl:text-title-lg xl:font-medium">
             A global, mobile, whole schooling experience for 4–15 year olds that fits your family everywhere
@@ -270,13 +271,13 @@ const socials = [
         </ul>
         {Astro.slots.has('footer-note') && <div class="mb-8 md:mb-10"><slot name="footer-note" /></div>}
       </div>
-      <img src="/images/peeking-logo.svg" loading="lazy" decoding="async" alt="bina" width="440" height="125" class="block h-auto w-full" />
+      <img src="/images/peeking-logo.svg" decoding="async" alt="bina" width="440" height="125" class="block h-auto w-full" />
     </footer>
 
     <!-- Right-edge "Follow us" rail, tablet and up — same as the main site, on lagoon. -->
     <aside
       aria-label="Follow us on social media"
-      class="fixed bottom-[10%] right-0 z-[900] hidden flex-col items-center gap-[1.1rem] rounded-l-lg bg-lagoon px-[0.7rem] py-5 md:flex"
+      class="fixed bottom-[10%] right-0 z-[900] hidden flex-col items-center gap-[1.1rem] rounded-l-lg bg-lagoon px-[0.7rem] py-5 min-[1120px]:flex"
     >
       {socials.map((s) => (
         <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} class="block transition-transform duration-200 ease-out hover:scale-110">

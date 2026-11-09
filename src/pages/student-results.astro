@@ -125,7 +125,6 @@ const tenureBars = tenure.map((b, i) => {
   <!-- hero -->
   <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
-      <p class="eyebrow-line mb-5">Student results · 2025–26 school year</p>
       <h1 class="mb-5 text-title-3xl sm:text-display-sm">
         How much do children learn in a year at bina?
       </h1>
@@ -519,11 +518,18 @@ const tenureBars = tenure.map((b, i) => {
         l.readGrowthMedian == null
           ? `<p class="mt-4 text-body-lg">We share growth figures for groups of 10 or more students, so every number stays reliable. This year, fewer than 10 ${l.level} students were assessed at both points, so this group shows the benchmark result only.</p>`
           : '';
+      // One card fills the row; three share it (Zeyu, 2026-11-09: no empty space beside a lone card).
+      const cols = l.readGrowthMedian == null ? '' : ' sm:grid-cols-3';
+      // P1–P6 link to the primary school page, M levels to middle school (stakeholder, 2026-11-09).
+      const middle = l.level.startsWith('M');
+      const dayLink = middle
+        ? { text: 'See a day at bina in middle school →', url: 'https://thebinaschool.com/middle-school' }
+        : { text: 'See a day at bina in primary school →', url: 'https://thebinaschool.com/primary-school' };
       result.innerHTML = `
-        <div class="grid gap-3 sm:grid-cols-3">${cards}</div>
+        <div class="grid gap-3${cols}">${cards}</div>
         ${note}
         <p class="mt-4 text-body-lg">
-          <a href="${SITE}" class="font-bold underline">See a typical week for a ${l.level} student →</a>
+          <a href="${dayLink.url}" class="font-bold underline">${dayLink.text}</a>
         </p>`;
       buttons.forEach((b) => b.setAttribute('aria-pressed', b.dataset.level === level ? 'true' : 'false'));
       const url = new URL(location);

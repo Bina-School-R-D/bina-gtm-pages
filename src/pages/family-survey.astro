@@ -87,7 +87,7 @@ const faq = [
   {
     q: 'What should I keep in mind when reading these scores?',
     a: 'Families who answer surveys tend to be the most engaged ones, so read the scores with that in mind. Every figure is a school-wide average, and no individual family or child is shown. For results measured independently, see our student results.',
-    link: { text: 'student results', url: '/student-results' },
+    link: { text: 'student results', url: 'https://thebinaschool.com/student-results' },
   },
   {
     q: 'Where do these numbers come from?',
@@ -322,41 +322,39 @@ const faq = [
       <h2 class="mb-6 text-title-xl sm:text-title-3xl">
         Our next goal: every score <span class="whitespace-nowrap text-hl">above 9</span>,<br class="max-sm:hidden" /> and here's the 12-month plan
       </h2>
-      <div class="grid gap-8 lg:grid-cols-2">
-        <div>
-          <p class="mb-4">
-            Sense of belonging scores <strong>{dimensions[6].score} out of 10</strong>,
-            and it's the one we're focusing on most this year. At an online school, community is
-            something we build on purpose, so we asked families what they'd like next and made their
-            answers the plan.
-          </p>
-          <p class="text-hl">
-            The target: <strong class="text-hl"
-              >every one of our seven scores above 9 out of 10 within the next 12 months.</strong
-            >
-          </p>
-        </div>
-        <div>
-          <p class="mb-4 font-display font-bold">
-            The plan, ranked by what families asked for
-          </p>
-          <!-- Deep ocean cards with mint text on mint (the /student-results "Understanding STAR" pattern). -->
-          <ul class="m-0 grid list-none gap-3 p-0">
-            {
-              wishlist.map((w) => (
-                <li class="flex items-baseline gap-4 rounded-lg bg-deep-ocean px-5 py-4 text-mint">
-                  <span class="w-14 flex-none font-display text-title-md font-bold">{w.pct}%</span>
-                  <span>{w.label}</span>
-                </li>
-              ))
-            }
-          </ul>
-          <p class="mt-4 text-body-lg">
-            Middle-school parent survey, <strong>{surveyB.n} responses.</strong> These are themes families raised in
-            their own words, not options we offered.
-          </p>
-        </div>
+      <!-- Stacked, not two columns (stakeholder, 2026-11-09: the short left column left a gap beside
+           the plan). Text first, then the plan as one row of five cards from 1024px, a list below. -->
+      <div class="mb-10 max-w-3xl">
+        <p class="mb-4">
+          Sense of belonging scores <strong>{dimensions[6].score} out of 10</strong>,
+          and it's the one we're focusing on most this year. At an online school, community is
+          something we build on purpose, so we asked families what they'd like next and made their
+          answers the plan.
+        </p>
+        <p class="text-hl">
+          The target: <strong class="text-hl"
+            >every one of our seven scores above 9 out of 10 within the next 12 months.</strong
+          >
+        </p>
       </div>
+      <p class="mb-4 font-display font-bold">
+        The plan, ranked by what families asked for
+      </p>
+      <!-- Deep ocean cards with mint text on mint (the /student-results "Understanding STAR" pattern). -->
+      <ul class="m-0 grid list-none gap-3 p-0 lg:grid-cols-5">
+        {
+          wishlist.map((w) => (
+            <li class="flex items-baseline gap-4 rounded-lg bg-deep-ocean px-5 py-4 text-mint lg:flex-col lg:gap-2">
+              <span class="w-14 flex-none font-display text-title-md font-bold lg:w-auto">{w.pct}%</span>
+              <span>{w.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-4 text-body-lg">
+        Middle-school parent survey, <strong>{surveyB.n} responses.</strong> These are themes families raised in
+        their own words, not options we offered.
+      </p>
     </div>
   </section>
 

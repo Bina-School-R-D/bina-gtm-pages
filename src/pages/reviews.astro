@@ -111,7 +111,9 @@ ordered.forEach((review, i) => {
   if (i === middle) wall.push({ kind: 'cta', at: 1 });
   wall.push({ kind: 'review', review });
 });
-// Every card keeps the same width (Zeyu, 2026-11-04: the stretched last card was removed).
+// Every review card keeps the same width (Zeyu, 2026-11-04: the stretched last card was removed).
+// At 3 columns the two sky blue in-between cards are two cards wide, so the 34 cards fill 12 full
+// rows and the wall ends evenly (stakeholder, 2026-11-09). At 2 columns 34 already ends evenly.
 const spanFor = (_idx: number) => '';
 
 // Review and feature cards are mint (card-bina-solid on the dark section); the in-between CTA cards are sky blue
@@ -225,7 +227,6 @@ const monthYear = (iso: string | null) =>
                       width="26"
                       height="26"
                       class="h-[1.625rem] w-[1.625rem] shrink-0"
-                      loading="lazy"
                     />
                     <span class="min-w-0 flex-1">
                       <span class="block truncate font-display text-body-md font-bold">
@@ -265,6 +266,12 @@ const monthYear = (iso: string | null) =>
                   </p>
 
                   <div class="review-body min-h-0 text-body-lg">{f.detail}</div>
+                  <!-- "See more →" like every review card (stakeholder, 2026-11-09); here it opens the
+                       post itself, since the full piece lives on LinkedIn / Instagram. -->
+                  <a href={f.url} target="_blank" rel="noopener noreferrer" class="review-more no-underline">
+                    <span class="review-more-label">See more →</span>
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
                 </div>
               );
             }
@@ -272,7 +279,7 @@ const monthYear = (iso: string | null) =>
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
+                  <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
                     <p class="mb-2 font-display text-body-xl font-bold">
                       Already a <span class="normal-case">bina</span> family?
                     </p>
@@ -286,14 +293,14 @@ const monthYear = (iso: string | null) =>
                 );
               }
               return (
-                <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
+                <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
                   <p class="mb-2 font-display text-body-xl font-bold">
                     Want to see the numbers too?
                   </p>
                   <p class="mb-4 text-body-lg">
                     {surveyN} families rated bina out of 10, and every score is published.
                   </p>
-                  <a href="/family-survey" class="btn-bina-secondary btn-sm mt-auto self-start">See the family survey</a>
+                  <a href="https://thebinaschool.com/family-survey" class="btn-bina-secondary btn-sm mt-auto self-start">See the family survey</a>
                 </div>
               );
             }
@@ -320,7 +327,6 @@ const monthYear = (iso: string | null) =>
                     width="26"
                     height="26"
                     class="h-[1.625rem] w-[1.625rem] shrink-0"
-                    loading="lazy"
                   />
                   <span class="min-w-0 flex-1">
                     <span class="block truncate font-display text-body-md font-bold">
@@ -517,6 +523,10 @@ const monthYear = (iso: string | null) =>
       text-decoration-thickness: 1.5px;
       text-underline-offset: 4px;
       transition: opacity 0.15s ease-out;
+    }
+    /* A link "See more" (the feature cards) keeps its fill solid; only the label fades. */
+    a.review-more.review-more:hover {
+      opacity: 1;
     }
     .review-more:hover .review-more-label {
       opacity: 0.8;
