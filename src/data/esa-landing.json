@@ -291,7 +291,8 @@
       ],
       "seoTitle": "Utah Fits All Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition.",
-      "awardPrefix": "Up to"
+      "awardPrefix": "Up to",
+      "heroBadge": "Approved Utah Fits All school"
     },
     {
       "slug": "idaho",
@@ -331,7 +332,8 @@
       "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
       "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition.",
       "awardPrefix": "Up to",
-      "cardTag": "Jan 15 – Mar 15, 2027"
+      "cardTag": "Jan 15 – Mar 15, 2027",
+      "heroBadge": "Approved Idaho Parental Choice Tax Credit school"
     },
     {
       "slug": "wyoming",
@@ -370,7 +372,8 @@
       ],
       "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer.",
-      "cardTag": "2027–28 dates coming soon"
+      "cardTag": "2027–28 dates coming soon",
+      "heroBadge": "Approved Wyoming ESA school"
     },
     {
       "slug": "new-hampshire",
@@ -409,7 +412,8 @@
       ],
       "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
       "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
-      "awardPrefix": "About"
+      "awardPrefix": "About",
+      "heroBadge": "Approved New Hampshire EFA school"
     },
     {
       "slug": "west-virginia",
@@ -418,12 +422,11 @@
       "esaMin": 5435.62,
       "esaMax": 5435.62,
       "cardTag": "2026–27 open until Feb 28",
-      "h1": "West Virginia's Hope Scholarship: a parent's guide",
-      "heroLine": "Everything you need to know about West Virginia's education savings account: who qualifies, how much it pays and how to apply.",
+      "h1": "West Virginia families can use the Hope Scholarship toward a bina education",
       "heroBadge": "Approved West Virginia Hope Scholarship school",
       "seoTitle": "West Virginia Hope Scholarship: a Parent's Guide | bina",
       "seoDesc": "Who qualifies for West Virginia's Hope Scholarship, how much it pays and how to apply, and how to use it toward bina, a live online school for ages 4 to 15.",
-      "moneyTitle": "What you pay with your Hope Scholarship",
+      "moneyTitle": "What you pay with the Hope Scholarship",
       "ctaTitle": "See how your Hope Scholarship works at bina",
       "callStep": {
         "t": "Book an ESA call with Monet or Jose",
@@ -431,51 +434,7 @@
       },
       "howEsa": {
         "title": "The Hope Scholarship in plain words",
-        "body": "The Hope Scholarship is West Virginia's Education Savings Account (ESA), run by the West Virginia State Treasurer's Office. The state puts money into an account for your child, and you spend it on approved education costs such as private or online school tuition, tutoring, curriculum, books and therapies.",
-        "bullets": [
-          {
-            "k": "Full award for 2026–27:",
-            "v": "$5,435.62 per student"
-          },
-          {
-            "k": "How it's paid:",
-            "v": "in four quarterly deposits (by August 15, October 15, January 15 and April 15)"
-          },
-          {
-            "k": "Part-year awards:",
-            "v": "the later you apply in the school year, the smaller your first-year award (see dates below)"
-          }
-        ]
-      },
-      "dates": {
-        "title": "Application dates for 2026–27",
-        "head": [
-          "Apply between",
-          "Share of the award"
-        ],
-        "rows": [
-          [
-            "March 2 – June 15, 2026",
-            "100%"
-          ],
-          [
-            "June 16 – September 15, 2026",
-            "75%"
-          ],
-          [
-            "September 16 – November 30, 2026",
-            "50%"
-          ],
-          [
-            "December 1, 2026 – February 28, 2027",
-            "25%"
-          ],
-          [
-            "From March 2027",
-            "Full award for 2027–28"
-          ]
-        ],
-        "note": "Returning families confirm each year by June 15."
+        "body": "The Hope Scholarship is West Virginia's Education Savings Account, run by the West Virginia State Treasurer's Office. When your child is approved and your Notice of Intent is on file, the state puts money into a Hope account for your child's education, a quarter of the award at a time (by August 15, October 15, January 15 and April 15). You spend it on approved expenses, including tuition at an online school like bina, and the money goes from your account to the school, not to you."
       },
       "qualifies": {
         "title": "Can your family use the Hope Scholarship?",
@@ -486,7 +445,7 @@
           },
           {
             "k": "Grade",
-            "v": "Your child is enrolled in, or eligible to enroll in, a West Virginia public school from kindergarten to grade 12."
+            "v": "Your child is enrolled in, or eligible to enroll in, a West Virginia public school from kindergarten to grade 12. bina teaches from Pre-K to Grade 10. Pre-K isn't covered by the Hope Scholarship."
           },
           {
             "k": "Kindergarten",
@@ -494,11 +453,15 @@
           },
           {
             "k": "School history",
-            "v": "From 2026–27, children already in private school or homeschool can apply too. They don't need to have attended public school first."
+            "v": "From 2026–27, every West Virginia K–12 student can apply, including children already in private school or homeschool."
           },
           {
             "k": "While using funds",
             "v": "Your child isn't enrolled full time in a public school."
+          },
+          {
+            "k": "Dates",
+            "v": "Applications are open all year, and the date you apply sets your first-year award. For 2026–27: 50% of the award until November 30, 2026, and 25% from December 1, 2026 to February 28, 2027. After February 28, applications count toward the 2027–28 school year."
           }
         ]
       },
@@ -513,12 +476,6 @@
         "5": {
           "d": "[Placeholder: step 5 text to come from Monet/Jose.]"
         }
-      },
-      "classWallet": {
-        "title": "How to pay bina with your Hope funds",
-        "steps": [
-          "[Placeholder: steps to come from Monet/Jose, including bina's Hope portal listing name.]"
-        ]
       },
       "about": {
         "title": "Getting to know bina",
@@ -567,7 +524,56 @@
           }
         }
       ],
-      "awardName": "Hope Scholarship"
+      "gate": [
+        "bina is approved for West Virginia's Hope Scholarship",
+        "The full award is $5,435.62 a year. You top up the rest.",
+        "Your Hope account is funded every quarter"
+      ],
+      "moneyLine": "The Hope Scholarship covers about half of a year at bina. Here's how it adds up.",
+      "awardRowLabel": "Hope Scholarship gives you (full award)",
+      "midYear": {
+        "leadBold": "Applying during the school year:",
+        "lead": "your first-year award depends on when you apply. On the yearly plan:",
+        "head": [
+          "Apply between",
+          "Your 2026–27 award",
+          "You pay (yearly plan)"
+        ],
+        "rows": [
+          [
+            "September 16 – November 30, 2026",
+            "$2,717.81 (50%)",
+            "About $671 a month"
+          ],
+          [
+            "December 1, 2026 – February 28, 2027",
+            "$1,358.91 (25%)",
+            "About $784 a month"
+          ]
+        ],
+        "after": "From the 2027–28 school year, you receive the full award."
+      },
+      "moneyNotes": [
+        "You sign an agreement with bina for the balance the scholarship doesn't cover."
+      ],
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply for the Hope Scholarship and file your Notice of Intent",
+            "Talks you through your numbers before you apply, so you know your top-up"
+          ],
+          [
+            "Use your Hope funds toward bina tuition",
+            "Sends you an invoice, enrollment letter and accreditation details"
+          ],
+          [
+            "Confirm your place in the program each year",
+            "Follows up with you until each payment clears and sends new paperwork each year"
+          ]
+        ]
+      }
     }
   ],
   "tierCopy": {

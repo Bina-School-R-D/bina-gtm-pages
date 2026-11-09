@@ -110,6 +110,19 @@ export function numberedSteps(d, reimbursed, callStep) {
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 export const words = WORDS;
 
+const DISCLAIMER_Q = 'Is bina responsible for this program?';
+function withDisclaimer(faq, d) {
+  if (faq.some((f) => f.q === DISCLAIMER_Q)) return faq;
+  return [
+    ...faq,
+    {
+      q: DISCLAIMER_Q,
+      a: `The ${d.prog} is run by the state of ${d.s}, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.`,
+      link: { text: 'the official program site', url: d.officialUrl },
+    },
+  ];
+}
+
 /**
  * Everything a /esa/<state> page renders, resolved once: program facts, sales copy, the
  * money arithmetic and the steps. Throws rather than shipping a page built on a mismatch.
@@ -163,7 +176,9 @@ export function statePage(slug) {
     stepsBoth: countBy('both'),
     // This state's own questions lead; the ones every family asks follow — unless the state's
     // FAQ is a complete set of its own (Arizona, from the Notion draft).
-    questions: copy.faqOnly ? copy.faq : [...copy.faq, ...landing.faq],
+    // Every state page ends its FAQ with the same disclaimer (ESA final page structure): states
+    // whose Notion FAQ already has it keep theirs; the others get it in Arizona's wording.
+    questions: withDisclaimer(copy.faqOnly ? copy.faq : [...copy.faq, ...landing.faq], program),
     // The money table: what a family pays on each plan after the award.
     payRows: [
       { plan: 'Yearly plan', tuition: school.tuitionYearly },
