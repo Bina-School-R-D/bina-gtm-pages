@@ -22,6 +22,8 @@ export default defineConfig({
   redirects: {
     '/': 'https://thebinaschool.com',
     '/esa-guide': '/esa',
+    // /book-adventure was retired on 2026-11-09 (no longer needed); old links land on the main site.
+    '/book-adventure': 'https://thebinaschool.com',
     ...retiredStateRedirects,
   },
   // React only for the /families-map island (the component is shared with thebinaschool.com).
