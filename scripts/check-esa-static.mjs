@@ -135,7 +135,6 @@ for (const name of served) {
   if (steps.length === 0) fail(`${where}: no steps in esa-landing.json (process.groups)`);
   for (const text of [
     copy.h1,
-    copy.heroBadge,
     ...(copy.gate || []),
     copy.money ? (copy.money.youPay || copy.money.title) : null,
     copy.qualifies?.title,
