@@ -280,10 +280,10 @@ const monthYear = (iso: string | null) =>
               if (item.at === 0) {
                 return (
                   <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
-                    <p class="mb-3 text-title-md sm:text-title-lg xl:text-title-xl">
+                    <p class="mb-2 font-display text-body-xl font-bold">
                       Already a <span class="normal-case">bina</span> family?
                     </p>
-                    <p class="mb-6 text-body-xl">
+                    <p class="mb-4 text-body-lg">
                       Your review helps the next family find their way to bina.
                     </p>
                     <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
@@ -294,10 +294,10 @@ const monthYear = (iso: string | null) =>
               }
               return (
                 <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black xl:col-span-2', spanFor(idx)]}>
-                  <p class="mb-3 text-title-md sm:text-title-lg xl:text-title-xl">
+                  <p class="mb-2 font-display text-body-xl font-bold">
                     Want to see the numbers too?
                   </p>
-                  <p class="mb-6 text-body-xl">
+                  <p class="mb-4 text-body-lg">
                     {surveyN} families rated bina out of 10, and every score is published.
                   </p>
                   <a href="https://thebinaschool.com/family-survey" class="btn-bina-secondary btn-sm mt-auto self-start">See the family survey</a>
