@@ -151,7 +151,7 @@ const money = copy.money;
               const l = linked(n.t, n.link);
               return (
                 <p class="text-body-lg text-mint">
-                  *<BrandText text={l.before} />{l.text && <a href={l.url} class="font-bold underline">{l.text}</a>}{l.after}
+                  *<BrandText text={l.before} />{l.text && <a href={l.url}>{l.text}</a>}{l.after}
                 </p>
               );
             })}
@@ -279,7 +279,7 @@ const money = copy.money;
           </ol>
           {copy.portal.videoUrl && (
             <p class="mt-6 text-body-lg">
-              <a href={copy.portal.videoUrl} target="_blank" rel="noopener" class="font-bold underline">
+              <a href={copy.portal.videoUrl} target="_blank" rel="noopener" class="font-semibold">
                 {copy.portal.videoLabel} →
               </a>
             </p>
@@ -327,11 +327,11 @@ const money = copy.money;
             </ul>
             {copy.about.link && (
               <p class="mt-8 flex flex-wrap gap-x-8 gap-y-3">
-                <a href={copy.about.link.url} target="_blank" rel="noopener noreferrer" class="font-bold text-lagoon underline">
+                <a href={copy.about.link.url} target="_blank" rel="noopener noreferrer" class="font-semibold text-lagoon">
                   <BrandText text={copy.about.link.label} /><span class="sr-only"> (opens in a new tab)</span>
                 </a>
                 {copy.about.link2 && (
-                  <a href={copy.about.link2.url} class="font-bold text-lagoon underline">
+                  <a href={copy.about.link2.url} class="font-semibold text-lagoon">
                     <BrandText text={copy.about.link2.label} />
                   </a>
                 )}

@@ -241,7 +241,7 @@ const monthYear = (iso: string | null) =>
                     href={f.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mb-2 inline-flex shrink-0 items-center gap-1 self-start text-body-md font-display font-bold underline underline-offset-2"
+                    class="mb-2 inline-flex shrink-0 items-center gap-1 self-start text-body-md font-display font-semibold"
                   >
                     {f.cta}
                     <svg
@@ -346,7 +346,7 @@ const monthYear = (iso: string | null) =>
                     href={sourceUrl[r.source]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1 font-display font-bold underline underline-offset-2"
+                    class="inline-flex items-center gap-1 font-display font-semibold"
                   >
                     {sourceVerb[r.source]}
                     <svg
@@ -427,7 +427,7 @@ const monthYear = (iso: string | null) =>
                       <a
                         href={sourceUrl[r.source]}
                         rel="noopener"
-                        class="font-display font-bold underline underline-offset-4"
+                        class="font-display font-semibold"
                       >
                         {sourceVerb[r.source]} →
                       </a>
@@ -518,17 +518,18 @@ const monthYear = (iso: string | null) =>
     /* Hover: the label fades to 80%, like every link (Zeyu, 2026-11-06). The label fades, not the
        button, because the button's own fill covers the faded review text behind it. */
     .review-more-label {
+      font-weight: 600;
       text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 4px;
-      transition: opacity 0.15s ease-out;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+      transition: text-decoration-thickness 0.15s ease-out;
     }
     /* A link "See more" (the feature cards) keeps its fill solid; only the label fades. */
     a.review-more.review-more:hover {
       opacity: 1;
     }
     .review-more:hover .review-more-label {
-      opacity: 0.8;
+      text-decoration-thickness: 3px;
     }
 
     /* The full review, in a native dialog — no library, Esc and backdrop close for free. */

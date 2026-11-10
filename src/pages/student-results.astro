@@ -529,7 +529,7 @@ const tenureBars = tenure.map((b, i) => {
         <div class="grid gap-3${cols}">${cards}</div>
         ${note}
         <p class="mt-4 text-body-lg">
-          <a href="${dayLink.url}" class="font-bold underline">${dayLink.text}</a>
+          <a href="${dayLink.url}" class="font-semibold">${dayLink.text}</a>
         </p>`;
       buttons.forEach((b) => b.setAttribute('aria-pressed', b.dataset.level === level ? 'true' : 'false'));
       const url = new URL(location);

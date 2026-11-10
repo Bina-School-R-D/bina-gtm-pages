@@ -257,7 +257,7 @@ const socials = [
                     <a
                       href={l.href}
                       {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                      class="font-display text-body-lg font-medium text-lagoon underline decoration-transparent xl:text-body-xl xl:font-medium"
+                      class="font-display text-body-lg font-semibold text-lagoon xl:text-body-xl"
                     >{l.label}</a>
                   </li>
                 ))}
@@ -268,7 +268,7 @@ const socials = [
         <ul class="mb-8 flex flex-wrap gap-x-6 gap-y-2 md:mb-10">
           {footerLegalLinks.map((l) => (
             <li>
-              <a href={l.href} class="font-display text-body-lg font-medium text-mint underline decoration-transparent xl:text-body-xl xl:font-medium">{l.label}</a>
+              <a href={l.href} class="font-display text-body-lg font-semibold text-mint xl:text-body-xl">{l.label}</a>
             </li>
           ))}
         </ul>
