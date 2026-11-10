@@ -1,7 +1,10 @@
 ---
+import CtaBlock from '../components/CtaBlock.astro';
+import BrandText from '../components/BrandText.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/reviews.json';
 import survey from '../data/family-survey.json';
+import { CTA, CTA_LABEL } from '../lib/esa-states.js';
 
 const { headline, sources, reviews, registry, beyond } = data;
 
@@ -48,11 +51,12 @@ const sourceUrl: Record<string, string> = {
 const BAR = ['niche', 'trustpilot', 'world-schools', 'survey'];
 const barSources = BAR.map((key) => sources.find((src) => src.key === key)!);
 const sourceLogo: Record<string, string> = {
-  niche: '/images/logos/niche.svg',
-  trustpilot: '/images/logos/trustpilot.svg',
-  'world-schools': '/images/logos/world-schools.svg',
-  site: '/images/logos/bina.svg',
-  survey: '/images/logos/bina.svg',
+  // Black-only logos (Zeyu, 2026-11-04), so the badges and cards stay within the page's colors.
+  niche: '/images/logos/niche-black.svg',
+  trustpilot: '/images/logos/trustpilot-black.svg',
+  'world-schools': '/images/logos/world-schools-black.svg',
+  site: '/images/logos/bina-black.svg',
+  survey: '/images/logos/bina-black.svg',
 };
 
 const sourceInitial: Record<string, string> = {
@@ -98,28 +102,21 @@ const wall: WallItem[] = [];
 // The article and the reel open the wall and stay put under every filter — they are the two
 // things a parent made unprompted, and neither is a review, so neither is counted as one.
 beyond.forEach((item) => wall.push({ kind: 'feature', item }));
+// Notion draft (2026-11-04): the review ask after the first 7 reviews, the survey card in the
+// middle of the list. The "Reading about it only goes so far" card is gone: the CTA card at the
+// end does that job.
+const middle = Math.floor(ordered.length / 2);
 ordered.forEach((review, i) => {
-  if (i === 5) wall.push({ kind: 'cta', at: 0 });
-  if (i === 13) wall.push({ kind: 'cta', at: 2 });
-  if (i === 20) wall.push({ kind: 'cta', at: 1 });
+  if (i === 7) wall.push({ kind: 'cta', at: 0 });
+  if (i === middle) wall.push({ kind: 'cta', at: 1 });
   wall.push({ kind: 'review', review });
 });
+// Every card in the wall is the same size, the two sky blue cards included (Zeyu, 2026-11-10);
+// at 3 columns the last row is not full, which is accepted.
+const spanFor = (_idx: number) => '';
 
-// Chromatic tints, cycled. Literal classes so Tailwind picks them up.
-const tints = [
-  'bg-white',
-  'bg-bina-grass/25',
-  'bg-white',
-  'bg-bina-yellow/30',
-  'bg-bina-blue/20',
-  'bg-white',
-  'bg-bina-purple/20',
-  'bg-bina-pink/15',
-  'bg-white',
-  'bg-bina-green/20',
-  'bg-bina-orange/15',
-  'bg-white',
-];
+// Review and feature cards are mint (card-bina-solid on the dark section); the in-between CTA cards are sky blue
+// with black text and a black button (Zeyu, 2026-11-06).
 
 const monthYear = (iso: string | null) =>
   iso
@@ -136,21 +133,20 @@ const monthYear = (iso: string | null) =>
   title="bina Reviews — What Families Actually Say About Us"
   description="Every review of bina in one place — 27 verbatim parent and teacher reviews, and links to every independent site where families rate us."
   flushFooter={true}
+  ctaHref={CTA}
+  ctaLabel="Start your bina journey"
 >
   <!-- hero: one claim, one line, one CTA -->
-  <header class="bg-bina-purple/25">
-    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
-      <p class="pill-bina mb-6 text-sm tracking-wide">reviews</p>
-      <h1 class="mb-5 max-w-3xl text-5xl font-black sm:text-7xl">
-        What parents say
-        <span class="underline decoration-bina-yellow decoration-8 underline-offset-4">about bina</span>
+  <header class="theme-lagoon">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+      <h1 class="mb-5 text-title-3xl sm:text-display-sm">
+        What parents say about bina
       </h1>
-      <p class="mb-8 max-w-xl text-lg text-coal-1000 sm:text-xl">
-        Their words, not ours — every one of them copied whole from a site we don't control.
+      <p class="mb-8 text-body-xl">
+        <BrandText text="Reviews from bina families, copied word for word from Niche, Trustpilot and the families who gave us permission to share them." />
       </p>
-      <a href={SITE} class="btn-bina text-lg">Visit bina</a>
 
-      <nav aria-label="Where bina is reviewed" class="mt-8">
+      <nav aria-label="Where bina is reviewed">
         <ul class="flex flex-wrap items-center gap-2">
           {
             barSources.map((src) => (
@@ -159,30 +155,27 @@ const monthYear = (iso: string | null) =>
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-coal-black bg-white px-3 py-1.5 font-display text-xs font-bold text-coal-black no-underline transition-colors duration-200 hover:bg-bina-yellow"
+                  class="inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-black px-2.5 py-1 font-display text-label uppercase text-lagoon no-underline transition-colors duration-200 hover:bg-dragon-fruit hover:text-black"
                 >
                   {sourceLogo[src.key] ? (
-                    <img
-                      src={sourceLogo[src.key]}
-                      alt=""
-                      width="18"
-                      height="18"
-                      class="h-[1.125rem] w-[1.125rem] shrink-0"
-                      loading="lazy"
-                    />
+                    <!-- The logo as a mask filled with the text color, so it matches the label color. -->
+                    <span
+                      aria-hidden="true"
+                      class="badge-logo h-[1.125rem] w-[1.125rem] shrink-0 bg-current"
+                      style={`--logo:url(${sourceLogo[src.key]})`}
+                    ></span>
                   ) : (
                     <span
                       aria-hidden="true"
                       class:list={[
-                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full border-2 border-coal-black text-[0.55rem]',
-                        src.markColor,
+                        'flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-full bg-lagoon text-body-md text-black',
                       ]}
                     >
                       {src.mark}
                     </span>
                   )}
-                  <span>{src.barLabel}</span>
-                  {src.barStat && <span class="font-normal text-coal-900">{src.barStat}</span>}
+                  <span class="font-bold">{src.barLabel}</span>
+                  {src.barStat && <span class="font-bold">{src.barStat}</span>}
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
@@ -207,24 +200,23 @@ const monthYear = (iso: string | null) =>
   </header>
 
   <!-- the wall -->
-  <section class="border-t-2 border-coal-black bg-bina-purple/10">
-    <div class="mx-auto max-w-[96rem] px-6 py-8 sm:px-10 sm:py-10">
+  <section class="theme-base">
+    <div class="mx-auto max-w-5xl px-5 py-14">
       <div
         id="review-wall"
-        class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
       >
         {
-          wall.map((item) => {
+          wall.map((item, idx) => {
             if (item.kind === 'feature') {
               const f = item.item;
               return (
-                <a
-                  href={f.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <!-- Like the review cards: the card itself doesn't react to hover; only the
+                     platform link fades (Zeyu, 2026-11-06). -->
+                <div
                   class:list={[
-                    'wall-cell card-bina relative flex flex-col px-7 py-5 no-underline',
-                    f.tint,
+                    'wall-cell card-bina-solid relative flex flex-col px-7 py-5',
+                    spanFor(idx),
                   ]}
                 >
                   <div class="mb-2 flex shrink-0 items-center gap-2.5">
@@ -234,19 +226,23 @@ const monthYear = (iso: string | null) =>
                       width="26"
                       height="26"
                       class="h-[1.625rem] w-[1.625rem] shrink-0"
-                      loading="lazy"
                     />
                     <span class="min-w-0 flex-1">
-                      <span class="block truncate font-display text-sm font-bold text-coal-black">
+                      <span class="block truncate font-display text-body-md font-bold">
                         {f.who}
                       </span>
-                      <span class="block truncate text-[0.7rem] leading-tight text-coal-900">
+                      <span class="block truncate text-body-md leading-tight">
                         {f.platform}
                       </span>
                     </span>
                   </div>
 
-                  <p class="mb-2 inline-flex shrink-0 items-center gap-1 text-[0.7rem] font-display font-bold text-coal-black underline underline-offset-2">
+                  <a
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mb-2 inline-flex shrink-0 items-center gap-1 self-start text-body-md font-display font-bold underline underline-offset-2"
+                  >
                     {f.cta}
                     <svg
                       aria-hidden="true"
@@ -262,62 +258,54 @@ const monthYear = (iso: string | null) =>
                       <path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5" />
                     </svg>
                     <span class="sr-only">(opens in a new tab)</span>
-                  </p>
+                  </a>
 
-                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-sm font-bold text-coal-black">
+                  <p class="mb-1 line-clamp-2 shrink-0 font-display text-body-lg font-bold">
                     {f.title}
                   </p>
 
-                  <div class="review-body min-h-0 text-sm text-coal-1000">{f.detail}</div>
-                </a>
+                  <div class="review-body min-h-0 text-body-lg">{f.detail}</div>
+                  <!-- "See more →" like every review card (stakeholder, 2026-11-09); here it opens the
+                       post itself, since the full piece lives on LinkedIn / Instagram. -->
+                  <a href={f.url} target="_blank" rel="noopener noreferrer" class="review-more no-underline">
+                    <span class="review-more-label">See more →</span>
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
+                </div>
               );
             }
 
             if (item.kind === 'cta') {
               if (item.at === 0) {
                 return (
-                  <div class="wall-cell card-bina flex flex-col bg-bina-yellow p-6">
-                    <p class="mb-2 font-display text-lg font-bold text-coal-black">
-                      Already a bina family?
+                  <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
+                    <p class="mb-2 font-display text-body-xl font-bold">
+                      Already a <span class="normal-case">bina</span> family?
                     </p>
-                    <p class="mb-4 text-sm text-coal-1000">
-                      Your honest opinion is what the next family reads before they dare to switch.
+                    <p class="mb-4 text-body-lg">
+                      Your review helps the next family find their way to bina.
                     </p>
-                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-ghost mt-auto self-start">
+                    <a href={TRUSTPILOT_WRITE} rel="noopener" class="btn-bina-secondary btn-sm mt-auto self-start">
                       Write a review
                     </a>
                   </div>
                 );
               }
-              if (item.at === 2) {
-                return (
-                  <div class="wall-cell card-bina flex flex-col bg-bina-grass/40 p-6">
-                    <p class="mb-2 font-display text-lg font-bold text-coal-black">
-                      Reading about it only goes so far.
-                    </p>
-                    <p class="mb-4 text-sm text-coal-1000">
-                      See how bina teaches and whether these families are right about us.
-                    </p>
-                    <a href={SITE} class="btn-bina mt-auto self-start">Visit bina</a>
-                  </div>
-                );
-              }
               return (
-                <div class="wall-cell card-bina flex flex-col bg-coal-black p-6">
-                  <p class="mb-2 font-display text-lg font-bold text-white">
-                    Stories are one thing. Scores are another.
+                <div class:list={['wall-cell flex flex-col rounded-lg bg-sky-blue p-6 text-black', spanFor(idx)]}>
+                  <p class="mb-2 font-display text-body-xl font-bold">
+                    Want to see the numbers too?
                   </p>
-                  <p class="mb-4 text-sm text-white/80">
-                    {surveyN} families rated us out of 10. We published every score, worst included.
+                  <p class="mb-4 text-body-lg">
+                    {surveyN} families rated bina out of 10, and every score is published.
                   </p>
-                  <a href="/family-survey" class="btn-bina mt-auto self-start">See the scores</a>
+                  <a href="https://thebinaschool.com/family-survey" class="btn-bina-secondary btn-sm mt-auto self-start">See the family survey</a>
                 </div>
               );
             }
 
             const r = item.review;
             const i = ordered.indexOf(r);
-            const tint = tints[i % tints.length];
             const initial = r.author ? r.author.charAt(0) : sourceInitial[r.source];
             const when = monthYear(r.date);
             const paras = r.body.split('\n\n').filter(Boolean);
@@ -325,8 +313,8 @@ const monthYear = (iso: string | null) =>
             return (
               <article
                 class:list={[
-                  'review-card wall-cell card-bina relative flex flex-col px-7 py-5',
-                  tint,
+                  'review-card wall-cell card-bina-solid relative flex flex-col px-7 py-5',
+                  spanFor(idx),
                 ]}
                 data-role={r.role}
                 data-themes={r.themes.join(' ')}
@@ -338,13 +326,12 @@ const monthYear = (iso: string | null) =>
                     width="26"
                     height="26"
                     class="h-[1.625rem] w-[1.625rem] shrink-0"
-                    loading="lazy"
                   />
                   <span class="min-w-0 flex-1">
-                    <span class="block truncate font-display text-sm font-bold text-coal-black">
+                    <span class="block truncate font-display text-body-md font-bold">
                       {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                     </span>
-                    <span class="block truncate text-[0.7rem] leading-tight text-coal-900">
+                    <span class="block truncate text-body-md leading-tight">
                       {r.author && r.roleLabel}
                       {r.country && ` · ${r.country}`}
                       {r.author && when && ' · '}
@@ -354,12 +341,12 @@ const monthYear = (iso: string | null) =>
                   </span>
                 </div>
 
-                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-[0.7rem]">
+                <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-body-md">
                   <a
                     href={sourceUrl[r.source]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1 font-display font-bold text-coal-black underline underline-offset-2"
+                    class="inline-flex items-center gap-1 font-display font-bold underline underline-offset-2"
                   >
                     {sourceVerb[r.source]}
                     <svg
@@ -378,36 +365,36 @@ const monthYear = (iso: string | null) =>
                     <span class="sr-only">(opens in a new tab)</span>
                   </a>
                   {r.rating && (
-                    <span class="tracking-widest text-coal-black" aria-label={`${r.rating} out of 5`}>
+                    <span class="text-hl" aria-label={`${r.rating} out of 5`}>
                       <span aria-hidden="true">★★★★★</span>
                     </span>
                   )}
                 </p>
 
                 {r.title && (
-                  <p class="mb-1 shrink-0 truncate font-display text-sm font-bold text-coal-black">
+                  <p class="mb-1 shrink-0 truncate font-display text-body-lg font-bold">
                     {r.title}
                   </p>
                 )}
 
-                <div class="review-body min-h-0 text-sm text-coal-1000">
+                <div class="review-body min-h-0 text-body-lg">
                   {paras.map((p) => (
                     <p class="mb-1.5 last:mb-0 whitespace-pre-line">{p}</p>
                   ))}
                 </div>
 
                 <button type="button" class="review-more hidden" data-dialog={`dlg-${r.id}`}>
-                  See more…
+                  <span class="review-more-label">See more →</span>
                 </button>
 
-                <dialog id={`dlg-${r.id}`} class="review-dialog card-bina">
+                <dialog id={`dlg-${r.id}`} class="review-dialog card-bina-solid">
                   <div class="p-6 sm:p-8">
                     <div class="mb-4 flex items-start justify-between gap-4">
                       <span>
-                        <span class="block font-display text-lg font-bold text-coal-black">
+                        <span class="block font-display text-body-xl font-bold">
                           {r.author ?? (r.role === 'staff' ? 'A bina team member' : 'A bina parent')}
                         </span>
-                        <span class="block text-xs text-coal-900">
+                        <span class="block text-body-md">
                           {r.roleLabel}
                           {r.country && ` · ${r.country}`}
                           {when && ` · ${when}`}
@@ -415,32 +402,32 @@ const monthYear = (iso: string | null) =>
                       </span>
                       <button
                         type="button"
-                        class="dialog-close shrink-0 cursor-pointer rounded-full border-2 border-coal-black bg-white px-3 py-1 font-display text-sm font-bold text-coal-black transition-colors hover:bg-bina-pink"
+                        class="dialog-close shrink-0 cursor-pointer rounded-full border-2 border-line px-3 py-1 font-display text-body-md font-bold transition-colors hover:bg-lagoon hover:text-black"
                         aria-label="Close"
                         >Close</button
                       >
                     </div>
                     {r.title && (
-                      <p class="mb-1 font-display text-xl font-bold text-coal-black">{r.title}</p>
+                      <p class="mb-1 font-display text-title-sm">{r.title}</p>
                     )}
                     {r.rating && (
                       <p
-                        class="mb-3 text-sm tracking-widest text-coal-black"
+                        class="mb-3 text-body-md text-hl"
                         aria-label={`${r.rating} out of 5`}
                       >
                         <span aria-hidden="true">★★★★★</span>
                       </p>
                     )}
-                    <div class="text-coal-1000">
+                    <div class="">
                       {paras.map((p) => (
                         <p class="mb-3 last:mb-0 whitespace-pre-line">{p}</p>
                       ))}
                     </div>
-                    <p class="mt-5 text-xs">
+                    <p class="mt-5 text-body-md">
                       <a
                         href={sourceUrl[r.source]}
                         rel="noopener"
-                        class="font-display font-bold text-coal-black underline underline-offset-4"
+                        class="font-display font-bold underline underline-offset-4"
                       >
                         {sourceVerb[r.source]} →
                       </a>
@@ -457,49 +444,15 @@ const monthYear = (iso: string | null) =>
   </section>
 
 
-  <!-- CTA -->
-  <section class="border-t-2 border-coal-black bg-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
-      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
-        Read all you like — then come and <span class="text-bina-grass">see for yourself</span>
-      </h2>
-      <p class="mx-auto mb-8 max-w-xl text-white/80">
-        See how bina teaches, meet the teachers these families keep naming, and decide for yourself
-        whether the reviews hold up.
-      </p>
-      <div class="flex flex-wrap justify-center gap-3">
-        <a href={SITE} class="btn-bina text-lg">Visit bina</a>
-
-        <a href="/family-survey" class="btn-bina-ghost text-lg">See the family survey</a>
-      </div>
-
+  <!-- CTA: the last section before the footer -->
+  <CtaBlock>
+    <h2 class="cta-title text-title-xl sm:text-title-3xl"><BrandText text="See if bina is right for your child" /></h2>
+    <p class="cta-copy">See how bina teaches and meet the teachers these families talk about.</p>
+    <div class="cta-actions">
+      <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
     </div>
-  </section>
+  </CtaBlock>
 
-  <p slot="footer-note" class="text-xs text-white/60">
-    Every quote here comes from the Growth team's testimonial registry, which holds {registry.total}
-    entries; only the {registry.approved} marked approved for public use are published, and the {
-      registry.needsPermission
-    } awaiting a family's consent plus the {registry.needsRetrieval} not yet transcribed are not on
-    this page. Reviews are copied verbatim and by hand — {headline.nicheCount} from
-    <a href={NICHE} rel="noopener" class="underline">bina's Niche page</a>, {
-      headline.trustpilotPublished
-    } from <a href={TRUSTPILOT} rel="noopener" class="underline">bina's Trustpilot page</a> (both
-    last read 21 August 2026) and {site.length} from families who gave permission to be quoted on
-    thebinaschool.com. This page is not a live feed, so read the source for the current picture.
-    Niche reports 21 reviews, of which 20 carry review text. Trustpilot reports {
-      headline.trustpilotCount
-    } and a {headline.trustpilotScore} TrustScore — Trustpilot's own weighted score, not an average of
-    the reviews shown. Three Trustpilot entries are deliberately not reproduced: two are the same
-    families' Niche reviews cross-posted, and one is a review of an unrelated trading firm. bina
-    cannot add, edit or remove reviews on Niche, Trustpilot or world-schools.com, and has never
-    offered anything in exchange for a review. Reviewers are self-selecting and their experiences are their own. Niche
-    lists bina as PK–6; bina teaches ages 4–15. The {recommendAvg}/10 and NPS {nps} figures come from
-    bina's own survey of {surveyN} families, and the {npsTopBand}+ parent band is Independent School
-    Management's, not ours — <a href="/family-survey" class="underline">
-      method, sources and every score here</a
-    >. NPS® is a registered trademark of Bain &amp; Company, Fred Reichheld and Satmetrix Systems.
-  </p>
 
   <!-- With JS off, cards grow to fit and nothing is faded, so no review is ever unreachable. -->
   <noscript>
@@ -519,13 +472,14 @@ const monthYear = (iso: string | null) =>
   <style>
     /* Every cell in the wall is the same height, so the grid stays a grid. */
     .wall-cell {
-      height: 12.5rem;
+      height: 14.5rem;
     }
     @media (min-width: 640px) {
       .wall-cell {
-        height: 13rem;
+        height: 15rem;
       }
     }
+
 
     /* Three lines of review: two solid, the third fading out to nothing. */
     .review-body {
@@ -539,24 +493,42 @@ const monthYear = (iso: string | null) =>
     }
 
     /* "See more" sits on top of the fade, bottom-right of the card. */
+    /* "See more" reads as the site's text links (bold, underlined, arrow; hover thickens the
+       underline), not a pill button. It sits bottom-left, on a strip of the card's own color so
+       the faded text behind it never shows through. */
+    .badge-logo {
+      -webkit-mask: var(--logo) center / contain no-repeat;
+      mask: var(--logo) center / contain no-repeat;
+    }
     .review-more {
       position: absolute;
-      right: 1.25rem;
-      bottom: 0.9rem;
+      left: 1.75rem;
+      right: 1.75rem;
+      bottom: 0;
+      padding: 0.4rem 0 0.9rem;
       cursor: pointer;
-      border: 2px solid #000;
-      border-radius: 9999px;
-      background: #fff;
-      padding: 0.1rem 0.65rem;
-      font-family: 'Rund Display', Arial, sans-serif;
+      border: 0;
+      background: var(--card-bg, var(--t-bg));
+      text-align: left;
+      font-family: var(--font-display);
       font-weight: 700;
-      font-size: 0.7rem;
-      color: #000;
-      white-space: nowrap;
-      transition: background-color 0.2s ease-out;
+      font-size: 1rem;
+      color: var(--t-fg);
     }
-    .review-more:hover {
-      background: #f7d928;
+    /* Hover: the label fades to 80%, like every link (Zeyu, 2026-11-06). The label fades, not the
+       button, because the button's own fill covers the faded review text behind it. */
+    .review-more-label {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      transition: opacity 0.15s ease-out;
+    }
+    /* A link "See more" (the feature cards) keeps its fill solid; only the label fades. */
+    a.review-more.review-more:hover {
+      opacity: 1;
+    }
+    .review-more:hover .review-more-label {
+      opacity: 0.8;
     }
 
     /* The full review, in a native dialog — no library, Esc and backdrop close for free. */
@@ -565,7 +537,6 @@ const monthYear = (iso: string | null) =>
       max-height: min(80vh, 44rem);
       overflow-y: auto;
       padding: 0;
-      background: #fff;
     }
     .review-dialog::backdrop {
       background: rgb(0 0 0 / 0.55);

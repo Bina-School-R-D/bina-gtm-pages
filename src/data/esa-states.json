@@ -6,7 +6,8 @@
     "New Hampshire": "nh.scholarshipfund.org — rolling; full award needs the application complete and verified by Jul 15, documents in by Jul 1; prorated awards through February. 2027–28 open date not published; 2026–27 opened Mar 16, 2026.",
     "Utah": "utaheducationfitsall.org — Mar 1 returning / Apr 1 new / May 1 close is the recurring schedule set in law, so the 2027 dates follow from statute rather than an announcement.",
     "Idaho": "Idaho State Tax Commission — Jan 15 – Mar 15, 2027 published for the 2026 credit paid in 2027. Priority from 2027: prior-year recipients, then ≤300% FPL.",
-    "Wyoming": "edu.wyoming.gov and the WDE bulletin — 2026–27 opened 9 a.m. Jul 6, 2026, processed by end of July, funds by Sep 1. 2027–28 dates NOT published as of 2026-09-22."
+    "Wyoming": "edu.wyoming.gov and the WDE bulletin — 2026–27 opened 9 a.m. Jul 6, 2026, processed by end of July, funds by Sep 1. 2027–28 dates NOT published as of 2026-09-22.",
+    "West Virginia": "Application windows from hopescholarshipwv.gov, checked Nov 1, 2026 (Notion draft): Mar 2–Jun 15, 2026 full award; Jun 16–Sep 15 75%; Sep 16–Nov 30 50%; Dec 1, 2026–Feb 28, 2027 25%; 2027–28 opens March 2027. Returning families confirm by June 15."
   },
   "_retired": "allStates is every US state, kept for ONE reason: astro.config.mjs turns every state that is not in `programs` into a redirect to /esa. Those 45 pages existed (PR #36 built one per state); killing them outright would 404 links that are already out there, so they redirect instead. Do not use allStates to build pages — `programs` is the list of states we can serve.",
   "allStates": [
@@ -73,7 +74,7 @@
       "windowState": "rolling",
       "windowNote": "Arizona is the one state you can start in any month of the year.",
       "applyUrl": "https://esaportal.azed.gov/",
-      "approval": "Approval takes up to 30 days. You pre-register, then set up ClassWallet and link your bank. Because your funding quarter is set by your contract-signing date, signing with bina early puts you in an earlier funding quarter.",
+      "approval": "Approval takes up to 45 days. You pre-register, then set up ClassWallet and link your bank. Because your funding quarter is set by your contract-signing date, signing with bina early puts you in an earlier funding quarter.",
       "boost": "Arizona's handbook explicitly approves “tuition or fees for a nonpublic online learning program” — exactly the category bina is in.",
       "officialUrl": "https://www.azed.gov/esa",
       "binaUrl": "https://www.thebinaschool.com/esa/arizona"
@@ -98,7 +99,7 @@
       "prog": "Education Freedom Account (EFA)",
       "status": "approved",
       "who": "Every New Hampshire K–12 family — the income cap was removed in 2025. Enrollment is capped statewide at 12,500 students, so apply early.",
-      "howMuch": "About $5,000 per child, per year.",
+      "howMuch": "About $3,800–$5,800 per child, per year.",
       "platform": "ClassWallet",
       "applyWindow": "Rolling, all year. For a full 2027–28 award your application must be complete and verified by Jul 15, 2027 — send your documents by Jul 1 to leave time for verification. Miss that and you can still get a prorated award for the year already underway, right through the end of February.",
       "windowState": "rolling",
@@ -137,6 +138,37 @@
       "approval": "Wyoming verifies eligibility within about a month of the window closing, and your $7,000 lands in your Odyssey account by September 1. Returning families also get an extra $1,750 in rollover funds — we time your bina start to your funding date.",
       "officialUrl": "https://edu.wyoming.gov/parents/education-savings-accounts/",
       "binaUrl": "https://www.thebinaschool.com/esa/wyoming"
+    },
+    {
+      "s": "West Virginia",
+      "prog": "Hope Scholarship",
+      "status": "approved",
+      "who": "Your child lives in West Virginia and is enrolled in, or eligible to enroll in, a West Virginia public school from kindergarten to grade 12.",
+      "howMuch": "$5,435.62 per student for 2026–27, paid in four quarterly deposits.",
+      "platform": "the Hope portal",
+      "applyWindow": "Applying between March 2 and June 15 gets the full award for the school year. Later applications get a smaller first-year share.",
+      "windowState": "annual",
+      "windowNote": "2026–27 applications are open until February 28, 2027.",
+      "applyUrl": "https://hopescholarshipwv.gov",
+      "approval": "Once you're found eligible, file a Notice of Intent with your county superintendent. Accounts aren't funded until it's on file.",
+      "officialUrl": "https://hopescholarshipwv.gov",
+      "binaUrl": "https://go.bina.school/esa/west-virginia",
+      "_note": "Added 2026-11-09: stakeholder confirmed bina as an approved Hope Scholarship provider and asked for the page. Facts from the Notion 'West Virginia Hope Scholarship page: content draft' (Jose's guide, the ESA State Database and hopescholarshipwv.gov, checked Nov 1, 2026). The award is marked to confirm with Monet/Jose."
+    },
+    {
+      "s": "Florida",
+      "prog": "Family Empowerment Scholarship for Students with Unique Abilities (FES-UA)",
+      "status": "partial",
+      "who": "Florida students with a qualifying unique ability (an IEP or a qualifying diagnosis), aged 3 to 21. No income limit.",
+      "howMuch": "Depends on the child's grade, county and needs.",
+      "platform": "EMA (Step Up For Students)",
+      "applyWindow": "New 2026–27 applications close November 15, 2026; accept by December 15, 2026.",
+      "windowState": "annual",
+      "applyUrl": "https://apply.stepupforstudents.org",
+      "approval": "Reimbursement requests take up to 60 days once all documents are in.",
+      "officialUrl": "https://www.stepupforstudents.org/scholarships/unique-abilities/",
+      "binaUrl": "https://go.bina.school/esa/florida",
+      "_note": "Added 2026-11-09 as a partial-support page (not an approved state): bina is reimbursed as part-time tutoring through FES-UA. From the Notion 'Florida FES-UA page: content draft (partial support template)'. Not shown as an approved-state card on /esa; linked from 'Other ways to use your state's funding'."
     }
   ]
 }

@@ -1,0 +1,65 @@
+---
+/*
+ * The one accordion style for every page (the /esa/<state> FAQ, Zeyu 2026-11-04):
+ * full-width rows, a thin divider in the section's line color under each, the question in
+ * title-sm (20px) Medium and the answer in body-lg (16px), so the question reads first (Zeyu, 2026-11-05), and a "+" on the right that turns into "×" when open. No cards, no accent bars.
+ * Colors come from the section theme, so it works on any background.
+ */
+interface Props {
+  /** `link` turns one phrase of the answer into a link, `em` sets one phrase in italics (e.g. a
+   *  journal title); each phrase must appear in `a`. */
+  items: { q: string; a: string; link?: { text: string; url: string }; em?: string }[];
+}
+const { items } = Astro.props;
+
+type Seg = { t: string; kind: 'text' | 'link' | 'em'; url?: string };
+// Split the answer into plain text, the one link phrase and the one italic phrase, in order.
+const segments = (f: Props['items'][number]): Seg[] => {
+  const marks = [
+    f.link && f.a.includes(f.link.text) ? { t: f.link.text, kind: 'link' as const, url: f.link.url } : null,
+    f.em && f.a.includes(f.em) ? { t: f.em, kind: 'em' as const } : null,
+  ]
+    .filter((m): m is NonNullable<typeof m> => m !== null)
+    .map((m) => ({ ...m, at: f.a.indexOf(m.t) }))
+    .sort((x, y) => x.at - y.at);
+  const out: Seg[] = [];
+  let pos = 0;
+  for (const m of marks) {
+    if (m.at < pos) continue;
+    if (m.at > pos) out.push({ t: f.a.slice(pos, m.at), kind: 'text' });
+    out.push({ t: m.t, kind: m.kind, url: 'url' in m ? m.url : undefined });
+    pos = m.at + m.t.length;
+  }
+  if (pos < f.a.length) out.push({ t: f.a.slice(pos), kind: 'text' });
+  return out;
+};
+---
+
+<div>
+  {
+    items.map((f) => (
+      <details class="group border-b border-line">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-title-sm font-medium [&::-webkit-details-marker]:hidden">
+          <span>{f.q}</span>
+          <span
+            class="flex-none text-title-md leading-none transition-transform duration-200 group-open:rotate-45"
+            aria-hidden="true"
+          >
+            +
+          </span>
+        </summary>
+        <p class="max-w-3xl pb-5 pr-10 text-body-lg">
+          {segments(f).map((sg) =>
+            sg.kind === 'link' ? (
+              <a href={sg.url} rel="noopener" class="font-bold underline">{sg.t}</a>
+            ) : sg.kind === 'em' ? (
+              <em>{sg.t}</em>
+            ) : (
+              sg.t
+            )
+          )}
+        </p>
+      </details>
+    ))
+  }
+</div>

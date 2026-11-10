@@ -7,7 +7,8 @@
  * what it asserts now, and the change was deliberate:
  *   - was: all 50 states are pages, and a state page is /esa with the URL changed.
  *   - now: ONLY states bina can accept are pages; the other 45 redirect to /esa; and a
- *          state page is the merged page (hero → how it works → money → process → FAQ).
+ *          state page is the merged page (hero → money → process → CTA → FAQ; layout from
+ *          Zeyu's Arizona copy, 2026-11-04, with Notion-sourced sections where a state has them).
  * Keep the static-not-query-parameter rule from the original — that part still holds.
  *
  * Dependency-free on purpose: node + the built files, nothing else.
@@ -123,50 +124,52 @@ for (const name of served) {
   mustNot(pages[name], '<title>ESA Funding for bina — Parent Guide</title>', where);
 }
 
-// 5 — the merged page structure is present on every served state, server-rendered.
+// 5 — every state page carries its Notion draft's structure, server-rendered (2026-11-09: the
+// copy, not a shared template, decides which sections exist).
 for (const name of served) {
   const slug = slugify(name);
   const where = `/esa/${slug}`;
   const copy = landing.states.find((s) => s.slug === slug);
   const d = byState[name];
+  const steps = (copy.process?.groups || []).flatMap((g) => g.steps);
+  if (steps.length === 0) fail(`${where}: no steps in esa-landing.json (process.groups)`);
   for (const text of [
-    copy.h1, // hero
-    copy.intro,
-    landing.howItWorks.fundingTitle, // how it works
-    landing.howItWorks.schoolTitle,
-    d.howMuch === undefined ? '' : copy.coverTitle, // the money
-    'per child, per year',
-    'a full year at bina, on the yearly plan',
-    'Before you enroll — during bina admissions', // process
-    'After you enroll',
-    'Talk to bina first',
-    `Apply for the ${d.prog}`,
-    'Get approved and funded',
-    'Enroll at bina',
-    copy.timingTitle,
-    d.applyWindow,
-    d.approval,
-    d.who,
-    d.applyUrl,
+    copy.h1,
+    ...(copy.gate || []),
+    copy.money ? (copy.money.youPay || copy.money.title) : null,
+    copy.qualifies?.title,
+    copy.howEsa?.title,
+    copy.covered?.title,
+    copy.support?.title,
+    copy.process?.title,
+    ...steps.map((st) => st.t),
+    copy.portal?.title,
+    copy.invoice?.title,
+    copy.about?.title,
+    copy.cta?.title,
+    copy.callUrl,
     d.officialUrl,
     'id="process"',
   ]) {
-    if (text) must(pages[name], text, where);
+    // Copy may carry inline markup (e.g. <span class="normal-case">bina</span> keeps the brand
+    // lowercase inside an uppercase label), so accept a match in the raw HTML or in its text.
+    if (!text || pages[name] === null) continue;
+    if (!pages[name].includes(text)) must(pages[name].replace(/<[^>]+>/g, ''), text, where);
   }
-  // The award has to be the same number the database holds — the page computes the remainder
-  // from it, so a mismatch here is a wrong price in front of a parent.
-  for (const n of new Set([copy.esaMin, copy.esaMax])) {
-    const money = '$' + n.toLocaleString('en-US');
-    if (!d.howMuch.includes(money))
-      fail(`${where}: esa-landing.json says ${money} but esa-states.json says "${d.howMuch}"`);
+  // The award has to be the same number the database holds. Partial-support pages (Florida)
+  // have no single award.
+  if (copy.tier !== 'partial') {
+    if (!copy.money) fail(`${where}: an approved state needs its money section`);
+    for (const n of new Set([copy.esaMin, copy.esaMax])) {
+      const money = '$' + n.toLocaleString('en-US');
+      if (!d.howMuch.includes(money))
+        fail(`${where}: esa-landing.json says ${money} but esa-states.json says "${d.howMuch}"`);
+    }
   }
-  // This state's own FAQ leads, and every question is really on the page.
-  if (!copy.faq || copy.faq.length < 3) fail(`${where}: fewer than 3 state-specific FAQ entries`);
-  for (const f of [...(copy.faq || []), ...landing.faq]) must(pages[name], f.q, where);
-  // Idaho is a reimbursement; the other four are paid to bina. Never mix the two up.
-  const reimbursed = copy.tier === 'reimbursed';
-  must(pages[name], reimbursed ? 'Pay bina, then claim it back' : 'Pay tuition from your account', where);
-  mustNot(pages[name], reimbursed ? 'Pay tuition from your account' : 'Pay bina, then claim it back', where);
+  // Every question is really on the page, and the last one is the disclaimer.
+  if (!copy.faq || copy.faq.length < 3) fail(`${where}: fewer than 3 FAQ entries`);
+  for (const f of copy.faq || []) must(pages[name], f.q, where);
+  if (copy.faq?.at(-1)?.q !== 'Is bina responsible for this program?') fail(`${where}: the FAQ must end with the disclaimer`);
 }
 
 // 6 — the index is a chooser with static destinations, and the legacy ?state= link still lands.
@@ -182,7 +185,8 @@ for (const name of served) {
   mustNot(index, 'id="result"', where);
   mustNot(index, 'box.innerHTML', where);
   // 8 — the retired tiers are gone from the built output entirely.
-  for (const gone of ['Coming soon', 'possible for some families — ask us', "doesn't have a program you can use"])
+  // 'Coming soon' came back on 2026-11-04 as a text list (Akis) — never as links to a redirect, which check 3 enforces.
+  for (const gone of ['possible for some families — ask us', "doesn't have a program you can use"])
     mustNot(index, gone, where);
 }
 

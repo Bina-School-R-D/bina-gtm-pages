@@ -1,70 +1,63 @@
 ---
 /*
- * /esa/<state> — one page per state where bina can accept students. Five of them.
+ * /esa/<state> — one page per state where bina can accept students. Six of them (West Virginia added 2026-11-09).
  *
- * Merged 2026-09-22 from the old split between /esa (a process tool) and /esa/<state> (a
- * paid-search landing page): a parent needed both halves, so this page runs
- * hero → how it works → the money → the full process → that state's FAQ.
+ * Layout (Zeyu, 2026-11-04 — Arizona copy first, the same template for every state):
+ * hero → the money → the full process → CTA → FAQ. Sections whose copy lives in the team's
+ * Notion page (who qualifies, how the ESA works, paying in ClassWallet, getting to know bina)
+ * render only for states whose esa-landing.json entry carries them.
  *
  * The 45 states we cannot serve are not pages — they redirect to /esa (astro.config.mjs).
- * Program facts come from esa-states.json only; sales copy from esa-landing.json; proof
- * numbers are imported from the other pages' data files and never re-typed.
+ * Program facts come from esa-states.json only; sales copy from esa-landing.json.
  */
+import CtaBlock from '../../components/CtaBlock.astro';
+import Accordion from '../../components/Accordion.astro';
+import BrandText from '../../components/BrandText.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EsaProcess from '../../components/EsaProcess.astro';
 import landing from '../../data/esa-landing.json';
-import survey from '../../data/family-survey.json';
-import results from '../../data/student-results.json';
-import reviewData from '../../data/reviews.json';
-import { CTA, CTA_LABEL, statePage, usd } from '../../lib/esa-states.js';
+import { CTA, CTA_LABEL, statePage } from '../../lib/esa-states.js';
 
 export function getStaticPaths() {
   return landing.states.map((s) => ({ params: { state: s.slug }, props: { slug: s.slug } }));
 }
 
 const page = statePage(Astro.props.slug);
-const { copy, program, reimbursed, tier, awardLabel, awardNote, monthLabel, gapLabel, questions, otherStates } = page;
-const { school, faq, reviewIds, howItWorks } = landing;
-
-const reviews = reviewIds.map((id) => reviewData.reviews.find((r) => r.id === id)).filter(Boolean);
-const sourceLabel = { niche: 'Niche', trustpilot: 'Trustpilot', site: 'thebinaschool.com' };
-const reviewDate = (d) =>
-  d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
-
-// Built as one string: JSX around the separators leaves a space before every comma.
-const otherStatesHtml = otherStates
-  .map(
-    (s, i) =>
-      (i === 0 ? '' : i === otherStates.length - 1 ? ' and ' : ', ') +
-      `<a href="/esa/${s.slug}" class="font-bold text-bina-grass underline">${s.state}</a>`
-  )
-  .join('');
+// Every section's copy is the state's Notion draft, word for word (esa-landing.json, 2026-11-09).
+const { copy, questions } = page;
+// Split a sentence around one linked phrase ({ text, url }), for links inside step and note text.
+const linked = (t, link) => {
+  const at = link ? t.indexOf(link.text) : -1;
+  return at === -1
+    ? { before: t, text: '', url: '', after: '' }
+    : { before: t.slice(0, at), text: link.text, url: link.url, after: t.slice(at + link.text.length) };
+};
+const money = copy.money;
 ---
 
 <BaseLayout
   title={copy.seoTitle}
   description={copy.seoDesc}
   ctaHref={CTA}
-  ctaLabel="Start your journey"
+  ctaLabel={CTA_LABEL}
 >
   <!-- HERO: the claim, the funding gate, and what this page is -->
-  <header class="bg-bina-purple">
+  <header class="theme-lagoon">
     <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-      <p class="pill-bina mb-6 text-sm tracking-wide">{copy.pill}</p>
-      <h1 class="mb-5 max-w-3xl text-4xl font-black sm:text-6xl">{copy.h1}</h1>
-      <p class="mb-8 max-w-2xl text-lg text-coal-1000 sm:text-xl">{copy.intro}</p>
+      <!-- No badge above the title (Zeyu, 2026-11-10: removed from every ESA page). -->
+      <h1 class="mb-10 max-w-3xl text-title-3xl sm:text-display-sm">
+        {copy.h1}
+      </h1>
 
-      <div class="mb-10 flex flex-wrap items-center gap-3">
-        <a href={CTA} class="btn-bina text-lg">{CTA_LABEL}</a>
-        <a href="#process" class="btn-bina-ghost text-lg">See the whole process</a>
-      </div>
-
-      <ul class="grid gap-3 border-t-2 border-coal-black/20 pt-8 sm:grid-cols-3">
+      {/* A one-line intro (West Virginia) or the three checks (the other states). */}
+      {copy.heroLine && <p class:list={['max-w-3xl text-body-xl', copy.gate && 'mb-8']}><BrandText text={copy.heroLine} /></p>}
+      {copy.gate && (
+      <ul class="grid gap-3 sm:grid-cols-3">
         {
           copy.gate.map((g) => (
             <li class="flex items-start gap-3">
               <span
-                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full border-2 border-coal-black bg-white font-display text-xs font-black"
+                class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon"
                 aria-hidden="true"
               >
                 ✓
@@ -74,306 +67,299 @@ const otherStatesHtml = otherStates
           ))
         }
       </ul>
+      )}
     </div>
   </header>
 
-  <!-- HOW IT WORKS: the funding in brief, then what the money buys -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-            How it works
-          </p>
-          <h2 class="mb-6 text-3xl sm:text-4xl">{howItWorks.fundingTitle}</h2>
-          <ol class="grid gap-5">
-            {
-              howItWorks.fundingSteps.map((s, i) => (
-                <li class="flex gap-4">
-                  <span class="grid h-9 w-9 flex-none place-items-center rounded-full border-2 border-coal-black bg-bina-yellow font-display text-sm font-black">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <h3 class="mb-1 font-display text-base font-bold leading-snug">{s.t}</h3>
-                    <p class="text-sm text-coal-900">{s.d}</p>
-                  </span>
-                </li>
-              ))
-            }
-          </ol>
-          {
-            program.windowNote && (
-              <p class="card-bina mt-6 p-5 text-sm font-bold">
-                {program.windowState === 'annual-unpublished' ? '🕑' : '📅'} {program.windowNote}
-              </p>
-            )
-          }
-        </div>
+  <!-- THE MONEY (approved states): the heading and intro line, one card per row of the Notion
+       table (tuition, minus the award, then what you pay), an optional mid-year table, then notes. -->
+  {
+    money && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          {money.youPay ? (
+            <>
+              <h2 class="font-display text-title-2xl font-bold sm:text-title-4xl">
+                You pay <span class="text-hl">{money.youPay}</span> a month
+              </h2>
+              <p class="mt-2 font-display text-title-md font-normal"><BrandText text={money.line} /></p>
+            </>
+          ) : (
+            <>
+              <h2 class="text-title-xl sm:text-title-3xl">{money.title}</h2>
+              <p class="mt-3 max-w-3xl text-body-xl"><BrandText text={money.line} /></p>
+            </>
+          )}
 
-        <div>
-          <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-            The school
-          </p>
-          <h2 class="mb-4 text-3xl sm:text-4xl">{howItWorks.schoolTitle}</h2>
-          <p class="mb-6 text-coal-900">{howItWorks.schoolLead}</p>
-          <ul class="grid gap-3">
-            {
-              howItWorks.schoolPoints.map((p) => (
-                <li class="flex items-start gap-3">
-                  <span
-                    class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full border-2 border-coal-black bg-bina-grass font-display text-xs font-black"
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </span>
-                  <span class="font-medium leading-snug">{p}</span>
-                </li>
-              ))
-            }
+          <div class="mt-10 grid gap-4 md:grid-cols-2">
+            {money.rows.map((r) => (
+              <div class="card-bina-mint p-6 sm:p-8">
+                <p class="mb-5 font-display text-title-sm">{r.plan}</p>
+                <dl class="grid gap-2 text-body-lg">
+                  <div class="flex items-baseline justify-between gap-4">
+                    <dt><span class="normal-case">bina</span> tuition (per year)</dt>
+                    <dd class="text-right font-display font-bold">{r.tuition}</dd>
+                  </div>
+                  <div class="flex items-baseline justify-between gap-4 border-b border-black pb-3">
+                    <dt>{money.awardCol}</dt>
+                    <dd class="text-right font-display font-bold">− {r.award}</dd>
+                  </div>
+                  <div class="pt-2">
+                    <dt class="font-display font-bold">You pay</dt>
+                    <dd>
+                      <span class="block font-display text-title-xl font-bold">
+                        {r.payYear}<span class="text-body-xl"> a year</span>
+                      </span>
+                      <span class="block">{r.payMonth.charAt(0).toUpperCase() + r.payMonth.slice(1)}</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
+          </div>
+
+          <!-- Second table: families applying during the school year (West Virginia): the same mint card. -->
+          {money.midYear && (
+            <div class="mt-10">
+              <p class="mb-5 max-w-3xl text-body-xl"><strong class="font-display font-bold">{money.midYear.leadBold}</strong> {money.midYear.lead}</p>
+              <div class="card-bina-mint overflow-x-auto p-6 sm:p-8">
+                <table class="w-full border-collapse text-left text-body-lg">
+                  <thead>
+                    <tr class="border-b border-black">
+                      {money.midYear.head.map((h) => (
+                        <th scope="col" class="pb-3 pr-4 font-display font-bold">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {money.midYear.rows.map((row) => (
+                      <tr class="border-b border-black last:border-b-0">
+                        {row.map((cell, i) => (
+                          <td class:list={['py-3 pr-4', i === row.length - 1 && 'font-display font-bold']}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p class="mt-4 text-body-lg">{money.midYear.after}</p>
+            </div>
+          )}
+
+          <div class="mt-6 grid gap-2">
+            {money.notes.map((n) => {
+              const l = linked(n.t, n.link);
+              return (
+                <p class="text-body-lg text-mint">
+                  *<BrandText text={l.before} />{l.text && <a href={l.url} class="font-bold underline">{l.text}</a>}{l.after}
+                </p>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- HOW THE PROGRAM WORKS, first (partial-support pages: the program before who qualifies) -->
+  {
+    copy.howEsa && copy.howEsaFirst && (
+      <!-- A mint card on the dark section (deep ocean label), built like the closing CTA block (left-aligned: it is a paragraph to read). -->
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <div class="theme-mint rounded-lg px-6 py-8 sm:px-12 sm:py-10">
+            <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl">{copy.howEsa.title}</h2>
+            <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
+            {copy.howEsa.bullets && (
+              <ul class="mt-6 grid max-w-3xl list-disc gap-2 pl-6 text-body-xl">
+                {copy.howEsa.bullets.map((b) => (
+                  <li><strong class="font-bold">{b.k}</strong> {b.v}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- WHO QUALIFIES (states with Notion copy) -->
+  {
+    copy.qualifies && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl">{copy.qualifies.title}</h2>
+          <!-- A checklist, not cards: one row per condition, ✓ + label on the left, and the
+               first sentence (the answer) in bold so a scanner gets it without reading on. -->
+          <dl class="border-t border-line">
+            {copy.qualifies.items.map((it) => {
+              const cut = it.v.indexOf('. ');
+              const lead = cut === -1 ? it.v : it.v.slice(0, cut + 1);
+              const rest = cut === -1 ? '' : it.v.slice(cut + 2);
+              return (
+                <div class="grid gap-x-8 gap-y-2 border-b border-line py-6 sm:grid-cols-[15rem_1fr]">
+                  <dt class="flex items-center gap-3 font-display text-title-sm">
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                    {it.k}
+                  </dt>
+                  <dd class="text-body-lg sm:pt-1">
+                    <strong class="block font-display text-body-xl font-bold"><BrandText text={lead} /></strong>
+                    {rest && <span class="mt-1 block"><BrandText text={rest} /></span>}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- HOW THE PROGRAM WORKS (states with Notion copy): after "Who qualifies" (ESA final page structure) -->
+  {
+    copy.howEsa && !copy.howEsaFirst && (
+      <!-- A mint card on the dark section (deep ocean label), built like the closing CTA block (left-aligned: it is a paragraph to read). -->
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <div class="theme-mint rounded-lg px-6 py-8 sm:px-12 sm:py-10">
+            <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl">{copy.howEsa.title}</h2>
+            <p class="max-w-3xl text-body-xl"><BrandText text={copy.howEsa.body} /></p>
+            {copy.howEsa.bullets && (
+              <ul class="mt-6 grid max-w-3xl list-disc gap-2 pl-6 text-body-xl">
+                {copy.howEsa.bullets.map((b) => (
+                  <li><strong class="font-bold">{b.k}</strong> {b.v}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- WHAT CAN BE REIMBURSED (partial-support pages, Florida) -->
+  {
+    copy.covered && (
+      <section class="theme-base">
+        <!-- Bottom padding matches the visible gap above the heading (two dark sections, 2 × 56px). -->
+        <div class="mx-auto max-w-5xl px-5 pt-14 pb-28">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.covered.title} /></h2>
+          <ul class="m-0 grid max-w-3xl list-none gap-4 p-0">
+            {copy.covered.items.map((t) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                <span class="pt-1 text-body-xl"><BrandText text={t} /></span>
+              </li>
+            ))}
           </ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- THE MONEY: award, tuition, and the remainder we are not hiding -->
-  <section class="border-t-2 border-coal-black bg-bina-yellow/20">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-        {program.prog} · {tier.label}
-      </p>
-      <h2 class="mb-3 text-3xl sm:text-4xl">{copy.coverTitle}</h2>
-      <p class="mb-8 max-w-3xl text-lg text-coal-1000">{copy.coverBody}</p>
-
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="card-bina p-6">
-          <p class="font-display text-3xl font-black">{awardLabel}</p>
-          <p class="mt-2 font-display font-bold">per child, per year</p>
-          <p class="mt-1 text-sm text-coal-900">{awardNote}</p>
-        </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-3xl font-black">{usd(school.tuitionYearly)}</p>
-          <p class="mt-2 font-display font-bold">a full year at bina, on the yearly plan</p>
-          <p class="mt-1 text-sm text-coal-900">
-            {usd(school.tuitionQuarterly)} on the quarterly plan ·
-            <a href={school.tuitionUrl} class="underline">tuition page</a>
-          </p>
-        </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-3xl font-black">{monthLabel}<span class="text-lg">/mo</span></p>
-          <p class="mt-2 font-display font-bold">{gapLabel}</p>
-          <p class="mt-1 text-sm text-coal-900">
-            before {usd(school.siblingDiscount)} off per additional child
-          </p>
-        </div>
-      </div>
-
-      <div class="card-bina mt-6 p-6">
-        <h3 class="mb-4 font-display text-xl">Who can apply, and where the money sits</h3>
-        <dl class="grid gap-4 sm:grid-cols-3">
-          <div>
-            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">Who qualifies</dt>
-            <dd class="mt-1">{program.who}</dd>
-          </div>
-          <div>
-            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">How you spend it</dt>
-            <dd class="mt-1">
-              {reimbursed ? tier.note : `Through ${program.platform} — the state pays bina directly.`}
-            </dd>
-          </div>
-          <div>
-            <dt class="font-display text-sm font-bold uppercase tracking-wide text-coal-900">Official program</dt>
-            <dd class="mt-1">
-              <a href={program.officialUrl} rel="noopener" class="font-bold underline">{copy.state}'s own site →</a>
-            </dd>
-          </div>
-        </dl>
-        <p class="mt-4 text-sm text-coal-900">
-          Amounts, deadlines and rules are set by {copy.state} and can change. Treat your state's
-          official program site as the final word — and we will go through it with you on the call.
-        </p>
-      </div>
-
-      {program.boost && <p class="card-bina mt-6 bg-bina-grass/25 p-5 font-bold">✓ {program.boost}</p>}
-    </div>
-  </section>
+      </section>
+    )
+  }
 
   <!-- PROCESS -->
   <EsaProcess page={page} />
 
-  <!-- PROOF: is this actually a good school? -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-3xl sm:text-4xl">
-        The school, before the money: our families score us {survey.headline.recommendAvg} out of 10
-      </h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        The funding only matters if the school is worth it. So here is our own survey data, our own
-        assessment results, and every review we have — including the platforms we cannot edit.
-      </p>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card-bina p-6">
-          <p class="font-display text-5xl font-black text-coal-black">{survey.headline.recommendAvg}</p>
-          <p class="mt-2 font-display font-bold">Parents would send their friends here</p>
-          <p class="mt-1 text-sm text-coal-900">
-            out of 10, from {survey.surveyA.n} families · <a href="/family-survey" class="underline">all seven scores</a>
-          </p>
-        </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-5xl font-black text-coal-black">{reviewData.headline.nicheAvg.toFixed(1)} ★</p>
-          <p class="mt-2 font-display font-bold">Every review on Niche is five stars</p>
-          <p class="mt-1 text-sm text-coal-900">
-            {reviewData.headline.nicheCount} reviews · <a href="/reviews" class="underline">read all of them</a>
-          </p>
-        </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-5xl font-black text-coal-black">+{results.headline.readGrowthAvg}</p>
-          <p class="mt-2 font-display font-bold">Points of reading growth in one school year</p>
-          <p class="mt-1 text-sm text-coal-900">
-            STAR, {results.headline.pairedN} students · <a href="/student-results" class="underline">the full results</a>
-          </p>
-        </div>
-        <div class="card-bina p-6">
-          <p class="font-display text-5xl font-black text-coal-black">{school.classCap}</p>
-          <p class="mt-2 font-display font-bold">The most children your child's class can hold</p>
-          <p class="mt-1 text-sm text-coal-900">a cap, not an average</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- projection: picture your own week -->
-  <section class="border-t-2 border-coal-black bg-bina-grass/20">
-    <div class="mx-auto max-w-4xl px-5 py-14">
-      <h2 class="mb-3 text-3xl sm:text-4xl">Your Tuesday, if your child were at bina</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        The school day fits your time zone, so this shape holds whether you are in {copy.state} or
-        three flights away from it.
-      </p>
-      <ol class="grid gap-4 sm:grid-cols-2">
-        {
-          school.dayInLife.map((d) => (
-            <li class="card-bina p-5">
-              <p class="font-display text-sm font-bold uppercase tracking-wide text-bina-pink">{d.time}</p>
-              <p class="mt-1 font-medium text-coal-1000">{d.what}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <!-- reviews -->
-  <section class="border-t-2 border-coal-black bg-bina-blue/15">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <h2 class="mb-3 text-3xl sm:text-4xl">Families who made this exact decision</h2>
-      <p class="mb-8 max-w-2xl text-coal-900">
-        Copied word for word, nothing trimmed. There are
-        {' '}{reviewData.reviews.length - reviews.length} more on
-        {' '}<a href="/reviews" class="font-bold underline">our reviews page</a>, including the platforms
-        where we do not control what gets published.
-      </p>
-      <div class="grid gap-4 md:grid-cols-3">
-        {
-          reviews.map((r) => (
-            <figure class="card-bina flex h-full flex-col p-6">
-              <blockquote class="grow whitespace-pre-line text-sm text-coal-1000">{r.body}</blockquote>
-              <figcaption class="mt-4 border-t-2 border-coal-black/10 pt-3 font-display text-xs font-bold text-coal-900">
-                {r.roleLabel} · {sourceLabel[r.source]}
-                {reviewDate(r.date) ? ` · ${reviewDate(r.date)}` : ''}
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ: this state's questions first, then the ones every family asks -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-14">
-      <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-        {copy.state} questions
-      </p>
-      <h2 class="mb-8 text-3xl sm:text-4xl">The questions {copy.state} families actually ask</h2>
-      <div class="divide-y-2 divide-coal-black/10">
-        {
-          questions.map((f) => (
-            <details class="group py-4">
-              <summary class="cursor-pointer list-none font-display text-lg font-bold marker:hidden">
-                <span class="inline-flex items-start gap-3">
-                  <span class="mt-1 font-black text-bina-pink transition-transform group-open:rotate-90">›</span>
-                  {f.q}
+  <!-- PORTAL HOW-TO: finding and paying bina in ClassWallet or Odyssey -->
+  {
+    copy.portal && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.portal.title} /></h2>
+          <!-- A plain numbered list (lagoon badges on dark), same pattern as "What you do". -->
+          <ol class="m-0 grid list-none gap-4 p-0">
+            {copy.portal.steps.map((t, i) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">
+                  {i + 1}
                 </span>
-              </summary>
-              <p class="mt-3 pl-7 text-coal-1000">{f.a}</p>
-            </details>
-          ))
-        }
-      </div>
+                <span class="pt-1 font-display font-bold leading-snug"><BrandText text={t} /></span>
+              </li>
+            ))}
+          </ol>
+          {copy.portal.videoUrl && (
+            <p class="mt-6 text-body-lg">
+              <a href={copy.portal.videoUrl} target="_blank" rel="noopener" class="font-bold underline">
+                {copy.portal.videoLabel} →
+              </a>
+            </p>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- GETTING REIMBURSED (partial-support pages, Florida): what goes on the bina invoice -->
+  {
+    copy.invoice && (
+      <section class="theme-base">
+        <div class="mx-auto max-w-5xl px-5 py-14">
+          <h2 class="mb-8 text-title-xl sm:text-title-3xl"><BrandText text={copy.invoice.title} /></h2>
+          <ul class="m-0 grid max-w-3xl list-none gap-4 p-0">
+            {copy.invoice.items.map((t) => (
+              <li class="flex items-start gap-4">
+                <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+                <span class="pt-1 font-display font-bold leading-snug"><BrandText text={t} /></span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-6 max-w-3xl text-body-lg"><BrandText text={copy.invoice.tips} /></p>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- GETTING TO KNOW BINA (states with Notion copy): an editorial split so it reads apart from
+       the checklists above — heading and link on the left, each fact as a large statement on the right
+       (no rules — Zeyu, 2026-11-04). -->
+  {
+    copy.about && (
+      <section class="theme-base">
+        <div class="mx-auto grid max-w-5xl gap-10 px-5 py-16 md:grid-cols-[1fr_1.6fr] md:gap-16">
+          <div>
+            <h2 class="text-title-3xl text-lagoon sm:text-display-sm"><BrandText text={copy.about.title} /></h2>
+          </div>
+          <div class="md:pt-2">
+            <ul class="m-0 grid list-none gap-5 p-0">
+              {copy.about.bullets.map((b) => (
+                <li class="font-display text-title-md font-bold sm:text-title-lg">{b}</li>
+              ))}
+            </ul>
+            {copy.about.link && (
+              <p class="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+                <a href={copy.about.link.url} target="_blank" rel="noopener noreferrer" class="font-bold text-lagoon underline">
+                  <BrandText text={copy.about.link.label} /><span class="sr-only"> (opens in a new tab)</span>
+                </a>
+                {copy.about.link2 && (
+                  <a href={copy.about.link2.url} class="font-bold text-lagoon underline">
+                    <BrandText text={copy.about.link2.label} />
+                  </a>
+                )}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- close: before the FAQ, so the FAQ is the last section -->
+  <CtaBlock>
+    <h2 class:list={['cta-title text-title-xl sm:text-title-3xl', !copy.cta.line && 'mb-8']}><BrandText text={copy.cta.title} /></h2>
+    {copy.cta.line && <p class="cta-copy"><BrandText text={copy.cta.line} /></p>}
+    <div class="cta-actions">
+      <a href={copy.callUrl} class="btn-bina-secondary">Book an ESA call</a>
+      <a href={CTA} class="btn-bina">{CTA_LABEL}</a>
+    </div>
+  </CtaBlock>
+
+  <!-- FAQ: the last section before the footer -->
+  <section class="theme-base">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="mb-8 text-title-xl sm:text-title-3xl">FAQ</h2>
+      <Accordion items={questions} />
     </div>
   </section>
 
-  <!-- close -->
-  <section class="border-t-2 border-coal-black bg-coal-black text-white">
-    <div class="mx-auto max-w-4xl px-5 py-16 text-center">
-      <h2 class="mb-4 text-3xl text-white sm:text-4xl">
-        One call tells you whether this works for your family
-      </h2>
-      <p class="mx-auto mb-8 max-w-2xl text-white/80">
-        We will put your {copy.state} numbers next to bina's, in writing, and you can decide with the
-        whole picture in front of you. No obligation, and no pretending the funding is simpler than it is.
-      </p>
-      <a href={CTA} class="btn-bina text-lg">{CTA_LABEL}</a>
-      <p class="mt-6 text-sm text-white/60">
-        Prefer email? <a href="mailto:admissions@thebinaschool.com" class="font-bold text-bina-grass underline">admissions@thebinaschool.com</a>
-      </p>
-      <p class="mt-8 border-t border-white/15 pt-6 text-sm text-white/60">
-        In a different state? bina can take state funding in <Fragment set:html={otherStatesHtml} />.
-        {' '}<a href="/esa" class="font-bold text-bina-grass underline">See all five →</a>
-      </p>
-    </div>
-  </section>
 
-  <!-- where every number came from -->
-  <section class="border-t-2 border-coal-black">
-    <div class="mx-auto max-w-4xl px-5 py-12">
-      <h2 class="mb-4 font-display text-xl">Where these numbers come from</h2>
-      <ul class="grid gap-2 text-sm text-coal-900">
-        <li>
-          <strong>{copy.state} program details and dates</strong> — the bina team's ESA database, checked
-          against {copy.state}'s own program site. {copy.state} sets the rules and can change them;
-          <a href={program.officialUrl} rel="noopener" class="underline"> the official program site</a> is the final word.
-        </li>
-        <li>
-          <strong>Tuition</strong> — published on
-          <a href={school.tuitionUrl} class="underline"> thebinaschool.com/tuition</a>. The monthly figure
-          on this page is simple arithmetic: yearly tuition minus the base award, divided by 12, before
-          sibling discounts. Awards for children with special needs are higher in several states.
-        </li>
-        <li>
-          <strong>{survey.headline.recommendAvg} out of 10</strong> — our own family survey,
-          {' '}{survey.surveyA.n} families, {survey.surveyA.responseRatePct}% response rate. Families who
-          answer a survey are more positive than those who do not; every score, including our weakest, is
-          on <a href="/family-survey" class="underline">the survey page</a>.
-        </li>
-        <li>
-          <strong>+{results.headline.readGrowthAvg} reading points</strong> — STAR assessments,
-          Oct '25 to May '26, the {results.headline.pairedN} students assessed at both points at the same
-          level. Aggregates only, on <a href="/student-results" class="underline">the results page</a>.
-        </li>
-        <li>
-          <strong>Reviews</strong> — copied verbatim from Niche, where we cannot edit or remove anything.
-          The full set is on <a href="/reviews" class="underline">our reviews page</a>.
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <p slot="footer-note" class="mx-auto max-w-2xl text-xs text-white/60">
-    {program.prog} is run by the state of {copy.state}, not by bina. Program amounts, eligibility and
-    deadlines are subject to change — always confirm with
-    <a href={program.officialUrl} rel="noopener" class="underline">the official program site</a> before
-    you rely on a number here.
-  </p>
 </BaseLayout>

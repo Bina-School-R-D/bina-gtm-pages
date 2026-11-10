@@ -16,7 +16,8 @@ import landing from '../data/esa-landing.json';
 export const WEBSITE = 'https://thebinaschool.com';
 export const EMAIL = 'admissions@thebinaschool.com';
 export const CTA = 'https://form.thebinaschool.com/new';
-export const CTA_LABEL = 'Start your bina journey →';
+// Button label: no arrow on buttons (Zeyu, 2026-11-05); text links keep theirs.
+export const CTA_LABEL = 'Start your bina journey';
 
 /** State name → URL slug. All 50 names are ASCII words, so spaces are the only join. */
 export const stateSlug = (name) => name.toLowerCase().replace(/\s+/g, '-');
@@ -35,9 +36,6 @@ export const CHIP = {
   both: { label: 'together', cls: 'bg-bina-grass' },
 };
 
-// Ordered by what a parent can act on today: rolling states first, because those are the only
-// ones where reading this in September leads anywhere this school year.
-const WINDOW_RANK = { rolling: 0, annual: 1, 'annual-unpublished': 2 };
 
 export const WINDOW_BADGE = {
   rolling: { label: 'Apply any time', cls: 'bg-bina-grass' },
@@ -62,27 +60,30 @@ function payStep(d, reimbursed) {
   return {
     who: 'both',
     t: 'Pay tuition from your account',
-    d: `bina is an approved ${d.prog} provider, so ${d.s} pays bina directly from your ${d.platform} account — nothing comes out of your pocket. Where your award doesn't cover full tuition, you pay only the difference.`,
+    d: `bina is an approved ${d.prog} provider, so ${d.s} pays bina directly from your ${d.platform} account. Where your award doesn't cover full tuition, you pay the difference.`,
   };
 }
 
 /** The numbered step groups. Numbering runs across all groups. */
-export function numberedSteps(d, reimbursed) {
+export function numberedSteps(d, reimbursed, callStep) {
   const groups = [
     {
       label: 'Before you enroll — during bina admissions',
       steps: [
-        {
-          who: 'bina',
-          t: 'Talk to bina first',
-          d: `One call. We tell you what bina costs, what the ${d.prog} covers in ${d.s}, and what is left for you — before you fill in anything.`,
-        },
+        // A state's own call step (Arizona: the named ESA call) replaces the generic one.
+        callStep
+          ? { who: 'bina', ...callStep }
+          : {
+              who: 'bina',
+              t: 'Talk to bina first',
+              d: `One call. We tell you what bina costs, what the ${d.prog} covers in ${d.s}, and what is left for you — before you fill in anything.`,
+            },
         {
           who: 'state',
           t: `Apply for the ${d.prog}`,
           d: d.applyWindow,
           url: d.applyUrl,
-          urlLabel: `Apply on ${d.s}'s site ↗`,
+          urlLabel: `Apply on ${d.s}'s site →`,
         },
         { who: 'state', t: 'Get approved and funded', d: d.approval },
       ],
@@ -106,6 +107,19 @@ export function numberedSteps(d, reimbursed) {
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 export const words = WORDS;
 
+const DISCLAIMER_Q = 'Is bina responsible for this program?';
+function withDisclaimer(faq, d) {
+  if (faq.some((f) => f.q === DISCLAIMER_Q)) return faq;
+  return [
+    ...faq,
+    {
+      q: DISCLAIMER_Q,
+      a: `The ${d.prog} is run by the state of ${d.s}, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.`,
+      link: { text: 'the official program site', url: d.officialUrl },
+    },
+  ];
+}
+
 /**
  * Everything a /esa/<state> page renders, resolved once: program facts, sales copy, the
  * money arithmetic and the steps. Throws rather than shipping a page built on a mismatch.
@@ -119,65 +133,51 @@ export function statePage(slug) {
     throw new Error(`No esa-states.json entry for ${copy.state} — sync the ESA database first.`);
 
   // Fail the build if the database moves and this page's award drifts out of step with it.
-  for (const n of new Set([copy.esaMin, copy.esaMax])) {
+  // Partial-support pages (Florida) have no single award to check.
+  for (const n of copy.tier === 'partial' ? [] : new Set([copy.esaMin, copy.esaMax])) {
     if (!program.howMuch.includes(usd(n)))
       throw new Error(
         `${copy.state}: esa-landing.json says ${usd(n)} but esa-states.json says "${program.howMuch}" — reconcile them.`
       );
   }
 
-  const { school } = landing;
   const reimbursed = copy.tier === 'reimbursed';
-  const perMonth = (gap) => Math.round(gap / 12);
-  // esaMax is the larger award, so it produces the smaller remainder.
-  const monthLow = perMonth(school.tuitionYearly - copy.esaMax);
-  const monthHigh = perMonth(school.tuitionYearly - copy.esaMin);
 
-  const groups = numberedSteps(program, reimbursed);
+  // Steps come from the state's Notion draft (copy.process.groups, 2026-11-09), numbered across
+  // groups; a state without its own steps falls back to the generic ones.
+  let groups;
+  if (copy.process?.groups) {
+    let n = 0;
+    groups = copy.process.groups.map((g) => ({ label: g.label, steps: g.steps.map((st) => ({ ...st, n: ++n })) }));
+  } else {
+    groups = numberedSteps(program, reimbursed, copy.callStep);
+  }
   const allSteps = groups.flatMap((g) => g.steps);
-  const countBy = (who) => WORDS[allSteps.filter((s) => s.who === who).length];
 
+  // The money, the steps and every other section are the state's Notion draft, word for word
+  // (esa-landing.json); nothing on the page is computed here any more.
   return {
     copy,
     program,
     reimbursed,
-    tier: landing.tierCopy[copy.tier],
-    badge: WINDOW_BADGE[program.windowState],
-    awardLabel: copy.esaMin === copy.esaMax ? usd(copy.esaMax) : `${usd(copy.esaMin)}–${usd(copy.esaMax)}`,
-    // The base award is what we quote; several states pay more for children with special needs.
-    awardNote: /special needs|disability/i.test(program.howMuch)
-      ? 'The base award. Several states pay more for a child with special needs.'
-      : `Paid through ${program.platform}.`,
-    monthLabel: monthLow === monthHigh ? usd(monthHigh) : `${usd(monthLow)}–${usd(monthHigh)}`,
-    gapLabel: reimbursed ? 'your net cost after the refund' : 'is what you cover yourself',
     groups,
     stepTotal: WORDS[allSteps.length],
-    stepsBina: countBy('bina'),
-    stepsState: countBy('state'),
-    stepsBoth: countBy('both'),
-    // This state's own questions lead; the ones every family asks follow.
-    questions: [...copy.faq, ...landing.faq],
-    otherStates: landing.states.filter((s) => s.slug !== slug),
+    // Every state's Notion draft is a complete FAQ ending with the disclaimer; a state without
+    // one gets the disclaimer in Arizona's wording.
+    questions: withDisclaimer(copy.faq, program),
   };
 }
 
-/** The /esa chooser: one card per served state, actionable ones first. */
+/** The /esa chooser: one card per approved state, in the Notion table's order. */
 export function chooserStates() {
+  // The approved-state cards, in the order of the Notion table (2026-11-09). Each card carries
+  // the table's columns word for word (copy.card); partial-support states (Florida) are not cards.
   return landing.states
+    .filter((s) => s.tier !== 'partial')
     .map((s) => {
       const program = programFor(s.state);
       if (!program) throw new Error(`No esa-states.json entry for ${s.state}.`);
-      return {
-        ...s,
-        program,
-        badge: WINDOW_BADGE[program.windowState],
-        awardLabel:
-          s.esaMin === s.esaMax ? usd(s.esaMax) : `${usd(s.esaMin)}–${usd(s.esaMax)}`,
-      };
-    })
-    .sort(
-      (a, b) =>
-        WINDOW_RANK[a.program.windowState] - WINDOW_RANK[b.program.windowState] ||
-        a.state.localeCompare(b.state)
-    );
+      if (!s.card) throw new Error(`${s.state}: no chooser card copy (esa-landing.json states[].card).`);
+      return { ...s, program };
+    });
 }

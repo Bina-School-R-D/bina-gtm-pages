@@ -96,7 +96,7 @@
       "name": "Our family survey",
       "detail": "103 families scored us out of 10",
       "note": "published in full, weakest score included",
-      "url": "/family-survey",
+      "url": "https://thebinaschool.com/family-survey",
       "stat": "9.42",
       "mark": "★",
       "markColor": "bg-bina-purple",
@@ -593,7 +593,7 @@
       "url": "https://www.linkedin.com/pulse/seven-theory-informed-reasons-alternative-education-route-ogunrekun-opgve/",
       "who": "A bina parent",
       "platform": "LinkedIn · she is also a psychologist",
-      "logo": "/images/logos/linkedin.svg",
+      "logo": "/images/logos/linkedin-black.svg",
       "tint": "bg-bina-blue/20"
     },
     {
@@ -605,7 +605,7 @@
       "url": "https://www.instagram.com/reel/DQrWLA9jXyY/",
       "who": "MaryKate",
       "platform": "Instagram · bina parent",
-      "logo": "/images/logos/instagram.svg",
+      "logo": "/images/logos/instagram-black.svg",
       "tint": "bg-bina-pink/15"
     }
   ],

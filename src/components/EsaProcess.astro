@@ -1,11 +1,13 @@
 ---
 /*
- * One state's process — the numbered steps that used to live in /esa's dropdown panel,
+ * One state's process: the support table (when the state has one) and the numbered steps.
+ * Formerly the numbered steps that used to live in /esa's dropdown panel,
  * server-rendered for the state whose page this is. Replaces EsaStatePanel: with the page
  * merged (hero → how it works → money → process → FAQ) the fact tiles moved up into the
  * money section, so this block is the steps and nothing else.
  */
-import { CHIP, CTA, CTA_LABEL } from '../lib/esa-states.js';
+import BrandText from './BrandText.astro';
+import { CHIP } from '../lib/esa-states.js';
 
 interface Props {
   /** The resolved page model from statePage(). */
@@ -13,71 +15,105 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const { copy, groups, stepTotal, stepsBina, stepsState, stepsBoth } = page;
-const title = stepTotal.charAt(0).toUpperCase() + stepTotal.slice(1);
+const { copy, groups, stepTotal } = page;
+// Labels are sentence case on the page; the lib keeps its lowercase strings.
+const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+const proc = copy.process ?? {};
+// Split a sentence around one linked phrase ({ text, url }).
+const linked = (t, link) => {
+  const at = link ? t.indexOf(link.text) : -1;
+  return at === -1
+    ? { before: t, text: '', url: '', after: '' }
+    : { before: t.slice(0, at), text: link.text, url: link.url, after: t.slice(at + link.text.length) };
+};
 ---
 
-<section id="process" class="scroll-mt-20 border-t-2 border-coal-black">
-  <div class="mx-auto max-w-4xl px-5 py-14">
-    <p class="mb-2 font-display text-sm font-bold uppercase tracking-widest text-bina-pink">
-      The process
-    </p>
-    <h2 class="mb-3 text-3xl sm:text-4xl">{title} steps, and we are on the call for all of them</h2>
-    <p class="mb-8 max-w-2xl text-coal-900">
-      You do {stepsState} on {copy.state}'s own website, {stepsBina} happen with us, and {stepsBoth} we
-      do together — so you never have to work out which is which on your own.
-    </p>
+<!-- Mint section: black headings and labels, deep ocean step cards with mint text, deep ocean badges (Zeyu, 2026-11-04 — the /student-results STAR colors). -->
+<section id="process" class="theme-mint scroll-mt-20">
+  <div class="mx-auto max-w-5xl px-5 py-14">
+    <!-- The "You do two on … own website" line is gone (stakeholder, 2026-11-09); the tags say it. -->
+    <h2 class:list={['text-title-xl sm:text-title-3xl', proc.line ? 'mb-3' : 'mb-8']}>{proc.title ?? 'From application to first day'}</h2>
+    {proc.line && <p class="mb-8 max-w-3xl"><BrandText text={proc.line} /></p>}
 
-    <div class="overflow-hidden rounded-[1.875rem] border-2 border-coal-black">
+    {
+      copy.support && (
+        <div class="mb-12">
+          <h3 class="mb-2 font-display text-title-lg font-bold">{copy.support.title}</h3>
+          <p class="mb-6 text-body-lg">{copy.support.lead}</p>
+          <!-- Two columns, no cards (Zeyu, 2026-11-04 — the old "how the funding works / what you
+               get" structure): your steps as a numbered list, bina's part as a checklist. -->
+          <div class="grid gap-10 md:grid-cols-2 md:gap-16">
+            <div>
+              <h4 class="mb-5 font-display text-title-md font-bold">What you do</h4>
+              <ol class="m-0 grid list-none gap-4 p-0">
+                {copy.support.rows.map(([you], i) => (
+                  <li class="flex items-start gap-4">
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint" aria-hidden="true">{i + 1}</span>
+                    <span class="pt-1 font-display font-bold leading-snug">{you}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <h4 class="mb-5 font-display text-title-md font-bold">What <span class="normal-case">bina</span> does</h4>
+              <ul class="m-0 grid list-none gap-4 p-0">
+                {copy.support.rows.map(([, bina]) => (
+                  <li class="flex items-start gap-4">
+                    <span class="grid h-8 w-8 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-mint" aria-hidden="true">✓</span>
+                    <span class="pt-1 leading-snug">{bina}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="grid gap-8">
       {
         groups.map((g) => (
-          <>
-            <p class="bg-coal-black px-5 py-2 font-display text-xs font-bold uppercase tracking-widest text-bina-yellow sm:px-6">
-              {g.label}
-            </p>
-            <ul class="m-0 list-none p-0">
+          <div>
+            {g.label && <p class="eyebrow-line mb-3"><BrandText text={g.label} /></p>}
+            <ol class="m-0 grid list-none gap-4 p-0">
               {g.steps.map((step) => (
-                <li class="flex gap-4 border-t-2 border-coal-black bg-white px-5 py-5 sm:px-6">
-                  <span class="grid h-10 w-10 flex-none place-items-center rounded-xl border-2 border-coal-black bg-bina-yellow font-display text-lg font-black">
+                <li class="flex items-center gap-5 rounded-lg bg-deep-ocean px-5 py-5 text-mint sm:gap-7 sm:px-7">
+                  <span class="w-8 flex-none text-center font-display text-title-3xl sm:text-display-sm" aria-hidden="true">
                     {step.n}
                   </span>
-                  <span class="min-w-0">
-                    <span class="mb-1 flex flex-wrap items-center gap-2">
-                      <strong class="font-display text-base">{step.t}</strong>
-                      <span
-                        class={`inline-flex rounded-full border-2 border-coal-black px-2.5 py-0.5 font-display text-[11px] font-bold ${CHIP[step.who].cls}`}
-                      >
-                        {step.who === 'state' ? `on ${copy.state}'s site` : CHIP[step.who].label}
+                  <span class="min-w-0 flex-1">
+                    <span class="mb-2 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                      <strong class="font-display text-title-md">
+                        <span class="sr-only">Step {step.n}: </span>
+                        {step.titleUrl ? <a href={step.titleUrl} class="underline underline-offset-4">{step.t}</a> : step.t}
+                      </strong>
+                      <span class="inline-flex flex-none items-center rounded-full bg-mint px-3 py-1 font-display text-label uppercase text-deep-ocean">
+                        <BrandText text={step.who === 'state' ? `On ${copy.state}'s site` : sentence(CHIP[step.who].label)} />
                       </span>
                     </span>
-                    <span class="block text-sm text-coal-900">{step.d}</span>
+                    {(() => {
+                      const l = linked(step.d, step.link);
+                      return (
+                        <span class="block text-body-lg">
+                          <BrandText text={l.before} />{l.text && <a href={l.url} rel="noopener" class="font-bold underline">{l.text}</a>}<BrandText text={l.after} />
+                        </span>
+                      );
+                    })()}
                     {step.url && (
-                      <a
-                        href={step.url}
-                        rel="noopener"
-                        class="mt-2 inline-flex font-bold underline decoration-bina-pink decoration-2 underline-offset-4"
-                      >
+                      <a href={step.url} rel="noopener" class="mt-2 inline-flex text-body-lg font-bold underline underline-offset-4">
                         {step.urlLabel}
                       </a>
                     )}
                   </span>
                 </li>
               ))}
-            </ul>
-          </>
+            </ol>
+          </div>
         ))
       }
-      <p class="border-t-2 border-coal-black bg-white px-5 py-3 text-sm text-coal-900 sm:px-6">
-        Funding renews each school year — we send you fresh paperwork every season, so renewing
-        takes minutes.
-      </p>
     </div>
 
-    <div class="card-bina mt-8 p-6 sm:p-8">
-      <p class="mb-2 font-display text-xs font-bold uppercase tracking-widest text-bina-pink">Timing</p>
-      <h3 class="mb-2 font-display text-xl">{copy.timingTitle}</h3>
-      <p class="text-coal-1000">{copy.timingBody}</p>
-      <a href={CTA} class="btn-bina mt-5">{CTA_LABEL}</a>
-    </div>
+    {proc.note && <p class="mt-6 text-body-lg">*{proc.note}</p>}
+
   </div>
 </section>

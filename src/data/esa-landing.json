@@ -8,7 +8,9 @@
     "thebinaschool.com's homepage still names only Utah, Arizona and Wyoming, and the upstream ESA_State_Database.xlsx never got the Wyoming and New Hampshire approvals. Both lag these pages.",
     "New Hampshire's 'who' said 'families under the state income limit' — wrong since SB 295 (2025) removed the 350% FPL cap. Corrected here to universal with the 12,500-student statewide cap. Push the correction back into the upstream database.",
     "Awards quoted are base awards. Children with special needs qualify for more in several states; the pages say so without quoting an amount.",
-    "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold."
+    "Class size RESOLVED (Akis, 2026-09-22): average class is 6–8 children, hard cap 12. The pages say 'average' rather than stating 6–8 as the size, so a family in a class of 10 has not been mis-sold.",
+    "ARIZONA COPY — 2026-11-04 (Zeyu, from the Notion 'Arizona ESA page: content draft (approved template)'): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — the hero's $7,000–$8,000 top-up line, the quarterly 'you pay' figure, Pre-K funding, the Dates line, unused funds rolling over, what Monet/Jose's support covers, the order of steps 3 and 4, the sibling discount, the IEP/504 line, 'Families in 40+ countries'. Still missing, so left off the page: the ESA call booking link (CTA button points at '#', step 1 has no link), bina's exact ClassWallet listing name / vendor ID (step 2 says 'Search for bina.'), and the class-size wording (bullet omitted). Also open: whether the 2% ClassWallet processing fee shows in the numbers.",
+    "/esa COPY — 2026-11-04 (Zeyu, from the Notion 'Main ESA page: content draft (/esa)', restructured Nov 2 after Akis's feedback): lines marked 🔍 in Notion are used as written while Monet and Jose confirm them — New Hampshire's $3,800–$5,800 award and $414–$581 top-up (also changed on the New Hampshire page), Utah 'Up to $8,000', Idaho 'Up to $5,000' and its after-credit figure, Arkansas on the coming-soon list, and bina's provider status for Georgia (applied), Louisiana (in progress) and South Carolina (blocked 2026–27). Missing, so left off: the coming-soon and other-ways states have no page to link to (thebinaschool.com/esa/<state> serves the homepage for any state), the ESA call booking link (button points at '#'), and the class-size wording (bullet omitted). Open: how to describe Idaho, a tax credit, on an 'ESA' page."
   ],
   "school": {
     "tuitionYearly": 10769,
@@ -73,32 +75,6 @@
       }
     ]
   },
-  "howItWorks": {
-    "fundingTitle": "How the funding works, in brief",
-    "fundingSteps": [
-      {
-        "t": "Your state decides, not bina",
-        "d": "You apply to your state's own program on its own website. bina cannot apply on your behalf and cannot influence the decision — but we tell you exactly what to put where, and what your numbers will be, before you start."
-      },
-      {
-        "t": "bina is already on the approved side",
-        "d": "The part most families worry about — whether the school they picked is allowed — is already settled in these five states. That is the whole reason this page exists for your state and not for others."
-      },
-      {
-        "t": "The award rarely covers everything",
-        "d": "We publish the remainder on your state's page rather than letting you discover it at the paperwork stage. It is a monthly figure, and there is $1,500 off for each additional child."
-      }
-    ],
-    "schoolTitle": "What you get for it",
-    "schoolLead": "Not a curriculum in a box and not a video library. A school: a class, a timetable, the same teachers every day, and a Family Success person who knows your child's name.",
-    "schoolPoints": [
-      "An average class of 6–8 children with two teachers in the room, capped at 12",
-      "Five hours a day, five days a week, about 200 school days a year",
-      "Certified teachers, report cards and assessments — Cognia accredited, a registered Cambridge International School",
-      "A timetable that fits your time zone, wherever you are",
-      "Ages 4 to 15, with clubs and a community your child belongs to"
-    ]
-  },
   "faq": [
     {
       "q": "Is bina a homeschool program or a school?",
@@ -119,10 +95,6 @@
     {
       "q": "Can I use ESA money for bina alongside other things?",
       "a": "That depends on your state's rules and your award, not on us. Tuition for an online school is an approved category in the states listed here; whether there is room left over for other purchases is a question for your state's handbook, and we will point you at the exact page."
-    },
-    {
-      "q": "We live in a state that isn't listed here. Can we still join bina?",
-      "a": "Yes — families join bina from all over the world without any state funding. These pages cover only the states where we can accept your state's money today; we are working on more, and new programs are approved most years. Email us your state and we will tell you straight where it stands and let you know if that changes."
     }
   ],
   "reviewIds": [
@@ -137,38 +109,442 @@
       "tier": "funded",
       "esaMin": 7000,
       "esaMax": 8000,
-      "pill": "Arizona ESA · bina is an approved provider",
-      "h1": "Arizona families can use ESA funds toward a bina education",
-      "intro": "Arizona's Empowerment Scholarship Account gives your family $7,000–$8,000 per child, per year to spend on approved education — and bina is an approved provider. You spend it through ClassWallet, the state pays us directly, and you cover the remainder. Arizona has no annual deadline, so this is a decision you can make in any month of the year.",
+      "seoTitle": "ESA-Approved Online School in Arizona | bina",
+      "seoDesc": "bina is an approved Arizona ESA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Use your $7,000–$8,000 ESA toward tuition.",
+      "h1": "Arizona families can use their ESA toward a bina education",
       "gate": [
         "bina is an approved Arizona ESA provider",
-        "$7,000–$8,000 per child, per year",
+        "Your ESA covers about $7,000–$8,000 a year. You top up the rest.",
         "You spend it through ClassWallet"
       ],
-      "coverTitle": "Arizona's own handbook approves what bina is",
-      "coverBody": "The ESA handbook lists “tuition or fees for a nonpublic online learning program” as an approved expense — the exact category bina sits in. You are not hoping a reviewer stretches a rule.",
-      "timingTitle": "Arizona is open all year, and the date you sign moves your money",
-      "timingBody": "There is no annual deadline — applications run year-round. Funding runs in quarters — Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun — and your funding starts in the quarter you sign your contract, with money arriving between the 15th and 30th of that quarter's first month. Signing with bina earlier puts you in an earlier funding quarter. Of the five states on this site, Arizona is the easiest one to start in mid-year.",
+      "card": {
+        "award": "$7,000–$8,000",
+        "pay": "About $231–$314 a month",
+        "when": "Any time",
+        "paid": "ClassWallet"
+      },
+      "howEsa": {
+        "title": "The Arizona ESA in plain words",
+        "body": "The Empowerment Scholarship Account is run by the Arizona Department of Education. When your child is approved, the state puts money into an account for your child's education every quarter. You spend it through ClassWallet on approved expenses, and tuition at an online school like bina is one of them. Unused funds roll over while your child stays in the program."
+      },
+      "money": {
+        "youPay": "about $231–$314",
+        "line": "on the bina yearly plan, after Arizona's $7,000–$8,000 award",
+        "awardCol": "Arizona ESA gives you",
+        "rows": [
+          {
+            "plan": "Yearly plan",
+            "tuition": "$10,769",
+            "award": "$7,000–$8,000",
+            "payYear": "$2,769–$3,769",
+            "payMonth": "about $231–$314 a month"
+          },
+          {
+            "plan": "Quarterly plan",
+            "tuition": "$11,580",
+            "award": "$7,000–$8,000",
+            "payYear": "$3,580–$4,580",
+            "payMonth": "about $298–$382 a month"
+          }
+        ],
+        "notes": [
+          {
+            "t": "Your exact award depends on your family. Our financial aid team will confirm your numbers with you."
+          },
+          {
+            "t": "$1,500 off for each additional child. Full prices are on the tuition page.",
+            "link": {
+              "text": "tuition page",
+              "url": "https://thebinaschool.com/tuition"
+            }
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use the Arizona ESA?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in Arizona."
+          },
+          {
+            "k": "Grade",
+            "v": "Any child from kindergarten to grade 12 can apply. bina teaches from Pre-K to Grade 10."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit."
+          },
+          {
+            "k": "School",
+            "v": "Your child doesn't need to have attended public school before. While using ESA funds, your child studies with bina instead of a public or charter school."
+          },
+          {
+            "k": "Dates",
+            "v": "Arizona accepts applications all year. Processing can take up to 45 days. Funding runs in quarters (ending Sep 30, Dec 31, Mar 31 and Jun 30), and the date you sign your ESA agreement sets the quarter your funding starts."
+          }
+        ]
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply to the Arizona ESA on the state portal",
+            "Talks you through your numbers before you apply, so you know your top-up"
+          ],
+          [
+            "Set up your ClassWallet account",
+            "Sends you a ready-to-use invoice with everything the state needs"
+          ],
+          [
+            "Create the payment order in ClassWallet",
+            "Follows up with you until the payment clears and your child starts"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "note": "Funding renews each school year, and we send you new paperwork each time.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Book an ESA call with our financial aid team",
+                "titleUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=arizona",
+                "d": "We go through your award, your top-up and a start date."
+              },
+              {
+                "who": "state",
+                "t": "Apply for the Empowerment Scholarship Account (ESA)",
+                "d": "Apply on the Arizona ESA portal with proof of residency and your child's birth certificate. Processing can take up to 45 days.",
+                "url": "https://www.azed.gov/esa",
+                "urlLabel": "Apply on Arizona's site →"
+              },
+              {
+                "who": "state",
+                "t": "Sign your ESA agreement and set up ClassWallet",
+                "d": "Once you're approved, sign your agreement with the state and activate your ClassWallet account. The date you sign sets the quarter your funding starts."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Enroll at bina",
+                "d": "Choose your start date and sign your agreement with bina for the remaining balance. We send you everything your application needs: an itemized invoice, enrollment letter and accreditation details."
+              },
+              {
+                "who": "both",
+                "t": "Pay tuition from your account",
+                "d": "We send you an invoice. You create an order in ClassWallet, the state reviews it, and the payment goes straight to bina, usually within about a week of approval. You pay the difference."
+              }
+            ]
+          }
+        ]
+      },
+      "portal": {
+        "title": "How to find and pay bina in ClassWallet",
+        "steps": [
+          "Log in to ClassWallet.",
+          "Search for bina.",
+          "Create an order using the invoice bina sends you.",
+          "The state approves the order and pays bina directly."
+        ],
+        "videoUrl": "https://youtu.be/8wc8PsG5z9U",
+        "videoLabel": "Watch ClassWallet's parent walkthrough"
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how your Arizona ESA works at bina",
+        "line": "We'll put your Arizona numbers next to bina's tuition, in writing, so you can decide with the full picture in front of you."
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=arizona",
       "faq": [
         {
-          "q": "Is bina really an approved Arizona ESA expense, or are we hoping a reviewer agrees?",
-          "a": "It is written into the state's own handbook. Arizona lists “tuition or fees for a nonpublic online learning program” as an approved expense, and ClassWallet has a built-in category for it. You are not relying on a reviewer stretching a rule."
+          "q": "Is bina an approved Arizona ESA school?",
+          "a": "Yes. bina has been an approved school on ClassWallet since November 2024, and the Arizona Department of Education confirmed our registration in June 2026."
         },
         {
-          "q": "$7,000–$8,000 doesn't cover $10,769. What do I actually pay?",
-          "a": "The difference — roughly $230 to $315 a month, before $1,500 off for each additional child. We put your exact number in writing before you commit. Awards for a child with special needs are higher in Arizona, sometimes much higher, which can close the gap entirely."
+          "q": "Does the ESA cover all of bina's tuition?",
+          "a": "It covers most of it. On the yearly plan, families usually top up about $231–$314 a month, depending on their award."
         },
         {
-          "q": "Can we start mid-year?",
-          "a": "Yes, and Arizona is the best state on this site for it. There is no annual deadline; your funding quarter is set by the date you sign, and the quarters end on Sep 30, Dec 31, Mar 31 and Jun 30. Sign earlier, get funded sooner."
+          "q": "Is there an application deadline?",
+          "a": "Arizona accepts applications all year. The date you sign your ESA agreement sets which quarter your funding starts, so applying earlier means funding starts sooner."
         },
         {
           "q": "How long does approval take?",
-          "a": "Up to 30 days. You pre-register with the Arizona Department of Education, then set up ClassWallet and link your bank. We tell you what to have ready so none of that stalls."
+          "a": "Up to 45 days after you apply, according to the Arizona Department of Education."
+        },
+        {
+          "q": "How does bina get paid?",
+          "a": "We send you an invoice. You create an order in ClassWallet, the state reviews it and pays bina directly, usually within about a week."
+        },
+        {
+          "q": "Can my child start before the ESA is approved?",
+          "a": "Yes. You can enroll and pay bina directly while your application is being reviewed, then switch to ESA funding once it's approved."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "My child is in public school now. Can we still apply?",
+          "a": "Yes. Your child can apply while in public school and studies with bina once your ESA is active."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Empowerment Scholarship Account (ESA) is run by the state of Arizona, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://www.azed.gov/esa"
+          }
         }
+      ]
+    },
+    {
+      "slug": "new-hampshire",
+      "state": "New Hampshire",
+      "tier": "funded",
+      "esaMin": 3800,
+      "esaMax": 5800,
+      "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition.",
+      "h1": "New Hampshire families can use their Education Freedom Account toward a bina education",
+      "gate": [
+        "bina is an approved provider for New Hampshire's Education Freedom Account (EFA)",
+        "Your EFA gives you about $3,800 to $5,800 a year. You top up the rest.",
+        "Pay bina directly through your ClassWallet account"
       ],
-      "seoTitle": "ESA-Approved Online School in Arizona | bina",
-      "seoDesc": "bina is an approved Arizona ESA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Use your $7,000–$8,000 ESA toward tuition."
+      "card": {
+        "award": "About $3,800–$5,800",
+        "pay": "About $414–$581 a month",
+        "when": "Until Feb 15 (by Jul 15 for a full award)",
+        "paid": "ClassWallet",
+        "linkName": "NH"
+      },
+      "money": {
+        "title": "What you pay with your New Hampshire EFA",
+        "line": "Your EFA covers part of a year at bina. Here's how it adds up.",
+        "awardCol": "New Hampshire EFA gives you",
+        "rows": [
+          {
+            "plan": "Base grant",
+            "tuition": "$10,769 (yearly plan)",
+            "award": "About $3,800",
+            "payYear": "About $6,969",
+            "payMonth": "about $581 a month"
+          },
+          {
+            "plan": "Base grant + extra aid",
+            "tuition": "$10,769 (yearly plan)",
+            "award": "About $4,500–$5,800",
+            "payYear": "About $4,969–$6,269",
+            "payMonth": "about $414–$522 a month"
+          }
+        ],
+        "notes": [
+          {
+            "t": "Your exact award depends on your family. Our financial aid team will confirm your numbers with you."
+          },
+          {
+            "t": "Extra aid of $700–$2,000 is available for families at or below 185% of the federal poverty line."
+          },
+          {
+            "t": "Quarterly plan: $11,580 a year, so the top-up is $811 higher."
+          },
+          {
+            "t": "Siblings: $1,500 off for each additional child."
+          },
+          {
+            "t": "You sign an agreement with bina for the balance the EFA doesn't cover."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use the New Hampshire EFA?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in New Hampshire."
+          },
+          {
+            "k": "Age and grade",
+            "v": "Children in kindergarten to grade 12 who turn 5 by September 30 of the school year. bina teaches from Pre-K to Grade 10."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit. Families at or below 350% of the federal poverty level get priority and are never waitlisted."
+          },
+          {
+            "k": "Places",
+            "v": "The EFA funds up to 12,500 students in 2026–27, rising to 15,625 in 2027–28."
+          },
+          {
+            "k": "Dates",
+            "v": "For a full award, your application must be complete and verified by July 15. Later applications get a part-year award (80%, 60% or 30% of the grant, depending on the month). The last day to apply for the school year is February 15."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "The New Hampshire EFA in plain words",
+        "body": "The Education Freedom Account is a New Hampshire state program, managed by the Children's Scholarship Fund New Hampshire. When your child is approved, the state puts money into a ClassWallet account for your child's education in four installments: mid-September (20%), mid-November (20%), mid-February (30%) and mid-April (30%). You spend it on approved expenses, including tuition at an online school like bina. Funding renews each school year."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply for the EFA on the state's site",
+            "Talks you through your numbers before you apply, so you know your top-up"
+          ],
+          [
+            "Set up your ClassWallet account",
+            "Sends your invoice, enrollment letter and accreditation details"
+          ],
+          [
+            "Approve the payment in ClassWallet",
+            "Follows up with you until the payment clears and sends renewal paperwork each year"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Talk to bina",
+                "d": "Book an ESA call with our financial aid team. We go through your award, your top-up and a start date.",
+                "link": {
+                  "text": "Book an ESA call with our financial aid team",
+                  "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=new_hampshire"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Apply for the EFA",
+                "d": "Apply on New Hampshire's EFA site. Apply by July 15 for a full award, or by February 15 for a part-year award.",
+                "link": {
+                  "text": "New Hampshire's EFA site",
+                  "url": "https://nhefa.scholarshipfund.org/"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Get approved and funded",
+                "d": "Once you're verified, funds go into your ClassWallet account in four installments through the year."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Enroll at bina",
+                "d": "Choose your start date. We send your invoice, enrollment letter and accreditation details."
+              },
+              {
+                "who": "both",
+                "t": "Pay through ClassWallet",
+                "d": "Tuition is paid from your ClassWallet account and goes straight to bina. You pay the difference."
+              }
+            ]
+          }
+        ]
+      },
+      "portal": {
+        "title": "How to find and pay bina in ClassWallet",
+        "steps": [
+          "Log in to ClassWallet.",
+          "Search for bina.",
+          "Create an order using the invoice bina sends you.",
+          "The payment goes straight to bina."
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how your EFA works at bina"
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=new_hampshire",
+      "faq": [
+        {
+          "q": "Is bina an approved New Hampshire EFA provider?",
+          "a": "Yes. bina is an approved provider, and families pay us directly through ClassWallet."
+        },
+        {
+          "q": "Does the EFA cover all of bina's tuition?",
+          "a": "It covers part of it. With the base grant of about $3,800, families on the yearly plan top up about $581 a month. Families who qualify for extra aid pay less. Your exact award depends on your family, and our financial aid team will confirm your numbers."
+        },
+        {
+          "q": "Is there an income limit?",
+          "a": "No. Every New Hampshire K–12 family can apply. Families at or below 350% of the federal poverty level get priority."
+        },
+        {
+          "q": "Can I apply in the middle of the school year?",
+          "a": "Yes, until February 15. Applying by July 15 gets you a full award. Later applications get a part-year award."
+        },
+        {
+          "q": "When is the money paid?",
+          "a": "In four installments: mid-September, mid-November, mid-February and mid-April."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Can my child start before the EFA is approved?",
+          "a": "Yes. You can enroll and pay bina directly while your application is being reviewed, then switch to EFA funding once it's approved."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Education Freedom Account (EFA) is run by the state of New Hampshire, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://nhefa.scholarshipfund.org/"
+          }
+        }
+      ]
     },
     {
       "slug": "utah",
@@ -176,81 +552,207 @@
       "tier": "funded",
       "esaMin": 8000,
       "esaMax": 8000,
-      "pill": "Utah Fits All · bina is an approved provider",
-      "h1": "Utah families can use Utah Fits All funds toward a bina education",
-      "intro": "The Utah Fits All Scholarship awards $8,000 per child, per year, paid into your Odyssey account to spend on approved education — and bina is an approved provider. Awards are limited and the window is once a year, so the useful thing to know today is when it opens and what to have ready.",
-      "gate": [
-        "bina is an approved Utah Fits All provider",
-        "$8,000 per child, per year",
-        "You spend it through Odyssey"
-      ],
-      "coverTitle": "$8,000 covers most of a bina year",
-      "coverBody": "Utah pays the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina.",
-      "timingTitle": "The next window opens Mar 1, 2027 — and awards are limited",
-      "timingBody": "Utah law sets the same dates every year: Mar 1 for returning students and their siblings, Apr 1 for new students, and the portal closes May 1. The 2026–27 window closed on May 1, 2026, so the next one runs Mar 1 – May 1, 2027. Not everyone who applies is funded, so families who don't want to lose a year start at bina now and apply the day the window opens — we keep your paperwork ready for it.",
-      "faq": [
-        {
-          "q": "The window is closed. Is there any point talking to you now?",
-          "a": "Yes — that is exactly when it helps. The next window is Mar 1 – May 1, 2027, awards are limited, and the families who get funded are the ones who applied in the first days with clean paperwork. We get you ready for it, and plenty of families start at bina in the meantime and pay directly."
-        },
-        {
-          "q": "Are Utah Fits All awards guaranteed if I qualify?",
-          "a": "No. Every Utah K–12 family is eligible, but the money runs out — awards are announced in mid-June and you accept by the end of June. We plan your bina start around your notification date rather than assuming the award, so a no from the state never leaves you without a school."
-        },
-        {
-          "q": "$8,000 against $10,769 — what is left for me?",
-          "a": "About $230 a month, before $1,500 off for each additional child. Utah Fits All is the largest base award of the five states on this site."
-        },
-        {
-          "q": "Does bina being outside Utah — or outside the US — disqualify us?",
-          "a": "No. Utah's statute explicitly contemplates a private school not physically located in Utah, and you spend the scholarship through the Odyssey marketplace where bina is a provider."
-        }
-      ],
       "seoTitle": "Utah Fits All Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition."
-    },
-    {
-      "slug": "idaho",
-      "state": "Idaho",
-      "tier": "reimbursed",
-      "esaMin": 5000,
-      "esaMax": 5000,
-      "pill": "Idaho Parental Choice Tax Credit · bina qualifies",
-      "h1": "Idaho families can claim back up to $5,000 of a bina education",
-      "intro": "Idaho's Parental Choice Tax Credit is a refund, not a wallet: you enroll at bina, you pay tuition, you submit the receipts, and Idaho pays you back up to $5,000 per child — $7,500 for a child with a disability. bina tuition qualifies. Because the claim is built on receipts, starting school earlier costs you nothing in eligibility.",
+      "seoDesc": "bina is an approved Utah Fits All provider — a live online school for ages 4 to 15, classes of 12 or fewer. Put your $8,000 scholarship toward tuition.",
+      "h1": "Utah families can use the Utah Fits All Scholarship toward a bina education",
       "gate": [
-        "bina tuition qualifies for the credit",
-        "Up to $5,000 per child ($7,500 for special needs)",
-        "Paid to you — as a refund or an advance"
+        "bina is an approved provider for the Utah Fits All Scholarship",
+        "Your scholarship gives you up to $8,000 a year. You top up the rest.",
+        "Pay bina directly through your Odyssey account"
       ],
-      "coverTitle": "This one is a refund, not a wallet",
-      "coverBody": "Idaho does not pay bina directly. You enroll, you pay tuition, you submit the receipts — and the state returns up to $5,000 per child as a refundable credit or an advance payment. We produce the receipts you need without you having to ask twice.",
-      "timingTitle": "The next window runs Jan 15 – Mar 15, 2027 — first come, first served",
-      "timingBody": "You apply through your Idaho Taxpayer Access Point (TAP) account between Jan 15 and Mar 15, 2027. The money is handed out in the order applications arrive, and from 2027 priority goes first to families who received the credit the year before, then to households at or below 300% of the federal poverty level. Both 2026 windows have closed. Families joining now enroll and pay directly, and we have your receipts and enrollment letter ready for January.",
+      "card": {
+        "award": "Up to $8,000",
+        "pay": "From about $231 a month",
+        "when": "Once a year",
+        "paid": "Odyssey"
+      },
+      "money": {
+        "title": "What you pay with Utah Fits All",
+        "line": "Your scholarship covers most of a year at bina. Here's how it adds up.",
+        "awardCol": "Utah Fits All gives you",
+        "rows": [
+          {
+            "plan": "Yearly plan",
+            "tuition": "$10,769",
+            "award": "Up to $8,000",
+            "payYear": "From $2,769",
+            "payMonth": "about $231 a month"
+          },
+          {
+            "plan": "Quarterly plan",
+            "tuition": "$11,580",
+            "award": "Up to $8,000",
+            "payYear": "From $3,580",
+            "payMonth": "about $298 a month"
+          }
+        ],
+        "notes": [
+          {
+            "t": "Your exact award depends on your family. Our financial aid team will confirm your numbers with you."
+          },
+          {
+            "t": "Siblings: $1,500 off for each additional child."
+          },
+          {
+            "t": "You sign an agreement with bina for the balance the scholarship doesn't cover."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use Utah Fits All?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in Utah."
+          },
+          {
+            "k": "Grade",
+            "v": "Any child from kindergarten to grade 12. bina teaches from Pre-K to Grade 10."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit. Places are limited, so applying early with complete paperwork helps."
+          },
+          {
+            "k": "Dates",
+            "v": "Utah has one application window a year. For 2026–27, returning students could apply from March 1 and new students from April 1, and applications closed May 1. Awards were announced June 16 and scholarships funded July 15. Utah hasn't published the 2027–28 dates yet."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "Utah Fits All in plain words",
+        "body": "The Utah Fits All Scholarship is a Utah state program. When your child is awarded a scholarship, the state puts money into an Odyssey account for your child's education. You spend it on approved expenses, including tuition at a private online school like bina. Funding renews each school year."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply on the Utah Fits All site during the window",
+            "Helps you prepare your paperwork before the window opens"
+          ],
+          [
+            "Accept your award by the end of June",
+            "Sends your invoice, enrollment letter and accreditation details"
+          ],
+          [
+            "Pay bina from your Odyssey account",
+            "Follows up with you until the payment clears and sends renewal paperwork each year"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Talk to bina",
+                "d": "Book an ESA call with our financial aid team. We go through your award, your top-up and a start date, and get your paperwork ready.",
+                "link": {
+                  "text": "Book an ESA call with our financial aid team",
+                  "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=utah"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Apply for Utah Fits All",
+                "d": "Apply on utaheducationfitsall.org between March 1 (returning students) or April 1 (new students) and May 1.",
+                "link": {
+                  "text": "utaheducationfitsall.org",
+                  "url": "https://www.utaheducationfitsall.org/"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Get awarded and accept",
+                "d": "Awards are announced in mid-June. Accept yours by June 30. Scholarships are funded in mid-July."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Enroll at bina",
+                "d": "Choose your start date. We send your invoice, enrollment letter and accreditation details."
+              },
+              {
+                "who": "both",
+                "t": "Pay through Odyssey",
+                "d": "Tuition is paid from your Odyssey account and goes straight to bina. You pay the difference."
+              }
+            ]
+          }
+        ]
+      },
+      "portal": {
+        "title": "How to find and pay bina in Odyssey",
+        "steps": [
+          "Log in to your Odyssey account.",
+          "Search for bina in the Utah Fits All marketplace.",
+          "Choose bina's tuition offering and complete the purchase.",
+          "The payment goes straight to bina."
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how Utah Fits All works at bina"
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=utah",
       "faq": [
         {
-          "q": "Does Idaho pay bina, or pay me?",
-          "a": "You. This one is a tax credit, not a school account — you pay bina, submit the receipts, and Idaho returns up to $5,000 per child as a refundable credit or an advance payment. We give you the itemized invoice, enrollment letter and accreditation details every time you need them."
+          "q": "Is bina an approved Utah Fits All provider?",
+          "a": "Yes. bina is listed in the Utah Fits All marketplace on Odyssey, and Utah families have paid us through it since 2025."
         },
         {
-          "q": "So I have to fund the whole year myself first?",
-          "a": "You fund it and claim it back — and you can apply for the advance payment rather than waiting for a refund. We have quarterly and yearly plans, and $1,500 off per additional child, so the cash-flow shape is something we work out with you on the call."
+          "q": "Does the scholarship cover all of bina's tuition?",
+          "a": "It covers most of it. With the full $8,000, families on the yearly plan top up about $231 a month. Your exact award depends on your family, and our financial aid team will confirm your numbers."
         },
         {
-          "q": "Both 2026 windows closed. Have we missed it?",
-          "a": "For 2026, yes. The next window is Jan 15 – Mar 15, 2027. Because the claim is built on receipts, starting at bina now does not cost you eligibility — it gives you the receipts. It is first come, first served, so being documented and ready in January matters more in Idaho than anywhere else."
+          "q": "When can I apply?",
+          "a": "Once a year. In 2026–27, returning students could apply from March 1, new students from April 1, and the window closed on May 1. Utah hasn't published the 2027–28 dates yet, and we'll share them as soon as it does."
         },
         {
-          "q": "Who gets priority in 2027?",
-          "a": "Families who received the credit the year before, then households at or below 300% of the federal poverty level, then everyone else in the order applications arrive."
+          "q": "Is it worth talking to bina before the window opens?",
+          "a": "Yes. Families who apply early with complete paperwork have the best chance. We help you get everything ready ahead of time."
         },
         {
-          "q": "Up to $5,000 — what is my real cost?",
-          "a": "About $480 a month net of the credit, before $1,500 off for each additional child. A child with a disability qualifies for up to $7,500, which brings it down further."
+          "q": "Can my child start before the scholarship is funded?",
+          "a": "Yes. You can enroll and pay bina directly now, then switch to scholarship funding once it's in place."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Utah Fits All Scholarship is run by the state of Utah, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://www.utaheducationfitsall.org/"
+          }
         }
-      ],
-      "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
-      "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition."
+      ]
     },
     {
       "slug": "wyoming",
@@ -258,85 +760,823 @@
       "tier": "funded",
       "esaMin": 7000,
       "esaMax": 7000,
-      "pill": "Wyoming Steamboat Legacy · bina is an approved provider",
-      "h1": "Wyoming families can use ESA funds toward a bina education",
-      "intro": "The Steamboat Legacy Scholarship puts $7,000 per child, per year into your Odyssey account to spend on approved education — and bina is an approved provider. Renewing families get an extra $1,750 in rollover funds on top. Wyoming runs one short window a year, which makes knowing the date the whole game.",
+      "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer.",
+      "h1": "Wyoming families can use the Steamboat Legacy Scholarship toward a bina education",
       "gate": [
-        "bina is an approved Wyoming ESA provider",
-        "$7,000 per child, per year (+$1,750 rollover when you renew)",
-        "You spend it through Odyssey"
+        "bina is an approved provider for Wyoming's Steamboat Legacy Scholarship (ESA)",
+        "Your ESA gives you $7,000 a year. You top up the rest.",
+        "Pay bina directly through your Odyssey account"
       ],
-      "coverTitle": "$7,000 lands in your Odyssey account, and bina is in the list",
-      "coverBody": "Wyoming deposits the scholarship into your Odyssey account and you spend it on approved education, including tuition at an online school like bina. Renewing families get an extra $1,750 in rollover funds on top.",
-      "timingTitle": "Wyoming has not published the 2027–28 dates — expect early July 2027",
-      "timingBody": "For 2026–27 the application opened at 9 a.m. on Jul 6, 2026 and ran to the end of July, eligibility was verified by the end of July, and funds landed in Odyssey by Sep 1. The Wyoming Department of Education has not announced the 2027–28 window yet, so plan for early July 2027 — we would rather tell you that than invent a date. Families who want bina this year enroll and pay directly, and we line your funding up for the next cycle and tell you the day the date is published.",
+      "card": {
+        "award": "$7,000",
+        "pay": "About $314 a month",
+        "when": "Set windows (2027–28 dates not yet announced)",
+        "paid": "Odyssey"
+      },
+      "money": {
+        "title": "What you pay with your Wyoming ESA",
+        "line": "Your ESA covers most of a year at bina. Here's how it adds up.",
+        "awardCol": "Wyoming ESA gives you",
+        "rows": [
+          {
+            "plan": "Yearly plan",
+            "tuition": "$10,769",
+            "award": "$7,000",
+            "payYear": "$3,769",
+            "payMonth": "about $314 a month"
+          },
+          {
+            "plan": "Quarterly plan",
+            "tuition": "$11,580",
+            "award": "$7,000",
+            "payYear": "$4,580",
+            "payMonth": "about $382 a month"
+          }
+        ],
+        "notes": [
+          {
+            "t": "Siblings: $1,500 off for each additional child."
+          },
+          {
+            "t": "You sign an agreement with bina for the balance the ESA doesn't cover."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use the Wyoming ESA?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in Wyoming and isn't enrolled in a public school."
+          },
+          {
+            "k": "Age and grade",
+            "v": "For kindergarten to grade 12, your child is at least 5 by August 1 of the school year. bina teaches from Pre-K to Grade 10."
+          },
+          {
+            "k": "Pre-K",
+            "v": "Children who are 4 by August 1 qualify if household income is at or below 250% of the federal poverty level (about $80,375 for a family of four)."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit from kindergarten up."
+          },
+          {
+            "k": "Dates",
+            "v": "Wyoming opens applications in set windows. For 2026–27, the main window opened on July 6 and a supplemental window ran October 27–29. Dates for 2027–28 aren't published yet. We'll let you know as soon as they're announced."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "The Wyoming ESA in plain words",
+        "body": "The Steamboat Legacy Scholarship is Wyoming's Education Savings Account, run by the Wyoming Department of Education. When your child is approved, the state puts $7,000 a year into an Odyssey account for your child's education, paid in quarterly allocations. You spend it with approved providers, and Wyoming allows providers outside the state to offer online learning, so you can use it at bina. Funding renews each school year."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply on the Wyoming ESA site when a window opens",
+            "Lets you know when the window opens and helps you prepare"
+          ],
+          [
+            "Accept your award (opt in) and get funded in Odyssey",
+            "Sends your invoice, enrollment letter and accreditation details"
+          ],
+          [
+            "Pay bina from your Odyssey account",
+            "Follows up with you until the payment clears and sends renewal paperwork each year"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Talk to bina",
+                "d": "Book an ESA call with our financial aid team. We go through your award, your top-up and a start date.",
+                "link": {
+                  "text": "Book an ESA call with our financial aid team",
+                  "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=wyoming"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Apply for the ESA",
+                "d": "Apply on the Wyoming ESA site during an application window, with proof of residency and your child's age and grade.",
+                "link": {
+                  "text": "the Wyoming ESA site",
+                  "url": "https://edu.wyoming.gov/parents/education-savings-accounts/"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Get approved and opt in",
+                "d": "Wyoming reviews your application and posts your approval. Opt in by the deadline to accept your award."
+              },
+              {
+                "who": "state",
+                "t": "Get funded",
+                "d": "Funds are paid into your Odyssey account in quarterly allocations."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "both",
+                "t": "Enroll at bina and pay through Odyssey",
+                "d": "Choose your start date, and we send your invoice, enrollment letter and accreditation details. Tuition is paid from your Odyssey account and goes straight to bina. You pay the difference."
+              }
+            ]
+          }
+        ]
+      },
+      "portal": {
+        "title": "How to find and pay bina in Odyssey",
+        "steps": [
+          "Log in to your Odyssey account.",
+          "Search for bina in the Wyoming ESA marketplace.",
+          "Choose bina's tuition offering and complete the purchase.",
+          "The payment goes straight to bina."
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how your Wyoming ESA works at bina"
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=wyoming",
       "faq": [
         {
-          "q": "You don't know the 2027 dates. Why should I trust the rest of this page?",
-          "a": "Because we would rather say we don't know than guess. The Wyoming Department of Education has not announced the 2027–28 window; for 2026–27 it opened 9 a.m. on Jul 6 and ran to the end of July, so plan for early July 2027. Tell us you're in Wyoming and you will hear from us the day it is published — before the window, not after it closes."
+          "q": "Is bina an approved Wyoming ESA provider?",
+          "a": "Yes. Wyoming allows approved providers outside the state to offer online learning, and bina is approved in the Wyoming ESA marketplace on Odyssey."
         },
         {
-          "q": "Is bina actually in Wyoming's provider list?",
-          "a": "Yes — bina is an approved Education Service Provider and you spend the scholarship through Odyssey. Wyoming's own guidance says a certified ESP does not need to be located in Wyoming and can provide virtual services from anywhere."
+          "q": "Does the ESA cover all of bina's tuition?",
+          "a": "It covers most of it. On the yearly plan, families usually top up about $314 a month."
         },
         {
-          "q": "$7,000 against $10,769 — what do I pay?",
-          "a": "About $315 a month, before $1,500 off for each additional child. Renewing families also get $1,750 in rollover funds, which reduces it further in year two."
+          "q": "When can I apply?",
+          "a": "Wyoming opens applications in set windows. For 2026–27 there was a main window in July and a supplemental window in late October. The 2027–28 dates haven't been announced yet, and we'll share them as soon as Wyoming publishes them."
         },
         {
-          "q": "When does the money actually arrive?",
-          "a": "Wyoming verifies eligibility within about a month of the window closing and the $7,000 lands in your Odyssey account by September 1. We time your bina start around that date."
+          "q": "When does the money arrive?",
+          "a": "Funds are paid into your Odyssey account in quarterly allocations once you're approved and have opted in."
         },
         {
-          "q": "The window is closed and school has started. What now?",
-          "a": "Families enroll and pay directly, and we line the funding up for the next cycle. Nothing about starting at bina now makes the next application harder — it makes it easier, because you already have an enrolled child and a paper trail."
+          "q": "Can my child start before the next funding cycle?",
+          "a": "Yes. You can enroll and pay bina directly now, then switch to ESA funding once it's in place."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Steamboat Legacy Scholarship (ESA) is run by the state of Wyoming, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://edu.wyoming.gov/parents/education-savings-accounts/"
+          }
         }
-      ],
-      "seoTitle": "Wyoming ESA Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved Wyoming provider for the Steamboat Legacy Scholarship — a live online school for ages 4 to 15, with classes of 12 or fewer."
+      ]
     },
     {
-      "slug": "new-hampshire",
-      "state": "New Hampshire",
+      "slug": "west-virginia",
+      "state": "West Virginia",
       "tier": "funded",
-      "esaMin": 5000,
-      "esaMax": 5000,
-      "pill": "New Hampshire EFA · bina is an approved provider",
-      "h1": "New Hampshire families can use EFA funds toward a bina education",
-      "intro": "New Hampshire's Education Freedom Account gives your family about $5,000 per child, per year through ClassWallet — and bina is an approved provider. The income cap was removed in 2025, so every New Hampshire family is eligible, and applications run all year. Enrollment is capped statewide at 12,500 students, which is the one reason to move early.",
+      "esaMin": 5435.62,
+      "esaMax": 5435.62,
+      "seoTitle": "West Virginia Hope Scholarship Online School for Ages 4–15 | bina",
+      "seoDesc": "bina is approved for West Virginia's Hope Scholarship — a live online school for ages 4 to 15. Put your $5,435.62 award toward tuition.",
+      "h1": "West Virginia families can use the Hope Scholarship toward a bina education",
       "gate": [
-        "bina is an approved New Hampshire EFA provider",
-        "About $5,000 per child, per year",
-        "You spend it through ClassWallet"
+        "bina is approved for West Virginia's Hope Scholarship",
+        "The full award is $5,435.62 a year. You top up the rest.",
+        "Your Hope account is funded every quarter"
       ],
-      "coverTitle": "A rolling program, paid in four installments",
-      "coverBody": "The EFA accepts applications all year and pays into your ClassWallet account in September, November, January and April — which lines up with how bina bills, so you are never asked for money the state hasn't sent yet.",
-      "timingTitle": "Rolling all year — but Jul 15, 2027 is the deadline that decides your award size",
-      "timingBody": "For a full 2027–28 award your application must be complete and verified by Jul 15, 2027, so send your documents by Jul 1 to leave time for verification. Miss it and you can still get a prorated award for the year already underway, right through the end of February. Decisions take about 30 days, or up to two months if the state asks for more paperwork, and funds arrive in four installments — September, November, January and April. The sensible order is to talk to us first and apply with your bina numbers in hand.",
+      "card": {
+        "award": "$5,435.62",
+        "pay": "About $444 a month",
+        "when": "2026–27: until Feb 28 (50% of the award until Nov 30, 25% after). Full 2027–28 award from March 2027",
+        "paid": "From your Hope account",
+        "awardNote": "(less if you apply later in the school year)"
+      },
+      "money": {
+        "title": "What you pay with the Hope Scholarship",
+        "line": "The Hope Scholarship covers about half of a year at bina. Here's how it adds up.",
+        "awardCol": "Hope Scholarship gives you (full award)",
+        "rows": [
+          {
+            "plan": "Yearly plan",
+            "tuition": "$10,769",
+            "award": "$5,435.62",
+            "payYear": "$5,333.38",
+            "payMonth": "about $444 a month"
+          },
+          {
+            "plan": "Quarterly plan",
+            "tuition": "$11,580",
+            "award": "$5,435.62",
+            "payYear": "$6,144.38",
+            "payMonth": "about $512 a month"
+          }
+        ],
+        "midYear": {
+          "leadBold": "Applying during the school year:",
+          "lead": "your first-year award depends on when you apply. On the yearly plan:",
+          "head": [
+            "Apply between",
+            "Your 2026–27 award",
+            "You pay (yearly plan)"
+          ],
+          "rows": [
+            [
+              "September 16 – November 30, 2026",
+              "$2,717.81 (50%)",
+              "About $671 a month"
+            ],
+            [
+              "December 1, 2026 – February 28, 2027",
+              "$1,358.91 (25%)",
+              "About $784 a month"
+            ]
+          ],
+          "after": "From the 2027–28 school year, you receive the full award."
+        },
+        "notes": [
+          {
+            "t": "Siblings: $1,500 off for each additional child."
+          },
+          {
+            "t": "You sign an agreement with bina for the balance the scholarship doesn't cover."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use the Hope Scholarship?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in West Virginia and stays a resident while in the program."
+          },
+          {
+            "k": "Grade",
+            "v": "Your child is enrolled in, or eligible to enroll in, a West Virginia public school from kindergarten to grade 12. bina teaches from Pre-K to Grade 10. Pre-K isn't covered by the Hope Scholarship."
+          },
+          {
+            "k": "Kindergarten",
+            "v": "Your child is at least 5 before July 1."
+          },
+          {
+            "k": "School history",
+            "v": "From 2026–27, every West Virginia K–12 student can apply, including children already in private school or homeschool."
+          },
+          {
+            "k": "While using funds",
+            "v": "Your child isn't enrolled full time in a public school."
+          },
+          {
+            "k": "Dates",
+            "v": "Applications are open all year, and the date you apply sets your first-year award. For 2026–27: 50% of the award until November 30, 2026, and 25% from December 1, 2026 to February 28, 2027. After February 28, applications count toward the 2027–28 school year."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "The Hope Scholarship in plain words",
+        "body": "The Hope Scholarship is West Virginia's Education Savings Account, run by the West Virginia State Treasurer's Office. When your child is approved and your Notice of Intent is on file, the state puts money into a Hope account for your child's education, a quarter of the award at a time (by August 15, October 15, January 15 and April 15). You spend it on approved expenses, including tuition at an online school like bina, and the money goes from your account to the school, not to you."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Apply for the Hope Scholarship and file your Notice of Intent",
+            "Talks you through your numbers before you apply, so you know your top-up"
+          ],
+          [
+            "Use your Hope funds toward bina tuition",
+            "Sends you an invoice, enrollment letter and accreditation details"
+          ],
+          [
+            "Confirm your place in the program each year",
+            "Follows up with you until each payment clears and sends new paperwork each year"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "note": "Funding renews each school year. Confirm your place between January 5 and June 15, and we send you new paperwork each time.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Book an ESA call with our financial aid team",
+                "titleUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=west_virginia",
+                "d": "We go through your award, your top-up and a start date."
+              },
+              {
+                "who": "state",
+                "t": "Apply for the Hope Scholarship",
+                "d": "Create an account at hopescholarshipwv.gov and complete the application for each child. Upload your child's state-issued birth certificate and proof of West Virginia residency. If your child has attended a West Virginia public school, add their WVEIS number (it's on their report card).",
+                "url": "https://hopescholarshipwv.gov",
+                "urlLabel": "Apply on West Virginia's site →"
+              },
+              {
+                "who": "state",
+                "t": "File your Notice of Intent",
+                "d": "Once your application shows \"Eligible\", file a Notice of Intent with your county board of education. You only file it once, and your account is funded only after it's on file."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Enroll at bina",
+                "d": "Choose your start date and sign your agreement with bina for the remaining balance. If your child is enrolled full time in a public school, withdraw them before they start at bina."
+              },
+              {
+                "who": "both",
+                "t": "Pay bina from your Hope account",
+                "d": "Funds arrive each quarter. We send you an invoice, you pay bina from your Hope account, and you pay the difference."
+              }
+            ]
+          }
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how the Hope Scholarship works at bina",
+        "line": "We'll put your West Virginia numbers next to bina's tuition, in writing, so you can decide with the full picture in front of you."
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=west_virginia",
       "faq": [
         {
-          "q": "I thought the EFA had an income limit.",
-          "a": "It did — until 2025, when SB 295 removed the 350% federal-poverty-level cap. Every New Hampshire K–12 family is now eligible. Enrollment is capped statewide at 12,500 students, so early is better, but your income is no longer the question."
+          "q": "Is bina approved for the Hope Scholarship?",
+          "a": "Yes. bina is approved for West Virginia's Hope Scholarship, so you can use your Hope funds toward bina tuition."
         },
         {
-          "q": "Can we apply mid-year?",
-          "a": "Yes. The EFA is rolling all year. Apply and be verified by Jul 15 for a full award for the coming year; after that you can still get a prorated award for the year already underway, right through the end of February."
+          "q": "Does the Hope Scholarship cover all of bina's tuition?",
+          "a": "It covers about half. With the full award, families on the yearly plan top up about $444 a month."
         },
         {
-          "q": "When does the money arrive, and does it match how bina bills?",
-          "a": "Funds land in your ClassWallet account in four installments — September, November, January and April. That lines up with how bina bills, so you are not asked for money the state hasn't sent yet."
+          "q": "When can I apply?",
+          "a": "Applications are open all year, and the date you apply sets your first-year award. If you apply by November 30, 2026, you receive 50% of the 2026–27 award, and from December 1, 2026 to February 28, 2027, you receive 25%. From the next school year, you receive the full award."
         },
         {
-          "q": "About $5,000 against $10,769 — what is my share?",
-          "a": "About $480 a month, before $1,500 off for each additional child. We put your exact figure in writing before you commit."
+          "q": "What is a Notice of Intent?",
+          "a": "A form you file with your county board of education once your application shows \"Eligible\". You file it once, and your Hope account is funded only after it's on file."
         },
         {
-          "q": "How long does a decision take?",
-          "a": "About 30 days, or up to two months if the state asks for more documents — which is why we suggest talking to us first and applying with your bina numbers and paperwork already in hand."
+          "q": "When does the money arrive?",
+          "a": "The state adds a quarter of the award to your account by August 15, October 15, January 15 and April 15."
+        },
+        {
+          "q": "My child is in public school now. Can we still apply?",
+          "a": "Yes. Every West Virginia K–12 student can apply. Your child can't stay enrolled full time in a public school while using Hope funds, so they move to bina once you're ready to start."
+        },
+        {
+          "q": "Is there anything I need to do each year?",
+          "a": "Yes. Confirm your child's place in the program between January 5 and June 15 each year. We send you new paperwork for it."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your first payment."
+        },
+        {
+          "q": "Do you offer a sibling discount?",
+          "a": "Yes. Each additional child gets $1,500 off tuition."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Hope Scholarship is run by the state of West Virginia, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://hopescholarshipwv.gov"
+          }
         }
+      ]
+    },
+    {
+      "slug": "idaho",
+      "state": "Idaho",
+      "tier": "reimbursed",
+      "esaMin": 5000,
+      "esaMax": 5000,
+      "seoTitle": "Online School That Qualifies for Idaho's Tax Credit | bina",
+      "seoDesc": "bina is a live online school for ages 4 to 15, classes of 12 or fewer. Idaho's Parental Choice Tax Credit refunds up to $5,000 per child of nonpublic tuition.",
+      "h1": "Idaho families can use the Parental Choice Tax Credit toward a bina education",
+      "gate": [
+        "bina tuition qualifies for Idaho's Parental Choice Tax Credit",
+        "Get back up to $5,000 a year. You cover the rest.",
+        "Pay bina, then claim it from Idaho, or ask for an advance payment"
       ],
-      "seoTitle": "New Hampshire EFA Online School for Ages 4–15 | bina",
-      "seoDesc": "bina is an approved New Hampshire EFA provider — a live online school for ages 4 to 15, with classes of 12 or fewer. Put your Education Freedom Account toward tuition."
+      "card": {
+        "award": "Up to $5,000",
+        "pay": "About $481 a month after your credit",
+        "when": "Jan 15 – Mar 15, 2027",
+        "paid": "You pay bina, the state reimburses you"
+      },
+      "money": {
+        "title": "What you pay with Idaho's tax credit",
+        "line": "The tax credit pays back about half of a year at bina. Here's how it adds up.",
+        "awardCol": "Idaho gives you back",
+        "rows": [
+          {
+            "plan": "Yearly plan",
+            "tuition": "$10,769",
+            "award": "Up to $5,000",
+            "payYear": "About $5,769",
+            "payMonth": "about $481 a month"
+          },
+          {
+            "plan": "Quarterly plan",
+            "tuition": "$11,580",
+            "award": "Up to $5,000",
+            "payYear": "About $6,580",
+            "payMonth": "about $548 a month"
+          }
+        ],
+        "notes": [
+          {
+            "t": "Children with a qualifying disability can receive up to $7,500."
+          },
+          {
+            "t": "Siblings: $1,500 off for each additional child."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your family use Idaho's tax credit?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "You and your child are full-year Idaho residents."
+          },
+          {
+            "k": "Age",
+            "v": "Your child is aged 5 to 19 (up to 22 with a disability) and studies full time at a nonpublic school. bina teaches ages 4 to 15."
+          },
+          {
+            "k": "Tax return",
+            "v": "You've filed an Idaho income tax return (Form 40) that lists your child as a dependent."
+          },
+          {
+            "k": "Priority",
+            "v": "Families with income at or below 300% of the federal poverty level are processed first. Everyone else is processed in the order applications arrive."
+          },
+          {
+            "k": "Dates",
+            "v": "The next window runs January 15 – March 15, 2027. Funds go first come, first served, so apply early in the window."
+          }
+        ]
+      },
+      "howEsa": {
+        "title": "Idaho's tax credit in plain words",
+        "body": "The Parental Choice Tax Credit is run by the Idaho State Tax Commission. Instead of the state paying the school, you pay bina's tuition and claim it back. Idaho pays you as a refundable tax credit, or you can apply for an advance payment so you don't carry the full cost up front. You apply again each year."
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step. They do it with you, or for you where they can.",
+        "rows": [
+          [
+            "Set up your Idaho tax account (TAP) and apply in the window",
+            "Talks you through your numbers and cash flow before you apply"
+          ],
+          [
+            "Pay bina's tuition",
+            "Sends your itemized invoice, receipts, enrollment letter and accreditation details"
+          ],
+          [
+            "Submit your receipts to claim your credit",
+            "Sends new paperwork each year for your renewal"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to first day",
+        "line": "Every family's path is a little different, so our financial aid team will help you choose the right order for these steps.",
+        "groups": [
+          {
+            "label": "Before you enroll — during bina admissions",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Talk to bina",
+                "d": "Book an ESA call with our financial aid team. We go through your credit, what you pay, your cash flow and a start date.",
+                "link": {
+                  "text": "Book an ESA call with our financial aid team",
+                  "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=idaho"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Get ready to apply",
+                "d": "Make sure you've filed your Idaho Form 40, and set up a Taxpayer Access Point (TAP) account. Registration can take up to two weeks, so start before January."
+              },
+              {
+                "who": "state",
+                "t": "Apply in the window",
+                "d": "Apply through your TAP account between January 15 and March 15, 2027. You can apply for the tax credit, or for an advance payment."
+              }
+            ]
+          },
+          {
+            "label": "After you enroll",
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Enroll at bina",
+                "d": "Choose your start date. We send your itemized invoice, enrollment letter and accreditation details."
+              },
+              {
+                "who": "both",
+                "t": "Pay bina and claim it back",
+                "d": "Pay tuition and submit your bina receipts to Idaho to receive your credit."
+              }
+            ]
+          }
+        ]
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how Idaho's tax credit works at bina"
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=idaho",
+      "faq": [
+        {
+          "q": "Does bina tuition qualify for Idaho's tax credit?",
+          "a": "Yes. bina is a full-time nonpublic school, and its tuition is a qualifying expense."
+        },
+        {
+          "q": "Who gets paid, me or bina?",
+          "a": "You do. You pay bina's tuition, and Idaho pays you back as a tax credit or an advance payment."
+        },
+        {
+          "q": "Do I have to pay for the whole year up front?",
+          "a": "You can apply for an advance payment to help with cash flow. We'll go through the options with you on your call."
+        },
+        {
+          "q": "How much does the credit cover?",
+          "a": "Up to $5,000 a year per child, or up to $7,500 for a child with a qualifying disability. On the yearly plan, families usually pay about $481 a month after the credit."
+        },
+        {
+          "q": "When can I apply?",
+          "a": "The next window runs January 15 – March 15, 2027. Funds are awarded first come, first served, with priority for families at or below 300% of the federal poverty level."
+        },
+        {
+          "q": "I missed this year's window. Can my child still join?",
+          "a": "Yes. You can enroll and pay directly now, and we'll help you apply in the January window."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "The Parental Choice Tax Credit is run by the state of Idaho, not by bina. Program amounts, eligibility and deadlines are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://myschoolchoice.idaho.gov/"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "florida",
+      "state": "Florida",
+      "tier": "partial",
+      "seoTitle": "Florida FES-UA Scholarship and bina: a Parent's Guide | bina",
+      "seoDesc": "How Florida families with an FES-UA scholarship can have bina tutoring costs paid back from their scholarship account: who qualifies, what's covered and how to apply.",
+      "h1": "Florida's FES-UA scholarship and bina: a parent's guide",
+      "heroLine": "If your child qualifies for Florida's Family Empowerment Scholarship for Students with Unique Abilities (FES-UA), you can ask for bina tutoring costs to be paid back from your scholarship account.",
+      "gate": [
+        "For Florida students with a qualifying unique ability",
+        "bina tutoring can be reimbursed as part-time tutoring",
+        "Our financial aid team helps you apply and prepares the invoice the state needs"
+      ],
+      "howEsaFirst": true,
+      "howEsa": {
+        "title": "FES-UA in plain words",
+        "body": "FES-UA is a Florida education savings account for students with unique abilities, managed by Step Up For Students (SUFS). The state deposits money into an account each quarter, and families spend it on approved costs, including part-time tutoring.",
+        "bullets": [
+          {
+            "k": "Award:",
+            "v": "depends on your child's grade, county and needs. Our financial aid team will go through your numbers with you."
+          },
+          {
+            "k": "Rollover:",
+            "v": "unused funds roll over each year, up to a $50,000 account cap."
+          },
+          {
+            "k": "How bina fits:",
+            "v": "bina isn't paid directly from the account. You pay bina, then ask SUFS to reimburse you."
+          }
+        ]
+      },
+      "qualifies": {
+        "title": "Can your child use FES-UA?",
+        "items": [
+          {
+            "k": "Where you live",
+            "v": "Your child lives in Florida."
+          },
+          {
+            "k": "Age",
+            "v": "At least 3 by December 31, 2026, and under 22 on September 1, 2026."
+          },
+          {
+            "k": "Unique ability",
+            "v": "An IEP from a Florida school district, or a qualifying diagnosis from a licensed physician, physician assistant, APRN or psychologist (for example autism, ADHD, Down syndrome, or a speech or language impairment)."
+          },
+          {
+            "k": "Income",
+            "v": "No income limit."
+          },
+          {
+            "k": "Dates",
+            "v": "New 2026–27 applications close November 15, 2026."
+          }
+        ]
+      },
+      "covered": {
+        "title": "How bina tutoring is covered",
+        "items": [
+          "bina's live online classes are invoiced as part-time tutoring, which can be taught online.",
+          "Part-time tutoring is capped at 720 hours a year for grades K–3 and 900 hours a year for grades 4–12.",
+          "You can request reimbursement for tutoring prepaid up to four months ahead.",
+          "SUFS reviews every request under state rules. Whether a request is approved, how much is repaid and when is decided by the state, not by bina."
+        ]
+      },
+      "support": {
+        "title": "You're not doing this alone",
+        "lead": "Our financial aid team walks you through every step.",
+        "rows": [
+          [
+            "Apply for FES-UA with Step Up For Students",
+            "Talks you through the scholarship and your numbers before you apply"
+          ],
+          [
+            "Pay bina by card or bank transfer",
+            "Sends an invoice with everything SUFS needs"
+          ],
+          [
+            "Submit your reimbursement request in EMA",
+            "Supplies tutor credentials if SUFS asks"
+          ]
+        ]
+      },
+      "process": {
+        "title": "From application to reimbursement",
+        "groups": [
+          {
+            "steps": [
+              {
+                "who": "bina",
+                "t": "Talk to bina",
+                "d": "Book an ESA call with our financial aid team to go through how FES-UA works with bina.",
+                "link": {
+                  "text": "Book an ESA call with our financial aid team",
+                  "url": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=florida"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Create an EMA account",
+                "d": "Create an EMA account on the Step Up For Students portal. One account covers the whole family.",
+                "link": {
+                  "text": "the Step Up For Students portal",
+                  "url": "https://apply.stepupforstudents.org"
+                }
+              },
+              {
+                "who": "state",
+                "t": "Apply for FES-UA",
+                "d": "Apply for FES-UA and upload your documents: two proofs of Florida residency, your child's birth certificate or passport, Social Security numbers for you and your child, and your child's IEP or diagnosis paperwork. New applications close November 15, 2026."
+              },
+              {
+                "who": "state",
+                "t": "Accept your scholarship in EMA",
+                "d": "Accept your scholarship in EMA by December 15, 2026, and set up how you want to be reimbursed (direct deposit, PayPal or check)."
+              },
+              {
+                "who": "both",
+                "t": "Pay bina and request reimbursement",
+                "d": "Pay by card or bank transfer, then submit bina's invoice and proof of payment under the Reimbursements tab in EMA. Allow up to 60 days for processing."
+              }
+            ]
+          }
+        ]
+      },
+      "invoice": {
+        "title": "What goes on your bina invoice",
+        "items": [
+          "Your child's name",
+          "The subject and the dates covered",
+          "The teacher's name and license number, and the company name (bina)",
+          "The total for the period as one amount, the transaction date and proof it's paid in full"
+        ],
+        "tips": "Tips: keep every receipt, reply within 30 days if a request goes on hold, and check the SUFS Unique Abilities Purchasing Guide or ask for pre-authorization if you're unsure."
+      },
+      "about": {
+        "title": "Getting to know bina",
+        "bullets": [
+          "Live online school from Pre-K to Grade 10",
+          "Cambridge and Cognia accredited, CIS member",
+          "Families in 40+ countries"
+        ],
+        "link": {
+          "label": "Explore bina →",
+          "url": "https://thebinaschool.com"
+        }
+      },
+      "cta": {
+        "title": "See how FES-UA can work with bina"
+      },
+      "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=florida",
+      "faq": [
+        {
+          "q": "Does FES-UA pay bina directly?",
+          "a": "No. You pay bina, then ask Step Up For Students to reimburse you from your scholarship account."
+        },
+        {
+          "q": "Will FES-UA cover all of bina's tuition?",
+          "a": "FES-UA covers bina as part-time tutoring, up to the yearly hour limits. Your award depends on your child's grade, county and needs, and our financial aid team will go through what that means for your family before you apply."
+        },
+        {
+          "q": "Who qualifies?",
+          "a": "Florida students with a qualifying unique ability, shown by an IEP or a diagnosis from a licensed professional. There's no income limit."
+        },
+        {
+          "q": "When is the deadline?",
+          "a": "New 2026–27 applications close November 15, 2026, and new students must accept the scholarship by December 15, 2026. Returning families renew between February 1 and April 30 each year."
+        },
+        {
+          "q": "How long does reimbursement take?",
+          "a": "Up to 60 days after all documents are in. 2026–27 funds can be spent until June 30, 2027, and requests must be submitted by July 31, 2027."
+        },
+        {
+          "q": "Will someone help me with the application?",
+          "a": "Yes. Our financial aid team guides you through every step, from the application to your reimbursement request."
+        },
+        {
+          "q": "Is bina responsible for this program?",
+          "a": "FES-UA is run by the state of Florida and managed by Step Up For Students, not by bina. Program amounts, eligibility, deadlines and reimbursement decisions are subject to change. Always confirm with the official program site before you rely on a number here.",
+          "link": {
+            "text": "the official program site",
+            "url": "https://www.stepupforstudents.org/scholarships/unique-abilities/"
+          }
+        }
+      ]
     }
   ],
   "tierCopy": {
@@ -348,5 +1588,101 @@
       "label": "Reimbursed",
       "note": "You pay bina, then the state pays you back against the receipts."
     }
+  },
+  "index": {
+    "kicker": "ESA funding for families",
+    "title": "Use your state's ESA toward a bina education",
+    "line": "An Education Savings Account (ESA) is money your state sets aside for your child's education. In six states, families can put it toward a year at bina.",
+    "checks": [
+      "Approved in Arizona, New Hampshire, Idaho, Utah, West Virginia and Wyoming",
+      "Your state's award covers a large part of your tuition",
+      "Our financial aid team guides you through every step"
+    ],
+    "findTitle": "Choose your state",
+    "findLine": "Each state runs its own program, with its own award, dates and payment route. Find yours below.",
+    "approvedTitle": "Use your ESA at bina today",
+    "other": {
+      "title": "Other ways to use your state's funding",
+      "line": "In some states, families can put their scholarship toward part of their bina costs. Our team will walk you through what's possible.",
+      "states": [
+        {
+          "name": "Florida",
+          "text": "families with an FES-UA scholarship can be reimbursed for bina tutoring",
+          "url": "/esa/florida"
+        }
+      ]
+    },
+    "ask": {
+      "line": "Don't see your state? Families anywhere can join bina with direct tuition.",
+      "label": "Ask us about your state →",
+      "url": "mailto:admissions@thebinaschool.com?subject=ESA%20funding%20in%20my%20state"
+    },
+    "howTitle": "How ESA funding works at bina",
+    "howSteps": [
+      {
+        "t": "You apply to your state.",
+        "d": "Each family applies on its state's own website. Before you apply, we go through your numbers with you so you know your award and your top-up."
+      },
+      {
+        "t": "bina is already approved.",
+        "d": "In the six approved states, bina is an approved school, so your award can go straight to your tuition."
+      },
+      {
+        "t": "Your award covers a large part of your tuition.",
+        "d": "You top up the rest each month, with $1,500 off for each additional child. Your state's page shows the amounts."
+      }
+    ],
+    "aboutTitle": "Getting to know bina",
+    "aboutBullets": [
+      "Live online school for ages 4 to 15, from Pre-K to Grade 10",
+      "Cambridge and Cognia accredited, CIS member",
+      "Families in 40+ countries",
+      "A Family Success contact who knows your child by name"
+    ],
+    "ctaTitle": "See what a year at bina costs with your ESA",
+    "faq": [
+      {
+        "q": "What is an ESA?",
+        "a": "An Education Savings Account is money your state puts aside for your child's education. You can spend it on approved expenses, including tuition at an approved school like bina."
+      },
+      {
+        "q": "Which states can I use at bina?",
+        "a": "Arizona, New Hampshire, Idaho, Utah, West Virginia and Wyoming. Choose your state above for the details."
+      },
+      {
+        "q": "Does the award cover all of bina's tuition?",
+        "a": "It covers a large part of it, and you top up the rest each month. Awards depend on your state and your family, and our financial aid team will confirm your numbers."
+      },
+      {
+        "q": "Who applies, me or bina?",
+        "a": "You apply to your state's program on its official website. We go through the application with you and send everything the state needs from bina."
+      },
+      {
+        "q": "Will someone help me through the process?",
+        "a": "Yes. Our financial aid team guides you from your first question to your first payment."
+      },
+      {
+        "q": "Can my child start before my ESA is approved?",
+        "a": "Yes. You can enroll and pay bina directly while your application is being reviewed, then switch to ESA funding once it's approved."
+      },
+      {
+        "q": "Do you offer a sibling discount?",
+        "a": "Yes. Each additional child gets $1,500 off tuition."
+      },
+      {
+        "q": "My state isn't listed yet. Can my child still join bina?",
+        "a": "Yes. Families in any state can join bina with direct tuition. Ask us about your state, and we'll let you know what's possible."
+      },
+      {
+        "q": "Is bina responsible for these programs?",
+        "a": "Each ESA program is run by its own state, not by bina. Amounts, eligibility and deadlines are set by the state and can change. Always confirm with your state's official program site before you rely on a number here."
+      }
+    ],
+    "exploreLink": {
+      "label": "Explore bina →",
+      "url": "https://thebinaschool.com"
+    },
+    "approvedNote": "Awards depend on your family. Our financial aid team will confirm your numbers with you.",
+    "callUrl": "https://form.thebinaschool.com/new?utm_source=website&utm_medium=esa_page&utm_campaign=esa_pages_2026&utm_content=main"
   }
 }
