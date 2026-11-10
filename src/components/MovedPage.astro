@@ -1,0 +1,26 @@
+---
+// A page that moved to thebinaschool.com (2026-11-10). GitHub Pages can't send a real 301, so this
+// sends the browser on at once: the script keeps the query (?ref=, utm_*, ?signup=) and the hash
+// (#start-dates) so attribution and deep links survive; the meta refresh covers no-JS visitors.
+// noindex + canonical tell Google the page now lives at `to`.
+interface Props {
+  to: string;
+}
+const { to } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Moved to {to}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={to} />
+    <script is:inline define:vars={{ to }}>
+      location.replace(to + location.search + location.hash);
+    </script>
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+  </head>
+  <body>
+    <a href={to}>This page has moved to {to}</a>
+  </body>
+</html>
