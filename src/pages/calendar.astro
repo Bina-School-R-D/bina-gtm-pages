@@ -1,4 +1,901 @@
 ---
-import MovedPage from '../components/MovedPage.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/school-calendar.json';
+import { calendarMonths, startDates } from '../lib/school-calendar.js';
+import { CTA } from '../lib/esa-states.js';
+
+const months = calendarMonths();
+const yearLabel = data.schoolYear.replace('/', '–'); // "2026–27"
+
+// Legend copy from the Notion 'Calendar page: content draft' (2026-11-05). "School break" and the
+// intro line are 🔍 placeholders until admissions confirms the break weeks.
+const LEGEND = [
+  { k: 'k-start', label: 'Start of a new biome', note: 'The first day of a new themed unit, and a good day to join' },
+  { k: 'k-unit', label: 'Biome unit', note: 'A school day within that biome' },
+  { k: 'k-show', label: 'Final Project Showcase', note: "Children present what they've made during the biome" },
+  { k: 'k-break', label: 'School break', note: 'No classes' },
+];
+const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+// bina Foundation palette per biome — display only. The biome dates and the colors in
+// school-calendar.json stay a mirror of bina-start-school; this page paints them on-brand.
+// ink = the day-number color on that fill (every pair is in the library's contrast table).
+const MINT = '#D8F6C8';
+const BIOME_TONE = {
+  Freshwater: { color: '#78C0FE', ink: '#000000' }, // sky blue
+  Desert: { color: '#FF8A3D', ink: '#000000' }, // tangerine
+  Tundra: { color: '#55EED4', ink: '#000000' }, // lagoon
+  Grasslands: { color: '#FF7A71', ink: '#000000' }, // watermelon
+  Rainforest: { color: '#632AA8', ink: MINT }, // grape
+  Marine: { color: '#FFE916', ink: '#000000' }, // lemon
+  Microbiome: { color: '#025EB9', ink: MINT }, // deep ocean
+  Forest: { color: '#64E27B', ink: '#000000' }, // clover
+};
+const tone = (name) => BIOME_TONE[name] ?? { color: MINT, ink: '#000000' };
+const cellStyle = (c) => {
+  const name = c.biome?.name ?? c.start?.biome;
+  if (!name) return undefined;
+  const t = tone(name);
+  return `--c:${t.color};--ink:${t.ink};--s:${MINT}`;
+};
 ---
-<MovedPage to="https://thebinaschool.com/calendar" />
+
+<BaseLayout
+  title={`bina calendar ${data.schoolYear}`}
+  description={`The bina school year ${data.schoolYear}: every biome, every showcase, and the dates a new child can start class.`}
+  noindex={true}
+  bare={true}
+  footer={true}
+>
+  <div class="cal" data-mode="calendar">
+    <div class="cal-toggle">
+      <!-- Our own date picker (Zeyu, 2026-11-05): the browser's pop-up can't take bina's colors or
+           font. The hidden input keeps the value and the change event the rest of the page uses. -->
+      <div class="handover">
+        <span id="handover-label">Sign-up date</span>
+        <div class="handover-wrap">
+          <button type="button" class="handover-field" id="handover-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="dp" aria-labelledby="handover-label handover-text">
+            <span class="handover-text" id="handover-text"></span>
+          </button>
+          <input type="hidden" id="handover" />
+          <div class="dp" id="dp" role="dialog" aria-label="Choose a sign-up date" hidden>
+            <div class="dp-head">
+              <button type="button" class="dp-nav dp-prev" data-step="-1" aria-label="Previous month"></button>
+              <p class="dp-title" id="dp-title" aria-live="polite"></p>
+              <button type="button" class="dp-nav dp-next" data-step="1" aria-label="Next month"></button>
+            </div>
+            <table class="dp-grid" role="grid" aria-labelledby="dp-title">
+              <thead>
+                <tr>{weekdays.map((w) => <th scope="col">{w}</th>)}</tr>
+              </thead>
+              <tbody id="dp-body"></tbody>
+            </table>
+            <div class="dp-foot">
+              <button type="button" class="dp-today" id="dp-today">Today</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="starts-toggle" />
+        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        <span class="switch-label">Show the dates your child can start</span>
+      </label>
+      <p class="cal-info is-off" id="cal-info" aria-live="polite"></p>
+    </div>
+
+    <header class="cal-head">
+      <div class="cal-title">
+        <h1>bina calendar {yearLabel}</h1>
+        <p class="cal-intro">
+          The bina school year is built around biomes: themed units where children explore one part of
+          the natural world through every subject. Pick a date to see when your child can join and which
+          biome they'll start in.
+        </p>
+      </div>
+    </header>
+
+    <!-- Legend + months sit in one black rounded panel (Zeyu, 2026-11-05). -->
+    <div class="cal-panel">
+    <!-- The year art sits either side of the legend, on the same line (Zeyu, 2026-11-05). -->
+    <div class="cal-legend">
+        <img src="/images/calendar/year-26.png" alt="2026" class="cal-art" width="204" height="186" />
+      <div class="cal-legend-keys">
+      <ul class="key key-calendar">
+        {LEGEND.map((l) => (
+          <li>
+            <span class:list={['k', l.k]}>00</span>
+            <span><strong>{l.label}</strong><span class="k-note">{l.note}</span></span>
+          </li>
+        ))}
+      </ul>
+      <ul class="key key-starts">
+        <li><span class="k k-open">00</span> <strong>Your child can start</strong></li>
+        <li class="key-next" id="key-next"></li>
+      </ul>
+      </div>
+        <img src="/images/calendar/year-27.png" alt="2027" class="cal-art" width="216" height="199" />
+    </div>
+
+    <div class="cal-grid">
+      <!-- Phones only: the 26 art sits on top of August, in its own row so September stays level (Zeyu, 2026-11-05). -->
+      <div class="month-art-row" aria-hidden="true">
+        <img src="/images/calendar/year-26.png" alt="" class="month-art" width="204" height="186" />
+      </div>
+      {months.map((m, i) => (
+        <Fragment>
+        <section class="month" aria-label={m.name}>
+          <h2>{m.name}</h2>
+          <div class="days">
+            {weekdays.map((w, i) => <span class:list={['dow', { wknd: i > 4 }]}>{w}</span>)}
+            {Array.from({ length: m.lead }).map(() => <span />)}
+            {m.cells.map((c) => (
+              <span
+                class:list={['d', c.kind, { wknd: c.weekend, sd: c.start }]}
+                style={cellStyle(c)}
+                data-iso={c.iso}
+                data-signby={c.start?.signBy}
+                data-info={c.start ? `${c.start.label} · ${c.start.biome} · sign up by ${c.start.signByLabel}` : undefined}
+                tabindex={c.start ? 0 : undefined}
+              >
+                <span class="n">{c.day}</span>
+              </span>
+            ))}
+          </div>
+          {m.biomeStarts.map((b) => (
+            <p class="biome-key" style={`--c:${tone(b.name).color}`}>Start of biome: {b.name}</p>
+          ))}
+        </section>
+        {m.name === 'December' && (
+          /* Phones only: the 27 art takes January's old spot next to December, and January starts
+             a new row (Zeyu, 2026-11-05). */
+          <div class="month-art-cell" aria-hidden="true">
+            <img src="/images/calendar/year-27.png" alt="" class="month-art" width="216" height="199" />
+          </div>
+        )}
+        {m.name === 'July' && (
+          /* Phones only: the logo fills the empty spot beside July, bottom right (Zeyu, 2026-11-05).
+             It sits on the black panel, so no container is needed. */
+          <a href="https://thebinaschool.com" class="month-logo-cell" aria-label="bina — home">
+            <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
+          </a>
+        )}
+        </Fragment>
+      ))}
+    </div>
+
+    <!-- Desktop/tablet: the logo sits in the panel's bottom-right corner, under July (Zeyu, 2026-11-05).
+         Phones use the spot beside July instead. -->
+    <a href="https://thebinaschool.com" class="panel-logo" aria-label="bina — home">
+      <img src="/images/navbar-logo-2026.svg" alt="bina" width="147" height="62" />
+    </a>
+    </div>
+
+    <footer class="cal-foot">
+      <p class="cal-cta">
+        Ready to pick a start date? <a href={CTA}>Start your bina journey →</a>
+      </p>
+    </footer>
+  </div>
+
+  <script define:vars={{ starts: startDates.map((s) => ({ iso: s.iso, signBy: s.signBy })) }}>
+    const root = document.querySelector('.cal');
+    const toggle = document.getElementById('starts-toggle');
+    const info = document.getElementById('cal-info');
+    const next = document.getElementById('key-next');
+    const DEFAULT_INFO = 'Tap a date to see when to sign up by.';
+
+    const handover = document.getElementById('handover');
+
+    // Today in the viewer's own timezone — a sign-up deadline is end of that day, where they are.
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const isIso = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v ?? '');
+
+    // The sign-up (handover) date: a start date is open only if its sign-by deadline is on or
+    // after it. Defaults to today; `?signup=YYYY-MM-DD` lets a rep send a family a pre-set link.
+    function applyHandover(iso) {
+      document.querySelectorAll('.sd').forEach((el) => {
+        const gone = el.dataset.signby < iso;
+        el.classList.toggle('gone', gone);
+        el.tabIndex = gone ? -1 : 0;
+      });
+      const firstOpen = document.querySelector('.sd:not(.gone)');
+      next.textContent = firstOpen
+        ? `First possible start: ${firstOpen.dataset.info.replace(' · ', ' (').replace(' · ', ') — ')}`
+        : 'No start dates left this school year for that sign-up date.';
+    }
+    const params = new URLSearchParams(location.search);
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const handoverText = document.getElementById('handover-text');
+    const showDate = (iso) => {
+      const [y, m, d] = iso.split('-').map(Number);
+      handoverText.textContent = `${d} ${MONTHS[m - 1]} ${y}`;
+    };
+    // ---- date picker ----
+    const btn = document.getElementById('handover-btn');
+    const dp = document.getElementById('dp');
+    const dpTitle = document.getElementById('dp-title');
+    const dpBody = document.getElementById('dp-body');
+    const FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const pad = (n) => String(n).padStart(2, '0');
+    const toIso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const fromIso = (iso) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+    let focusDate = new Date();
+
+    function renderPicker() {
+      const y = focusDate.getFullYear();
+      const m = focusDate.getMonth();
+      dpTitle.textContent = `${FULL[m]} ${y}`;
+      const lead = (new Date(y, m, 1).getDay() + 6) % 7; // Monday first, like the calendar
+      const days = new Date(y, m + 1, 0).getDate();
+      const focusIso = toIso(focusDate);
+      let html = '<tr>';
+      for (let i = 0; i < lead; i++) html += '<td></td>';
+      for (let d = 1; d <= days; d++) {
+        const iso = `${y}-${pad(m + 1)}-${pad(d)}`;
+        const sel = iso === handover.value;
+        const cls = ['dp-day', sel && 'is-sel', iso === today && 'is-today'].filter(Boolean).join(' ');
+        html += `<td role="gridcell" aria-selected="${sel}"><button type="button" class="${cls}" data-iso="${iso}" tabindex="${iso === focusIso ? 0 : -1}" aria-label="${d} ${FULL[m]} ${y}${iso === today ? ', today' : ''}"${iso === today ? ' aria-current="date"' : ''}>${d}</button></td>`;
+        if ((lead + d) % 7 === 0 && d < days) html += '</tr><tr>';
+      }
+      dpBody.innerHTML = html + '</tr>';
+    }
+    const focusDay = () => dpBody.querySelector('[tabindex="0"]')?.focus();
+    function openPicker() {
+      focusDate = fromIso(handover.value);
+      renderPicker();
+      dp.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      focusDay();
+    }
+    function closePicker(refocus = true) {
+      if (dp.hidden) return;
+      dp.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      if (refocus) btn.focus();
+    }
+    function choose(iso) {
+      handover.value = iso;
+      handover.dispatchEvent(new Event('change'));
+      closePicker();
+    }
+    btn.addEventListener('click', () => (dp.hidden ? openPicker() : closePicker()));
+    dp.querySelectorAll('.dp-nav').forEach((b) =>
+      b.addEventListener('click', () => {
+        focusDate = new Date(focusDate.getFullYear(), focusDate.getMonth() + Number(b.dataset.step), 1);
+        renderPicker();
+      }),
+    );
+    document.getElementById('dp-today').addEventListener('click', () => choose(today));
+    dpBody.addEventListener('click', (e) => {
+      const day = e.target.closest('.dp-day');
+      if (day) choose(day.dataset.iso);
+    });
+    dpBody.addEventListener('keydown', (e) => {
+      const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      const d = new Date(focusDate);
+      if (e.key in moves) d.setDate(d.getDate() + moves[e.key]);
+      else if (e.key === 'PageUp') d.setMonth(d.getMonth() - 1);
+      else if (e.key === 'PageDown') d.setMonth(d.getMonth() + 1);
+      else if (e.key === 'Home') d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+      else if (e.key === 'End') d.setDate(d.getDate() + (6 - ((d.getDay() + 6) % 7)));
+      else return;
+      e.preventDefault();
+      focusDate = d;
+      renderPicker();
+      focusDay();
+    });
+    dp.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); closePicker(); }
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!dp.hidden && !e.target.closest('.handover-wrap')) closePicker(false);
+    });
+
+    handover.value = isIso(params.get('signup')) ? params.get('signup') : today;
+    showDate(handover.value);
+    applyHandover(handover.value);
+    handover.addEventListener('change', () => {
+      const iso = isIso(handover.value) ? handover.value : today;
+      showDate(iso);
+      applyHandover(iso);
+      if (iso === today) params.delete('signup');
+      else params.set('signup', iso);
+      const q = params.toString();
+      history.replaceState(null, '', `${location.pathname}${q ? `?${q}` : ''}${location.hash}`);
+      setMode(true);
+    });
+
+    function setMode(on) {
+      root.dataset.mode = on ? 'starts' : 'calendar';
+      toggle.checked = on;
+      info.classList.toggle('is-off', !on);
+      info.textContent = DEFAULT_INFO;
+      history.replaceState(null, '', on ? '#start-dates' : location.pathname + location.search);
+    }
+    toggle.addEventListener('change', () => setMode(toggle.checked));
+    setMode(location.hash === '#start-dates');
+
+    const show = (el) => {
+      if (root.dataset.mode !== 'starts' || el.classList.contains('gone')) return;
+      info.textContent = el.dataset.info;
+    };
+    document.querySelectorAll('.sd').forEach((el) => {
+      ['pointerenter', 'focus', 'click'].forEach((t) => el.addEventListener(t, () => show(el)));
+      // Mouse-out or focus-out resets the line. Touch fires pointerleave right after a tap, so
+      // only a mouse resets on leave — a tapped date stays shown until the next tap.
+      el.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse') info.textContent = DEFAULT_INFO;
+      });
+      el.addEventListener('blur', () => (info.textContent = DEFAULT_INFO));
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  /* Dark primary base with mint text — the default bina Foundation theme. Solid brand
+     colours only: mint for text and lines, weekends in a lighter weight, no faded tints. */
+  :global(body) {
+    background: var(--color-primary-base);
+  }
+  .cal {
+    --bg: var(--color-primary-base);
+    --muted: var(--color-mint);
+    --text: var(--color-mint);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1rem clamp(1rem, 2.4vw, 2.5rem) 1.5rem;
+    font-family: var(--font-display);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  /* ---- toggle ---- */
+  /* The info line is only made invisible (never removed), so switching on moves nothing. */
+  .cal-toggle {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    min-height: 2.75rem;
+  }
+  .cal-toggle .handover {
+    grid-column: 1;
+    justify-self: start;
+  }
+  /* Toggle on the right edge (Zeyu, 2026-11-05); its info line sits just left of it. */
+  .cal-toggle .switch {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .cal-toggle .cal-info {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  .cal-info.is-off {
+    visibility: hidden;
+  }
+  @media (max-width: 900px) {
+    .cal-toggle {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+    .cal-toggle .handover,
+    .cal-toggle .switch,
+    .cal-toggle .cal-info {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: center;
+    }
+  }
+  .switch {
+    display: inline-flex;
+    flex-direction: row-reverse; /* text first, toggle on its right (Zeyu, 2026-11-05) */
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .switch input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .switch-track {
+    position: relative;
+    width: 3.25rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--color-black);
+    border: 2px solid var(--color-lagoon);
+    transition: background 0.2s;
+  }
+  .switch-thumb {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    background: var(--color-mint);
+    transition: transform 0.2s;
+  }
+  .switch input:checked + .switch-track {
+    background: var(--color-lemon);
+    border-color: var(--color-black);
+  }
+  .switch input:checked + .switch-track .switch-thumb {
+    transform: translateX(1.5rem);
+    background: var(--color-black);
+  }
+  .switch input:checked ~ .switch-label {
+    color: var(--color-mint);
+  }
+  .switch input:focus-visible + .switch-track {
+    outline: 3px solid var(--color-lagoon);
+    outline-offset: 2px;
+  }
+  .handover {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .handover-field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--color-mint);
+    background: var(--color-black);
+    border: 2px solid var(--color-lagoon);
+    border-radius: 999px;
+    padding: 0.2rem 0.85rem;
+  }
+  .handover-field::after {
+    content: '';
+    width: 0.9rem;
+    height: 0.9rem;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .handover-field {
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .handover-field:focus-visible {
+    outline: 3px solid var(--color-lagoon);
+    outline-offset: 2px;
+  }
+  .handover-wrap {
+    position: relative;
+  }
+
+  /* ---- date picker pop-up: black panel, mint text, lagoon selected day, mint ring on today ---- */
+  .dp {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 20;
+    width: max-content;
+    padding: 1rem;
+    background: var(--color-black);
+    color: var(--color-mint);
+    border: 1.5px solid var(--color-mint);
+    border-radius: 16px;
+    font-family: var(--font-display);
+  }
+  .dp[hidden] { display: none; }
+  /* Stacked top bar: centre the pop-up on the whole bar, so it never runs off a phone screen. */
+  @media (max-width: 900px) {
+    .cal-toggle { position: relative; }
+    .handover-wrap { position: static; }
+    .dp { top: 3.25rem; left: 50%; transform: translateX(-50%); }
+  }
+  .dp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .dp-title {
+    margin: 0;
+    font-size: 1.25rem; /* title-sm */
+    font-weight: 600;
+  }
+  .dp-nav {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-mint);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dp-nav::before {
+    content: '';
+    width: 1.1rem;
+    height: 1.1rem;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 5l-7 7 7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 5l-7 7 7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .dp-next::before { transform: scaleX(-1); }
+  .dp-nav:hover { color: var(--color-lagoon); }
+  .dp-grid {
+    border-collapse: separate;
+    border-spacing: 0.15rem;
+  }
+  .dp-grid th {
+    width: 2.5rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem; /* label */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+  .dp-grid :global(td) { padding: 0; }
+  :global(.dp-day) {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1.5px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-mint);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  :global(.dp-day:hover) { border-color: var(--color-mint); }
+  :global(.dp-day.is-today) { border-color: var(--color-mint); }
+  :global(.dp-day.is-sel) {
+    background: var(--color-lagoon);
+    border-color: var(--color-lagoon);
+    color: var(--color-black);
+    font-weight: 700;
+  }
+  :global(.dp-day:focus-visible),
+  .dp-nav:focus-visible,
+  .dp-today:focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 2px;
+  }
+  .dp-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+  .dp-today {
+    border: 0;
+    background: transparent;
+    padding: 0.25rem 0.5rem;
+    color: var(--color-lagoon);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .dp-today:hover { text-decoration-thickness: 3px; text-underline-offset: 2px; }
+  .cal-info {
+    margin: 0;
+    padding: 0.25rem 0.875rem;
+    border-radius: 999px;
+    background: var(--color-black);
+    color: var(--color-lemon);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  /* ---- header ---- */
+  .cal-panel {
+    position: relative;
+    --bg: var(--color-black);
+    background: var(--color-black);
+    border-radius: 16px; /* rounded-lg */
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+  @media (max-width: 640px) {
+    .cal-panel { padding: 1.25rem 0.75rem; border-radius: 8px; }
+  }
+  .cal-legend {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.25rem;
+  }
+  .cal-legend .key { margin: 0; gap: 1rem 2rem; }
+  .cal-legend .key li { max-width: 15rem; }
+  .cal-legend .cal-art { width: clamp(4.5rem, 10vw, 10rem); }
+  /* Too narrow for one row: a tidy 2 × 2 grid instead of a ragged wrap. */
+  @media (max-width: 1300px) {
+    .cal-legend .key-calendar {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      justify-content: center;
+    }
+    .cal[data-mode='starts'] .cal-legend .key-calendar { display: none; }
+  }
+  @media (max-width: 640px) {
+    .cal-legend .key-calendar { grid-template-columns: 1fr; justify-content: stretch; }
+    .cal-legend .key li { max-width: none; }
+  }
+  .cal-legend .cal-art:last-child { justify-self: end; }
+  @media (max-width: 640px) {
+    .cal-legend { grid-template-columns: 1fr; }
+    .cal-legend .cal-art { display: none; }
+  }
+  .cal-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 2.25rem; /* less above the title, more above the panel (Zeyu, 2026-11-10) */
+  }
+  .cal-title {
+    text-align: center;
+  }
+  .cal-intro {
+    max-width: 44rem;
+    margin: 0.75rem auto 0;
+    font-size: 1rem; /* body-lg */
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .cal-head h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-mint);
+    font-size: clamp(2rem, 5vw, 4.5rem); /* display-sm/md/lg range */
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-align: center;
+  }
+  .cal-art {
+    width: clamp(4.5rem, 13vw, 12.5rem);
+    height: auto;
+  }
+
+
+  /* ---- months ---- */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2.75rem clamp(0.75rem, 1.6vw, 2rem);
+  }
+  @media (max-width: 1100px) {
+    .cal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 0.75rem; }
+    .cal-head { gap: 0.25rem; margin-top: 1.5rem; }
+  }
+  .panel-logo {
+    position: absolute;
+    right: clamp(1.25rem, 2.5vw, 2.5rem);
+    bottom: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+  .panel-logo img { width: 6rem; height: auto; display: block; }
+  .month-art-row,
+  .month-art-cell,
+  .month-logo-cell { display: none; }
+  @media (max-width: 640px) {
+    .month-art-row {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 0.75rem;
+      margin-bottom: -1.25rem; /* sit close to August's heading */
+    }
+    .month-art { justify-self: center; width: 7.5rem; height: auto; }
+    .month-art-cell { display: grid; place-items: center; }
+    .month-logo-cell { display: flex; align-items: flex-end; justify-content: flex-end; }
+    .month-logo-cell img { width: 5.5rem; height: auto; }
+    .panel-logo { display: none; }
+  }
+  .month h2 {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600; /* title-sm */
+    font-size: clamp(1rem, 1.25vw, 1.25rem);
+    color: var(--muted);
+  }
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    row-gap: 0.3rem;
+    text-align: center;
+    font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  }
+  .dow {
+    color: var(--muted);
+    font-weight: 500;
+    padding-bottom: 0.15rem;
+  }
+  .dow.wknd,
+  .d.wknd {
+    color: var(--color-mint);
+    font-weight: 400;
+  }
+  .d {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    color: var(--text);
+    transition: opacity 0.2s;
+  }
+  .d .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.45em;
+    height: 1.45em;
+    padding: 0 0.1em;
+    border-radius: 0.3em;
+    border: 1.5px solid transparent;
+    line-height: 1;
+  }
+  .d.unit .n {
+    background: var(--c);
+    color: var(--ink);
+  }
+  .d.start .n {
+    border-color: var(--c);
+  }
+  .d.showcase .n {
+    border-color: var(--c);
+    border-radius: 999px;
+  }
+  /* Text stays mint (grape and deep ocean don't pass as text on primary base); the dot carries the biome. */
+  .biome-key {
+    margin: 1.1rem 0 0;
+    color: var(--text);
+    font-weight: 700;
+    font-size: clamp(0.875rem, 0.9vw, 0.95rem);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .biome-key::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--c);
+  }
+
+  /* ---- footer ---- */
+  .cal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
+    /* no rule above the footer (Zeyu, 2026-11-05) */
+  }
+  /* Legend sits under the title, next to the calendar it explains (Notion draft, 2026-11-05). */
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem 2.5rem;
+    margin: 0 0 2.25rem;
+    padding: 0;
+    list-style: none;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  .key li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    max-width: 17rem;
+  }
+  .key strong {
+    display: block;
+    font-weight: 700;
+  }
+  .k-note {
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .key { flex-direction: column; align-items: stretch; gap: 0.9rem; }
+    .key li { max-width: none; }
+  }
+  .k {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.3rem;
+    flex: none;
+    border: 1.5px solid var(--color-mint);
+    color: var(--color-mint);
+  }
+  .k-unit { background: var(--color-mint); border-color: var(--color-mint); color: var(--color-black); }
+  .k-show { border-radius: 999px; }
+  /* School break: a plain weekday number, no fill, no ring. */
+  .k-break { border-color: transparent; }
+  .k-open { background: var(--color-lemon); border-color: var(--color-lemon); color: var(--color-black); }
+  .key-next { color: var(--color-lemon); }
+  .cal-cta {
+    margin: 0 0 0 auto;
+    color: var(--color-mint);
+    font-size: 1rem;
+  }
+  /* Inside a sentence: the paragraph's weight; underline and hover come from the global text-link rule. */
+  .cal-cta a {
+    color: var(--color-lagoon);
+  }
+  .cal-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.6rem;
+    background: var(--color-black);
+  }
+  .cal-logo img { width: 2.6rem; height: auto; }
+
+  /* ---- start-dates mode ---- */
+  .key-starts { display: none; }
+  .cal[data-mode='starts'] .key-calendar { display: none; }
+  .cal[data-mode='starts'] .key-starts { display: flex; }
+  /* Keep every biome colour, faded, so a start date still reads against its biome. */
+  .cal[data-mode='starts'] .d:not(.sd) { opacity: 0.3; }
+  .cal[data-mode='starts'] .d.sd {
+    cursor: pointer;
+  }
+  .cal[data-mode='starts'] .d.sd .n {
+    background: var(--c);
+    border-color: var(--s); /* mint ring */
+    border-radius: 0.3em;
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 0 0 2px var(--bg);
+  }
+  .cal[data-mode='starts'] .d.sd:hover .n,
+  .cal[data-mode='starts'] .d.sd:focus-visible .n {
+    outline: 2px solid var(--color-lagoon);
+    outline-offset: 1px;
+  }
+  /* Too late for the chosen sign-up date: not shown as a start date at all. */
+  .cal[data-mode='starts'] .d.sd.gone { opacity: 0.3; cursor: default; }
+  .cal[data-mode='starts'] .d.sd.gone .n {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text);
+    font-weight: 500;
+    outline: none;
+  }
+  .cal[data-mode='starts'] .d.sd.gone.unit .n { background: var(--c); color: var(--ink); }
+  .d.sd:focus { outline: none; }
+</style>
