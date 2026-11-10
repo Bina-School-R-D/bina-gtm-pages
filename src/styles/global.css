@@ -301,17 +301,24 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Link hover — every link on every page, text and whole-card links   */
-/* (Zeyu, 2026-11-06): the thebinaschool.com footer-link hover, a fade */
-/* to 80% opacity. Buttons and links with their own hover fill        */
-/* (the /reviews rating tags) keep theirs.                            */
+/* Text links — bina Foundation "Text link" guidelines (Zeyu, 2026-11-10). */
+/* Always underlined, in the surface's text color (or a passing        */
+/* highlight such as lagoon); the underline is 1px and thickens to 3px */
+/* on hover, the color never changes. SemiBold for links that stand on */
+/* their own (font-semibold), the paragraph's weight inside running    */
+/* text. Buttons and links with their own fill hover (the /reviews     */
+/* rating tags) keep theirs. Unlayered so it beats Tailwind utilities. */
 /* ------------------------------------------------------------------ */
-a:not([class*="btn-bina"]):not([class*="hover:bg-"]) {
+a:not([class*="btn-bina"]):not([class*="hover:bg-"]):not(.no-underline) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.2em;
   text-decoration-skip-ink: auto;
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  transition: text-decoration-thickness 0.15s ease-out;
 }
-a:not([class*="btn-bina"]):not([class*="hover:bg-"]):hover {
-  opacity: 0.8;
+a:not([class*="btn-bina"]):not([class*="hover:bg-"]):not(.no-underline):hover {
+  text-decoration-thickness: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
   a { transition: none; }

@@ -86,7 +86,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
                   <span><strong class="font-bold">When to apply:</strong> <span class="font-display font-medium">{s.card.when}</span></span>
                   <span><strong class="font-bold">How <span class="normal-case">bina</span> gets paid:</strong> <span class="font-display font-medium">{s.card.paid}</span></span>
                 </span>
-                <a href={`/esa/${s.slug}`} class="mt-auto self-start font-bold underline decoration-2 underline-offset-4">
+                <a href={`/esa/${s.slug}`} class="mt-auto self-start font-semibold">
                   bina for {s.card.linkName ?? s.state} families →
                 </a>
               </div>
@@ -113,7 +113,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
               <div class="grid gap-x-6 gap-y-1 py-2 sm:grid-cols-[10rem_1fr]">
                 <dt class="font-display text-title-sm text-hl">{st.name}</dt>
                 <dd class="m-0 text-body-lg">
-                  {st.url ? <a href={st.url} class="font-bold underline"><BrandText text={sentence(st.text)} /></a> : <BrandText text={sentence(st.text)} />}
+                  {st.url ? <a href={st.url} class="font-semibold"><BrandText text={sentence(st.text)} /></a> : <BrandText text={sentence(st.text)} />}
                 </dd>
               </div>
             ))
@@ -123,7 +123,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
       <p class="mt-12 flex items-center gap-3 font-display text-body-xl font-bold">
         <span class="grid h-7 w-7 flex-none place-items-center rounded-full bg-deep-ocean text-body-md text-mint" aria-hidden="true">?</span>
-        <span>{c.ask.line} <a href={c.ask.url} class="underline">{c.ask.label}</a></span>
+        <span>{c.ask.line} <a href={c.ask.url}>{c.ask.label}</a></span>
       </p>
     </div>
   </section>
@@ -165,7 +165,7 @@ const sentence = (t) => t.charAt(0).toUpperCase() + t.slice(1);
         </ul>
         <!-- "Explore bina →" under the bullets (stakeholder, 2026-11-09), new tab. -->
         <p class="mt-8">
-          <a href={c.exploreLink.url} target="_blank" rel="noopener noreferrer" class="font-bold text-lagoon underline">
+          <a href={c.exploreLink.url} target="_blank" rel="noopener noreferrer" class="font-semibold text-lagoon">
             <BrandText text={c.exploreLink.label} /><span class="sr-only"> (opens in a new tab)</span>
           </a>
         </p>

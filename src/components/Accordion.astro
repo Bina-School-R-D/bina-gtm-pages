@@ -51,7 +51,7 @@ const segments = (f: Props['items'][number]): Seg[] => {
         <p class="max-w-3xl pb-5 pr-10 text-body-lg">
           {segments(f).map((sg) =>
             sg.kind === 'link' ? (
-              <a href={sg.url} rel="noopener" class="font-bold underline">{sg.t}</a>
+              <a href={sg.url} rel="noopener">{sg.t}</a>
             ) : sg.kind === 'em' ? (
               <em>{sg.t}</em>
             ) : (
