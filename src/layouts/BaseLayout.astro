@@ -15,6 +15,8 @@ interface Props {
   flushFooter?: boolean;
   /** Drop the nav and footer entirely — for full-bleed tool pages like /calendar. */
   bare?: boolean;
+  /** With `bare`: keep the site footer (and the Follow-us rail) — /calendar, Zeyu 2026-11-10. */
+  footer?: boolean;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   ctaLabel = CTA_LABEL,
   flushFooter = false,
   bare = false,
+  footer = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -231,7 +234,7 @@ const socials = [
       <slot />
     </main>
 
-    {!bare && (
+    {(!bare || footer) && (
     <!-- Footer (Zeyu, 2026-11-06): the main site's grouped footer — tagline column, one column per
          group (2 on phones, 3 from 640px, tagline + 5 from 1024px), the legal links in one row above
          the peeking logo (no divider line), and the Follow-us rail. Black / mint / lagoon: mint
