@@ -320,6 +320,13 @@ a:not([class*="btn-bina"]):not([class*="hover:bg-"]):not(.no-underline) {
 a:not([class*="btn-bina"]):not([class*="hover:bg-"]):not(.no-underline):hover {
   text-decoration-thickness: 3px;
 }
+/* Footer links: no underline at rest (Zeyu, 2026-11-10); the 3px underline still appears on hover. */
+a.footer-link.footer-link.footer-link.footer-link {
+  text-decoration-color: transparent;
+}
+a.footer-link.footer-link.footer-link.footer-link:hover {
+  text-decoration-color: currentColor;
+}
 @media (prefers-reduced-motion: reduce) {
   a { transition: none; }
 }
