@@ -137,7 +137,12 @@ const socials = [
             j = d.createElement(s),
             dl = l != 'dataLayer' ? '&l=' + l : '';
           j.async = true;
-          j.src = 'https://sgtm.thebinaschool.com/8bkryjbnrubr.js?' + i;
+          // Stape Cookie Keeper (User identifier: Stape User ID): Safari 16.4+ loads the
+          // "kp" variant of the loader so Stape can restore ITP-expired GA/Ads cookies.
+          // Same detection as Stape's generated snippet; all other browsers unchanged.
+          var sv = /Version\/([0-9._]+)(.*Mobile)?.*Safari.*/.exec(navigator.userAgent || '');
+          var ck = !!sv && parseFloat(sv[1]) >= 16.4;
+          j.src = 'https://sgtm.thebinaschool.com/' + (ck ? '8bkrkpyjbnrubr' : '8bkryjbnrubr') + '.js?' + i;
           f.parentNode.insertBefore(j, f);
           ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (t) {
             w.removeEventListener(t, loadGtm);
