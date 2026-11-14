@@ -115,8 +115,8 @@ const socials = [
     <meta name="generator" content={Astro.generator} />
 
     <!-- Tracking parity with thebinaschool.com: same GTM container (CookieYes CMP + GA4
-         live inside it), a dedicated PostHog project for go.bina.school (session replay
-         enabled after analytics consent), same first-touch attribution file. GTM
+         live inside it), the main PostHog project 366401 via the e.thebinaschool.com
+         proxy (session replay enabled after analytics consent), same first-touch attribution file. GTM
          uses the main site's deferred loader — they load after full page load + idle,
          or on first interaction, whichever comes first — so the consent banner never
          lands on the LCP critical path. Host-gated to bina domains so previews and local
@@ -159,8 +159,11 @@ const socials = [
     </script>
 
     <script is:inline>
-      /* Dedicated go PostHog project and existing replay settings. CookieYes in
-         shared GTM owns consent; only its resolved analytics boolean grants access. */
+      /* Main PostHog project (366401, shared with thebinaschool.com and start.bina.school)
+         through the first-party proxy e.thebinaschool.com. Tracking settings live in code,
+         same object as the main site (bina-gtm notes/prd-posthog-health.md, Asana
+         1220378866795306). CookieYes in shared GTM owns consent; only its resolved
+         analytics boolean grants access. */
       (function () {
         if (/HeadlessChrome|ReactSnap/i.test(navigator.userAgent || '')) return;
         if (!/(^|\.)(thebinaschool\.com|bina\.school)$/.test(window.location.hostname || '')) return;
@@ -189,7 +192,7 @@ const socials = [
             script.type = 'text/javascript';
             script.crossOrigin = 'anonymous';
             script.async = true;
-            script.src = 'https://us-assets.i.posthog.com/static/array.js';
+            script.src = 'https://e.thebinaschool.com/static/array.js';
             // Load the real SDK without the snippet's queued init or a second loader.
             // Its unloaded instance has no project until this fresh consent check.
             script.onload = function () {
@@ -205,9 +208,19 @@ const socials = [
           if (capturing) return;
           if (!initialized) {
             initialized = true;
-            window.posthog.init('phc_D4SErijz7JBzQTuzsJGdYQcKUB3LZxZoqBsBJSn8TQH4', {
-              api_host: 'https://us.i.posthog.com',
+            window.posthog.init('phc_u3t5aKtGXF9YSYkqSzJZCP8wpVtwFi9buiuN7BQRLCev', {
+              api_host: 'https://e.thebinaschool.com',
+              ui_host: 'https://us.posthog.com',
               defaults: '2026-01-30',
+              person_profiles: 'identified_only',
+              autocapture: true,
+              capture_dead_clicks: false,
+              capture_heatmaps: true,
+              capture_performance: { network_timing: true, web_vitals: true },
+              capture_exceptions: false,
+              enable_recording_console_log: true,
+              disable_surveys: true,
+              session_recording: { maskAllInputs: true },
             });
           }
           window.posthog.opt_in_capturing();
