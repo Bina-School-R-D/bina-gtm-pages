@@ -1,0 +1,16 @@
+---
+/* The call to action on every market page (hero + closing block): "Join bina in {market}" →
+   the main site's "Start your bina journey" form + ?market={id}. The second button
+   ("Meet bina's {market} families" → #events) was removed (Akis, 2026-11-19).
+   The label sits in ONE span: the button is flex, and loose text + the "bina" span would
+   become separate flex items with the spaces dropped. */
+import { joinHref } from '../../lib/local.js';
+interface Props {
+  market: { id: string; name: string };
+  align?: 'start' | 'center';
+}
+const { market, align = 'start' } = Astro.props;
+---
+<div class:list={['flex flex-wrap gap-3', align === 'center' && 'justify-center']}>
+  <a href={joinHref(market)} class="btn-bina" data-local-cta="join"><span>Join <span class="normal-case">bina</span> in {market.name} →</span></a>
+</div>

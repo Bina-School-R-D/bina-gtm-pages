@@ -1,0 +1,670 @@
+{
+  "_provenance": "The /local pages: one page per market where bina families meet in person, plus the /local hub. Brief: bina-gtm-markets notes/local-pages/prompt.md (2026-11-18), Toronto hero from Akis (2026-11-19). Built here on localhost first; when ready they move to thebinaschool.com staging and its publish agent. Market and state names, tags and section order live here; school facts (class cap, tuition) come from esa-landing.json, proof numbers from family-survey.json and student-results.json, reviews from reviews.json, accreditation copy from Akis (2026-11-19), logos from thebinaschool.com. Never re-typed here. Text marked [PENDING …] is not final: it shows highlighted on localhost and hides its whole section on a production build.",
+  "_openQuestions": [
+    "Pricing: thebinaschool.com shows tuition only on routes the operator (Ihor Kosse) approved. These pages show USD + local currency. Get his OK before the pages move to the main site.",
+    "Tally intake form says $898/month; thebinaschool.com/tuition says $897/month (yearly plan). One of them is wrong.",
+    "The Ontario homeschooling guide (/homeschooling-guides/ontario) is built on the main-site stage but not live yet. The Toronto guide link 404s until it is.",
+    "Toronto hero facts: '6-12 kids' per class (Akis, 2026-11-19) vs 'average class of six to eight, never more than 12' (esa-landing.json). Both hold; keep them aligned if either changes.",
+    "Cal.com events sync (team 243242, slugs local-{market}-…) is not wired here: events are hand-kept in local-events.json until the pages move to the main site, which has the sync script.",
+    "RESOLVED 2026-11-19 (Akis): accreditation wording matches the main site ('Accredited by Cognia and Cambridge, CIS member'). Body figures checked 2026-11-19 on each body's own site: cognia.org homepage (40,000 institutions, 17,000,000 students, 100 countries); cois.org/about-cis (1,635 schools and universities, 120 countries); cambridgeinternational.org/about-us (over 10 000 Cambridge schools, 160 countries; read via summary, not verbatim). Re-check yearly."
+  ],
+  "hub": {
+    "title": "bina Near You | Local Families and Events",
+    "description": "Where bina families meet: local events and communities in Toronto, Austin and Dubai.",
+    "h1": "Where bina families meet",
+    "intro": "bina is an online school for ages 4–15. In these places, our families also meet in person."
+  },
+  "accreditations": {
+    "_source": "Headline + note: Akis, 2026-11-19 (replaces the homepage copy). Logos from thebinaschool.com (public/images/landing/logos/*-v2.png, made for a dark background).",
+    "headline": "Globally accredited and recognized",
+    "items": [
+      {
+        "name": "Cognia",
+        "image": "/images/local/logos/accreditation-cognia-v2.png",
+        "width": 684,
+        "height": 684,
+        "variant": "badge"
+      },
+      {
+        "name": "CIS",
+        "image": "/images/local/logos/accreditation-cis-v2.png",
+        "width": 200,
+        "height": 200,
+        "variant": "badge"
+      },
+      {
+        "name": "Cambridge",
+        "image": "/images/local/logos/accreditation-cambridge-v2.png",
+        "width": 839,
+        "height": 365,
+        "variant": "wide"
+      }
+    ],
+    "note": "bina is Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS). Cognia works with 40,000 institutions and 17 million students in 100 countries; CIS brings together 1,635 schools and universities from 120 countries; and Cambridge International counts over 10,000 Cambridge schools in 160 countries."
+  },
+  "rates": {
+    "_source": "Bank of Canada USD/CAD 1.4291 (2026-11-17) · USD/AED 3.6725 (peg) · set 2026-11-18. Local amounts are rounded to the nearest 10 and shown as approximate: bina bills in USD only.",
+    "CAD": {
+      "rate": 1.4291,
+      "prefix": "CA$",
+      "name": "Canadian dollars"
+    },
+    "AED": {
+      "rate": 3.6725,
+      "prefix": "AED ",
+      "name": "UAE dirhams"
+    }
+  },
+  "markets": [
+    {
+      "id": "toronto",
+      "name": "Toronto",
+      "tags": {
+        "country": "canada",
+        "state": "ontario",
+        "market": "toronto"
+      },
+      "countryName": "Canada",
+      "stateName": "Ontario",
+      "live": false,
+      "title": "bina in Toronto | Online School in Ontario, Ages 4–15",
+      "description": "bina is an online school for ages 4–15 with families across the Greater Toronto Area. Classes run 9am–2pm Eastern. Meet our Toronto families.",
+      "cardLine": "Families across the Greater Toronto Area, meeting every month.",
+      "image": {
+        "src": "/images/landing/map/111_Toronto_Canada.webp",
+        "alt": "Toronto skyline and the CN Tower across Lake Ontario, autumn",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Toronto"
+        },
+        {
+          "type": "State",
+          "name": "Ontario"
+        },
+        {
+          "type": "Country",
+          "name": "Canada"
+        }
+      ],
+      "currency": "CAD",
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "Toronto’s accredited private school, live online",
+          "facts": [
+            "Verified teachers, small classes of 6-12 kids",
+            "Monday to Friday, 9am–2pm EST",
+            "Full school year Aug to Jul, start any month",
+            "Classmates from 50+ countries"
+          ],
+          "rating": {
+            "_score": "recommendAvg from family-survey.json, never typed here"
+          }
+        },
+        {
+          "kind": "accreditations",
+          "anchor": "accreditation",
+          "navLabel": "Accreditation"
+        },
+        {
+          "kind": "group",
+          "anchor": "community",
+          "navLabel": "Community",
+          "title": "Friends in Toronto, classmates everywhere",
+          "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
+          "theme": "theme-grape"
+        },
+        {
+          "kind": "who",
+          "heading": "bina in Toronto and Canada",
+          "text": "Our Toronto families learn together online every morning and meet in person through the year, from the Toronto Zoo to meetups in Brampton."
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "A family meetup every month, date chosen by the families",
+            "A local pod: an after-school session at a library [PENDING: confirm + day]",
+            "Classmate intros by age"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Founding parents",
+          "people": [
+            {
+              "name": "Amanda",
+              "place": "Brampton",
+              "line": "Organises Toronto meetups.",
+              "photo": "[PENDING: photo, consent]"
+            },
+            {
+              "name": "Johanna",
+              "place": "Aurora",
+              "line": "Hosts a stay-and-play day this winter. [PENDING: confirm]",
+              "photo": "[PENDING: photo, consent]"
+            }
+          ]
+        },
+        {
+          "kind": "quotes",
+          "heading": "What parents say",
+          "quotes": [
+            {
+              "text": "[PENDING: Amanda's exact words, consent]",
+              "by": "Amanda",
+              "place": "Brampton",
+              "date": "[PENDING: month year]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "what",
+          "heading": "bina in the world",
+          "items": [
+            "Classmates across the world [PENDING: 40+ countries (main site) or 50+ (hero)?]",
+            "40+ clubs, online",
+            "Families who meet up and travel together"
+          ]
+        },
+        {
+          "kind": "group",
+          "anchor": "reviews",
+          "navLabel": "Reviews",
+          "theme": "theme-sky-blue",
+          "title": "Your child would be in good company here",
+          "intro": "What bina parents say, in our family survey and in public reviews."
+        },
+        {
+          "kind": "proof",
+          "heading": "",
+          "cards": [
+            "recommend",
+            "nps"
+          ]
+        },
+        {
+          "kind": "reviews"
+        },
+        {
+          "kind": "group",
+          "anchor": "student-results",
+          "navLabel": "Student results",
+          "theme": "theme-deep-ocean",
+          "title": "The whole school moved forward",
+          "intro": "Measured twice a year with STAR assessments, against US national benchmarks."
+        },
+        {
+          "kind": "proof",
+          "heading": "",
+          "cards": [
+            "readGrowth",
+            "mathGrowth",
+            "readAtAbove"
+          ]
+        },
+        {
+          "kind": "group",
+          "anchor": "education",
+          "navLabel": "Education",
+          "title": "Ask us what you'd ask any Toronto school",
+          "intro": "What we teach, how we teach it, and why it holds up in Canada.",
+          "theme": "theme-mint"
+        },
+        {
+          "kind": "education",
+          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features.",
+          "questions": [
+            {
+              "q": "What do they teach?",
+              "cards": [
+                {
+                  "title": "11 subjects at every grade",
+                  "items": [
+                    "Literacy (English)",
+                    "Mathematics",
+                    "Science",
+                    "Social Studies: history, geography, civics, economics",
+                    "SEL & Life Skills",
+                    "Computing",
+                    "Design Technology",
+                    "Visual Arts",
+                    "Music",
+                    "Drama",
+                    "Physical Education"
+                  ]
+                },
+                {
+                  "title": "Taught by theme, not in silos",
+                  "text": "The year runs through 8 biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest. Each one ties the subjects to a single theme, and skills come back deeper in the next."
+                },
+                {
+                  "title": "Life skills are a real subject",
+                  "text": "At 7, children plan a spend-save-share budget. At 11, they learn to spot scams. At 13, they budget for independent living."
+                }
+              ]
+            },
+            {
+              "q": "How do they teach it?",
+              "cards": [
+                {
+                  "title": "Live, in a small group",
+                  "text": "Live classes with the same small group and the same teachers: an average of six to eight children with two teachers in the room, never more than {classCap}."
+                },
+                {
+                  "title": "A real school day",
+                  "text": "9am–2pm Eastern, Monday to Friday: live classes, adventures, clubs and passion projects, about 200 days a year."
+                },
+                {
+                  "title": "Skills come back, deeper",
+                  "text": "Each topic is taught at the earliest grade any of bina's reference curricula teaches it, then revisited at greater depth in later biomes."
+                },
+                {
+                  "title": "You see where your child stands",
+                  "text": "Weekly snapshots of what they have mastered and what comes next, plus STAR assessments twice a year."
+                }
+              ]
+            },
+            {
+              "q": "Is bina a real school, or just another online course?",
+              "cards": [
+                {
+                  "title": "Accredited",
+                  "text": "Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS).",
+                  "link": {
+                    "label": "See the accreditations",
+                    "href": "#accreditation"
+                  }
+                },
+                {
+                  "title": "Rated by its families",
+                  "text": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families), and 5 stars on Niche.",
+                  "link": {
+                    "label": "Read the reviews",
+                    "href": "/reviews"
+                  }
+                },
+                {
+                  "title": "A team behind every family",
+                  "text": "A Family Success concierge for every family, plus educational psychology when you need it, included, not billed extra."
+                },
+                {
+                  "title": "A full timetable, not worksheets",
+                  "text": "5 hours a day, 5 days a week, with real teachers and real classmates."
+                }
+              ]
+            },
+            {
+              "q": "Is it Canada-ready?",
+              "cards": [
+                {
+                  "title": "Can my child study at bina in Ontario?",
+                  "text": "Homeschooling is legal in Ontario. Families who choose bina homeschool under Ontario law. [PENDING: verify against the Ontario guide]",
+                  "link": {
+                    "label": "Rules and first steps",
+                    "href": "https://thebinaschool.com/homeschooling-guides/ontario"
+                  }
+                },
+                {
+                  "title": "Built on Ontario's curriculum, and four more",
+                  "text": "bina uses the Ontario Curriculum as its Canadian reference, alongside US Common Core, England's National Curriculum, Cambridge and Australia's. Each topic is taught at the earliest grade any of them teaches it, so fractions, grammar and phonics often come earlier than in Ontario schools."
+                },
+                {
+                  "title": "Can we go back to a local school?",
+                  "text": "Qualifications that travel with your child: bina is Cognia accredited and a registered Cambridge International School. [PENDING: how Ontario and international schools place a child coming from bina: school leadership's OK]"
+                }
+              ],
+              "grades": {
+                "title": "bina levels and Ontario grades",
+                "rows": [
+                  [
+                    "Foundation",
+                    "3–5",
+                    "Pre-K + Junior Kindergarten"
+                  ],
+                  [
+                    "P1",
+                    "5–6",
+                    "Senior Kindergarten / Grade 1"
+                  ],
+                  [
+                    "P2",
+                    "6–7",
+                    "Grade 1 / Grade 2"
+                  ],
+                  [
+                    "P3",
+                    "7–8",
+                    "Grade 2 / Grade 3"
+                  ],
+                  [
+                    "P4",
+                    "8–9",
+                    "Grade 3"
+                  ],
+                  [
+                    "P5",
+                    "9–10",
+                    "Grade 4"
+                  ],
+                  [
+                    "P6",
+                    "10–11",
+                    "Grade 5"
+                  ],
+                  [
+                    "M1",
+                    "11–12",
+                    "Grade 6"
+                  ],
+                  [
+                    "M2",
+                    "12–13",
+                    "Grade 7"
+                  ],
+                  [
+                    "M3",
+                    "13–14",
+                    "Grade 8"
+                  ]
+                ],
+                "note": "Levels follow age, so a bina level is never the same as the same-numbered grade. [PENDING: Grades 9–10: the main site says Pre-K to Grade 10, the curriculum pack stops at Grade 8]"
+              }
+            }
+          ],
+          "link": {
+            "label": "Our approach to learning",
+            "href": "https://thebinaschool.com/education"
+          }
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition",
+          "anchor": "tuition",
+          "navLabel": "Tuition"
+        },
+        {
+          "kind": "faq",
+          "heading": "Questions parents ask",
+          "items": [
+            {
+              "q": "Do bina families in Toronto meet in person?",
+              "a": "Yes. Toronto families meet every month, and classmates are introduced by age."
+            },
+            {
+              "q": "What time are classes?",
+              "a": "9am–2pm Eastern time, live, 5 days a week."
+            },
+            {
+              "q": "Is bina legal in Ontario?",
+              "a": "Homeschooling is legal in Ontario. Families who choose bina homeschool under Ontario law. [PENDING: verify against the Ontario guide]",
+              "link": {
+                "text": "Homeschooling is legal in Ontario",
+                "url": "https://thebinaschool.com/homeschooling-guides/ontario"
+              }
+            },
+            {
+              "q": "How much is bina in Canadian dollars?",
+              "a": "About {range} a month, billed in USD.",
+              "priceRange": "CAD"
+            },
+            {
+              "q": "Where are bina's Toronto families?",
+              "a": "Across the Greater Toronto Area: Mississauga, Brampton, Aurora and the city."
+            }
+          ],
+          "anchor": "faq",
+          "navLabel": "FAQs"
+        },
+        {
+          "kind": "cta"
+        }
+      ],
+      "subnavLabel": {
+        "text": "bina Toronto",
+        "icon": "/images/local/maps/canada.svg",
+        "iconAlt": "Map of Canada"
+      }
+    },
+    {
+      "id": "austin",
+      "name": "Austin",
+      "tags": {
+        "country": "us",
+        "state": "texas",
+        "market": "austin"
+      },
+      "countryName": "United States",
+      "stateName": "Texas",
+      "live": false,
+      "title": "bina in Austin",
+      "description": "[PENDING CONTENT]",
+      "cardLine": "[PENDING: one line]",
+      "image": {
+        "src": "/images/landing/map/010_Austin_USA.webp",
+        "alt": "Austin skyline",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Austin"
+        },
+        {
+          "type": "State",
+          "name": "Texas"
+        },
+        {
+          "type": "Country",
+          "name": "United States"
+        }
+      ],
+      "currency": null,
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "bina in Austin",
+          "facts": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "accreditations"
+        },
+        {
+          "kind": "proof"
+        },
+        {
+          "kind": "features"
+        },
+        {
+          "kind": "schoolDay",
+          "heading": "Your Austin school day",
+          "items": [
+            {
+              "text": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "who",
+          "heading": "Who we are here",
+          "text": "[PENDING CONTENT]"
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Our families",
+          "people": [
+            {
+              "name": "[PENDING CONTENT]",
+              "place": "[PENDING CONTENT]",
+              "line": "[PENDING CONTENT]",
+              "photo": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "reviews"
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition"
+        },
+        {
+          "kind": "faq",
+          "heading": "Questions parents ask",
+          "items": [
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "guide",
+          "heading": "[PENDING CONTENT]",
+          "text": "[PENDING CONTENT]",
+          "link": {
+            "label": "[PENDING CONTENT]",
+            "href": "https://thebinaschool.com/homeschooling-guides/texas"
+          }
+        },
+        {
+          "kind": "cta"
+        }
+      ]
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "_rule": "Market and state are the same place: the URL drops the repeat (/local/uae/dubai). Never present bina as a physical school in Dubai; present it clearly as compliant with UAE law (legal answer D25 still open). Applies to every line added here.",
+      "tags": {
+        "country": "uae",
+        "state": "dubai",
+        "market": "dubai"
+      },
+      "countryName": "United Arab Emirates",
+      "stateName": "Dubai",
+      "live": false,
+      "title": "bina in Dubai",
+      "description": "[PENDING CONTENT]",
+      "cardLine": "[PENDING: one line]",
+      "image": {
+        "src": "/images/landing/map/024_Dubai_UAE.webp",
+        "alt": "Dubai skyline",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Dubai"
+        },
+        {
+          "type": "Country",
+          "name": "United Arab Emirates"
+        }
+      ],
+      "currency": "AED",
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "bina in Dubai",
+          "facts": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "accreditations"
+        },
+        {
+          "kind": "proof"
+        },
+        {
+          "kind": "features"
+        },
+        {
+          "kind": "schoolDay",
+          "heading": "Your Dubai school day",
+          "items": [
+            {
+              "text": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "who",
+          "heading": "Who we are here",
+          "text": "[PENDING CONTENT]"
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Our families",
+          "people": [
+            {
+              "name": "[PENDING CONTENT]",
+              "place": "[PENDING CONTENT]",
+              "line": "[PENDING CONTENT]",
+              "photo": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "reviews"
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition"
+        },
+        {
+          "kind": "faq",
+          "heading": "Questions parents ask",
+          "items": [
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING CONTENT]"
+            },
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING: D25]"
+            }
+          ]
+        },
+        {
+          "kind": "cta"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+---
+/*
+ * The /local SECTION LIBRARY: renders one section of a market page by its `kind`
+ * (src/data/local-markets.json → markets[].sections). Order in the data = order on the page.
+ * Any market can use any section; a new kind = one branch here + its data shape.
+ *
+ * Whole-school sections (accreditations, proof, features, reviews) read the same data as the
+ * other go.bina.school pages, so a number or review is never re-typed for /local.
+ * Each section uses exactly one theme (global.css "Section themes").
+ */
+import Pending from './Pending.astro';
+import LocalButtons from './LocalButtons.astro';
+import LocalEvents from './LocalEvents.astro';
+import LocalTuition from './LocalTuition.astro';
+import CtaBlock from '../CtaBlock.astro';
+import BrandText from '../BrandText.astro';
+import landing from '../../data/esa-landing.json';
+import survey from '../../data/family-survey.json';
+import results from '../../data/student-results.json';
+import reviewData from '../../data/reviews.json';
+import { accreditations, priceRange } from '../../lib/local.js';
+
+interface Props {
+  market: any;
+  section: any;
+  /** The colour of the group this section sits in (set by the page); else the section's own. */
+  theme?: string;
+}
+const { market, section, theme } = Astro.props;
+const { school, reviewIds } = landing;
+
+const reviews = section.kind === 'reviews' ? reviewIds.map((id: string) => reviewData.reviews.find((r: any) => r.id === id)).filter(Boolean) : [];
+const sourceLabel: Record<string, string> = { niche: 'Niche', trustpilot: 'Trustpilot', site: 'thebinaschool.com' };
+const reviewDate = (d?: string) =>
+  d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
+
+// FAQ answers: a computed price answer, then one optional link phrase inside the answer.
+const faqItems =
+  section.kind === 'faq'
+    ? section.items.map((f: any) => ({ ...f, a: f.priceRange ? f.a.replace('{range}', priceRange(f.priceRange)) : f.a }))
+    : [];
+const splitLink = (f: any) => {
+  if (!f.link || !f.a.includes(f.link.text)) return [{ t: f.a }];
+  const at = f.a.indexOf(f.link.text);
+  return [{ t: f.a.slice(0, at) }, { t: f.link.text, url: f.link.url }, { t: f.a.slice(at + f.link.text.length) }].filter((s) => s.t);
+};
+
+// Numbers inside copy are read from the data files, never retyped: {recommendAvg} {surveyN} {classCap}.
+const fill = (t?: string) =>
+  String(t ?? '')
+    .replaceAll('{recommendAvg}', String(survey.headline.recommendAvg))
+    .replaceAll('{surveyN}', String(survey.surveyA.n))
+    .replaceAll('{classCap}', String(school.classCap));
+
+// Proof cards: every number is read from the survey / results data. A section picks its cards
+// by key (section.cards); without a list it shows the original three.
+const rh = results.headline, sh = survey.headline;
+const PROOF: Record<string, { value: string; title: string; note: string; link: string; href: string }> = {
+  recommend: { value: String(sh.recommendAvg), title: 'Parents would send their friends here', note: `out of 10, ${survey.surveyA.n} families`, link: 'the survey', href: '/family-survey' },
+  nps: { value: String(sh.nps), title: 'Net Promoter Score', note: 'the standard measure schools use', link: 'the survey', href: '/family-survey' },
+  readGrowth: { value: `+${rh.readGrowthAvg}`, title: 'Points of reading growth in one school year', note: `STAR, ${rh.pairedN} students`, link: 'the results', href: '/student-results' },
+  mathGrowth: { value: `+${rh.mathGrowthAvg}`, title: 'Points of math growth in one school year', note: `STAR, ${rh.pairedN} students`, link: 'the results', href: '/student-results' },
+  readAtAbove: { value: `${rh.readAtAbovePct}%`, title: 'At or above the national reading benchmark', note: `${rh.readAtAboveN} students, May 2026`, link: 'the results', href: '/student-results' },
+  classCap: { value: String(school.classCap), title: "The most children your child's class can hold", note: 'a cap, not an average', link: 'how classes work', href: 'https://thebinaschool.com/education' },
+};
+const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'readGrowth', 'classCap']).map((k: string) => PROOF[k]).filter(Boolean) : [];
+
+const wrap = 'mx-auto max-w-5xl px-5 py-14';
+const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
+---
+
+{section.kind === 'hero' && (
+  <header class="theme-lagoon" data-local-section="hero">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+      <div>
+        <h1 class="mb-8 max-w-3xl text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
+        {section.facts && (
+          <ul class="mb-10 grid gap-3">
+            {section.facts.map((f: string) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+                <span class="font-display text-title-sm font-bold leading-snug"><Pending text={f} /></span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <LocalButtons market={market} />
+        {section.rating && (
+          <div class="mt-6" data-local-rating>
+            <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
+            <p class="mt-1 font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+            {section.rating.line && <p class="mt-1 text-body-lg"><Pending text={section.rating.line} /></p>}
+          </div>
+        )}
+      </div>
+      {market.image && (
+        <img
+          src={market.image.src}
+          alt={market.image.alt}
+          width={market.image.width}
+          height={market.image.height}
+          fetchpriority="high"
+          decoding="async"
+          class="mx-auto h-auto w-full max-w-[560px]"
+        />
+      )}
+    </div>
+  </header>
+)}
+
+{section.kind === 'accreditations' && (
+  <section class="theme-black" data-local-section="accreditations">
+    <div class:list={[wrap, 'text-center']}>
+      <h2 class="mx-auto mb-10 max-w-3xl text-title-xl text-hl sm:text-title-3xl">{accreditations.headline}</h2>
+      <ul class="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
+        {accreditations.items.map((a: any) => (
+          <li>
+            <img
+              src={a.image}
+              alt={a.name}
+              width={a.width}
+              height={a.height}
+              loading="lazy"
+              decoding="async"
+              class:list={['h-auto', a.variant === 'wide' ? 'w-[300px] sm:w-[340px]' : 'w-[140px] sm:w-[160px]']}
+            />
+          </li>
+        ))}
+      </ul>
+      <p class="mx-auto mt-10 max-w-3xl text-body-md"><BrandText text={accreditations.note} /></p>
+    </div>
+  </section>
+)}
+
+{section.kind === 'proof' && (
+  <section class={theme ?? 'theme-base'} data-local-section="proof">
+    <div class={wrap}>
+      {section.heading !== '' && <h2 class={h2}><Pending text={section.heading ?? 'Families rate the school, and the children grow'} /></h2>}
+      <div class:list={['grid gap-4', proofCards.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3']}>
+        {proofCards.map((c: any) => (
+          <div class="card-bina-mint p-6">
+            <p class="font-display text-display-sm text-hl">{c.value}</p>
+            <p class="mt-2 font-display text-title-sm">{c.title}</p>
+            <p class="mt-1 text-body-md">{c.note} · <a href={c.href}>{c.link}</a></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section.kind === 'features' && (
+  <section class="theme-mint" data-local-section="features">
+    <div class={wrap}>
+      <h2 class={h2}>What your child gets at <span class="normal-case">bina</span></h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {school.features.map((f: any) => (
+          <li class="card-bina-solid p-6">
+            <p class="label-bina mb-3 text-hl">{f.eyebrow}</p>
+            <p class="mb-2 font-display text-title-sm">{f.title}</p>
+            <p class="text-body-lg"><BrandText text={f.body} /></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{section.kind === 'schoolDay' && (
+  <section class="theme-base" data-local-section="school-day">
+    <div class={wrap}>
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      <ul class="grid gap-3">
+        {section.items.map((item: any) => (
+          <li class="flex items-start gap-3 text-body-xl">
+            <span class="mt-1 grid h-6 w-6 flex-none place-items-center rounded-full bg-lagoon font-display text-body-md font-bold text-black" aria-hidden="true">✓</span>
+            {item.href ? <a href={item.href}><Pending text={item.text} /></a> : <Pending text={item.text} />}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{section.kind === 'group' && (
+  <section class={theme ?? 'theme-lemon'} data-local-section="group">
+    <div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
+      <h2 class="text-title-3xl sm:text-display-sm"><Pending text={section.title} /></h2>
+      {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
+    </div>
+  </section>
+)}
+
+{section.kind === 'education' && (
+  <section class={theme ?? 'theme-mint'} data-local-section="education">
+    <div class={wrap}>
+      {section.questions.map((q: any, i: number) => (
+        <div class:list={[i > 0 && 'mt-14']}>
+          <h3 class="mb-6 text-title-lg text-hl sm:text-title-xl"><Pending text={q.q} /></h3>
+          <ul class="grid gap-4 sm:grid-cols-2">
+            {q.cards.map((c: any) => (
+              <li class="card-bina-solid p-6">
+                <p class="mb-3 font-display text-title-sm"><Pending text={c.title} /></p>
+                {c.text && <p class="text-body-lg"><Pending text={fill(c.text)} /></p>}
+                {c.items && (
+                  <ul class="grid gap-1 text-body-lg">
+                    {c.items.map((it: string) => <li>· <Pending text={it} /></li>)}
+                  </ul>
+                )}
+                {c.link && <a href={c.link.href} class="mt-3 inline-block font-display text-body-lg font-semibold"><Pending text={c.link.label} /> →</a>}
+              </li>
+            ))}
+          </ul>
+          {q.grades && (
+            <div class="mt-8">
+              <p class="mb-4 font-display text-title-md"><Pending text={q.grades.title} /></p>
+              <div class="card-bina-solid mb-3 overflow-x-auto">
+                <table class="w-full text-left text-body-lg">
+                  <thead>
+                    <tr class="border-b border-black/10">
+                      <th class="px-4 py-3 font-display"><span class="normal-case">bina</span> level</th>
+                      <th class="px-4 py-3 font-display">Age</th>
+                      <th class="px-4 py-3 font-display">Ontario grade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {q.grades.rows.map((g: string[]) => (
+                      <tr class="border-b border-black/5 last:border-0">
+                        <td class="px-4 py-2 font-semibold">{g[0]}</td>
+                        <td class="px-4 py-2">{g[1]}</td>
+                        <td class="px-4 py-2">{g[2]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p class="text-body-md"><Pending text={q.grades.note} /></p>
+            </div>
+          )}
+        </div>
+      ))}
+      {section.link && <a href={section.link.href} class="mt-12 inline-block font-display text-title-sm font-semibold"><Pending text={section.link.label} /> →</a>}
+    </div>
+  </section>
+)}
+
+{section.kind === 'who' && (
+  <section class={theme ?? 'theme-base'} data-local-section="who">
+    <div class={wrap}>
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      <p class="max-w-3xl text-body-xl"><Pending text={section.text} /></p>
+    </div>
+  </section>
+)}
+
+{section.kind === 'what' && (
+  <section class={theme ?? 'theme-base'} data-local-section="what">
+    <div class={wrap}>
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      <ul class="grid gap-4 sm:grid-cols-3">
+        {section.items.map((item: string) => (
+          <li class="card-bina-mint p-6 text-body-xl"><Pending text={item} /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{section.kind === 'families' && (
+  <section class={theme ?? 'theme-base'} data-local-section="families">
+    <div class={wrap}>
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {section.people.map((p: any) => (
+          <li class="card-bina-mint flex gap-5 p-6">
+            <div class="grid size-20 flex-none place-items-center overflow-hidden rounded-full bg-black/10 text-center text-body-md leading-tight">
+              {typeof p.photo === 'string' ? <Pending text={p.photo} /> : <img src={p.photo.src} alt={p.photo.alt} width="160" height="160" loading="lazy" class="size-full object-cover" />}
+            </div>
+            <div>
+              <p class="font-display text-title-sm"><Pending text={p.name} /> <span class="text-hl">· <Pending text={p.place} /></span></p>
+              <p class="mt-2 text-body-lg"><Pending text={p.line} /></p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{section.kind === 'quotes' && (
+  <section class={theme ?? 'theme-base'} data-local-section="quotes">
+    <div class={wrap}>
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      {section.quotes.map((q: any) => (
+        <figure class="card-bina-mint p-8">
+          <blockquote class="font-display text-title-md"><span aria-hidden="true">“</span><Pending text={q.text} /><span aria-hidden="true">”</span></blockquote>
+          <figcaption class="mt-4 text-body-lg text-hl">— <Pending text={q.by} />, <Pending text={q.place} /> · <Pending text={q.date} /></figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+{section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} />}
+
+{section.kind === 'reviews' && (
+  <section class={theme ?? 'theme-sky-blue'} data-local-section="reviews">
+    <div class={wrap}>
+      <h2 class={h2}>Families who made this exact decision</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {reviews.map((r: any) => (
+          <figure class="card-bina-solid flex h-full flex-col p-6">
+            <blockquote class="grow whitespace-pre-line text-body-md"><BrandText text={r.body} /></blockquote>
+            <figcaption class="mt-4 border-t border-line pt-3 font-display text-body-md font-bold">
+              <BrandText text={r.roleLabel} /> · {sourceLabel[r.source]}{reviewDate(r.date) ? ` · ${reviewDate(r.date)}` : ''}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="mt-6 text-body-lg">More, word for word, on <a href="/reviews">our reviews page</a>.</p>
+    </div>
+  </section>
+)}
+
+{section.kind === 'tuition' && <LocalTuition heading={section.heading} currency={market.currency} />}
+
+{section.kind === 'faq' && (
+  <section class="theme-base" data-local-section="faq">
+    <div class="mx-auto max-w-4xl px-5 py-14">
+      <h2 class={h2}><Pending text={section.heading} /></h2>
+      <div>
+        {faqItems.map((f: any) => (
+          <details class="group border-b border-line">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-title-sm font-medium [&::-webkit-details-marker]:hidden">
+              <span><Pending text={f.q} /></span>
+              <span class="flex-none text-title-md leading-none transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="max-w-3xl pb-5 pr-10 text-body-lg">
+              {splitLink(f).map((s: any) => (s.url ? <a href={s.url} rel="noopener"><Pending text={s.t} /></a> : <Pending text={s.t} />))}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section.kind === 'guide' && (
+  <section class="theme-base" data-local-section="guide">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="theme-mint rounded-lg px-6 py-8 sm:px-12 sm:py-10">
+        <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl"><Pending text={section.heading} /></h2>
+        <p class="mb-6 max-w-3xl text-body-xl"><Pending text={section.text} /></p>
+        <a href={section.link.href} class="font-display text-title-sm font-semibold"><Pending text={section.link.label} /> →</a>
+      </div>
+    </div>
+  </section>
+)}
+
+{section.kind === 'cta' && (
+  <CtaBlock>
+    <h2 class="cta-title text-title-xl sm:text-title-3xl">Join <span class="normal-case">bina</span> in {market.name}</h2>
+    <LocalButtons market={market} align="center" />
+  </CtaBlock>
+)}

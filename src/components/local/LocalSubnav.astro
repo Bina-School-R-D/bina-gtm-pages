@@ -1,0 +1,114 @@
+---
+/*
+ * The page's own sub-navbar (Akis, 2026-11-19): sticks right under the main navbar and jumps
+ * to the page's groups (Accreditation · Community · Success · Education · Tuition · FAQs). Its own light
+ * colour (mint), so it reads as part of the page, not of the black main navbar.
+ * Items come from the rendered sections (lib/local.js navItems), so a group dropped on
+ * production never leaves a dead link. Phones: one row that scrolls left-right; the current
+ * group is highlighted and kept in view.
+ */
+interface Props {
+  items: { id: string; label: string }[];
+  /** Not a link: the market's name tag at the start of the bar, e.g. [map] bina Toronto. */
+  label?: { text: string; icon?: string; iconAlt?: string };
+}
+const { items, label } = Astro.props;
+---
+{items.length > 0 && (
+  <nav class="local-subnav" aria-label="On this page" data-local-subnav>
+    <ul class="local-subnav-row">
+      {label && (
+        <li class="local-subnav-label">
+          {label.icon && <img src={label.icon} alt={label.iconAlt ?? ''} width="26" height="24" />}
+          <span>{label.text.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</span>
+        </li>
+      )}
+      {items.map((it) => (
+        <li><a class="local-subnav-link no-underline" href={`#${it.id}`} data-target={it.id}>{it.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-local-subnav]');
+  if (nav) {
+    const row = nav.querySelector<HTMLElement>('.local-subnav-row')!;
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-target]')];
+    const targets = links.map((a) => document.getElementById(a.dataset.target!)).filter(Boolean) as HTMLElement[];
+    let current = '';
+    const update = () => {
+      const line = nav.getBoundingClientRect().bottom + 24;
+      let id = '';
+      for (const t of targets) if (t.getBoundingClientRect().top <= line) id = t.id;
+      if (id === current) return;
+      current = id;
+      for (const a of links) {
+        const on = a.dataset.target === id;
+        a.classList.toggle('is-active', on);
+        if (on) {
+          a.setAttribute('aria-current', 'true');
+          row.scrollTo({ left: a.offsetLeft - (row.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+        } else a.removeAttribute('aria-current');
+      }
+    };
+    let queued = false;
+    addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; update(); });
+    }, { passive: true });
+    update();
+  }
+</script>
+
+<style is:global>
+  /* Same heights as MainSiteNavbar's sticky .site-nav, so this sits right under it. */
+  :root { --local-nav-h: clamp(4.75rem, 4.4vw, 7.13rem); --local-subnav-h: 3.25rem; }
+  @media (min-width: 1280px) { :root { --local-nav-h: clamp(5.5rem, 5.09vw, 8.25rem); } }
+
+  .local-subnav {
+    position: sticky;
+    top: var(--local-nav-h);
+    z-index: 999;
+    height: var(--local-subnav-h);
+    background: var(--color-mint);
+    color: #000;
+    border-bottom: 1px solid rgb(0 0 0 / 0.12);
+    box-shadow: 0 6px 16px rgb(0 0 0 / 0.08);
+  }
+  .local-subnav-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .local-subnav-row::-webkit-scrollbar { display: none; }
+  @media (min-width: 768px) { .local-subnav-row { justify-content: center; } }
+  .local-subnav-row li { flex: none; scroll-snap-align: center; }
+  .local-subnav-link {
+    display: block;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-family: 'Rund Display', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #000;
+    transition: background 0.15s, color 0.15s;
+  }
+  .local-subnav-label { display: flex; align-items: center; gap: 0.45rem; padding-right: 1rem; margin-right: 0.5rem; border-right: 1px solid rgb(0 0 0 / 0.2); font-family: 'Rund Display', sans-serif; font-size: 16px; font-weight: 700; white-space: nowrap; color: #000; }
+  .local-subnav-label img { width: 34px; height: auto; }
+  .local-subnav-link:hover { background: rgb(0 0 0 / 0.07); text-decoration: none; }
+  .local-subnav-link.is-active { background: #000; color: var(--color-lagoon); }
+
+  /* Jumps land below both sticky bars. */
+  .local-page [data-local-anchor] { scroll-margin-top: calc(var(--local-nav-h) + var(--local-subnav-h)); }
+</style>

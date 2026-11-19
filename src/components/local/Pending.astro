@@ -1,0 +1,15 @@
+---
+/*
+ * Text that may hold a "[PENDING …]" placeholder: the placeholder renders highlighted (pink) so
+ * the team sees what's missing on localhost. Production never reaches here with one — sections
+ * that still hold a placeholder are dropped (src/lib/local.js visibleSections). Keeps "bina"
+ * lowercase, like BrandText.
+ */
+interface Props {
+  text: string;
+}
+const parts = String(Astro.props.text ?? '').split(/(\[PENDING[^\]]*\]|bina)/g).filter(Boolean);
+---
+<span>{parts.map((p) =>
+  p.startsWith('[PENDING') ? <mark class="local-pending">{p}</mark> : p === 'bina' ? <span class="normal-case">bina</span> : p
+)}</span>
