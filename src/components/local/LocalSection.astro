@@ -12,7 +12,7 @@ import Pending from './Pending.astro';
 import LocalButtons from './LocalButtons.astro';
 import LocalEvents from './LocalEvents.astro';
 import LocalTuition from './LocalTuition.astro';
-import CtaBlock from '../CtaBlock.astro';
+import LocalReviews from './LocalReviews.astro';
 import BrandText from '../BrandText.astro';
 import landing from '../../data/esa-landing.json';
 import survey from '../../data/family-survey.json';
@@ -64,6 +64,9 @@ const PROOF: Record<string, { value: string; title: string; note: string; link: 
   classCap: { value: String(school.classCap), title: "The most children your child's class can hold", note: 'a cap, not an average', link: 'how classes work', href: 'https://thebinaschool.com/education' },
 };
 const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'readGrowth', 'classCap']).map((k: string) => PROOF[k]).filter(Boolean) : [];
+
+// FAQ question colours cycle like the ESA pages' FAQ (staging, 2026-11-20).
+const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon-fruit'];
 
 const wrap = 'mx-auto max-w-5xl px-5 py-14';
 const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
@@ -138,7 +141,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
       {section.heading !== '' && <h2 class={h2}><Pending text={section.heading ?? 'Families rate the school, and the children grow'} /></h2>}
       <div class:list={['grid gap-4', proofCards.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3']}>
         {proofCards.map((c: any) => (
-          <div class="card-bina-mint p-6">
+          <div class="card-bina-solid p-6">
             <p class="font-display text-display-sm text-hl">{c.value}</p>
             <p class="mt-2 font-display text-title-sm">{c.title}</p>
             <p class="mt-1 text-body-md">{c.note} · <a href={c.href}>{c.link}</a></p>
@@ -187,6 +190,55 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
     <div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
       <h2 class="text-title-3xl sm:text-display-sm"><Pending text={section.title} /></h2>
       {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
+    </div>
+  </section>
+)}
+
+{section.kind === 'levels' && (
+  <section class={theme ?? 'theme-base'} data-local-section="levels">
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 pb-6 pt-4 md:grid-cols-2">
+      {section.levels.map((l: any) => (
+        <article class="local-level flex flex-col overflow-hidden rounded-[1.875rem] text-black" style={`background-color:${l.color}`}>
+          <div class="local-level-art relative flex flex-col items-center overflow-hidden px-6 pt-10 text-center sm:pt-12">
+            <img src={l.art.texture} alt="" aria-hidden="true" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" style={`opacity:${l.art.textureOpacity ?? 0.3}`} />
+            <img src={l.art.ground} alt="" aria-hidden="true" loading="lazy" decoding="async" class="absolute inset-x-0 bottom-0 z-[1] w-full object-cover" style={`opacity:${l.art.groundOpacity ?? 0.5}`} />
+            {(l.art.extras ?? []).map((x: any) => (
+              <img src={x.src} alt="" aria-hidden="true" loading="lazy" decoding="async" class="absolute z-[3] object-contain" style={`top:${x.top};left:${x.left};width:${x.width}`} />
+            ))}
+            <div class="relative z-10">
+              <h3 class="local-level-title">{l.title}</h3>
+              <p class="mt-3 font-display text-title-sm font-bold sm:text-title-md">{l.meta}</p>
+              <p class="mx-auto mt-2 max-w-md text-body-xl leading-snug"><Pending text={l.tagline} /></p>
+            </div>
+            <img src={l.art.kids} alt={l.art.alt ?? ''} loading="lazy" decoding="async" class="relative z-[2] mx-auto mt-6 block h-auto" style={`width:${l.art.kidsWidth ?? '70%'};margin-bottom:${l.art.kidsOffset ?? '-18%'}`} />
+          </div>
+          <div class="relative z-10 flex flex-1 flex-col gap-6 bg-white/55 px-6 py-7 backdrop-blur-sm sm:px-8">
+            {l.stats && (
+              <dl class="grid grid-cols-3 gap-3">
+                {l.stats.map((st: any) => (
+                  <div>
+                    <dt class="sr-only">{st.label}</dt>
+                    <dd class="font-display text-title-lg font-bold leading-none sm:text-title-xl">{st.value}</dd>
+                    <dd class="mt-1 text-body-md leading-snug">{st.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <ul class="grid gap-3">
+              {l.facts.map((f: any) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold" style={`color:${l.color}`} aria-hidden="true">✓</span>
+                  <span class="text-body-lg"><strong class="font-display">{f.title}</strong>{' '}<Pending text={f.text} /></span>
+                </li>
+              ))}
+            </ul>
+            {l.quote && (
+              <blockquote class="border-l-4 border-black pl-4 text-body-lg italic">“{l.quote.text}”{' '}<span class="not-italic">— {l.quote.by}</span></blockquote>
+            )}
+            <a href={l.link.href} class="btn-bina mt-auto self-start no-underline">{l.link.label} →</a>
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 )}
@@ -303,7 +355,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} />}
 
-{section.kind === 'reviews' && (
+{section.kind === 'reviews' && section.items && <LocalReviews section={section} theme={theme} />}
+
+{section.kind === 'reviews' && !section.items && (
   <section class={theme ?? 'theme-sky-blue'} data-local-section="reviews">
     <div class={wrap}>
       <h2 class={h2}>Families who made this exact decision</h2>
@@ -325,17 +379,17 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'tuition' && <LocalTuition heading={section.heading} currency={market.currency} />}
 
 {section.kind === 'faq' && (
-  <section class="theme-base" data-local-section="faq">
-    <div class="mx-auto max-w-4xl px-5 py-14">
-      <h2 class={h2}><Pending text={section.heading} /></h2>
+  <section class={theme ?? 'theme-base'} data-local-section="faq">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <h2 class="faq-title"><Pending text={section.heading} /></h2>
       <div>
-        {faqItems.map((f: any) => (
-          <details class="group border-b border-line">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-title-sm font-medium [&::-webkit-details-marker]:hidden">
-              <span><Pending text={f.q} /></span>
-              <span class="flex-none text-title-md leading-none transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+        {faqItems.map((f: any, i: number) => (
+          <details class="faq-item group" style={`--faq-c:var(--color-${FAQ_COLORS[i % FAQ_COLORS.length]})`}>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 py-5 text-left md:py-6 [&::-webkit-details-marker]:hidden">
+              <span class="faq-q pr-4"><Pending text={f.q} /></span>
+              <span class="faq-plus flex h-11 w-11 flex-none items-center justify-center transition-transform duration-500 ease-out group-open:rotate-45 md:h-12 md:w-12" aria-hidden="true">+</span>
             </summary>
-            <p class="max-w-3xl pb-5 pr-10 text-body-lg">
+            <p class="faq-a max-w-3xl pb-5 pr-10 pt-1 md:pb-6 md:pt-2">
               {splitLink(f).map((s: any) => (s.url ? <a href={s.url} rel="noopener"><Pending text={s.t} /></a> : <Pending text={s.t} />))}
             </p>
           </details>
@@ -358,8 +412,14 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 )}
 
 {section.kind === 'cta' && (
-  <CtaBlock>
-    <h2 class="cta-title text-title-xl sm:text-title-3xl">Join <span class="normal-case">bina</span> in {market.name}</h2>
-    <LocalButtons market={market} align="center" />
-  </CtaBlock>
+  <section class="theme-base" data-local-section="cta">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="theme-tangerine relative rounded-lg px-10 py-12 text-center sm:px-12 sm:py-10">
+        <h2 class="cta-title text-title-xl sm:text-title-3xl">Join <span class="normal-case">bina</span> in {market.name}</h2>
+        {section.copy && <p class="cta-copy"><Pending text={section.copy} /></p>}
+        <LocalButtons market={market} align="center" />
+        <img src="/images/local/cta/esa-cta-bird.png" alt="" width="344" height="360" loading="lazy" decoding="async" class="pointer-events-none absolute bottom-1 right-1 h-auto w-[142px] select-none max-[899px]:hidden" />
+      </div>
+    </div>
+  </section>
 )}

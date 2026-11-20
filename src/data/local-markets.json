@@ -112,116 +112,131 @@
         },
         {
           "kind": "group",
-          "anchor": "community",
-          "navLabel": "Community",
-          "title": "Friends in Toronto, classmates everywhere",
-          "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
-          "theme": "theme-grape"
-        },
-        {
-          "kind": "who",
-          "heading": "bina in Toronto and Canada",
-          "text": "Our Toronto families learn together online every morning and meet in person through the year, from the Toronto Zoo to meetups in Brampton."
-        },
-        {
-          "kind": "what",
-          "heading": "What we do here",
-          "items": [
-            "A family meetup every month, date chosen by the families",
-            "A local pod: an after-school session at a library [PENDING: confirm + day]",
-            "Classmate intros by age"
-          ]
-        },
-        {
-          "kind": "families",
-          "heading": "Founding parents",
-          "people": [
-            {
-              "name": "Amanda",
-              "place": "Brampton",
-              "line": "Organises Toronto meetups.",
-              "photo": "[PENDING: photo, consent]"
-            },
-            {
-              "name": "Johanna",
-              "place": "Aurora",
-              "line": "Hosts a stay-and-play day this winter. [PENDING: confirm]",
-              "photo": "[PENDING: photo, consent]"
-            }
-          ]
-        },
-        {
-          "kind": "quotes",
-          "heading": "What parents say",
-          "quotes": [
-            {
-              "text": "[PENDING: Amanda's exact words, consent]",
-              "by": "Amanda",
-              "place": "Brampton",
-              "date": "[PENDING: month year]"
-            }
-          ]
-        },
-        {
-          "kind": "events",
-          "heading": "Events"
-        },
-        {
-          "kind": "what",
-          "heading": "bina in the world",
-          "items": [
-            "Classmates across the world [PENDING: 40+ countries (main site) or 50+ (hero)?]",
-            "40+ clubs, online",
-            "Families who meet up and travel together"
-          ]
-        },
-        {
-          "kind": "group",
-          "anchor": "reviews",
-          "navLabel": "Reviews",
-          "theme": "theme-sky-blue",
-          "title": "Your child would be in good company here",
-          "intro": "What bina parents say, in our family survey and in public reviews."
-        },
-        {
-          "kind": "proof",
-          "heading": "",
-          "cards": [
-            "recommend",
-            "nps"
-          ]
-        },
-        {
-          "kind": "reviews"
-        },
-        {
-          "kind": "group",
-          "anchor": "student-results",
-          "navLabel": "Student results",
-          "theme": "theme-deep-ocean",
-          "title": "The whole school moved forward",
-          "intro": "Measured twice a year with STAR assessments, against US national benchmarks."
-        },
-        {
-          "kind": "proof",
-          "heading": "",
-          "cards": [
-            "readGrowth",
-            "mathGrowth",
-            "readAtAbove"
-          ]
-        },
-        {
-          "kind": "group",
           "anchor": "education",
           "navLabel": "Education",
           "title": "Ask us what you'd ask any Toronto school",
           "intro": "What we teach, how we teach it, and why it holds up in Canada.",
-          "theme": "theme-mint"
+          "theme": "theme-base"
+        },
+        {
+          "kind": "levels",
+          "_source": "Main site /education tracks (art), /primary-school and /middle-school (facts), staging.website.bina-dev.space 2026-11-20. Middle-school high-school claim also live on thebinaschool.com/middle-school.",
+          "levels": [
+            {
+              "id": "primary",
+              "title": "Primary school",
+              "meta": "Ages 4 to 12 · Pre-K to Grade 5",
+              "tagline": "Live, joyful learning that builds the foundations for everything that follows.",
+              "color": "#06E1BD",
+              "art": {
+                "texture": "/images/local/education/track-primary-bg-texture-1024.webp",
+                "textureOpacity": 0.3,
+                "ground": "/images/local/education/track-primary-ground-desert-1024.webp",
+                "groundOpacity": 0.54,
+                "kids": "/images/local/education/track-primary-kids.webp",
+                "kidsWidth": "72%",
+                "kidsOffset": "-14%",
+                "alt": "Four children seen from behind, throwing paper planes over a desert lake"
+              },
+              "stats": [
+                {
+                  "value": "9.4/10",
+                  "label": "learners want to log on every morning"
+                },
+                {
+                  "value": "1.2/5",
+                  "label": "parent involvement needed after onboarding"
+                },
+                {
+                  "value": "21%",
+                  "label": "fewer learners needing extra support in 6 months"
+                }
+              ],
+              "facts": [
+                {
+                  "title": "Live, every school day.",
+                  "text": "Monday to Friday, 9am–2pm Eastern, with the same teachers and classmates."
+                },
+                {
+                  "title": "Tiny classes, big attention.",
+                  "text": "Every child learns at their own level, and is known, seen and supported."
+                },
+                {
+                  "title": "Beyond the textbook.",
+                  "text": "Social skills, emotional intelligence and hands-on projects sit alongside the academics. Finance and AI are built in from the start."
+                },
+                {
+                  "title": "Teachers your child will love.",
+                  "text": "Over 55% hold a master's degree."
+                }
+              ],
+              "link": {
+                "label": "Explore primary school",
+                "href": "https://thebinaschool.com/primary-school"
+              }
+            },
+            {
+              "id": "middle",
+              "title": "Middle school",
+              "meta": "Ages 12 to 15 · Grades 6 to 8",
+              "tagline": "Rigorous, personalized, and built for the years that matter most.",
+              "color": "#E9C9FF",
+              "art": {
+                "texture": "/images/local/education/track-middle-bg-texture-1024.webp",
+                "textureOpacity": 0.2,
+                "ground": "/images/local/education/track-middle-meadow-1024.webp",
+                "groundOpacity": 0.46,
+                "kids": "/images/local/education/track-middle-kids.webp",
+                "kidsWidth": "62%",
+                "kidsOffset": "-22%",
+                "alt": "Two teenagers seen from behind, arms around each other, looking over a pink meadow",
+                "extras": [
+                  {
+                    "src": "/images/local/education/track-middle-dice.webp",
+                    "top": "48%",
+                    "left": "8%",
+                    "width": "14%"
+                  },
+                  {
+                    "src": "/images/local/education/track-middle-space-cat.webp",
+                    "top": "40%",
+                    "left": "77%",
+                    "width": "18%"
+                  }
+                ]
+              },
+              "facts": [
+                {
+                  "title": "Core classes live, every morning.",
+                  "text": "Math, Science and Language Arts, every day."
+                },
+                {
+                  "title": "Challenged at the right level.",
+                  "text": "Afternoons bring small-group sessions at your child's level, electives, project time and one-on-ones with a teacher."
+                },
+                {
+                  "title": "A teacher who knows your child.",
+                  "text": "Seen, known and challenged every day, with peers from 50 countries who think differently."
+                },
+                {
+                  "title": "Ready for any high school.",
+                  "text": "Cambridge-accredited and mastery-based. Learners graduate with a Cambridge-accredited record, strong research skills and a completed capstone project."
+                }
+              ],
+              "quote": {
+                "text": "When I wake up and realize it's a weekend, I wish I could go to school instead.",
+                "by": "a Level 8 student"
+              },
+              "link": {
+                "label": "Explore middle school",
+                "href": "https://thebinaschool.com/middle-school"
+              }
+            }
+          ]
         },
         {
           "kind": "education",
-          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features.",
+          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features. 'Go back to a local school' answer: thebinaschool.com/middle-school (live 2026-11-20).",
           "questions": [
             {
               "q": "What do they teach?",
@@ -249,27 +264,6 @@
                 {
                   "title": "Life skills are a real subject",
                   "text": "At 7, children plan a spend-save-share budget. At 11, they learn to spot scams. At 13, they budget for independent living."
-                }
-              ]
-            },
-            {
-              "q": "How do they teach it?",
-              "cards": [
-                {
-                  "title": "Live, in a small group",
-                  "text": "Live classes with the same small group and the same teachers: an average of six to eight children with two teachers in the room, never more than {classCap}."
-                },
-                {
-                  "title": "A real school day",
-                  "text": "9am–2pm Eastern, Monday to Friday: live classes, adventures, clubs and passion projects, about 200 days a year."
-                },
-                {
-                  "title": "Skills come back, deeper",
-                  "text": "Each topic is taught at the earliest grade any of bina's reference curricula teaches it, then revisited at greater depth in later biomes."
-                },
-                {
-                  "title": "You see where your child stands",
-                  "text": "Weekly snapshots of what they have mastered and what comes next, plus STAR assessments twice a year."
                 }
               ]
             },
@@ -319,7 +313,7 @@
                 },
                 {
                   "title": "Can we go back to a local school?",
-                  "text": "Qualifications that travel with your child: bina is Cognia accredited and a registered Cambridge International School. [PENDING: how Ontario and international schools place a child coming from bina: school leadership's OK]"
+                  "text": "Yes. bina is Cognia accredited and a registered Cambridge International School, and learners leave middle school with a Cambridge-accredited record, ready to walk into any high school and thrive."
                 }
               ],
               "grades": {
@@ -386,14 +380,136 @@
           }
         },
         {
+          "kind": "reviews",
+          "anchor": "reviews",
+          "navLabel": "Reviews",
+          "heading": "What parents say about bina",
+          "intro": "Reviews from bina families, copied word for word from Niche, Trustpilot, world-schools.com and the families who gave us permission to share them.",
+          "_source": "Picks from the main site's /reviews (staging 2026-11-20); names as initials like there. world-schools review copied verbatim from world-schools.com/schools/bina-school/ (2026-11-20); the same parent's text is niche-20, so niche-20 is not shown.",
+          "items": [
+            {
+              "feature": "T-016"
+            },
+            {
+              "review": "niche-02"
+            },
+            {
+              "review": "tp-01"
+            },
+            {
+              "feature": "T-015",
+              "who": "M. K.",
+              "title": "M. K. on what bina's clubs have meant for C."
+            },
+            {
+              "inline": {
+                "id": "ws-01",
+                "source": "world-schools",
+                "title": "Excellent Global Learning Environment",
+                "date": "2024-07-01",
+                "rating": 5,
+                "body": "We could not be happier with bina school. Our 6 year old loves her teachers and classmates and is learning so much better than when she was in traditional school. It is great for her to have classmates and teachers from all over the world. The tools and resources they use make learning really fun for our daughter."
+              }
+            },
+            {
+              "review": "niche-09"
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "anchor": "student-results",
+          "navLabel": "Student results",
+          "theme": "theme-mint",
+          "title": "The whole school moved forward",
+          "intro": "Measured twice a year with STAR assessments, against US national benchmarks."
+        },
+        {
+          "kind": "proof",
+          "heading": "",
+          "cards": [
+            "readGrowth",
+            "mathGrowth",
+            "readAtAbove"
+          ]
+        },
+        {
+          "kind": "group",
+          "anchor": "community",
+          "navLabel": "Community",
+          "title": "Friends in Toronto, classmates everywhere",
+          "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
+          "theme": "theme-grape"
+        },
+        {
+          "kind": "who",
+          "heading": "bina in Toronto and Canada",
+          "text": "Our Toronto families learn together online every morning and meet in person through the year, from the Toronto Zoo to meetups in Brampton."
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "A family meetup every month, date chosen by the families",
+            "A local pod: an after-school session at a library [PENDING: confirm + day]",
+            "Classmate intros by age"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Founding parents",
+          "people": [
+            {
+              "name": "Amanda",
+              "place": "Brampton",
+              "line": "Organises Toronto meetups.",
+              "photo": "[PENDING: photo, consent]"
+            },
+            {
+              "name": "Johanna",
+              "place": "Aurora",
+              "line": "Hosts a stay-and-play day this winter. [PENDING: confirm]",
+              "photo": "[PENDING: photo, consent]"
+            }
+          ]
+        },
+        {
+          "kind": "quotes",
+          "heading": "What parents say",
+          "quotes": [
+            {
+              "text": "[PENDING: Amanda's exact words, consent]",
+              "by": "Amanda",
+              "place": "Brampton",
+              "date": "[PENDING: month year]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "what",
+          "heading": "bina in the world",
+          "items": [
+            "Classmates across the world [PENDING: 40+ countries (main site) or 50+ (hero)?]",
+            "40+ clubs, online",
+            "Families who meet up and travel together"
+          ]
+        },
+        {
           "kind": "tuition",
           "heading": "Tuition",
           "anchor": "tuition",
           "navLabel": "Tuition"
         },
         {
+          "kind": "cta"
+        },
+        {
           "kind": "faq",
-          "heading": "Questions parents ask",
+          "heading": "FAQ",
           "items": [
             {
               "q": "Do bina families in Toronto meet in person?",
@@ -423,9 +539,6 @@
           ],
           "anchor": "faq",
           "navLabel": "FAQs"
-        },
-        {
-          "kind": "cta"
         }
       ],
       "subnavLabel": {

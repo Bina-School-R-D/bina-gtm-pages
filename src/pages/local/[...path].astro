@@ -115,6 +115,18 @@ const anyLive = shownMarkets().some((m: any) => m.live);
 )}
 
 <style is:global>
+  /* FAQ in the ESA pages' style (staging, 2026-11-20): big coloured questions, one colour each. */
+  .faq-title { font-family: var(--font-display); color: var(--color-mint); margin-bottom: 3rem; font-size: clamp(2.45rem, 3.24vw, 5.25rem); font-weight: 700; line-height: 1; }
+  .faq-item { color: var(--faq-c); }
+  .faq-q { font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 36px); font-weight: 500; line-height: 1.05; }
+  .faq-plus { font-family: var(--font-display); font-size: clamp(1.93rem, 2.55vw, 4.13rem); font-weight: 400; line-height: 1; }
+  .faq-a { color: var(--faq-c); font-size: clamp(18px, 2vw, 22px); line-height: 1.25; }
+  .faq-a a { color: inherit; }
+
+  /* Education level cards, after the main site's /education tracks. */
+  .local-level-title { font-family: var(--font-display); font-size: clamp(2.5rem, 4.2vw, 4rem); font-weight: 700; line-height: 1; }
+  .local-level-art { min-height: clamp(22rem, 34vw, 28rem); }
+
   .local-pending {
     background: #fe49c1;
     color: #000;
