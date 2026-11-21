@@ -74,39 +74,43 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'hero' && (
   <header class="theme-lagoon" data-local-section="hero">
-    <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-      <div>
-        <h1 class="mb-8 max-w-3xl text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
-        {section.facts && (
-          <ul class="mb-10 grid gap-3">
-            {section.facts.map((f: string) => (
-              <li class="flex items-start gap-3">
-                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
-                <span class="font-display text-title-sm font-bold leading-snug"><Pending text={f} /></span>
-              </li>
-            ))}
-          </ul>
+    {/* Same frame as the ESA heroes (max-w-5xl, one left edge with every section below);
+        the market photo sits beside the title, facts in two columns, CTA and rating on one row. */}
+    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
+      <div class="grid items-center gap-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <h1 class="max-w-3xl text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
+        {market.image && (
+          <img
+            src={market.image.src}
+            alt={market.image.alt}
+            width={market.image.width}
+            height={market.image.height}
+            fetchpriority="high"
+            decoding="async"
+            class="mx-auto h-auto w-full max-w-[420px] max-md:hidden"
+          />
         )}
+      </div>
+      {section.facts && (
+        <ul class="mt-10 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+          {section.facts.map((f: string) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+              <span class="font-display font-bold leading-snug"><Pending text={f} /></span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
         <LocalButtons market={market} />
         {section.rating && (
-          <div class="mt-6" data-local-rating>
+          <div class="flex items-center gap-3" data-local-rating>
             <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
-            <p class="mt-1 font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
-            {section.rating.line && <p class="mt-1 text-body-lg"><Pending text={section.rating.line} /></p>}
+            <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+            {section.rating.line && <p class="text-body-lg"><Pending text={section.rating.line} /></p>}
           </div>
         )}
       </div>
-      {market.image && (
-        <img
-          src={market.image.src}
-          alt={market.image.alt}
-          width={market.image.width}
-          height={market.image.height}
-          fetchpriority="high"
-          decoding="async"
-          class="mx-auto h-auto w-full max-w-[560px]"
-        />
-      )}
     </div>
   </header>
 )}
@@ -125,7 +129,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               height={a.height}
               loading="lazy"
               decoding="async"
-              class:list={['h-auto', a.variant === 'wide' ? 'w-[300px] sm:w-[340px]' : 'w-[140px] sm:w-[160px]']}
+              class:list={['h-auto', a.variant === 'wide' ? 'w-[240px] sm:w-[272px]' : 'w-[112px] sm:w-[128px]']}
             />
           </li>
         ))}
@@ -185,10 +189,11 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
   </section>
 )}
 
-{section.kind === 'group' && (
+{section.kind === 'group' && section.title && (
   <section class={theme ?? 'theme-lemon'} data-local-section="group">
-    <div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
-      <h2 class="text-title-3xl sm:text-display-sm"><Pending text={section.title} /></h2>
+    {/* wide: lines up with a full-width block below it (the level cards, max-w-6xl). Each sentence on its own line. */}
+    <div class:list={['mx-auto px-5 py-10 sm:py-12', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
+      <h2 class="text-balance text-title-3xl sm:text-display-sm">{section.title.split(/(?<=\.)\s+/).map((t: string) => <span class="sm:block">{t}{' '}</span>)}</h2>
       {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
     </div>
   </section>
@@ -212,30 +217,202 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             </div>
             <img src={l.art.kids} alt={l.art.alt ?? ''} loading="lazy" decoding="async" class="relative z-[2] mx-auto mt-6 block h-auto" style={`width:${l.art.kidsWidth ?? '70%'};margin-bottom:${l.art.kidsOffset ?? '-18%'}`} />
           </div>
-          <div class="relative z-10 flex flex-1 flex-col gap-6 bg-white/55 px-6 py-7 backdrop-blur-sm sm:px-8">
-            {l.stats && (
-              <dl class="grid grid-cols-3 gap-3">
-                {l.stats.map((st: any) => (
-                  <div>
-                    <dt class="sr-only">{st.label}</dt>
-                    <dd class="font-display text-title-lg font-bold leading-none sm:text-title-xl">{st.value}</dd>
-                    <dd class="mt-1 text-body-md leading-snug">{st.label}</dd>
+          <div class="relative z-10 flex flex-1 flex-col gap-6 bg-white/55 px-6 py-8 backdrop-blur-sm sm:px-8">
+            {l.blocks && (
+              <dl class="flex flex-col">
+                {l.blocks.map((bk: any, i: number) => bk.value ? (
+                  <div class:list={['flex items-center justify-between gap-4 rounded-2xl bg-black px-6 py-4', i === 0 ? 'mb-7' : 'mt-auto']} style={`color:${l.color}`}>
+                    <dt class="label-bina">{bk.label}</dt>
+                    <dd class="font-display text-title-lg font-bold leading-none sm:text-title-xl"><Pending text={bk.value} /></dd>
+                  </div>
+                ) : (
+                  <div class:list={['pb-6', i > 0 && !l.blocks[i - 1].value && 'border-t border-black/15 pt-6']}>
+                    <dt class="label-bina mb-4">{bk.label}</dt>
+                    {bk.items ? (
+                      <dd>
+                        <ul class="grid gap-3">
+                          {bk.items.map((it: string) => (
+                            <li class="flex items-start gap-3">
+                              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold" style={`color:${l.color}`} aria-hidden="true">✓</span>
+                              <span class="font-display text-title-sm font-medium leading-snug"><Pending text={it} /></span>
+                            </li>
+                          ))}
+                        </ul>
+                      </dd>
+                    ) : (
+                      <dd class="text-body-lg"><Pending text={bk.text} /></dd>
+                    )}
+                    {bk.more && (
+                      <details class="local-more group mt-5">
+                        <summary class="inline-flex cursor-pointer list-none items-center gap-2 rounded-full border-2 border-black px-4 py-2 font-display text-body-lg font-bold [&::-webkit-details-marker]:hidden">
+                          <span>{bk.more.label}</span>
+                          <span class="text-title-sm leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                        </summary>
+                        <div class="mt-4 grid gap-5 rounded-2xl bg-white/70 p-5 sm:p-6">
+                          {bk.more.groups.map((g: any) => (
+                            <div>
+                              <p class="mb-2 font-display text-title-sm font-bold">{g.title}</p>
+                              {g.items ? (
+                                <ul class:list={['grid gap-1 text-body-lg', g.items.length > 4 && 'sm:grid-cols-2 sm:gap-x-6']}>
+                                  {g.items.map((it: string) => (
+                                    <li class="flex items-start gap-2">
+                                      <span class="mt-[0.6em] h-1.5 w-1.5 flex-none rounded-full bg-black" aria-hidden="true"></span>
+                                      <span><Pending text={it} /></span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p class="text-body-lg"><Pending text={g.text} /></p>
+                              )}
+                              {g.note && <p class="mt-2 text-body-md"><Pending text={g.note} /></p>}
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    )}
                   </div>
                 ))}
               </dl>
             )}
-            <ul class="grid gap-3">
-              {l.facts.map((f: any) => (
-                <li class="flex items-start gap-3">
-                  <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-black font-display text-body-md font-bold" style={`color:${l.color}`} aria-hidden="true">✓</span>
-                  <span class="text-body-lg"><strong class="font-display">{f.title}</strong>{' '}<Pending text={f.text} /></span>
-                </li>
-              ))}
-            </ul>
+            {l.grades && (
+              <div>
+              <details class="local-more local-fit group overflow-hidden rounded-2xl bg-black" style={`--lc:${l.color}`}>
+                <summary class="local-fit-btn flex cursor-pointer list-none items-center gap-4 px-5 py-4 text-left sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
+                  <span class="min-w-0 flex-1">
+                    <span class="block font-display text-title-sm font-bold leading-tight sm:text-title-md" style={`color:${l.color}`}>{l.grades.label}</span>
+                    {l.grades.sublabel && <span class="mt-1 block text-body-md" style="color:rgb(255 255 255 / 0.75)">{l.grades.sublabel}</span>}
+                  </span>
+                  <span class="local-fit-plus grid h-10 w-10 flex-none place-items-center rounded-full border-2 transition-transform duration-300 group-open:rotate-180" style={`border-color:${l.color};color:${l.color}`} aria-hidden="true">
+                    <svg viewBox="0 0 20 20" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5" /></svg>
+                  </span>
+                </summary>
+                <div class="local-fit-body px-5 pb-6 sm:px-6 sm:pb-7">
+              {l.grades.callout && (() => {
+                const c = l.grades.callout;
+                // Primary = gaps closed (share who grew + points gained); middle = moving ahead (reading vs the US average by time at bina). All numbers from student-results.json.
+                return (
+                  <div class="local-callout relative pt-6" style={`--lc:${l.color};color:${l.color}`} data-local-callout>
+                    <p class="label-bina mb-3" style="color:rgb(255 255 255 / 0.6)">{c.eyebrow}</p>
+                    <p class="font-display text-title-lg font-bold leading-tight sm:text-title-xl">{c.title}</p>
+                    <p class="mt-2 max-w-sm text-body-lg" style="color:rgb(255 255 255 / 0.85)"><Pending text={c.text} /></p>
+                    {c.kind === 'gaps' && (() => {
+                      // Whole-school STAR numbers (student-results.json): share who grew in reading, and points gained.
+                      const grew = rh.readGrewPct, R = 40, C = 2 * Math.PI * R;
+                      const bars = [
+                        { label: 'Reading', v: rh.readGrowthAvg },
+                        { label: 'Math', v: rh.mathGrowthAvg },
+                      ];
+                      const vmax = Math.max(...bars.map((x) => x.v));
+                      const p1 = results.levels.find((x: any) => x.level === 'P1');
+                      return (
+                        <div class="mt-6">
+                          <div class="flex items-center gap-5 sm:gap-6">
+                            <svg viewBox="0 0 100 100" class="h-28 w-28 flex-none -rotate-90 sm:h-32 sm:w-32" role="img" aria-label={`${grew}% grew in reading`}>
+                              <circle cx="50" cy="50" r={R} fill="none" stroke="currentColor" stroke-opacity="0.18" stroke-width="12" />
+                              <circle cx="50" cy="50" r={R} fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" class="lc-ring" style={`--lc-c:${C};--lc-off:${C * (1 - grew / 100)}`} stroke-dasharray={C} />
+                            </svg>
+                            <div>
+                              <p class="font-display text-display-sm font-bold leading-none">{grew}%</p>
+                              <p class="mt-1 text-body-lg" style="color:#fff">grew in reading</p>
+                            </div>
+                          </div>
+                          <div class="mt-6 grid gap-3">
+                            {bars.map((x, i) => (
+                              <div class="grid grid-cols-[4.5rem_1fr_auto] items-center gap-3">
+                                <span class="text-body-md" style="color:rgb(255 255 255 / 0.7)">{x.label}</span>
+                                <span class="h-3 overflow-hidden rounded-full" style="background:rgb(255 255 255 / 0.12)"><span class="lc-bar block h-full rounded-full" style={`background:${l.color};--lc-w:${(x.v / vmax) * 100}%;animation-delay:${0.4 + i * 0.2}s`}></span></span>
+                                <span class="font-display text-title-sm font-bold">+{x.v} pts</span>
+                              </div>
+                            ))}
+                          </div>
+                          {p1 && <p class="mt-5 rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="font-display" style={`color:${l.color}`}>{p1.readBenchPct}%</strong> of P1 children read at or above the US benchmark.</p>}
+                          <p class="mt-4 text-body-md" style="color:rgb(255 255 255 / 0.55)">STAR, {rh.pairedN} students, {results.year} · <a href="/student-results" style="color:rgb(255 255 255 / 0.75)">All results</a></p>
+                        </div>
+                      );
+                    })()}
+                    {c.kind === 'ahead' && (() => {
+                      // Reading NCE by time at bina (student-results.json tenure); 50 = US national average.
+                      const T = results.tenure, W = 300, H = 130, x0 = 14, x1 = W - 40, yTop = 18, yBot = 104;
+                      const lo = 48, hi = Math.ceil(Math.max(...T.map((t: any) => t.readNceMean)) + 1);
+                      const X = (i: number) => x0 + (i * (x1 - x0)) / (T.length - 1);
+                      const Y = (v: number) => yBot - ((v - lo) / (hi - lo)) * (yBot - yTop);
+                      const pts = T.map((t: any, i: number) => [X(i), Y(t.readNceMean)]);
+                      const line = 'M' + pts.map((q: number[]) => q.join(' ')).join(' L ');
+                      const area = `${line} L ${X(T.length - 1)} ${Y(50)} L ${x0} ${Y(50)} Z`;
+                      const short = (s: string) => s.replace(' months', ' mo').replace(' years', ' yrs');
+                      const m1 = results.levels.find((x: any) => x.level === 'M1');
+                      const nAll = T.reduce((a: number, t: any) => a + t.n, 0);
+                      return (
+                        <div class="mt-6">
+                          <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full overflow-visible" role="img" aria-label="Reading scores by time at bina, all above the US national average and rising">
+                            <defs>
+                              <linearGradient id={`lc-grad-${l.id}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="currentColor" stop-opacity="0.35" />
+                                <stop offset="1" stop-color="currentColor" stop-opacity="0.02" />
+                              </linearGradient>
+                            </defs>
+                            <path d={area} fill={`url(#lc-grad-${l.id})`} class="lc-area" />
+                            <line x1={x0} y1={Y(50)} x2={x1} y2={Y(50)} stroke="#fff" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="5 5" />
+                            <text x={x1 + 6} y={Y(50) + 4} fill="#fff" fill-opacity="0.6" font-size="10" font-family="var(--font-display)">US avg</text>
+                            <path d={line} fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="lc-line" pathLength="1" />
+                            {pts.map((q: number[], i: number) => (
+                              <g class="lc-dot">
+                                <circle cx={q[0]} cy={q[1]} r={i === pts.length - 1 ? 6 : 4} fill="currentColor" />
+                                <text x={q[0]} y={q[1] - 10} text-anchor="middle" fill="currentColor" font-size="12" font-weight="700" font-family="var(--font-display)">+{Math.round(T[i].aboveNational)}</text>
+                              </g>
+                            ))}
+                            <text x={x1 + 12} y={pts[pts.length - 1][1] + 5} fill="currentColor" font-size="13" font-weight="700" font-family="var(--font-display)">bina</text>
+                            {T.map((t: any, i: number) => (
+                              <text x={X(i)} y={H - 4} text-anchor="middle" fill="#fff" fill-opacity="0.55" font-size="10" font-family="var(--font-display)">{short(t.label)}</text>
+                            ))}
+                          </svg>
+                          <p class="mt-2 text-body-md" style="color:rgb(255 255 255 / 0.6)">Reading points above the US national average, by time at bina</p>
+                          {m1 && (
+                            <div class="mt-5 grid grid-cols-2 gap-3">
+                              <p class="rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="block font-display text-title-md" style={`color:${l.color}`}>{m1.readGrewPct}%</strong>of M1 grew in reading</p>
+                              <p class="rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="block font-display text-title-md" style={`color:${l.color}`}>{m1.readBenchPct}%</strong>of M1 at or above benchmark</p>
+                            </div>
+                          )}
+                          <p class="mt-4 text-body-md" style="color:rgb(255 255 255 / 0.55)">STAR Reading, {nAll} students, {results.year} · <a href="/student-results" style="color:rgb(255 255 255 / 0.75)">All results</a></p>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                );
+              })()}
+                <p class="label-bina mb-3 mt-8 border-t pt-6" style="color:rgb(255 255 255 / 0.6);border-color:rgb(255 255 255 / 0.12)">Find your child's level</p>
+                <div class="overflow-hidden rounded-xl" style="background:rgb(255 255 255 / 0.06);color:#fff">
+                  <table class="w-full text-left text-body-lg">
+                    <thead>
+                      <tr class="border-b" style={`border-color:rgb(255 255 255 / 0.12);color:${l.color}`}>
+                        {l.grades.cols.map((c: string) => (
+                          <th class="whitespace-nowrap px-3 py-3 font-display sm:px-4">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {l.grades.rows.map((r: string[]) => (
+                        <tr class="border-b last:border-0" style="border-color:rgb(255 255 255 / 0.07)">
+                          <td class="whitespace-nowrap px-3 py-2.5 sm:px-4" style="color:rgb(255 255 255 / 0.7)">{r[0]}</td>
+                          <td class="px-3 py-2.5 sm:px-4">{r[1]}</td>
+                          <td class="whitespace-nowrap px-3 py-2.5 sm:px-4"><span class="inline-block rounded-full px-2.5 py-0.5 font-display text-body-md font-bold text-black" style={`background:${l.color}`}>{r[2]}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+              </details>
+              </div>
+            )}
+            {l.chat && (
+              <p class="local-chat relative self-start rounded-2xl rounded-bl-none bg-black px-5 py-4 font-display text-title-sm font-bold leading-snug" style={`color:${l.color}`}>
+                <span class="sr-only">What a parent might say: </span>“<Pending text={l.chat} />”
+              </p>
+            )}
             {l.quote && (
               <blockquote class="border-l-4 border-black pl-4 text-body-lg italic">“{l.quote.text}”{' '}<span class="not-italic">— {l.quote.by}</span></blockquote>
             )}
-            <a href={l.link.href} class="btn-bina mt-auto self-start no-underline">{l.link.label} →</a>
           </div>
         </article>
       ))}
@@ -244,12 +421,12 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 )}
 
 {section.kind === 'education' && (
-  <section class={theme ?? 'theme-mint'} data-local-section="education">
-    <div class={wrap}>
+  <section class={theme ?? section.theme ?? 'theme-mint'} data-local-section="education">
+    <div class:list={['mx-auto px-5 py-14', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
       {section.questions.map((q: any, i: number) => (
         <div class:list={[i > 0 && 'mt-14']}>
           <h3 class="mb-6 text-title-lg text-hl sm:text-title-xl"><Pending text={q.q} /></h3>
-          <ul class="grid gap-4 sm:grid-cols-2">
+          {q.cards?.length > 0 && <ul class="grid gap-4 sm:grid-cols-2">
             {q.cards.map((c: any) => (
               <li class="card-bina-solid p-6">
                 <p class="mb-3 font-display text-title-sm"><Pending text={c.title} /></p>
@@ -262,9 +439,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
                 {c.link && <a href={c.link.href} class="mt-3 inline-block font-display text-body-lg font-semibold"><Pending text={c.link.label} /> →</a>}
               </li>
             ))}
-          </ul>
+          </ul>}
           {q.grades && (
-            <div class="mt-8">
+            <div class:list={[q.cards?.length > 0 && 'mt-8']}>
               <p class="mb-4 font-display text-title-md"><Pending text={q.grades.title} /></p>
               <div class="card-bina-solid mb-3 overflow-x-auto">
                 <table class="w-full text-left text-body-lg">
@@ -423,3 +600,52 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
     </div>
   </section>
 )}
+
+<script>
+  // Level-card callouts animate once they scroll into view.
+  const callouts = document.querySelectorAll<HTMLElement>('[data-local-callout]');
+  if (callouts.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    }, { threshold: 0.4 });
+    callouts.forEach((c) => io.observe(c));
+  } else callouts.forEach((c) => c.classList.add('is-in'));
+</script>
+
+<style is:global>
+  .local-callout .lc-fill { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); }
+  .local-callout.is-in .lc-fill { animation: lcFill 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) forwards; }
+  @keyframes lcFill { to { opacity: 1; transform: scale(1); } }
+  .local-callout .lc-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .local-callout.is-in .lc-line { animation: lcDraw 1.4s ease-out forwards; }
+  @keyframes lcDraw { to { stroke-dashoffset: 0; } }
+  .local-callout .lc-ring { stroke-dashoffset: var(--lc-c); }
+  .local-callout.is-in .lc-ring { animation: lcRing 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+  @keyframes lcRing { to { stroke-dashoffset: var(--lc-off); } }
+  .local-callout .lc-bar { width: 0; }
+  .local-callout.is-in .lc-bar { animation: lcBar 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+  @keyframes lcBar { to { width: var(--lc-w); } }
+  .local-callout .lc-area, .local-callout .lc-dot { opacity: 0; }
+  .local-callout.is-in .lc-area, .local-callout.is-in .lc-dot { animation: lcShow 0.6s ease-out 1.1s forwards; }
+  @keyframes lcShow { to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .local-callout .lc-fill, .local-callout .lc-area, .local-callout .lc-dot { opacity: 1; transform: none; animation: none !important; }
+    .local-callout .lc-line { stroke-dashoffset: 0; animation: none !important; }
+    .local-callout .lc-ring { stroke-dashoffset: var(--lc-off); animation: none !important; }
+    .local-callout .lc-bar { width: var(--lc-w); animation: none !important; }
+  }
+</style>
+
+<style is:global>
+  /* "Where does my child fit?": a black button bar that invites the click. */
+  .local-fit { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .local-fit:not([open]):hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 0.25); }
+  .local-fit[open] { box-shadow: 0 14px 34px rgb(0 0 0 / 0.22); }
+  .local-fit[open] .local-fit-btn { border-bottom: 1px solid rgb(255 255 255 / 0.12); }
+  .local-fit[open] .local-fit-body { animation: fitOpen 0.35s ease-out; }
+  @keyframes fitOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .local-fit:not([open]) .local-fit-plus { animation: fitPulse 2.4s ease-in-out infinite; }
+  @keyframes fitPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--lc); } 50% { box-shadow: 0 0 0 7px transparent; } }
+  .local-fit-btn .local-fit-plus { animation-play-state: running; }
+  @media (prefers-reduced-motion: reduce) { .local-fit:not([open]) .local-fit-plus { animation: none; } .local-fit:not([open]):hover { transform: none; } .local-fit[open] .local-fit-body { animation: none; } }
+</style>

@@ -9,7 +9,8 @@
  * 3. known parent levels (/local/canada, /local/canada/ontario, …) → a noindex hand-off page to
  *    the nearest shown /local page above (GitHub Pages can't send a 302)
  *
- * Hub and market pages carry the main site's navbar (MainSiteNavbar), not BaseLayout's: `bare footer`.
+ * The hub carries the main site's navbar (MainSiteNavbar); market pages carry only a thin back bar +
+ * the market's own navbar (LocalSubnav). Both use BaseLayout `bare footer`.
  *
  * Anything else under /local/* is not emitted, so it gets the host's 404.
  */
@@ -97,7 +98,13 @@ const anyLive = shownMarkets().some((m: any) => m.live);
 
 {market && (
   <BaseLayout title={market.title} description={market.description} noindex={!market.live} bare footer flushFooter>
-    <MainSiteNavbar />
+    {/* No main navbar on market pages (Akis, 2026-11-20): a thin "back" bar, then the market's own navbar. */}
+    <div class="local-backbar">
+      <a href="https://thebinaschool.com" class="local-backbar-link no-underline">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16 10H4M4 10L9 5M4 10L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <span>Back to <span class="normal-case">bina</span> global website</span>
+      </a>
+    </div>
     <LocalSubnav items={navItems(sections)} label={market.subnavLabel} />
     <div class="local-page" data-market={market.id}>
       {themed.map(({ section, theme }: any) =>
@@ -126,6 +133,13 @@ const anyLive = shownMarkets().some((m: any) => m.live);
   /* Education level cards, after the main site's /education tracks. */
   .local-level-title { font-family: var(--font-display); font-size: clamp(2.5rem, 4.2vw, 4rem); font-weight: 700; line-height: 1; }
   .local-level-art { min-height: clamp(22rem, 34vw, 28rem); }
+  @media (min-width: 768px) { .local-level-art { height: clamp(26rem, 32vw, 28rem); } }
+
+  .local-backbar { background: #000; border-bottom: 1px solid rgb(255 255 255 / 0.08); padding: 0 clamp(1.05rem, 1.39vw, 2.25rem); }
+  .local-backbar-link { display: inline-flex; align-items: center; gap: 0.45rem; height: 2.25rem; font-family: var(--font-display); font-size: 14px; font-weight: 500; color: rgb(255 255 255 / 0.75); transition: color 0.15s; }
+  .local-backbar-link:hover { color: var(--color-lagoon); text-decoration: none; }
+  .local-backbar-link svg { width: 15px; height: 15px; transition: transform 0.15s; }
+  .local-backbar-link:hover svg { transform: translateX(-3px); }
 
   .local-pending {
     background: #fe49c1;

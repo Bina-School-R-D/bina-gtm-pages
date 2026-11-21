@@ -5,8 +5,8 @@
  * SiteNavbar (thebinaschool.com, 2026-11-19); main-site links are absolute. Only /local uses it:
  * the other go.bina.school pages keep BaseLayout's own nav.
  *
- * - Above it, a ratings bar (Akis, 2026-11-19): "Rated ★★★★★ on Niche, Trustpilot" ·
- *   "Read our reviews ›" → /reviews in a new tab · × hides it for the visit.
+ * - No ratings bar above it (Akis, 2026-11-20: "3 navbars" was too many). Reviews is instead a
+ *   highlighted link after the dropdowns (★ Reviews → /reviews), and the first link in the burger menu.
  * - ≥1280px: logo · 5 dropdowns (Education · Admissions · About · Community · Resources) · yellow CTA
  * - <1280px: logo ("b" mark under 768px) · yellow CTA · purple burger → full-screen menu
  *   (menu art: the main site's menu-bg + tiger)
@@ -44,7 +44,6 @@ const menus: Menu[] = [
       { label: 'About bina', href: `${M}/about` },
       // ❓ the About page has no id on that section yet: the main site must add id="the-people-behind-bina".
       { label: 'The people behind bina', href: `${M}/about#the-people-behind-bina` },
-      { label: 'Reviews', href: '/reviews' },
       { label: "bina's referral program", href: 'https://form.thebinaschool.com/new-partner', external: true },
     ] }],
   },
@@ -76,16 +75,6 @@ const parts = (t: string) => t.split(/(bina)/).filter(Boolean);
 const ext = (l: Link) => (l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {});
 const arrow = 'M4 10H16M16 10L11 5M16 10L11 15';
 ---
-<div class="site-prebar theme-grape" data-prebar>
-  <p class="site-prebar-text">
-    Rated <span class="text-hl" role="img" aria-label="5 stars">★★★★★</span> on Niche, Trustpilot
-  </p>
-  <a href="/reviews" target="_blank" rel="noopener" class="site-prebar-link">Read our reviews →</a>
-  <button type="button" class="site-prebar-close" aria-label="Close">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" /></svg>
-  </button>
-</div>
-
 <nav class="site-nav" aria-label="Main">
   <a class="site-nav-home no-underline" href={M}>
     <img src="/images/local/nav/navbar-logo-b.svg" alt="bina" class="site-nav-mark md:hidden" fetchpriority="high" />
@@ -112,6 +101,7 @@ const arrow = 'M4 10H16M16 10L11 5M16 10L11 15';
         </div>
       </li>
     ))}
+    <li><a class="site-nav-link nav-reviews no-underline" href="/reviews"><span class="nav-reviews-stars" aria-hidden="true">★</span>Reviews</a></li>
   </ul>
   <div class="nav-desktop-cta">
     <a href={CTA} target="_blank" rel="noopener noreferrer" class="nav-cta no-underline" aria-label={CTA_LABEL}>
@@ -143,6 +133,7 @@ const arrow = 'M4 10H16M16 10L11 5M16 10L11 15';
   <div class="site-menu-body">
     <div class="flex flex-col">
       <a class="site-menu-link no-underline" href={M}>Home</a>
+      <a class="site-menu-link no-underline" href="/reviews">★ Reviews</a>
       {menus.map((m) => (
         <details class="site-menu-group">
           <summary class="site-menu-link">{m.label}</summary>
@@ -197,42 +188,13 @@ const arrow = 'M4 10H16M16 10L11 5M16 10L11 15';
   });
   document.addEventListener('click', (e) => { if (!(e.target as Element).closest('.nav-dd')) closeAll(); });
   document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAll());
-
-  // Ratings bar: × hides it for this visit (sessionStorage; the page works without it).
-  const bar = document.querySelector<HTMLElement>('[data-prebar]');
-  const KEY = 'bina-prebar-closed';
-  try {
-    if (sessionStorage.getItem(KEY) === '1') bar?.remove();
-  } catch {}
-  bar?.querySelector('.site-prebar-close')?.addEventListener('click', () => {
-    bar.remove();
-    try {
-      sessionStorage.setItem(KEY, '1');
-    } catch {}
-  });
 </script>
 
 <style>
-  /* Ratings bar in the bina Foundation style: one section theme (grape: mint text, lemon
-     highlight for the stars), Rund Display, nothing under 14px, and the standard text link
-     (underlined in the text color, 1px → 3px on hover; global.css). */
-  .site-prebar {
-    position: relative;
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 1.5rem; row-gap: 0.25rem;
-    text-align: center;
-    background: var(--t-bg); color: var(--t-fg);
-    padding: 0.625rem calc(clamp(1.05rem, 1.39vw, 2.25rem) + 2.5rem);
-    font-family: 'Rund Display', sans-serif; font-size: 16px; font-weight: 600; line-height: 1.3;
-  }
-  .site-prebar-text { margin: 0; }
-  .site-prebar-text span { letter-spacing: 0.08em; margin: 0 0.2em; }
-  .site-prebar-link { flex: none; color: var(--t-fg); }
-  .site-prebar-close { position: absolute; top: 50%; right: clamp(1.05rem, 1.39vw, 2.25rem); transform: translateY(-50%); display: grid; place-items: center; width: 28px; height: 28px; background: none; border: 0; color: var(--t-fg); cursor: pointer; }
-  .site-prebar-close svg { width: 18px; height: 18px; }
-  .site-prebar-close:hover { color: var(--t-hl); }
-  @media (max-width: 480px) {
-    .site-prebar { font-size: 14px; column-gap: 0.75rem; }
-  }
+  /* Reviews: the one highlighted link in the bar (yellow, with a star). */
+  .nav-reviews { display: inline-flex; align-items: center; gap: 0.35em; padding: 0.35em 0.9em; border: 1.5px solid #f7d928; border-radius: 999px; color: #f7d928; }
+  .nav-reviews:hover { background: #f7d928; color: #000; opacity: 1; }
+  .nav-reviews-stars { font-size: 0.9em; }
 
   /* Copied from thebinaschool.com (SiteNavbar CSS, 2026-11-19). Sticky instead of fixed, so the
      page needs no spacer under it; it looks the same. */

@@ -1,8 +1,8 @@
 ---
 /*
- * Reviews on a /local page (Akis, 2026-11-20): the /reviews page in short. Its hero (lagoon, the
- * landscape + deer + parent art, the 4 score badges) and 6 of its wall cards, same width, less
- * height. Picks come from the market's section data (`items`):
+ * Reviews on a /local page (Akis, 2026-11-20; redesigned the same day to sit with the level cards):
+ * one dark section, same width as the level cards (max-w-6xl): heading, 4 score tiles, then 6
+ * cards in the level cards' colours. Picks come from the market's section data (`items`):
  *   { feature: 'T-016' }                      a LinkedIn / Instagram card from reviews.json `beyond`
  *   { review: 'tp-01' }                       a review from reviews.json
  *   { inline: { source, title, body, … } }    a review not in reviews.json (world-schools.com)
@@ -76,81 +76,74 @@ const cards: Card[] = (section.items ?? [])
   .filter(Boolean);
 
 const ext = 'M14 4h6v6M20 4 10.5 13.5';
+// Card colours cycle through the level cards' palette, so the wall reads as part of the page.
+const CARD_BG = ['#06E1BD', '#E9C9FF', 'var(--color-mint)', 'var(--color-sky-blue)', 'var(--color-lemon)', '#E9C9FF'];
 const ext2 = 'M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5';
 ---
 
-<header class="theme-lagoon local-reviews-hero relative overflow-hidden" data-local-section="reviews-hero">
-  <img src="/images/local/reviews/reviews-landscape.webp" alt="" width="2880" height="600" loading="lazy" decoding="async" class="pointer-events-none absolute inset-x-0 bottom-0 block h-auto w-full select-none max-sm:left-[-40vw] max-sm:w-[180vw] max-sm:max-w-none" />
-  <img src="/images/local/reviews/reviews-mom-kid.webp" alt="" width="450" height="588" loading="lazy" decoding="async" class="pointer-events-none absolute bottom-0 right-[6vw] block h-auto w-[15.6vw] select-none max-sm:right-[4vw] max-sm:w-[28vw]" />
-  <img src="/images/local/reviews/reviews-deer.webp" alt="" width="594" height="486" loading="lazy" decoding="async" class="pointer-events-none absolute bottom-0 left-[6vw] block h-auto w-[20.6vw] select-none max-sm:left-[4vw] max-sm:w-[37vw]" />
-  <div class="relative mx-auto max-w-5xl px-5 pb-[calc(20.8vw+0.5rem)] pt-14 max-sm:pb-[calc(37.5vw+0.5rem)] sm:pt-16">
-    <h2 class="mb-5 text-title-3xl sm:text-display-sm"><Pending text={section.heading} /></h2>
-    <p class="mb-8 text-body-xl"><Pending text={section.intro} /></p>
-    <ul class="flex flex-wrap items-center gap-2" aria-label="Where bina is reviewed">
+<section class="theme-base" data-local-section="reviews">
+  <div class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+    <h2 class="max-w-3xl text-balance text-title-3xl text-hl sm:text-display-sm"><Pending text={section.heading} /></h2>
+    <p class="mt-4 max-w-3xl text-body-xl"><Pending text={section.intro} /></p>
+
+    <ul class="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Where bina is reviewed">
       {bar.map((src) => (
         <li>
-          <a href={src.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-black px-2.5 py-1 font-display text-label uppercase text-lagoon no-underline transition-colors duration-200 hover:bg-grape">
-            <span aria-hidden="true" class="local-badge-logo h-[1.125rem] w-[1.125rem] shrink-0 bg-current" style={`--logo:url(${sourceLogo[src.key]})`}></span>
-            <span class="font-bold">{src.barLabel}</span>
-            {src.barStat && <span class="font-bold">{src.barStat}</span>}
-            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-3 w-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d={ext} /><path d={ext2} /></svg>
+          <a href={src.url} target="_blank" rel="noopener noreferrer" class="local-score group flex h-full flex-col justify-between gap-4 rounded-2xl p-5 no-underline">
+            <span class="flex items-center justify-between gap-2">
+              <span class="flex items-center gap-2 font-display text-body-md font-bold uppercase tracking-[0.06em]">
+                <span aria-hidden="true" class="local-badge-logo h-5 w-5 shrink-0 bg-current" style={`--logo:url(${sourceLogo[src.key]})`}></span>
+                {src.barLabel}
+              </span>
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d={ext} /><path d={ext2} /></svg>
+            </span>
+            <span class="font-display text-title-xl font-bold leading-none sm:text-title-2xl">{src.barStat}</span>
             <span class="sr-only">(opens in a new tab)</span>
           </a>
         </li>
       ))}
     </ul>
-  </div>
-</header>
 
-<section class="theme-base" data-local-section="reviews">
-  <div class="mx-auto max-w-5xl px-5 py-14">
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {cards.map((c) =>
-        c.kind === 'feature' ? (
-          <div class="local-wall-cell card-bina-solid relative flex flex-col px-7 py-5">
-            <div class="mb-2 flex shrink-0 items-center gap-2.5">
-              <img src={c.logo} alt="" width="26" height="26" class="h-[1.625rem] w-[1.625rem] shrink-0" />
+    <div class="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {cards.map((c, i) => {
+        const bg = CARD_BG[i % CARD_BG.length];
+        return c.kind === 'feature' ? (
+          <div class="local-wall-cell relative flex flex-col overflow-hidden rounded-[1.5rem] p-6 text-black" style={`background:${bg};--card-bg:${bg}`}>
+            <span class="local-quote" aria-hidden="true">“</span>
+            <p class="relative mb-2 line-clamp-2 shrink-0 font-display text-title-sm font-bold leading-snug">{c.title}</p>
+            <div class="local-review-body relative min-h-0 text-body-lg">{c.detail}</div>
+            <div class="mt-auto flex items-center gap-3 pt-4">
+              <img src={c.logo} alt="" width="36" height="36" class="h-9 w-9 shrink-0 rounded-full bg-white p-1.5" />
               <span class="min-w-0 flex-1">
                 <span class="block truncate font-display text-body-md font-bold">{c.who}</span>
-                <span class="block truncate text-body-md leading-tight">{c.platform}</span>
+                <a href={c.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-body-md font-semibold">{c.cta}<svg aria-hidden="true" viewBox="0 0 24 24" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d={ext} /><path d={ext2} /></svg><span class="sr-only">(opens in a new tab)</span></a>
               </span>
             </div>
-            <a href={c.url} target="_blank" rel="noopener noreferrer" class="mb-2 inline-flex shrink-0 items-center gap-1 self-start font-display text-body-md font-semibold">
-              {c.cta}
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d={ext} /><path d={ext2} /></svg>
-              <span class="sr-only">(opens in a new tab)</span>
-            </a>
-            <p class="mb-1 line-clamp-1 shrink-0 font-display text-body-lg font-bold">{c.title}</p>
-            <div class="local-review-body min-h-0 text-body-lg">{c.detail}</div>
-            <a href={c.url} target="_blank" rel="noopener noreferrer" class="local-review-more no-underline">
-              <span class="local-review-more-label">See more →</span>
-              <span class="sr-only">(opens in a new tab)</span>
-            </a>
           </div>
         ) : (
-          <article class="local-review-card local-wall-cell card-bina-solid relative flex flex-col px-7 py-5">
-            <div class="mb-2 flex shrink-0 items-center gap-2.5">
-              <img src={c.logo} alt="" width="26" height="26" class="h-[1.625rem] w-[1.625rem] shrink-0" />
-              <span class="min-w-0 flex-1">
-                <span class="block truncate font-display text-body-md font-bold">{c.who}</span>
-                <span class="block truncate text-body-md leading-tight">{c.meta}</span>
-              </span>
-            </div>
-            <p class="mb-2 flex shrink-0 flex-wrap items-center gap-x-2 text-body-md">
-              <a href={c.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-display font-semibold">
-                {c.verb}
-                <svg aria-hidden="true" viewBox="0 0 24 24" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d={ext} /><path d={ext2} /></svg>
-                <span class="sr-only">(opens in a new tab)</span>
-              </a>
-              {c.rating && <span class="text-hl" aria-label={`${c.rating} out of 5`}><span aria-hidden="true">★★★★★</span></span>}
+          <article class="local-review-card local-wall-cell relative flex flex-col overflow-hidden rounded-[1.5rem] p-6 text-black" style={`background:${bg};--card-bg:${bg}`}>
+            <span class="local-quote" aria-hidden="true">“</span>
+            <p class="relative mb-2 flex items-center gap-2 text-body-md">
+              {c.rating && <span class="tracking-[0.08em]" aria-label={`${c.rating} out of 5`}><span aria-hidden="true">★★★★★</span></span>}
             </p>
-            {c.title && <p class="mb-1 shrink-0 truncate font-display text-body-lg font-bold">{c.title}</p>}
-            <div class="local-review-body min-h-0 text-body-lg">
+            {c.title && <p class="relative mb-1 line-clamp-2 shrink-0 font-display text-title-sm font-bold leading-snug">{c.title}</p>}
+            <div class="local-review-body relative min-h-0 text-body-lg">
               {c.paras.map((p) => <p class="mb-1.5 whitespace-pre-line last:mb-0">{p}</p>)}
             </div>
             <button type="button" class="local-review-more hidden" data-dialog={`ldlg-${c.id}`}>
-              <span class="local-review-more-label">See more →</span>
+              <span class="local-review-more-label">Read more</span>
             </button>
+            <div class="mt-auto flex items-center gap-3 pt-4">
+              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-black font-display text-body-md font-bold" style={`color:${bg}`} aria-hidden="true">{c.who.startsWith('A ') ? '★' : c.who.replace(/[^A-Z]/g, '').slice(0, 2)}</span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate font-display text-body-md font-bold">{c.who}<span class="font-normal"> · {c.meta}</span></span>
+                <a href={c.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-body-md font-semibold">
+                  <span aria-hidden="true" class="local-badge-logo h-3.5 w-3.5 shrink-0 bg-current" style={`--logo:url(${c.logo})`}></span>
+                  {c.verb}
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+              </span>
+            </div>
             <dialog id={`ldlg-${c.id}`} class="local-review-dialog card-bina-solid">
               <div class="p-6 sm:p-8">
                 <div class="mb-4 flex items-start justify-between gap-4">
@@ -167,10 +160,10 @@ const ext2 = 'M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5';
               </div>
             </dialog>
           </article>
-        )
-      )}
+        );
+      })}
     </div>
-    <p class="mt-6 text-body-lg">More, word for word, on <a href="/reviews">our reviews page</a>.</p>
+    <a href="/reviews" class="mt-8 inline-block font-display text-title-sm font-semibold">Read every review, word for word →</a>
   </div>
 </section>
 
@@ -182,20 +175,20 @@ const ext2 = 'M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5';
 </noscript>
 
 <style is:global>
-  /* The /reviews wall card, shorter: 13rem instead of 15rem, two lines of review instead of three. */
-  .local-wall-cell { height: 13rem; }
-  .local-review-body { line-height: 1.6; max-height: 3.2em; overflow: hidden; }
+  /* Score tiles: dark glass, mint text; lagoon on hover. */
+  .local-score { background: rgb(255 255 255 / 0.06); color: var(--color-mint); border: 1px solid rgb(255 255 255 / 0.1); transition: background-color 0.2s, color 0.2s, transform 0.2s; }
+  .local-score:hover { background: var(--color-lagoon); color: #000; transform: translateY(-2px); text-decoration: none; }
+  /* Review cards: one height, a big quote mark, the review fades after four lines. */
+  .local-wall-cell { height: 19rem; }
+  .local-quote { position: absolute; top: -1.6rem; right: 1rem; font-family: var(--font-display); font-size: 9rem; font-weight: 700; line-height: 1; color: rgb(0 0 0 / 0.08); pointer-events: none; }
+  .local-review-body { line-height: 1.5; max-height: 6em; overflow: hidden; }
   .local-review-body.is-faded {
-    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 50%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 0, #000 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%);
   }
   .local-badge-logo { -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat; }
-  .local-review-more {
-    position: absolute; left: 1.75rem; right: 1.75rem; bottom: 0; padding: 0.4rem 0 0.9rem;
-    cursor: pointer; border: 0; background: var(--card-bg, var(--t-bg)); text-align: left;
-    font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--t-fg);
-  }
-  .local-review-more-label { font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; transition: text-decoration-thickness 0.15s ease-out; }
+  .local-review-more { align-self: flex-start; margin-top: 0.35rem; padding: 0; cursor: pointer; border: 0; background: none; font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: #000; }
+  .local-review-more-label { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; transition: text-decoration-thickness 0.15s ease-out; }
   .local-review-more:hover .local-review-more-label { text-decoration-thickness: 3px; }
   .local-review-dialog { width: min(38rem, calc(100vw - 2.5rem)); max-height: min(80vh, 44rem); overflow-y: auto; padding: 0; }
   .local-review-dialog::backdrop { background: rgb(0 0 0 / 0.55); }
