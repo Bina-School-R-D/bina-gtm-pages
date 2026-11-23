@@ -135,8 +135,10 @@ const anyLive = shownMarkets().some((m: any) => m.live);
   .local-level-art { min-height: clamp(22rem, 34vw, 28rem); }
   @media (min-width: 768px) { .local-level-art { height: clamp(26rem, 32vw, 28rem); } }
 
-  .local-backbar { background: #000; border-bottom: 1px solid rgb(255 255 255 / 0.08); padding: 0 clamp(1.05rem, 1.39vw, 2.25rem); }
-  .local-backbar-link { display: inline-flex; align-items: center; gap: 0.45rem; height: 2.25rem; font-family: var(--font-display); font-size: 14px; font-weight: 500; color: rgb(255 255 255 / 0.75); transition: color 0.15s; }
+  /* Sticky with the market navbar under it (Akis, 2026-11-23): never scrolls away. */
+  body:has(.local-backbar) { --local-backbar-h: calc(2rem + 6px); }
+  .local-backbar { position: sticky; top: 0; z-index: 1000; height: var(--local-backbar-h); box-sizing: border-box; background: #000; border-bottom: 1px solid rgb(255 255 255 / 0.08); padding: 5px clamp(1.05rem, 1.39vw, 2.25rem) 0; }
+  .local-backbar-link { display: inline-flex; align-items: center; gap: 0.45rem; height: 2rem; font-family: var(--font-display); font-size: 14px; font-weight: 500; color: rgb(255 255 255 / 0.75); transition: color 0.15s; }
   .local-backbar-link:hover { color: var(--color-lagoon); text-decoration: none; }
   .local-backbar-link svg { width: 15px; height: 15px; transition: transform 0.15s; }
   .local-backbar-link:hover svg { transform: translateX(-3px); }

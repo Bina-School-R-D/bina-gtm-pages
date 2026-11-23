@@ -22,7 +22,7 @@ const fmtDate = (d: string) =>
   new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 <section id="events" class:list={[theme ?? 'theme-base', 'scroll-mt-24']} data-local-section="events" data-local-events={start}>
-  <div class="mx-auto max-w-5xl px-5 py-14">
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
     <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
     <div class="mb-8 flex gap-2" role="tablist" aria-label={`${market.name} events`}>
       {['upcoming', 'past'].map((t) => (

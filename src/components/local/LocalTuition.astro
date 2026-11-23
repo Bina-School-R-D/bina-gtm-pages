@@ -16,7 +16,7 @@ const { heading, currency } = Astro.props;
 const { rows, currency: local } = priceList(currency);
 ---
 <section class="theme-base" data-local-section="tuition" data-local-tuition data-show="USD">
-  <div class="mx-auto max-w-5xl px-5 py-14">
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
     <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
       <h2 class="text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
       {local && (

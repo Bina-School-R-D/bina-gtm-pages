@@ -7,8 +7,9 @@
  * to the page's groups (Accreditation · Community · Success · Education · Tuition · FAQs). Its own light
  * colour (mint), so it reads as part of the page, not of the black main navbar.
  * Items come from the rendered sections (lib/local.js navItems), so a group dropped on
- * production never leaves a dead link. Phones: one row that scrolls left-right; the current
- * group is highlighted and kept in view.
+ * production never leaves a dead link.
+ * Under 1024px (Akis, 2026-11-23): full bina logo + market name on the left, then the CTA and a
+ * burger; the section links move into a drop-down panel under the bar (current group highlighted).
  */
 import { CTA, CTA_LABEL } from '../../lib/esa-states.js';
 interface Props {
@@ -28,7 +29,6 @@ const { items, label } = Astro.props;
             <span>{label.text.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</span>
           </span>
           <span class="local-subnav-stuck">
-            <img src="/images/local/nav/navbar-logo-b.svg" alt="" class="local-subnav-mark" />
             <img src="/images/local/nav/navbar-logo.svg" alt="" width="68" height="29" class="local-subnav-logo" />
             <span class="local-subnav-name">{label.text.replace(/^bina\s+/, '')}</span>
           </span>
@@ -43,7 +43,19 @@ const { items, label } = Astro.props;
         <span><span class="max-sm:hidden">Start your <span class="normal-case">bina</span> journey</span><span class="sm:hidden">Start</span></span>
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
       </a>
+      <button type="button" class="local-subnav-burger" aria-label="Open page sections" aria-expanded="false" aria-controls="local-subnav-menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true">
+          <path d="M4 7H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M4 12H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M4 17H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
+    <ul id="local-subnav-menu" class="local-subnav-menu" hidden>
+      {items.map((it) => (
+        <li><a class="local-subnav-menu-link no-underline" href={`#${it.id}`} data-target={it.id}>{it.label}</a></li>
+      ))}
+    </ul>
   </nav>
 )}
 
@@ -52,7 +64,8 @@ const { items, label } = Astro.props;
   if (nav) {
     const row = nav.querySelector<HTMLElement>('.local-subnav-row')!;
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-target]')];
-    const targets = links.map((a) => document.getElementById(a.dataset.target!)).filter(Boolean) as HTMLElement[];
+    const ids = [...new Set(links.map((a) => a.dataset.target!))];
+    const targets = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     let current = '';
     const update = () => {
       const line = nav.getBoundingClientRect().bottom + 24;
@@ -65,7 +78,7 @@ const { items, label } = Astro.props;
         a.classList.toggle('is-active', on);
         if (on) {
           a.setAttribute('aria-current', 'true');
-          row.scrollTo({ left: a.offsetLeft - (row.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+          if (row.contains(a)) row.scrollTo({ left: a.offsetLeft - (row.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
         } else a.removeAttribute('aria-current');
       }
     };
@@ -76,20 +89,37 @@ const { items, label } = Astro.props;
       requestAnimationFrame(() => { queued = false; update(); });
     }, { passive: true });
     update();
+
+    // Phones/tablets: the burger opens the section list under the bar; a tap on a link,
+    // outside the bar, or Escape closes it.
+    const burger = nav.querySelector<HTMLButtonElement>('.local-subnav-burger')!;
+    const menu = nav.querySelector<HTMLElement>('.local-subnav-menu')!;
+    const setMenu = (open: boolean) => {
+      menu.hidden = !open;
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close page sections' : 'Open page sections');
+    };
+    burger.addEventListener('click', () => setMenu(menu.hidden));
+    menu.addEventListener('click', (e) => { if ((e.target as Element).closest('a')) setMenu(false); });
+    document.addEventListener('click', (e) => { if (!nav.contains(e.target as Node)) setMenu(false); });
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && setMenu(false));
+    matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setMenu(false));
   }
 </script>
 
 <style is:global>
-  /* --local-nav-h = MainSiteNavbar's .site-nav height: the stuck bar takes it over. */
-  :root { --local-subnav-h: 4rem; --local-nav-h: clamp(4.75rem, 4.4vw, 7.13rem); }
-  @media (min-width: 1280px) { :root { --local-nav-h: clamp(5.5rem, 5.09vw, 8.25rem); } }
+  /* --local-nav-h = the bar's height. Tighter than MainSiteNavbar's .site-nav (76–132px) so the
+     back bar above it doesn't leave a gap over the logo (Akis, 2026-11-23). */
+  :root { --local-subnav-h: 4rem; --local-nav-h: 3.75rem; --local-backbar-h: 0px; }
+  @media (min-width: 1024px) { :root { --local-nav-h: clamp(4.25rem, 4.2vw, 6.5rem); } }
 
   /* Only this bar sticks: the main navbar scrolls away on market pages. */
   body:has([data-local-subnav]) .site-nav { position: relative; }
 
+  /* Sits right under the page's sticky back bar (if any), so both stay on screen together. */
   .local-subnav {
     position: sticky;
-    top: 0;
+    top: var(--local-backbar-h);
     z-index: 999;
     height: var(--local-subnav-h);
     background: var(--color-mint);
@@ -121,12 +151,7 @@ const { items, label } = Astro.props;
   .local-subnav.is-stuck .local-subnav-cta { display: inline-flex !important; }
   .local-subnav.is-stuck .local-subnav-inner { gap: clamp(1rem, 2.5vw, 3.5rem); padding: clamp(0.35rem, 0.46vw, 0.75rem) clamp(1.05rem, 1.39vw, 2.25rem); }
   .local-subnav.is-stuck .local-subnav-label { color: #fff; border-right: 0; padding-right: 0; font-size: clamp(0.92rem, 1.22vw, 1.97rem); }
-  .local-subnav-mark { display: none; aspect-ratio: 393/614; object-fit: contain; width: clamp(1.12rem, 1.48vw, 2.4rem); height: clamp(1.75rem, 2.31vw, 3.75rem); }
   .local-subnav.is-stuck .local-subnav-logo { aspect-ratio: 68/29; object-fit: contain; width: clamp(3.28rem, 4.34vw, 7.03rem); height: clamp(1.4rem, 1.85vw, 3rem); transform: translateY(-5px); }
-  @media (max-width: 767px) {
-    .local-subnav.is-stuck .local-subnav-mark { display: block; }
-    .local-subnav.is-stuck .local-subnav-logo { display: none; }
-  }
   .local-subnav.is-stuck .local-subnav-row { gap: clamp(0.25rem, 1vw, 1.5rem); }
   .local-subnav.is-stuck .local-subnav-link { color: #06e1bd; font-weight: 400; font-size: clamp(0.83rem, 1.1vw, 1.78rem); padding: 0.45em 0.9em; }
   .local-subnav.is-stuck .local-subnav-link:hover { background: rgb(255 255 255 / 0.1); }
@@ -183,14 +208,43 @@ const { items, label } = Astro.props;
   .local-subnav-cta:hover { background: #fe49c1; color: #000; text-decoration: none; }
   .local-subnav-cta:active { background: #ff605b; }
   .local-subnav-cta svg { width: 1rem; height: 1rem; flex: none; }
+  /* Burger + drop-down section list (under 1024px). Burger = MainSiteNavbar's .nav-burger. */
+  .local-subnav-burger { display: none; flex: none; cursor: pointer; background: transparent; border: none; justify-content: center; align-items: center; width: 2.75rem; height: 2.75rem; margin-right: -0.4rem; }
+  .local-subnav-burger path { transform-box: view-box; transform-origin: 50%; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; }
+  .local-subnav-burger[aria-expanded='true'] path:nth-child(1) { transform: rotate(45deg) translateY(5px); }
+  .local-subnav-burger[aria-expanded='true'] path:nth-child(2) { opacity: 0; }
+  .local-subnav-burger[aria-expanded='true'] path:nth-child(3) { transform: rotate(-45deg) translateY(-5px); }
+  .local-subnav-menu {
+    position: absolute; top: 100%; left: 0; right: 0;
+    max-height: calc(100dvh - var(--local-nav-h) - var(--local-backbar-h)); overflow-y: auto;
+    margin: 0; padding: 0.5rem clamp(1.05rem, 1.39vw, 2.25rem) 1rem; list-style: none;
+    background: #000; border-top: 1px solid rgb(255 255 255 / 0.12);
+    box-shadow: 0 16px 24px rgb(0 0 0 / 0.35);
+  }
+  .local-subnav-menu[hidden] { display: none; }
+  .local-subnav-menu li + li { border-top: 1px solid rgb(255 255 255 / 0.12); }
+  .local-subnav-menu-link {
+    display: flex; align-items: center; min-height: 3.25rem; padding: 0 0.6rem; margin: 0.15rem -0.6rem;
+    border-radius: 0.75rem; color: #06e1bd; font-family: 'Rund Display', sans-serif; font-size: 18px; font-weight: 400;
+  }
+  .local-subnav-menu-link:hover { background: rgb(255 255 255 / 0.08); text-decoration: none; }
+  .local-subnav-menu-link.is-active { background: #06e1bd; color: #000; }
+
+  @media (max-width: 1023px) {
+    .local-subnav-row { display: none; }
+    .local-subnav-cta { margin-left: auto; }
+    .local-subnav-burger { display: flex; }
+  }
+  @media (min-width: 1024px) {
+    .local-subnav-menu { display: none !important; }
+  }
   @media (max-width: 639px) {
-    .local-subnav-name { display: none; }
-    .local-subnav-label { padding-right: 0.6rem; }
-    .local-subnav-logo { width: 46px; }
-    .local-subnav-link { padding: 0.4rem 0.7rem; font-size: 14px; }
-    .local-subnav-cta { height: 2.4rem; padding: 0 0.75rem; font-size: 14px; }
+    .local-subnav.is-stuck .local-subnav-inner { gap: 0.6rem; }
+    .local-subnav.is-stuck .local-subnav-label { min-width: 0; flex: 0 1 auto; font-size: 18px; gap: 0.6rem; }
+    .local-subnav-name { overflow: hidden; text-overflow: ellipsis; padding-left: 0.6rem; border-left: 1px solid rgb(255 255 255 / 0.3); }
+    .local-subnav.is-stuck .local-subnav-cta { padding: 0.5rem 0.85rem; }
   }
 
   /* Jumps land below the sticky bar. */
-  .local-page [data-local-anchor] { scroll-margin-top: var(--local-nav-h); }
+  .local-page [data-local-anchor] { scroll-margin-top: calc(var(--local-nav-h) + var(--local-backbar-h)); }
 </style>

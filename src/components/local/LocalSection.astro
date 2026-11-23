@@ -68,17 +68,20 @@ const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'r
 // FAQ question colours cycle like the ESA pages' FAQ (staging, 2026-11-20).
 const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon-fruit'];
 
-const wrap = 'mx-auto max-w-5xl px-5 py-14';
+// Section padding (Akis, 2026-11-23: was py-14, too compressed): 64px phones, 96px from 640px.
+const wrap = 'mx-auto max-w-5xl px-5 py-16 sm:py-24';
 const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 ---
 
 {section.kind === 'hero' && (
   <header class="theme-lagoon" data-local-section="hero">
-    {/* Same frame as the ESA heroes (max-w-5xl, one left edge with every section below);
-        the market photo sits beside the title, facts in two columns, CTA and rating on one row. */}
-    <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-      <div class="grid items-center gap-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <h1 class="max-w-3xl text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
+    {/* Same frame as the ESA heroes (max-w-5xl, one left edge with every section below).
+        Desktop: title | market photo, then facts (one left-aligned column) | call-out under the
+        photo (Akis, 2026-11-23). Phones: title, facts, call-out stacked, tight enough that the
+        call-out ends inside a normal phone screen. */}
+    <div class="mx-auto max-w-5xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
+      <div class="grid gap-x-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <h1 class="max-w-3xl self-center text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
         {market.image && (
           <img
             src={market.image.src}
@@ -87,24 +90,53 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             height={market.image.height}
             fetchpriority="high"
             decoding="async"
-            class="mx-auto h-auto w-full max-w-[420px] max-md:hidden"
+            class="mx-auto h-auto w-full max-w-[420px] self-center max-md:hidden"
           />
         )}
+        {section.facts && (
+          <ul class:list={['mt-8 grid gap-y-2 sm:mt-10 sm:gap-y-3', section.callout ? 'self-start' : 'gap-x-8 sm:grid-cols-2 md:col-span-2']}>
+            {section.facts.map((f: string) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
+                {/* "Label: detail" → bold label, regular detail (Akis, 2026-11-23). */}
+                {(() => {
+                  const i = f.indexOf(': ');
+                  return i > 0
+                    ? <span class="font-display leading-snug"><span class="font-bold"><Pending text={f.slice(0, i + 1)} /></span>{' '}<Pending text={f.slice(i + 2)} /></span>
+                    : <span class="font-display font-bold leading-snug"><Pending text={f} /></span>;
+                })()}
+              </li>
+            ))}
+          </ul>
+        )}
+        {section.callout && (
+          /* The dual call-out (Akis, 2026-11-23): two black tiles (the section's filled card) joined by
+             a lemon "and" badge on the seam — local AND global, one experience. The rating sits right
+             under it (Akis, 2026-11-23). Under the photo on desktop; above the CTA on phones. */
+          <div class="mt-10 flex flex-col gap-4 md:self-start">
+            <div class="relative grid grid-cols-2 gap-1.5" data-local-duo>
+              {section.callout.items.map((it: { label: string; text: string }, i: number) => (
+                <div class:list={['card-bina-solid flex flex-col gap-1.5 p-4 sm:gap-2 sm:p-5', i === 0 ? 'pr-5 sm:pr-8' : 'pl-6 pr-3 sm:pl-9 sm:pr-5']}>
+                  <p class="text-label uppercase whitespace-nowrap text-hl"><Pending text={it.label} /></p>
+                  <p class="text-body-xl leading-snug sm:text-title-sm"><Pending text={it.text} /></p>
+                </div>
+              ))}
+              <span class="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 sm:h-14 sm:w-14 -translate-y-1/2 place-items-center rounded-full border-4 border-lagoon bg-lemon font-display text-body-lg font-bold text-black sm:text-title-sm" aria-hidden="true">{section.callout.joiner}</span>
+            </div>
+            {section.rating && (
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
+                <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
+                <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+                {section.rating.line && <p class="text-body-lg"><Pending text={section.rating.line} /></p>}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      {section.facts && (
-        <ul class="mt-10 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-          {section.facts.map((f: string) => (
-            <li class="flex items-start gap-3">
-              <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-deep-ocean font-display text-body-md font-bold text-lagoon" aria-hidden="true">✓</span>
-              <span class="font-display font-bold leading-snug"><Pending text={f} /></span>
-            </li>
-          ))}
-        </ul>
-      )}
       <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
         <LocalButtons market={market} />
-        {section.rating && (
-          <div class="flex items-center gap-3" data-local-rating>
+        {!section.callout && section.rating && (
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
             <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
             <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
             {section.rating.line && <p class="text-body-lg"><Pending text={section.rating.line} /></p>}
@@ -116,7 +148,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 )}
 
 {section.kind === 'accreditations' && (
-  <section class="theme-black" data-local-section="accreditations">
+  <section class="theme-deep-ocean" data-local-section="accreditations">
+    {/* Deep ocean, not black (Akis, 2026-11-23): black is the navbar's and footer's color. Dark
+        enough for the white Cambridge logo. */}
     <div class:list={[wrap, 'text-center']}>
       <h2 class="mx-auto mb-10 max-w-3xl text-title-xl text-hl sm:text-title-3xl">{accreditations.headline}</h2>
       <ul class="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
@@ -192,7 +226,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'group' && section.title && (
   <section class={theme ?? 'theme-lemon'} data-local-section="group">
     {/* wide: lines up with a full-width block below it (the level cards, max-w-6xl). Each sentence on its own line. */}
-    <div class:list={['mx-auto px-5 py-10 sm:py-12', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    <div class:list={['mx-auto px-5 pt-16 pb-8 sm:pt-24 sm:pb-10', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
       <h2 class="text-balance text-title-3xl sm:text-display-sm">{section.title.split(/(?<=\.)\s+/).map((t: string) => <span class="sm:block">{t}{' '}</span>)}</h2>
       {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
     </div>
@@ -200,10 +234,39 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 )}
 
 {section.kind === 'levels' && (
-  <section class={theme ?? 'theme-base'} data-local-section="levels">
-    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 pb-6 pt-4 md:grid-cols-2">
-      {section.levels.map((l: any) => (
-        <article class="local-level flex flex-col overflow-hidden rounded-[1.875rem] text-black" style={`background-color:${l.color}`}>
+  <section class={theme ?? 'theme-base'} data-local-section="levels" data-local-levels>
+    {/* Phones (Akis, 2026-11-23): one card at a time behind two tabs, so Middle school isn't lost
+        under the long Primary card. The tabs stick under the navbar while the card scrolls by.
+        From 768px both cards sit side by side and the tabs are hidden. */}
+    <div class="local-level-tabs sticky z-20 mx-auto max-w-6xl px-5 py-3 md:hidden" role="tablist" aria-label="School level">
+      <div class="grid grid-cols-2 gap-1 rounded-full border border-line p-1">
+        {section.levels.map((l: any, i: number) => (
+          <button
+            type="button"
+            role="tab"
+            id={`local-level-tab-${l.id}`}
+            aria-controls={`local-level-${l.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            data-level-tab={l.id}
+            class="local-level-tab rounded-full px-3 py-2.5 font-display text-body-lg font-bold"
+            style={`--lc:${l.color}`}
+          >{l.title}</button>
+        ))}
+      </div>
+    </div>
+    {/* Phones: cards run edge to edge (Akis, 2026-11-23) — page padding + card padding left too
+        little room and most lines wrapped. */}
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 pb-16 pt-1 max-md:px-0 sm:pb-24 md:grid-cols-2 md:pt-4">
+      {section.levels.map((l: any, i: number) => (
+        <article
+          id={`local-level-${l.id}`}
+          role="tabpanel"
+          aria-labelledby={`local-level-tab-${l.id}`}
+          data-level-panel={l.id}
+          class:list={['local-level flex flex-col overflow-hidden rounded-[1.875rem] text-black max-md:rounded-none', i === 0 && 'is-active']}
+          style={`background-color:${l.color}`}
+        >
           <div class="local-level-art relative flex flex-col items-center overflow-hidden px-6 pt-10 text-center sm:pt-12">
             <img src={l.art.texture} alt="" aria-hidden="true" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" style={`opacity:${l.art.textureOpacity ?? 0.3}`} />
             <img src={l.art.ground} alt="" aria-hidden="true" loading="lazy" decoding="async" class="absolute inset-x-0 bottom-0 z-[1] w-full object-cover" style={`opacity:${l.art.groundOpacity ?? 0.5}`} />
@@ -217,7 +280,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             </div>
             <img src={l.art.kids} alt={l.art.alt ?? ''} loading="lazy" decoding="async" class="relative z-[2] mx-auto mt-6 block h-auto" style={`width:${l.art.kidsWidth ?? '70%'};margin-bottom:${l.art.kidsOffset ?? '-18%'}`} />
           </div>
-          <div class="relative z-10 flex flex-1 flex-col gap-6 bg-white/55 px-6 py-8 backdrop-blur-sm sm:px-8">
+          <div class="relative z-10 flex flex-1 flex-col gap-6 bg-white/55 px-5 py-8 backdrop-blur-sm sm:px-8">
             {l.blocks && (
               <dl class="flex flex-col">
                 {l.blocks.map((bk: any, i: number) => bk.value ? (
@@ -422,7 +485,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'education' && (
   <section class={theme ?? section.theme ?? 'theme-mint'} data-local-section="education">
-    <div class:list={['mx-auto px-5 py-14', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    <div class:list={['mx-auto px-5 py-16 sm:py-24', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
       {section.questions.map((q: any, i: number) => (
         <div class:list={[i > 0 && 'mt-14']}>
           <h3 class="mb-6 text-title-lg text-hl sm:text-title-xl"><Pending text={q.q} /></h3>
@@ -557,7 +620,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'faq' && (
   <section class={theme ?? 'theme-base'} data-local-section="faq">
-    <div class="mx-auto max-w-5xl px-5 py-14">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
       <h2 class="faq-title"><Pending text={section.heading} /></h2>
       <div>
         {faqItems.map((f: any, i: number) => (
@@ -578,7 +641,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'guide' && (
   <section class="theme-base" data-local-section="guide">
-    <div class="mx-auto max-w-5xl px-5 py-14">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
       <div class="theme-mint rounded-lg px-6 py-8 sm:px-12 sm:py-10">
         <h2 class="mb-4 text-title-xl text-hl sm:text-title-3xl"><Pending text={section.heading} /></h2>
         <p class="mb-6 max-w-3xl text-body-xl"><Pending text={section.text} /></p>
@@ -590,7 +653,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'cta' && (
   <section class="theme-base" data-local-section="cta">
-    <div class="mx-auto max-w-5xl px-5 py-14">
+    <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
       <div class="theme-tangerine relative rounded-lg px-10 py-12 text-center sm:px-12 sm:py-10">
         <h2 class="cta-title text-title-xl sm:text-title-3xl">Join <span class="normal-case">bina</span> in {market.name}</h2>
         {section.copy && <p class="cta-copy"><Pending text={section.copy} /></p>}
@@ -612,7 +675,48 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
   } else callouts.forEach((c) => c.classList.add('is-in'));
 </script>
 
+<script>
+  // Phones: level tabs (Primary / Middle). One card shows; switching while scrolled into the card
+  // brings the new card's top back under the tabs.
+  document.querySelectorAll<HTMLElement>('[data-local-levels]').forEach((sec) => {
+    const tabs = [...sec.querySelectorAll<HTMLButtonElement>('[data-level-tab]')];
+    const panels = [...sec.querySelectorAll<HTMLElement>('[data-level-panel]')];
+    const bar = sec.querySelector<HTMLElement>('.local-level-tabs')!;
+    const select = (id: string, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.levelTab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach((p) => p.classList.toggle('is-active', p.dataset.levelPanel === id));
+      const panel = panels.find((p) => p.dataset.levelPanel === id);
+      const barBottom = bar.getBoundingClientRect().bottom;
+      if (panel && panel.getBoundingClientRect().top < barBottom) {
+        scrollTo({ top: scrollY + panel.getBoundingClientRect().top - barBottom - 8, behavior: 'smooth' });
+      }
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t.dataset.levelTab!));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        select(next.dataset.levelTab!, true);
+      });
+    });
+  });
+</script>
+
 <style is:global>
+  /* Level tabs (phones). Sticks under the back bar + market navbar; inactive = mint text,
+     active = filled with that level's card color, black text. */
+  .local-level-tabs { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px)); background: var(--t-bg); }
+  .local-level-tab { color: var(--t-fg); transition: background-color 0.15s, color 0.15s; }
+  .local-level-tab[aria-selected='true'] { background: var(--lc); color: #000; }
+  @media (max-width: 767px) {
+    [data-local-levels] .local-level:not(.is-active) { display: none; }
+  }
+
   .local-callout .lc-fill { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); }
   .local-callout.is-in .lc-fill { animation: lcFill 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) forwards; }
   @keyframes lcFill { to { opacity: 1; transform: scale(1); } }
