@@ -19,22 +19,57 @@ const fullDate = (d: string) => {
   const wd = t.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
   return `${wd} ${t.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`;
 };
+// Calendar badge on the photo (Akis, 2026-11-23: the card read as raw text): DEC · 19 · SAT.
+const badge = (d: string) => {
+  const t = new Date(d + 'T00:00:00Z');
+  const f = (o: Intl.DateTimeFormatOptions) => t.toLocaleDateString('en-US', { ...o, timeZone: 'UTC' });
+  return { month: f({ month: 'short' }), day: f({ day: 'numeric' }), wd: f({ weekday: 'short' }) };
+};
+// "Toronto, Canada (precise location …)" → place + a quieter note line.
+const splitArea = (a: string) => {
+  const m = /^(.*?)\s*\((.*)\)\s*$/.exec(a ?? '');
+  return m ? { place: m[1], note: m[2].charAt(0).toUpperCase() + m[2].slice(1) } : { place: a, note: '' };
+};
+const area = splitArea(e.area);
+const b = upcoming && e.date ? badge(e.date) : null;
+// 20px line icons in the card's highlight colour.
+const ICON = {
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  people: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.8 0 4.5 2 4.5 5"/>',
+  gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8S10.5 3.5 8 4.5 9 8 12 8zm0 0s1.5-4.5 4-3.5S15 8 12 8z"/>',
+};
 ---
 <li>
   <div class="card-bina-mint overflow-hidden">
   {/* Upcoming: more air (Akis, 2026-11-23: too dense): photo on top on phones, beside the text from sm. */}
   <div class:list={['flex', upcoming ? 'flex-col sm:flex-row' : 'items-center']}>
-    <div class:list={['grid flex-none place-items-center bg-black/10 text-center text-body-md', upcoming ? 'aspect-[16/9] w-full sm:aspect-auto sm:w-64 sm:self-stretch' : 'aspect-[4/3] w-36 self-stretch sm:w-40', !hasPhoto && 'p-2']}>
+    <div class:list={['relative grid flex-none place-items-center bg-black/10 text-center text-body-md', upcoming ? 'aspect-[16/9] w-full sm:aspect-auto sm:w-64 sm:self-stretch' : 'aspect-[4/3] w-36 self-stretch sm:w-40', !hasPhoto && 'p-2']}>
       {hasPhoto ? <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" /> : e.photo && <Pending text={e.photo} />}
+      {b && (
+        <span class="absolute left-4 top-4 flex w-16 flex-col items-center overflow-hidden rounded-sm bg-mint text-center font-display shadow-lg" aria-hidden="true">
+          <span class="w-full bg-deep-ocean py-0.5 text-label uppercase text-mint">{b.month}</span>
+          <span class="pt-1 text-title-lg leading-none text-black">{b.day}</span>
+          <span class="pb-1.5 text-body-md font-bold text-black">{b.wd}</span>
+        </span>
+      )}
     </div>
     <div class={upcoming ? 'p-6 sm:p-7' : 'p-4'}>
       <p class:list={['font-display', upcoming ? 'text-title-md' : 'text-title-sm']}><Pending text={e.title} /></p>
       {upcoming ? (
         <>
-          <p class="mt-3 text-body-xl font-semibold">{fullDate(e.date)}{e.time && <> · {e.time}</>}</p>
-          <p class="mt-1 text-body-lg"><Pending text={e.area} /></p>
+          <ul class="mt-4 grid gap-3">
+            <li class="flex items-start gap-3">
+              <svg viewBox="0 0 24 24" class="mt-0.5 size-5 flex-none text-hl" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.clock} />
+              <span class="text-body-lg font-semibold">{fullDate(e.date)}{e.time && <> · {e.time}</>}</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg viewBox="0 0 24 24" class="mt-0.5 size-5 flex-none text-hl" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.pin} />
+              <span class="text-body-lg"><span class="font-semibold"><Pending text={area.place} /></span>{area.note && <span class="block"><Pending text={area.note} /></span>}</span>
+            </li>
+          </ul>
           {e.text && <p class="mt-4 max-w-prose text-body-lg leading-relaxed"><Pending text={e.text} /></p>}
-          <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
           {/* Opens the booking page in a new tab, with the "opens in a new tab" icon (Akis, 2026-11-23). */}
           {e.rsvp && (
             <a href={e.rsvp} class="btn-bina btn-sm inline-flex items-center gap-2" target="_blank" rel="noopener noreferrer">
@@ -43,7 +78,12 @@ const fullDate = (d: string) => {
               <span class="sr-only">(opens in a new tab)</span>
             </a>
           )}
-          {e.registered > 0 && <p class="text-body-lg font-semibold text-hl">{e.registered} families already registered</p>}
+          {e.registered > 0 && (
+            <p class="flex items-center gap-2 text-body-lg font-semibold text-hl">
+              <svg viewBox="0 0 24 24" class="size-5 flex-none" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.people} />
+              {e.registered} families already registered
+            </p>
+          )}
           </div>
         </>
       ) : (
@@ -54,7 +94,10 @@ const fullDate = (d: string) => {
   {/* Sponsored event (Akis, 2026-11-23): a deep ocean strip across the bottom of the card with
       the sponsorship sentence from the data. */}
   {e.sponsored && (
-    <p class="bg-deep-ocean px-6 py-4 text-body-lg text-mint sm:px-7"><Pending text={e.sponsored} /></p>
+    <p class="flex items-center gap-3 bg-deep-ocean px-6 py-4 text-body-lg text-mint sm:px-7">
+      <svg viewBox="0 0 24 24" class="size-5 flex-none" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.gift} />
+      <span><Pending text={e.sponsored} /></span>
+    </p>
   )}
   </div>
   {/* Credit for a public (e.g. Wikimedia Commons) photo, under the card (Akis, 2026-11-23): author

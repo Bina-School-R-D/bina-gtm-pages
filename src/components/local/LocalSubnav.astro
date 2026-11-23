@@ -8,8 +8,10 @@
  * colour (mint), so it reads as part of the page, not of the black main navbar.
  * Items come from the rendered sections (lib/local.js navItems), so a group dropped on
  * production never leaves a dead link.
- * Under 1024px (Akis, 2026-11-23): full bina logo + market name on the left, then the CTA and a
- * burger; the section links move into a drop-down panel under the bar (current group highlighted).
+ * Under 1024px (Akis, 2026-11-23): full bina logo + market name on the left, then the CTA; the
+ * section links stay visible as a second, sideways-scrolling row under them, and the row slides
+ * so the highlighted link is always in view as you scroll the page (Akis, 2026-11-23: replaces
+ * the burger + drop-down, which hid the links).
  */
 import { CTA, CTA_LABEL } from '../../lib/esa-states.js';
 interface Props {
@@ -78,7 +80,11 @@ const { items, label } = Astro.props;
         a.classList.toggle('is-active', on);
         if (on) {
           a.setAttribute('aria-current', 'true');
-          if (row.contains(a)) row.scrollTo({ left: a.offsetLeft - (row.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+          // Slide the row so the active link sits in the middle (phones: the links row scrolls sideways).
+          if (row.contains(a)) {
+            const r = row.getBoundingClientRect(), l = a.getBoundingClientRect();
+            row.scrollBy({ left: l.left - r.left - (r.width - l.width) / 2, behavior: 'smooth' });
+          }
         } else a.removeAttribute('aria-current');
       }
     };
@@ -111,6 +117,8 @@ const { items, label } = Astro.props;
   /* --local-nav-h = the bar's height. Tighter than MainSiteNavbar's .site-nav (76–132px) so the
      back bar above it doesn't leave a gap over the logo (Akis, 2026-11-23). */
   :root { --local-subnav-h: 4rem; --local-nav-h: 3.75rem; --local-backbar-h: 0px; }
+  /* Phones/tablets: logo + CTA row (3.5rem) plus the section links row (3.25rem). */
+  @media (max-width: 1023px) { :root { --local-nav-h: 6.75rem; } }
   @media (min-width: 1024px) { :root { --local-nav-h: clamp(4.25rem, 4.2vw, 6.5rem); } }
 
   /* Only this bar sticks: the main navbar scrolls away on market pages. */
@@ -231,15 +239,24 @@ const { items, label } = Astro.props;
   .local-subnav-menu-link.is-active { background: #06e1bd; color: #000; }
 
   @media (max-width: 1023px) {
-    .local-subnav-row { display: none; }
+    /* Two rows: logo + CTA, then the links, full width and scrolling sideways. */
+    .local-subnav.is-stuck .local-subnav-inner { flex-wrap: wrap; align-content: stretch; row-gap: 0; padding-top: 0; padding-bottom: 0; }
+    .local-subnav.is-stuck .local-subnav-label { height: 3.5rem; }
     .local-subnav-cta { margin-left: auto; }
-    .local-subnav-burger { display: flex; }
+    .local-subnav.is-stuck .local-subnav-row {
+      /* Pills sit a little high in their row so the space above them (from the CTA) matches the space below. */
+      order: 3; flex: 1 0 100%; height: 3.25rem; gap: 0.25rem; align-items: flex-start;
+      margin: 0 calc(-1 * clamp(1.05rem, 1.39vw, 2.25rem)); padding: 0.25rem clamp(1.05rem, 1.39vw, 2.25rem) 0;
+      scroll-padding: 0 clamp(1.05rem, 1.39vw, 2.25rem);
+    }
+    .local-subnav.is-stuck .local-subnav-link { font-size: 16px; padding: 0.4rem 0.9rem; }
+    .local-subnav-burger, .local-subnav-menu { display: none !important; }
   }
   @media (min-width: 1024px) {
     .local-subnav-menu { display: none !important; }
   }
   @media (max-width: 639px) {
-    .local-subnav.is-stuck .local-subnav-inner { gap: 0.6rem; }
+    .local-subnav.is-stuck .local-subnav-inner { column-gap: 0.6rem; }
     .local-subnav.is-stuck .local-subnav-label { min-width: 0; flex: 0 1 auto; font-size: 18px; gap: 0.6rem; }
     .local-subnav-name { overflow: hidden; text-overflow: ellipsis; padding-left: 0.6rem; border-left: 1px solid rgb(255 255 255 / 0.3); }
     .local-subnav.is-stuck .local-subnav-cta { padding: 0.5rem 0.85rem; }

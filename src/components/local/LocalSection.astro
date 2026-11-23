@@ -155,7 +155,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <span class="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 sm:h-14 sm:w-14 -translate-y-1/2 place-items-center rounded-full border-4 border-lagoon bg-lemon font-display text-body-lg font-bold text-black sm:text-title-sm" aria-hidden="true">{section.callout.joiner}</span>
             </div>
             {section.rating && (
-              <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1" data-local-rating>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 md:justify-center" data-local-rating>
                 {faces.length || facePlaceholders ? (
                   <ul class="local-faces flex" aria-label="Parents at bina">
                     {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (
@@ -319,7 +319,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
     </div>
     {/* Phones: cards run edge to edge (Akis, 2026-11-23) — page padding + card padding left too
         little room and most lines wrapped. */}
-    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 pb-16 pt-1 max-md:px-0 sm:pb-24 md:grid-cols-2 md:pt-4">
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 pt-1 max-md:px-0 md:grid-cols-2 md:pb-24 md:pt-4">
       {section.levels.map((l: any, i: number) => (
         <article
           id={`local-level-${l.id}`}
@@ -672,22 +672,23 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
           <div class="mb-12">
             <h3 class="mb-5 text-title-lg"><Pending text={section.local.pods.heading} /></h3>
             {/* What a pod is (v2, Akis 2026-11-23): 5 mint tiles (deep ocean icon circle, short title,
-                the detail line) + a lemon tile that asks about a pod. 3 columns from lg, 2 from sm. */}
+                the detail line) + a lemon tile that asks about a pod. 3 columns from lg, 2 from sm.
+                Phones (Akis, 2026-11-23): icon beside the text, tighter padding, so each tile is shorter. */}
             <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {keepReady(section.local.pods.features).map((f: { icon: string; title?: string; text: string }) => (
-                <li class="card-bina-mint flex flex-col gap-3 p-5">
+                <li class="card-bina-mint flex items-start gap-4 p-4 sm:flex-col sm:gap-3 sm:p-5">
                   <span class="grid size-11 flex-none place-items-center rounded-full bg-deep-ocean text-mint" aria-hidden="true">
                     <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={POD_ICONS[f.icon] ?? ''} />
                   </span>
                   <div>
                     {f.title && <p class="font-display text-title-sm text-hl"><Pending text={f.title} /></p>}
-                    <p class="mt-1 text-body-lg"><Pending text={f.text} /></p>
+                    <p class="mt-1 text-body-lg max-sm:mt-0.5 max-sm:leading-snug"><Pending text={f.text} /></p>
                   </div>
                 </li>
               ))}
               {section.local.pods.cta && (
                 <li class="flex">
-                  <a href={joinHref(market)} class="flex w-full flex-col justify-between gap-4 rounded-[24px] bg-lemon p-5 font-display text-title-sm text-black no-underline transition-colors hover:bg-dragon-fruit" data-local-cta="pod">
+                  <a href={joinHref(market)} class="flex w-full items-center justify-between gap-4 rounded-[24px] bg-lemon p-4 font-display sm:flex-col sm:items-start sm:p-5 text-title-sm text-black no-underline transition-colors hover:bg-dragon-fruit" data-local-cta="pod">
                     <span><Pending text={section.local.pods.cta} /></span>
                     <span aria-hidden="true" class="text-title-lg">→</span>
                   </a>
