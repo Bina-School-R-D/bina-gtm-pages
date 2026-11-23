@@ -91,8 +91,8 @@ const fmt = (n) => n.toLocaleString('en-US');
 /**
  * One price list for every page (brochure style, Akis 2026-11-23): USD from esa-landing.json
  * (copied from thebinaschool.com/tuition), local amounts computed from it at the rate in
- * local-markets.json, rounded to the nearest 10. bina bills in USD only, so a local amount is
- * the big number and the USD amount bina charges sits under it. No local currency: USD is big.
+ * local-markets.json, rounded to the nearest 10. Pages show the local amount only. No local
+ * currency: USD.
  */
 export function tuitionPlans(currency) {
   const s = landing.school;
@@ -105,7 +105,7 @@ export function tuitionPlans(currency) {
     rate: r ? r.rate : null,
     plans: [
       { name: 'Quarterly plan', big: local(s.monthlyQuarterly) ?? usd(s.monthlyQuarterly), usd: usd(s.monthlyQuarterly), billed: 'quarterly', line: 'Once a season, 4 times a year.' },
-      { name: 'Annual plan', big: local(s.monthlyYearly) ?? usd(s.monthlyYearly), usd: usd(s.monthlyYearly), billed: 'yearly', line: `Save ${save}% when you pay upfront for the year.` },
+      { name: 'Annual plan', big: local(s.monthlyYearly) ?? usd(s.monthlyYearly), usd: usd(s.monthlyYearly), billed: 'yearly', save, line: 'Pay upfront for the year.' },
     ],
     sibling: { big: local(s.siblingDiscount) ?? usd(s.siblingDiscount), usd: usd(s.siblingDiscount) },
   };

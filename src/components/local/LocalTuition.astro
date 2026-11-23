@@ -2,8 +2,8 @@
 /*
  * Tuition, after the thebinaschool.com/brochure "Flexible tuition plans" block (Akis, 2026-11-23):
  * sky blue band, heading + sibling discount on the left, one black card per plan on the right.
- * No currency toggle: the local monthly amount is the big number, the USD amount bina actually
- * bills sits under it, small. Markets without a local currency show USD big. Prices from
+ * No currency toggle: prices show in the local currency only, no footnote (Akis, 2026-11-23).
+ * Markets without a local currency show USD. Prices from
  * tuitionPlans() in src/lib/local.js (one source for every page).
  */
 import Pending from './Pending.astro';
@@ -14,7 +14,7 @@ interface Props {
   currency: string | null;
 }
 const { heading, currency } = Astro.props;
-const { plans, sibling, currency: local, rate } = tuitionPlans(currency);
+const { plans, sibling } = tuitionPlans(currency);
 ---
 <section class="theme-sky-blue" data-local-section="tuition">
   <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
@@ -22,34 +22,27 @@ const { plans, sibling, currency: local, rate } = tuitionPlans(currency);
       <div>
         <h2 class="mb-6 text-title-3xl sm:text-display-sm"><Pending text={heading} /></h2>
         <p class="max-w-md font-display text-title-sm">
-          Families with more than one child get a {sibling.big} sibling discount for each additional student.
+          Families with more than one child get a {sibling.big}{sibling.big !== sibling.usd && ` (USD ${sibling.usd})`} sibling discount a year for each additional student.
         </p>
-        {local && <p class="mt-2 text-body-lg">{sibling.usd} USD a year per extra child.</p>}
       </div>
 
       <ul class="grid gap-4 sm:grid-cols-2">
         {plans.map((p) => (
           <li class="card-bina-solid flex flex-col p-6 sm:p-8">
-            <p class="font-display text-title-md">{p.name}</p>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="font-display text-title-md">{p.name}</p>
+              {/* Lemon tag: makes the annual saving hard to miss (Akis, 2026-11-23). */}
+              {p.save && <span class="rounded-full bg-lemon px-3 py-1 font-display text-label uppercase text-black">Save {p.save}%</span>}
+            </div>
             {/* Big: the local monthly amount. */}
             <p class="mt-5 whitespace-nowrap font-display text-title-4xl text-lemon">{p.big}</p>
             <p class="font-display text-title-sm">/ month</p>
-            {/* Small: what bina actually bills, in USD (Akis's wording, 2026-11-23). */}
-            {local && (
-              <p class="mt-4 text-body-lg">
-                Paid {p.billed} in USD.<br />
-                <strong class="font-semibold">{p.usd}</strong> is the USD amount.
-              </p>
-            )}
+            {/* The USD amount bina actually bills (Akis, 2026-11-23). Hidden when USD is already the big number. */}
+            {p.big !== p.usd && <p class="mt-4 text-body-lg">Billed in USD: {p.usd}</p>}
             <p class="mt-6 border-t border-current/30 pt-5 text-body-lg">{p.line}</p>
           </li>
         ))}
       </ul>
     </div>
-    {local && (
-      <p class="mt-8 text-body-lg">
-        *{local} amounts are approximate, at 1 USD = {rate} {local}. bina bills in USD.
-      </p>
-    )}
   </div>
 </section>

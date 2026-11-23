@@ -585,21 +585,7 @@
           },
           "world": {
             "heading": "bina in the world",
-            "map": { "title": "Where our families connect, play, and do bina together", "_note": "The thebinaschool.com homepage map (src/components/BinaFamiliesMap, verbatim copy; Akis, 2026-11-23). Change it on the main site first." },
-            "items": [
-              {
-                "title": "Global communities",
-                "text": "Classmates from around the world, and 40+ clubs, online."
-              },
-              {
-                "title": "Pods",
-                "text": "Local pods where bina families live."
-              },
-              {
-                "title": "Meetups",
-                "text": "Families who meet up and travel together."
-              }
-            ]
+            "map": { "_note": "The thebinaschool.com homepage map (src/components/BinaFamiliesMap, verbatim copy; Akis, 2026-11-23). Change it on the main site first. The three cards (Global communities, Pods, Meetups) and the map title were removed (Akis, 2026-11-23)." }
           }
         },
         {
@@ -614,10 +600,8 @@
           "anchor": "grades",
           "navLabel": "Grades",
           "title": "Find your child's level",
+          "intro": "Match your child's age and Ontario grade to the bina level they would join.",
           "_note": "Akis, 2026-11-23: moved out of 'Our students' results' into its own section after tuition, before the FAQs. Rows come from the levels section's grades data."
-        },
-        {
-          "kind": "cta"
         },
         {
           "kind": "faq",
@@ -676,6 +660,9 @@
           "anchor": "faq",
           "navLabel": "FAQs",
           "_note": "Ontario law, curriculum and return-to-school answers moved here from the Education section (Akis, 2026-11-20). Sources: Ontario guide + notes/guides-canada/legal-sources.md (PPM 131 wording and Sept 1 date still [VERIFY]); curriculum pack; thebinaschool.com/middle-school and /accreditation (Family Success transitions)."
+        },
+        {
+          "kind": "cta"
         }
       ],
       "subnavLabel": {

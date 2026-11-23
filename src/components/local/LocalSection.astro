@@ -104,18 +104,11 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
         call-out ends inside a normal phone screen. */}
     <div class="mx-auto max-w-6xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
       <div class="grid gap-x-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        {/* With a call-out, the title and facts share one left column, top-aligned, so the facts sit
+            right under the h1 instead of below the photo's full height (Akis, 2026-11-23). Without one,
+            `contents` keeps the old grid (facts span both columns). Same trick for photo + call-out. */}
+        <div class={section.callout ? 'md:self-start' : 'contents'}>
         <h1 class="max-w-3xl self-center text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
-        {market.image && (
-          <img
-            src={market.image.src}
-            alt={market.image.alt}
-            width={market.image.width}
-            height={market.image.height}
-            fetchpriority="high"
-            decoding="async"
-            class="h-auto w-full self-end max-md:hidden"
-          />
-        )}
         {section.facts && (
           <ul class:list={['mt-8 grid gap-y-2 sm:mt-10 sm:gap-y-3', section.callout ? 'self-start' : 'gap-x-8 sm:grid-cols-2 md:col-span-2']}>
             {section.facts.map((f: string) => (
@@ -132,6 +125,21 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             ))}
           </ul>
         )}
+        {/* Desktop: the CTA follows the facts in the left column (Akis, 2026-11-23). Phones keep it below the call-out. */}
+        {section.callout && <div class="mt-10 max-md:hidden"><LocalButtons market={market} /></div>}
+        </div>
+        <div class={section.callout ? '' : 'contents'}>
+        {market.image && (
+          <img
+            src={market.image.src}
+            alt={market.image.alt}
+            width={market.image.width}
+            height={market.image.height}
+            fetchpriority="high"
+            decoding="async"
+            class="h-auto w-full self-end max-md:hidden"
+          />
+        )}
         {section.callout && (
           /* The dual call-out (Akis, 2026-11-23): two black tiles (the section's filled card) joined by
              a lemon "and" badge on the seam — local AND global, one experience. The rating sits right
@@ -147,7 +155,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <span class="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 sm:h-14 sm:w-14 -translate-y-1/2 place-items-center rounded-full border-4 border-lagoon bg-lemon font-display text-body-lg font-bold text-black sm:text-title-sm" aria-hidden="true">{section.callout.joiner}</span>
             </div>
             {section.rating && (
-              <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
+              <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1" data-local-rating>
                 {faces.length || facePlaceholders ? (
                   <ul class="local-faces flex" aria-label="Parents at bina">
                     {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (
@@ -170,8 +178,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             )}
           </div>
         )}
+        </div>
       </div>
-      <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <div class:list={['mt-10 flex flex-wrap items-center gap-x-8 gap-y-4', section.callout && 'md:hidden']}>
         <LocalButtons market={market} />
         {!section.callout && section.rating && (
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
@@ -495,15 +504,23 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'grades' && resultLevels.length > 0 && (
   <section class={theme ?? 'theme-mint'} data-local-section="grades">
     {/* "Find your child's level" (Akis, 2026-11-23): its own section after tuition, nav "Grades".
-        One table, Primary rows then Middle rows, from the levels section's grades data. */}
+        One table, Primary rows then Middle rows, from the levels section's grades data.
+        Tuition-style split (Akis, 2026-11-23): heading + subtitle left, table right, so three short
+        columns don't stretch across the full width. Stacks on phones. */}
     <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
-      <h2 class={h2}><Pending text={section.title ?? "Find your child's level"} /></h2>
-      {section.intro && <p class="-mt-2 mb-6 max-w-3xl text-body-xl"><Pending text={section.intro} /></p>}
+      <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-14">
+        {/* Heading + subtitle and the table's header row stick under the page's bars until the
+            section ends (Akis, 2026-11-23). Heading sticks from 1024px only (side by side). */}
+        <div class="local-grades-sticky lg:sticky">
+          <h2 class="text-balance text-title-3xl sm:text-display-sm"><Pending text={section.title ?? "Find your child's level"} /></h2>
+          {section.intro && <p class="mt-4 max-w-md text-body-xl"><Pending text={section.intro} /></p>}
+        </div>
           <table class="w-full text-left text-body-lg">
             <thead>
-              <tr class="border-b-2 border-line">
-                {resultLevels[0].grades.cols.map((c: string) => (
-                  <th class="whitespace-nowrap py-3 pr-3 font-display text-hl">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
+              <tr>
+                {/* Column order Ontario · bina · Age (Akis, 2026-11-23); data stays Age · Ontario · bina. */}
+                {[1, 2, 0].map((i) => resultLevels[0].grades.cols[i]).map((c: string) => (
+                  <th class="local-grades-th sticky z-10 whitespace-nowrap py-3 pr-3 font-display text-hl">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
                 ))}
               </tr>
             </thead>
@@ -511,16 +528,21 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <tbody>
                 <tr><th colspan="3" class="label-bina pb-2 pt-6 text-left">{l.title}</th></tr>
                 {l.grades.rows.map((r: string[]) => (
-                  <tr class="border-b border-line/30">
-                    <td class="whitespace-nowrap py-3 pr-3">{r[0]}</td>
+                  <tr class="group border-b border-line/30">
                     <td class="py-3 pr-3">{r[1]}</td>
-                    <td class="whitespace-nowrap py-3"><span class="inline-block rounded-full bg-deep-ocean px-3 py-0.5 font-display text-body-lg font-bold text-mint">{r[2]}</span></td>
+                    <td class="whitespace-nowrap py-3 pr-3"><span class="inline-block rounded-full bg-deep-ocean px-3 py-0.5 font-display text-body-lg font-bold text-mint">{r[2]}</span></td>
+                    <td class="whitespace-nowrap py-3">
+                      {/* The age is the small CTA to the join form, label = age + arrow only (Akis, 2026-11-23).
+                          Quiet at rest (outlined, no fill) so the section isn't 12 yellow buttons; it fills lemon
+                          when you hover its row or the button itself (Akis, 2026-11-23). */}
+                      <a href={joinHref(market)} class="no-underline inline-flex min-h-12 items-center gap-2 rounded-sm border-2 border-line px-4 font-display text-button-sm text-black transition-colors group-hover:border-lemon group-hover:bg-lemon focus-visible:border-lemon focus-visible:bg-lemon" data-local-cta="grade">{r[0]} <span aria-hidden="true">→</span></a>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             ))}
           </table>
-
+      </div>
     </div>
   </section>
 )}
@@ -698,22 +720,22 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
           </div>
         )}
       </div>
-      {keepReady(section.world?.items).length > 0 && (
+      {(keepReady(section.world?.items).length > 0 || section.world?.map) && (
         <div class="mt-12 sm:mt-14">
           <h3 class="mb-5 text-title-lg"><Pending text={section.world.heading} /></h3>
-          <ul class="grid gap-4 sm:grid-cols-3">
+          {keepReady(section.world.items).length > 0 && <ul class="grid gap-4 sm:grid-cols-3">
             {keepReady(section.world.items).map((it: any) => (
               <li class="card-bina-mint p-6">
                 <p class="mb-2 font-display text-title-sm text-hl"><Pending text={it.title} /></p>
                 <p class="text-body-lg"><Pending text={it.text} /></p>
               </li>
             ))}
-          </ul>
+          </ul>}
           {/* The homepage families map (Akis, 2026-11-23), under the three cards, on its own dark panel: the component is
               styled for the main site's primary base background, and stays a verbatim copy. */}
           {section.world.map && (
-            <div class="theme-base mt-4 rounded-[24px] px-5 py-8 sm:px-10 sm:py-12">
-              <p class="mx-auto mb-8 max-w-2xl text-center font-display text-title-lg text-hl sm:text-title-xl"><Pending text={section.world.map.title} /></p>
+            <div class:list={['theme-base rounded-[24px] px-5 py-8 sm:px-10 sm:py-12', keepReady(section.world.items).length > 0 && 'mt-4']}>
+              {section.world.map.title && <p class="mx-auto mb-8 max-w-2xl text-center font-display text-title-lg text-hl sm:text-title-xl"><Pending text={section.world.map.title} /></p>}
               <BinaFamiliesMap client:visible />
             </div>
           )}
@@ -896,6 +918,11 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 <style is:global>
   /* "Our people in Canada" sticky offset: below the back bar + market navbar, plus a little air. */
   .local-people-sticky { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px) + 1.5rem); }
+  /* "Find your child's level": the header row sits flush under the bars (its 2px rule drawn as an
+     inset shadow, since a row border doesn't travel with sticky cells); the heading lines up with
+     the header text (py-3 = 0.75rem). */
+  .local-grades-th { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px)); background: var(--t-bg); box-shadow: inset 0 -2px 0 var(--t-line); }
+  .local-grades-sticky { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px) + 0.75rem); }
   /* "Where does my child fit?": a black button bar that invites the click. */
   .local-fit { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .local-fit:not([open]):hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 0.25); }
