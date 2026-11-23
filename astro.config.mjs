@@ -4,13 +4,14 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import esaData from './src/data/esa-states.json' with { type: 'json' };
 
-// ESA pages exist only for states where bina can accept students (Akis, 2026-09-22). The other
-// 45 states had a page each until then, so they redirect to /esa rather than 404 — links are
-// already out there. Generated from the data so a new approval only needs a `programs` entry.
+// The ESA pages moved to thebinaschool.com (Akis, 2026-11-23); the served states are redirect stubs
+// in src/pages/esa/[state].astro. The other states had a page each until 2026-09-22 — links are
+// still out there, so they go straight to the main site's /esa rather than 404.
 const servedStates = new Set(esaData.programs.map((p) => p.s));
+const MAIN_ESA = 'https://thebinaschool.com/esa';
 const esaSlug = (name) => name.toLowerCase().replace(/\s+/g, '-');
 const retiredStateRedirects = Object.fromEntries(
-  esaData.allStates.filter((name) => !servedStates.has(name)).map((name) => [`/esa/${esaSlug(name)}`, '/esa'])
+  esaData.allStates.filter((name) => !servedStates.has(name)).map((name) => [`/esa/${esaSlug(name)}`, MAIN_ESA])
 );
 
 // Deployed to GitHub Pages behind the custom domain go.bina.school.
@@ -21,8 +22,8 @@ export default defineConfig({
   // No homepage — the root bounces to the main site; old URLs stay alive.
   redirects: {
     '/': 'https://thebinaschool.com',
-    '/esa-guide': '/esa',
-    // /book-adventure was retired on 2026-11-09 (no longer needed); old links land on the main site.
+    '/esa-guide': MAIN_ESA,
+    // /book-adventure was retired on 2026-11-09 and is not coming back (Akis, 2026-11-23); old links land on the homepage.
     '/book-adventure': 'https://thebinaschool.com',
     ...retiredStateRedirects,
   },

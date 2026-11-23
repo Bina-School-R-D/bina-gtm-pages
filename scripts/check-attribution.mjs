@@ -35,9 +35,11 @@ function allParams(el, attr = 'href', expected = keys) {
   for (const key of expected) assert.equal(params(el, attr).get(key), new URLSearchParams(campaign).get(key), key);
   assert.equal(params(el, attr).has('email'), false);
 }
-for (const state of ['arizona', 'idaho', 'new-hampshire', 'utah', 'wyoming']) {
+// The ESA pages moved to thebinaschool.com (2026-11-23): dist/ no longer has CTA pages, so this
+// block runs only on saved evidence HTML.
+if (evidence) for (const state of ['arizona', 'idaho', 'new-hampshire', 'utah', 'wyoming']) {
   test(`${state}: actual page main-site CTAs carry the whitelisted first touch`, () => {
-    const file = evidence ? resolve(evidence, `${state}.html`) : new URL(`../dist/esa/${state}/index.html`, import.meta.url);
+    const file = resolve(evidence, `${state}.html`);
     const html = readFileSync(file, 'utf8');
     const links = [...html.matchAll(/<a\b[^>]*\bhref="(https:\/\/thebinaschool\.com(?:\/)?(?:\?[^"#]*)?(?:#[^"]*)?)"/g)].map((m) => element(m[1].replaceAll('&amp;', '&')));
     assert.ok(links.length > 0, 'observed main-site CTA must exist');
