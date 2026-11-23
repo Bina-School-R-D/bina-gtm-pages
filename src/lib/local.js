@@ -38,11 +38,15 @@ export const hubShown = () => shownMarkets().length > 0;
 /**
  * The section list a page renders: on production, sections with a placeholder are dropped,
  * then any `group` band left with no section under it (up to the next group) is dropped too.
+ * A `community` section is the exception: it drops its placeholder items one by one (keepReady).
  */
 export const visibleSections = (m) => {
-  const kept = m.sections.filter((s) => PREVIEW || !hasPending(s));
+  const kept = m.sections.filter((s) => PREVIEW || s.kind === 'community' || !hasPending(s));
   return kept.filter((s, i) => s.kind !== 'group' || (kept[i + 1] && kept[i + 1].kind !== 'group'));
 };
+
+/** Production: the items of a list without the ones still holding a placeholder. */
+export const keepReady = (items) => (items ?? []).filter((x) => PREVIEW || !hasPending(x));
 
 /** The page's sub-navbar: every rendered section with an `anchor` and a `navLabel`, in page order. */
 export const navItems = (sections) => sections.filter((s) => s.anchor && s.navLabel).map((s) => ({ id: s.anchor, label: s.navLabel }));
@@ -141,7 +145,8 @@ export function marketEvents(marketId, today = new Date().toISOString().slice(0,
     .map((e) => ({
       ...e,
       year: e.year ?? Number(e.date.slice(0, 4)),
-      month: e.month ?? new Date(e.date + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      // A hand-added past event may have no month yet: the card then shows the year only.
+      month: e.month ?? (e.date ? new Date(e.date + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }) : undefined),
     }))
     .sort((a, b) => (b.date ?? `${b.year}`).localeCompare(a.date ?? `${a.year}`));
   return { upcoming, past };

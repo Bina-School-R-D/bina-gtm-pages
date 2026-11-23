@@ -1,7 +1,7 @@
 {
   "_provenance": "Local events per market, hand-kept until the pages move to thebinaschool.com (its Cal.com sync reads team 243242, slugs local-{market}-…, Juli hosts). An event moves from Upcoming to Past the day after its date, at build time; nothing is ever deleted. Upcoming events carry `date` (YYYY-MM-DD) and `rsvp` (the Cal.com booking link); hand-added past events carry `year` + `month`. A past card shows title · area · month + year · photo (never the exact day or time). Location rule: a public venue shows venue + date; a small or private venue shows the area only; a family's home never. Photos: alt = place + activity + season, never kids' names.",
   "events": [
-    { "id": "toronto-zoo-2026", "market": "toronto", "title": "Toronto Zoo", "area": "Toronto", "year": 2026, "month": "[PENDING: month]", "photo": "[PENDING: photo]" },
-    { "id": "brampton-meetup-2026", "market": "toronto", "title": "Brampton meetup", "area": "Brampton", "year": 2026, "month": "[PENDING: month]", "photo": "[PENDING: photo]" }
+    { "id": "toronto-zoo-2025", "market": "toronto", "title": "Toronto Zoo", "area": "Toronto", "year": 2025, "month": "November", "photo": { "src": "/images/local/events/toronto-zoo-2025.jpg", "alt": "bina families at the Toronto Zoo polar bear window, autumn" }, "_source": "Nov 15, 2025 (Slack #general, Juli). Photo: Drive > meetups > Toronto Zoo 2025 meetup > Photos, photo_2026-01-30 13.09.07, cropped to the kids seen from behind (Akis, 2026-11-23)." },
+    { "id": "brampton-meetup-2026", "market": "toronto", "title": "Brampton meetup", "area": "Brampton", "year": 2026 }
   ]
 }

@@ -19,7 +19,7 @@ import landing from '../../data/esa-landing.json';
 import survey from '../../data/family-survey.json';
 import results from '../../data/student-results.json';
 import reviewData from '../../data/reviews.json';
-import { accreditations, faqAnswer, PREVIEW } from '../../lib/local.js';
+import { accreditations, faqAnswer, joinHref, keepReady, PREVIEW } from '../../lib/local.js';
 
 interface Props {
   market: any;
@@ -67,6 +67,15 @@ const PROOF: Record<string, { value: string; title: string; note: string; link: 
   classCap: { value: String(school.classCap), title: "The most children your child's class can hold", note: 'a cap, not an average', link: 'how classes work', href: 'https://thebinaschool.com/education' },
 };
 const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'readGrowth', 'classCap']).map((k: string) => PROOF[k]).filter(Boolean) : [];
+
+// Pod feature icons (24×24 line icons, drawn with the text colour): the keys used in pods.features.
+const POD_ICONS: Record<string, string> = {
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  laptop: '<rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M2.5 19h19"/>',
+  play: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17M6 6c3 2.5 3 9.5 0 12M18 6c-3 2.5-3 9.5 0 12"/>',
+  parents: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 19c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5M14.5 14c.8-.4 1.6-.6 2.5-.6 2.2 0 4 1.7 4 4.6"/>',
+};
 
 // FAQ question colours cycle like the ESA pages' FAQ (staging, 2026-11-20).
 const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon-fruit'];
@@ -601,7 +610,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               {typeof p.photo === 'string' ? <Pending text={p.photo} /> : <img src={p.photo.src} alt={p.photo.alt} width="160" height="160" loading="lazy" class="size-full object-cover" />}
             </div>
             <div>
-              <p class="font-display text-title-sm"><Pending text={p.name} /> <span class="text-hl">· <Pending text={p.place} /></span></p>
+              <p class="font-display text-title-sm"><Pending text={p.name} />{' '}<span class="text-hl">· <Pending text={p.place} /></span></p>
               <p class="mt-2 text-body-lg"><Pending text={p.line} /></p>
             </div>
           </li>
@@ -626,6 +635,82 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 )}
 
 {section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} wide={wide} />}
+
+{section.kind === 'community' && (
+  /* Akis, 2026-11-23: one band under the group heading. Desktop: Toronto pods, then Toronto events
+     as compact photo-left cards (2/3) | our people (1/3, one compact card), so the two columns end
+     close together; bina in the world across the bottom.
+     Phones: the same order, stacked. Placeholder items drop one by one on production. */
+  <section class={theme ?? 'theme-base'} data-local-section="community">
+    <div class="mx-auto max-w-6xl px-5 pb-16 sm:pb-24">
+      <div class="grid gap-12 md:grid-cols-3 md:gap-10">
+        <div class="md:col-span-2">
+        {keepReady(section.local.pods?.features).length > 0 && (
+          <div class="mb-12">
+            <h3 class="mb-5 text-title-lg"><Pending text={section.local.pods.heading} /></h3>
+            {/* What a pod is (v2, Akis 2026-11-23): 5 mint tiles (deep ocean icon circle, short title,
+                the detail line) + a lemon tile that asks about a pod. 3 columns from lg, 2 from sm. */}
+            <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {keepReady(section.local.pods.features).map((f: { icon: string; title?: string; text: string }) => (
+                <li class="card-bina-mint flex flex-col gap-3 p-5">
+                  <span class="grid size-11 flex-none place-items-center rounded-full bg-deep-ocean text-mint" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={POD_ICONS[f.icon] ?? ''} />
+                  </span>
+                  <div>
+                    {f.title && <p class="font-display text-title-sm text-hl"><Pending text={f.title} /></p>}
+                    <p class="mt-1 text-body-lg"><Pending text={f.text} /></p>
+                  </div>
+                </li>
+              ))}
+              {section.local.pods.cta && (
+                <li class="flex">
+                  <a href={joinHref(market)} class="flex w-full flex-col justify-between gap-4 rounded-[24px] bg-lemon p-5 font-display text-title-sm text-black no-underline transition-colors hover:bg-dragon-fruit" data-local-cta="pod">
+                    <span><Pending text={section.local.pods.cta} /></span>
+                    <span aria-hidden="true" class="text-title-lg">→</span>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+        {section.local.events && <LocalEvents market={market} heading={section.local.events.heading} embedded />}
+        </div>
+        {keepReady(section.people?.people).length > 0 && (
+          <div>
+            <h3 class="mb-5 text-title-lg"><Pending text={section.people.heading} /></h3>
+            {/* One mint card, one row per person (was a card each: too much air). */}
+            <ul class="card-bina-mint divide-y divide-black/10 px-5 py-1">
+              {keepReady(section.people.people).map((p: any) => (
+                <li class="flex items-center gap-4 py-3">
+                  <div class="grid size-12 flex-none place-items-center overflow-hidden rounded-full bg-black/10 text-center text-body-md leading-tight">
+                    {p.photo?.src ? <img src={p.photo.src} alt={p.photo.alt} width="96" height="96" loading="lazy" class="size-full object-cover" /> : typeof p.photo === 'string' ? <Pending text={p.photo} /> : <span class="font-display text-title-sm" aria-hidden="true">{p.name.charAt(0)}</span>}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-display text-title-sm leading-tight"><Pending text={p.name} />{p.place && <>{' '}<span class="text-hl">· <Pending text={p.place} /></span></>}</p>
+                    <p class="text-body-lg"><Pending text={p.line} /></p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      {keepReady(section.world?.items).length > 0 && (
+        <div class="mt-12 sm:mt-14">
+          <h3 class="mb-5 text-title-lg"><Pending text={section.world.heading} /></h3>
+          <ul class="grid gap-4 sm:grid-cols-3">
+            {keepReady(section.world.items).map((it: any) => (
+              <li class="card-bina-mint p-6">
+                <p class="mb-2 font-display text-title-sm text-hl"><Pending text={it.title} /></p>
+                <p class="text-body-lg"><Pending text={it.text} /></p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </section>
+)}
 
 {section.kind === 'reviews' && section.items && <LocalReviews section={section} theme={theme} />}
 

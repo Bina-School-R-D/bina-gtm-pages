@@ -16,17 +16,24 @@ interface Props {
   theme?: string;
   /** In a `wide` group: max-w-6xl, the level cards' width. */
   wide?: boolean;
+  /** Inside the community section: no band or padding of its own, an h3 heading. */
+  embedded?: boolean;
 }
-const { market, heading, theme, wide } = Astro.props;
+const { market, heading, theme, wide, embedded } = Astro.props;
 const { upcoming, past } = marketEvents(market.id);
 const start = upcoming.length ? 'upcoming' : 'past';
+const Wrap = embedded ? 'div' : 'section';
 const fmtDate = (d: string) =>
   new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
-<section id="events" class:list={[theme ?? 'theme-base', 'scroll-mt-24']} data-local-section="events" data-local-events={start}>
-  <div class:list={['mx-auto px-5 py-16 sm:py-24', wide ? 'max-w-6xl' : 'max-w-5xl']}>
-    <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
-    <div class="mb-8 flex gap-2" role="tablist" aria-label={`${market.name} events`}>
+<Wrap id="events" class:list={[!embedded && (theme ?? 'theme-base'), 'scroll-mt-24']} data-local-section={embedded ? undefined : 'events'} data-local-events={start}>
+  <div class:list={!embedded && ['mx-auto px-5 py-16 sm:py-24', wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    {embedded ? (
+      <h3 class="mb-5 text-title-lg"><Pending text={heading} /></h3>
+    ) : (
+      <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
+    )}
+    <div class:list={['flex gap-2', embedded ? 'mb-5' : 'mb-8']} role="tablist" aria-label={`${market.name} events`}>
       {['upcoming', 'past'].map((t) => (
         <button
           type="button"
@@ -57,26 +64,27 @@ const fmtDate = (d: string) =>
     </div>
 
     <div role="tabpanel" data-panel="past" hidden={start !== 'past'}>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Embedded (community section): compact cards, photo left, text right (Akis, 2026-11-23: fewer gaps). */}
+      <ul class:list={['grid gap-4 sm:grid-cols-2', !embedded && 'lg:grid-cols-3']}>
         {past.map((e: any) => (
-          <li class="card-bina-mint overflow-hidden">
-            <div class="grid aspect-[4/3] place-items-center bg-black/10 p-4 text-center text-body-md">
+          <li class:list={['card-bina-mint overflow-hidden', embedded && 'flex items-center']}>
+            <div class:list={['grid aspect-[4/3] place-items-center bg-black/10 text-center text-body-md', embedded && 'w-36 flex-none self-stretch sm:w-40', !(typeof e.photo === 'object' && e.photo) && 'p-2']}>
               {typeof e.photo === 'object' && e.photo ? (
                 <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" />
               ) : (
-                <Pending text={e.photo ?? ''} />
+                e.photo && <Pending text={e.photo} />
               )}
             </div>
-            <div class="p-5">
+            <div class={embedded ? 'p-4' : 'p-5'}>
               <p class="font-display text-title-sm"><Pending text={e.title} /></p>
-              <p class="mt-1 text-body-lg"><Pending text={e.area} /> · <Pending text={String(e.month)} /> {e.year}</p>
+              <p class="mt-1 text-body-lg"><Pending text={e.area} /> · {e.month && <><Pending text={String(e.month)} />{' '}</>}{e.year}</p>
             </div>
           </li>
         ))}
       </ul>
     </div>
   </div>
-</section>
+</Wrap>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-local-events]').forEach((root) => {
