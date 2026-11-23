@@ -155,7 +155,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <span class="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 sm:h-14 sm:w-14 -translate-y-1/2 place-items-center rounded-full border-4 border-lagoon bg-lemon font-display text-body-lg font-bold text-black sm:text-title-sm" aria-hidden="true">{section.callout.joiner}</span>
             </div>
             {section.rating && (
-              <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1" data-local-rating>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 md:justify-center" data-local-rating>
                 {faces.length || facePlaceholders ? (
                   <ul class="local-faces flex" aria-label="Parents at bina">
                     {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (

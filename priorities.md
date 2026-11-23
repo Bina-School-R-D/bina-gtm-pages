@@ -1,6 +1,6 @@
 # priorities.md — bina-gtm-pages
 
-## /local — Toronto page (branch `claude/local-pages`, localhost only)
+## /local — Toronto page (`live: false`, localhost only)
 
 Confirm before the page goes live (details in `_openQuestions` of `local-markets.json` / `testimonials.json`):
 - **Toronto pods**: the hero call-out names them, the Community section still marks the pod PENDING.
@@ -9,6 +9,7 @@ Confirm before the page goes live (details in `_openQuestions` of `local-markets
 - **Trustpilot score**: tile shows 4.5/5 (Akis); `reviews.json` says 4.2.
 - **Testimonial photos**: Mary Kate's portrait is `portrait-amina-2` on the main site; confirm it's her, and that consent covers the hero headshot crops.
 - Open: shorten the 3 level-card lines that wrap on phones; accreditation heading centred vs left on phones.
+- Open: navbar highlight switches a section late (back bar not counted in the offset); grades table has 12 age CTAs with arrows (lemon on hover): check with design.
 
 ## /esa — open items
 
