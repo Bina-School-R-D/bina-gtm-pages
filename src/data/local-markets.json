@@ -650,7 +650,19 @@
             },
             {
               "q": "Can we go back to a local school later?",
-              "a": "Yes. bina is Cognia accredited and a registered Cambridge International School, so your child leaves with a school record other schools recognise. Learners finish middle school with a Cambridge-accredited record and a capstone project, ready to walk into any high school and thrive. If you move back to a local school, our Family Success team helps with the paperwork, local requirements and next steps."
+              "a": "Yes. bina is Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS), so your child leaves with a school record other schools recognise. Learners finish middle school with a Cambridge-accredited record and a capstone project, ready to walk into any high school and thrive. If you move back to a local school, our Family Success team helps with the paperwork, local requirements and next steps."
+            },
+            {
+              "q": "What support does my family get?",
+              "a": "Every family gets a Family Success concierge, plus educational psychology when your child needs it. Both are included in tuition, not billed extra."
+            },
+            {
+              "q": "What do other bina parents say?",
+              "a": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families in our family survey), and bina has 5 stars on Niche. Read the reviews.",
+              "link": {
+                "text": "Read the reviews",
+                "url": "https://thebinaschool.com/reviews"
+              }
             },
             {
               "q": "How much is bina in Canadian dollars?",

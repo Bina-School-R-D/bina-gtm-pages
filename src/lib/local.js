@@ -11,6 +11,7 @@
 import data from '../data/local-markets.json';
 import eventData from '../data/local-events.json';
 import landing from '../data/esa-landing.json';
+import survey from '../data/family-survey.json';
 import { CTA } from './esa-states.js';
 
 export const PREVIEW = import.meta.env.DEV || import.meta.env.PUBLIC_LOCAL_PREVIEW === '1';
@@ -116,6 +117,17 @@ export function priceRange(currency) {
   const lo = fmt(round10(s.monthlyYearly * r.rate));
   const hi = fmt(round10(s.monthlyQuarterly * r.rate));
   return `${r.prefix}${lo}–${hi}`;
+}
+
+/**
+ * One FAQ answer as shown on the page and in the FAQ schema: the local price range for
+ * `priceRange` items, and survey numbers read from the data file, never retyped.
+ */
+export function faqAnswer(f) {
+  return String(f.a)
+    .replace('{range}', f.priceRange ? priceRange(f.priceRange) : '{range}')
+    .replaceAll('{recommendAvg}', String(survey.headline.recommendAvg))
+    .replaceAll('{surveyN}', String(survey.surveyA.n));
 }
 
 /* ------------------------------------------------------------------ events */

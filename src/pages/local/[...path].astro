@@ -22,13 +22,13 @@ import LocalSubnav from '../../components/local/LocalSubnav.astro';
 import {
   HUB_PATH,
   cardLine,
+  faqAnswer,
   hub,
   hubShown,
   marketJsonLd,
   marketPath,
   navItems,
   parentRedirects,
-  priceRange,
   shownMarkets,
   visibleSections,
 } from '../../lib/local.js';
@@ -57,7 +57,7 @@ const themed = sections.map((s: any) => {
 });
 const faq = sections.find((s: any) => s.kind === 'faq');
 const faqForSchema = faq
-  ? faq.items.map((f: any) => ({ q: f.q, a: f.priceRange ? f.a.replace('{range}', priceRange(f.priceRange)) : f.a }))
+  ? faq.items.map((f: any) => ({ q: f.q, a: faqAnswer(f) }))
   : [];
 const jsonLd = market ? marketJsonLd(market, faqForSchema) : [];
 const anyLive = shownMarkets().some((m: any) => m.live);

@@ -19,7 +19,7 @@ import landing from '../../data/esa-landing.json';
 import survey from '../../data/family-survey.json';
 import results from '../../data/student-results.json';
 import reviewData from '../../data/reviews.json';
-import { accreditations, priceRange, PREVIEW } from '../../lib/local.js';
+import { accreditations, faqAnswer, PREVIEW } from '../../lib/local.js';
 
 interface Props {
   market: any;
@@ -35,10 +35,10 @@ const sourceLabel: Record<string, string> = { niche: 'Niche', trustpilot: 'Trust
 const reviewDate = (d?: string) =>
   d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
 
-// FAQ answers: a computed price answer, then one optional link phrase inside the answer.
+// FAQ answers: computed price / survey numbers (faqAnswer), then one optional link phrase inside the answer.
 const faqItems =
   section.kind === 'faq'
-    ? section.items.map((f: any) => ({ ...f, a: f.priceRange ? f.a.replace('{range}', priceRange(f.priceRange)) : f.a }))
+    ? section.items.map((f: any) => ({ ...f, a: faqAnswer(f) }))
     : [];
 const splitLink = (f: any) => {
   if (!f.link || !f.a.includes(f.link.text)) return [{ t: f.a }];
