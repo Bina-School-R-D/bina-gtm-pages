@@ -26,8 +26,10 @@ interface Props {
   section: any;
   /** The colour of the group this section sits in (set by the page); else the section's own. */
   theme?: string;
+  /** Set by the page when the section sits in a `wide` group: max-w-6xl, the level cards' width. */
+  wide?: boolean;
 }
-const { market, section, theme } = Astro.props;
+const { market, section, theme, wide } = Astro.props;
 const { school, reviewIds } = landing;
 
 const reviews = section.kind === 'reviews' ? reviewIds.map((id: string) => reviewData.reviews.find((r: any) => r.id === id)).filter(Boolean) : [];
@@ -70,7 +72,8 @@ const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'r
 const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon-fruit'];
 
 // Section padding (Akis, 2026-11-23: was py-14, too compressed): 64px phones, 96px from 640px.
-const wrap = 'mx-auto max-w-5xl px-5 py-16 sm:py-24';
+// A `wide` group's sections share the level cards' width (max-w-6xl).
+const wrap = `mx-auto ${wide ? 'max-w-6xl' : 'max-w-5xl'} px-5 py-16 sm:py-24`;
 // Hero rating: 5 stacked parent headshots instead of stars (Akis, 2026-11-23). Real, consented
 // photos only, from rating.faces in the market data. Until they exist: stars on production,
 // grey placeholder circles on localhost so the layout can be reviewed.
@@ -83,12 +86,14 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'hero' && (
   <header class="theme-lagoon" data-local-section="hero">
-    {/* Same frame as the ESA heroes (max-w-5xl, one left edge with every section below).
+    {/* max-w-6xl: the level cards' width, one left edge with the sections below (Akis, 2026-11-23; was 5xl like the ESA heroes).
         Desktop: title | market photo, then facts (one left-aligned column) | call-out under the
-        photo (Akis, 2026-11-23). Phones: title, facts, call-out stacked, tight enough that the
+        photo, overlapping the photo's bottom 10% (Akis, 2026-11-23). Two equal columns so the photo is
+        bigger; it is a shaped cutout, so it scales whole (never cropped). Its height is 0.619 × the
+        column width (520×322), so 10% of it is a 6.19% margin (grid margins resolve against width). Phones: title, facts, call-out stacked, tight enough that the
         call-out ends inside a normal phone screen. */}
-    <div class="mx-auto max-w-5xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
-      <div class="grid gap-x-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+    <div class="mx-auto max-w-6xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
+      <div class="grid gap-x-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <h1 class="max-w-3xl self-center text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
         {market.image && (
           <img
@@ -98,7 +103,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             height={market.image.height}
             fetchpriority="high"
             decoding="async"
-            class="mx-auto h-auto w-full max-w-[420px] self-center max-md:hidden"
+            class="h-auto w-full self-end max-md:hidden"
           />
         )}
         {section.facts && (
@@ -121,7 +126,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
           /* The dual call-out (Akis, 2026-11-23): two black tiles (the section's filled card) joined by
              a lemon "and" badge on the seam — local AND global, one experience. The rating sits right
              under it (Akis, 2026-11-23). Under the photo on desktop; above the CTA on phones. */
-          <div class="mt-10 flex flex-col gap-4 md:self-start">
+          <div class="relative z-10 mt-10 flex flex-col gap-4 md:-mt-[6.19%] md:self-start">
             <div class="relative grid grid-cols-2 gap-1.5" data-local-duo>
               {section.callout.items.map((it: { label: string; text: string }, i: number) => (
                 <div class:list={['card-bina-solid flex flex-col gap-1.5 p-4 sm:gap-2 sm:p-5', i === 0 ? 'pr-5 sm:pr-8' : 'pl-6 pr-3 sm:pl-9 sm:pr-5']}>
@@ -264,7 +269,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'group' && section.title && (
   <section class={theme ?? 'theme-lemon'} data-local-section="group">
     {/* wide: lines up with a full-width block below it (the level cards, max-w-6xl). Each sentence on its own line. */}
-    <div class:list={['mx-auto px-5 pt-16 pb-8 sm:pt-24 sm:pb-10', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    <div class:list={['mx-auto px-5 pt-16 pb-8 sm:pt-24 sm:pb-10', section.wide || wide ? 'max-w-6xl' : 'max-w-5xl']}>
       <h2 class="text-balance text-title-3xl sm:text-display-sm">{section.title.split(/(?<=\.)\s+/).map((t: string) => <span class="sm:block">{t}{' '}</span>)}</h2>
       {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
     </div>
@@ -620,7 +625,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
   </section>
 )}
 
-{section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} />}
+{section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} wide={wide} />}
 
 {section.kind === 'reviews' && section.items && <LocalReviews section={section} theme={theme} />}
 

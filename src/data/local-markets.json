@@ -498,54 +498,13 @@
         ]
         },
         {
-          "kind": "education",
-          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features. 'Go back to a local school' answer: thebinaschool.com/middle-school (live 2026-11-20).",
-          "questions": [
-            {
-              "q": "Is bina a real school, or just another online course?",
-              "cards": [
-                {
-                  "title": "Accredited",
-                  "text": "Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS).",
-                  "link": {
-                    "label": "See the accreditations",
-                    "href": "#accreditation"
-                  }
-                },
-                {
-                  "title": "Rated by its families",
-                  "text": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families), and 5 stars on Niche.",
-                  "link": {
-                    "label": "Read the reviews",
-                    "href": "/reviews"
-                  }
-                },
-                {
-                  "title": "A team behind every family",
-                  "text": "A Family Success concierge for every family, plus educational psychology when you need it, included, not billed extra."
-                },
-                {
-                  "title": "A full timetable, not worksheets",
-                  "text": "5 hours a day, 5 days a week, with real teachers and real classmates."
-                }
-              ]
-            }
-          ],
-          "link": {
-            "label": "Our approach to learning",
-            "href": "https://thebinaschool.com/education"
-          },
-          "_note": "'What do they teach?' removed (Akis, 2026-11-20): subjects, biomes and life skills now live in the level cards' 'Learn more' toggles. 'Is it Canada-ready?' cards moved to the FAQ (Akis, 2026-11-20); only its grade table stays here. Grade table moved into the level cards' 'Where does my child fit?' toggles (Akis, 2026-11-20). Moved below the reviews, dark, level-card width (Akis, 2026-11-20).",
-          "theme": "theme-base",
-          "wide": true
-        },
-        {
           "kind": "group",
           "anchor": "community",
           "navLabel": "Community",
           "title": "Friends in Toronto, classmates everywhere",
           "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
-          "theme": "theme-grape"
+          "theme": "theme-grape",
+          "wide": true
         },
         {
           "kind": "who",
