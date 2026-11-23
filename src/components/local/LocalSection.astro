@@ -9,6 +9,7 @@
  * Each section uses exactly one theme (global.css "Section themes").
  */
 import Pending from './Pending.astro';
+import BinaFamiliesMap from '../BinaFamiliesMap';
 import Stars from './Stars.astro';
 import LocalButtons from './LocalButtons.astro';
 import LocalEvents from './LocalEvents.astro';
@@ -19,15 +20,17 @@ import landing from '../../data/esa-landing.json';
 import survey from '../../data/family-survey.json';
 import results from '../../data/student-results.json';
 import reviewData from '../../data/reviews.json';
-import { accreditations, priceRange, PREVIEW } from '../../lib/local.js';
+import { accreditations, faqAnswer, joinHref, keepReady, PREVIEW } from '../../lib/local.js';
 
 interface Props {
   market: any;
   section: any;
   /** The colour of the group this section sits in (set by the page); else the section's own. */
   theme?: string;
+  /** Set by the page when the section sits in a `wide` group: max-w-6xl, the level cards' width. */
+  wide?: boolean;
 }
-const { market, section, theme } = Astro.props;
+const { market, section, theme, wide } = Astro.props;
 const { school, reviewIds } = landing;
 
 const reviews = section.kind === 'reviews' ? reviewIds.map((id: string) => reviewData.reviews.find((r: any) => r.id === id)).filter(Boolean) : [];
@@ -35,10 +38,10 @@ const sourceLabel: Record<string, string> = { niche: 'Niche', trustpilot: 'Trust
 const reviewDate = (d?: string) =>
   d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
 
-// FAQ answers: a computed price answer, then one optional link phrase inside the answer.
+// FAQ answers: computed price / survey numbers (faqAnswer), then one optional link phrase inside the answer.
 const faqItems =
   section.kind === 'faq'
-    ? section.items.map((f: any) => ({ ...f, a: f.priceRange ? f.a.replace('{range}', priceRange(f.priceRange)) : f.a }))
+    ? section.items.map((f: any) => ({ ...f, a: faqAnswer(f) }))
     : [];
 const splitLink = (f: any) => {
   if (!f.link || !f.a.includes(f.link.text)) return [{ t: f.a }];
@@ -66,11 +69,21 @@ const PROOF: Record<string, { value: string; title: string; note: string; link: 
 };
 const proofCards = section.kind === 'proof' ? (section.cards ?? ['recommend', 'readGrowth', 'classCap']).map((k: string) => PROOF[k]).filter(Boolean) : [];
 
+// Pod feature icons (24×24 line icons, drawn with the text colour): the keys used in pods.features.
+const POD_ICONS: Record<string, string> = {
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  laptop: '<rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M2.5 19h19"/>',
+  play: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17M6 6c3 2.5 3 9.5 0 12M18 6c-3 2.5-3 9.5 0 12"/>',
+  parents: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 19c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5M14.5 14c.8-.4 1.6-.6 2.5-.6 2.2 0 4 1.7 4 4.6"/>',
+};
+
 // FAQ question colours cycle like the ESA pages' FAQ (staging, 2026-11-20).
 const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon-fruit'];
 
 // Section padding (Akis, 2026-11-23: was py-14, too compressed): 64px phones, 96px from 640px.
-const wrap = 'mx-auto max-w-5xl px-5 py-16 sm:py-24';
+// A `wide` group's sections share the level cards' width (max-w-6xl).
+const wrap = `mx-auto ${wide ? 'max-w-6xl' : 'max-w-5xl'} px-5 py-16 sm:py-24`;
 // Hero rating: 5 stacked parent headshots instead of stars (Akis, 2026-11-23). Real, consented
 // photos only, from rating.faces in the market data. Until they exist: stars on production,
 // grey placeholder circles on localhost so the layout can be reviewed.
@@ -83,24 +96,19 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 
 {section.kind === 'hero' && (
   <header class="theme-lagoon" data-local-section="hero">
-    {/* Same frame as the ESA heroes (max-w-5xl, one left edge with every section below).
+    {/* max-w-6xl: the level cards' width, one left edge with the sections below (Akis, 2026-11-23; was 5xl like the ESA heroes).
         Desktop: title | market photo, then facts (one left-aligned column) | call-out under the
-        photo (Akis, 2026-11-23). Phones: title, facts, call-out stacked, tight enough that the
+        photo, overlapping the photo's bottom 10% (Akis, 2026-11-23). Two equal columns so the photo is
+        bigger; it is a shaped cutout, so it scales whole (never cropped). Its height is 0.619 × the
+        column width (520×322), so 10% of it is a 6.19% margin (grid margins resolve against width). Phones: title, facts, call-out stacked, tight enough that the
         call-out ends inside a normal phone screen. */}
-    <div class="mx-auto max-w-5xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
-      <div class="grid gap-x-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+    <div class="mx-auto max-w-6xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-24">
+      <div class="grid gap-x-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        {/* With a call-out, the title and facts share one left column, top-aligned, so the facts sit
+            right under the h1 instead of below the photo's full height (Akis, 2026-11-23). Without one,
+            `contents` keeps the old grid (facts span both columns). Same trick for photo + call-out. */}
+        <div class={section.callout ? 'md:self-start' : 'contents'}>
         <h1 class="max-w-3xl self-center text-balance text-title-3xl sm:text-display-sm"><Pending text={section.h1} /></h1>
-        {market.image && (
-          <img
-            src={market.image.src}
-            alt={market.image.alt}
-            width={market.image.width}
-            height={market.image.height}
-            fetchpriority="high"
-            decoding="async"
-            class="mx-auto h-auto w-full max-w-[420px] self-center max-md:hidden"
-          />
-        )}
         {section.facts && (
           <ul class:list={['mt-8 grid gap-y-2 sm:mt-10 sm:gap-y-3', section.callout ? 'self-start' : 'gap-x-8 sm:grid-cols-2 md:col-span-2']}>
             {section.facts.map((f: string) => (
@@ -117,11 +125,26 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             ))}
           </ul>
         )}
+        {/* Desktop: the CTA follows the facts in the left column (Akis, 2026-11-23). Phones keep it below the call-out. */}
+        {section.callout && <div class="mt-10 max-md:hidden"><LocalButtons market={market} /></div>}
+        </div>
+        <div class={section.callout ? '' : 'contents'}>
+        {market.image && (
+          <img
+            src={market.image.src}
+            alt={market.image.alt}
+            width={market.image.width}
+            height={market.image.height}
+            fetchpriority="high"
+            decoding="async"
+            class="h-auto w-full self-end max-md:hidden"
+          />
+        )}
         {section.callout && (
           /* The dual call-out (Akis, 2026-11-23): two black tiles (the section's filled card) joined by
              a lemon "and" badge on the seam — local AND global, one experience. The rating sits right
              under it (Akis, 2026-11-23). Under the photo on desktop; above the CTA on phones. */
-          <div class="mt-10 flex flex-col gap-4 md:self-start">
+          <div class="relative z-10 mt-10 flex flex-col gap-4 md:-mt-[6.19%] md:self-start">
             <div class="relative grid grid-cols-2 gap-1.5" data-local-duo>
               {section.callout.items.map((it: { label: string; text: string }, i: number) => (
                 <div class:list={['card-bina-solid flex flex-col gap-1.5 p-4 sm:gap-2 sm:p-5', i === 0 ? 'pr-5 sm:pr-8' : 'pl-6 pr-3 sm:pl-9 sm:pr-5']}>
@@ -132,7 +155,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <span class="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 sm:h-14 sm:w-14 -translate-y-1/2 place-items-center rounded-full border-4 border-lagoon bg-lemon font-display text-body-lg font-bold text-black sm:text-title-sm" aria-hidden="true">{section.callout.joiner}</span>
             </div>
             {section.rating && (
-              <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
+              <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1" data-local-rating>
                 {faces.length || facePlaceholders ? (
                   <ul class="local-faces flex" aria-label="Parents at bina">
                     {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (
@@ -155,8 +178,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             )}
           </div>
         )}
+        </div>
       </div>
-      <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <div class:list={['mt-10 flex flex-wrap items-center gap-x-8 gap-y-4', section.callout && 'md:hidden']}>
         <LocalButtons market={market} />
         {!section.callout && section.rating && (
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
@@ -264,7 +288,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'group' && section.title && (
   <section class={theme ?? 'theme-lemon'} data-local-section="group">
     {/* wide: lines up with a full-width block below it (the level cards, max-w-6xl). Each sentence on its own line. */}
-    <div class:list={['mx-auto px-5 pt-16 pb-8 sm:pt-24 sm:pb-10', section.wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    <div class:list={['mx-auto px-5 pt-16 pb-8 sm:pt-24 sm:pb-10', section.wide || wide ? 'max-w-6xl' : 'max-w-5xl']}>
       <h2 class="text-balance text-title-3xl sm:text-display-sm">{section.title.split(/(?<=\.)\s+/).map((t: string) => <span class="sm:block">{t}{' '}</span>)}</h2>
       {section.intro && <p class="mt-3 max-w-3xl text-body-xl"><Pending text={fill(section.intro)} /></p>}
     </div>
@@ -480,15 +504,23 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 {section.kind === 'grades' && resultLevels.length > 0 && (
   <section class={theme ?? 'theme-mint'} data-local-section="grades">
     {/* "Find your child's level" (Akis, 2026-11-23): its own section after tuition, nav "Grades".
-        One table, Primary rows then Middle rows, from the levels section's grades data. */}
+        One table, Primary rows then Middle rows, from the levels section's grades data.
+        Tuition-style split (Akis, 2026-11-23): heading + subtitle left, table right, so three short
+        columns don't stretch across the full width. Stacks on phones. */}
     <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
-      <h2 class={h2}><Pending text={section.title ?? "Find your child's level"} /></h2>
-      {section.intro && <p class="-mt-2 mb-6 max-w-3xl text-body-xl"><Pending text={section.intro} /></p>}
+      <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-14">
+        {/* Heading + subtitle and the table's header row stick under the page's bars until the
+            section ends (Akis, 2026-11-23). Heading sticks from 1024px only (side by side). */}
+        <div class="local-grades-sticky lg:sticky">
+          <h2 class="text-balance text-title-3xl sm:text-display-sm"><Pending text={section.title ?? "Find your child's level"} /></h2>
+          {section.intro && <p class="mt-4 max-w-md text-body-xl"><Pending text={section.intro} /></p>}
+        </div>
           <table class="w-full text-left text-body-lg">
             <thead>
-              <tr class="border-b-2 border-line">
-                {resultLevels[0].grades.cols.map((c: string) => (
-                  <th class="whitespace-nowrap py-3 pr-3 font-display text-hl">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
+              <tr>
+                {/* Column order Ontario · bina · Age (Akis, 2026-11-23); data stays Age · Ontario · bina. */}
+                {[1, 2, 0].map((i) => resultLevels[0].grades.cols[i]).map((c: string) => (
+                  <th class="local-grades-th sticky z-10 whitespace-nowrap py-3 pr-3 font-display text-hl">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
                 ))}
               </tr>
             </thead>
@@ -496,16 +528,21 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               <tbody>
                 <tr><th colspan="3" class="label-bina pb-2 pt-6 text-left">{l.title}</th></tr>
                 {l.grades.rows.map((r: string[]) => (
-                  <tr class="border-b border-line/30">
-                    <td class="whitespace-nowrap py-3 pr-3">{r[0]}</td>
+                  <tr class="group border-b border-line/30">
                     <td class="py-3 pr-3">{r[1]}</td>
-                    <td class="whitespace-nowrap py-3"><span class="inline-block rounded-full bg-deep-ocean px-3 py-0.5 font-display text-body-lg font-bold text-mint">{r[2]}</span></td>
+                    <td class="whitespace-nowrap py-3 pr-3"><span class="inline-block rounded-full bg-deep-ocean px-3 py-0.5 font-display text-body-lg font-bold text-mint">{r[2]}</span></td>
+                    <td class="whitespace-nowrap py-3">
+                      {/* The age is the small CTA to the join form, label = age + arrow only (Akis, 2026-11-23).
+                          Quiet at rest (outlined, no fill) so the section isn't 12 yellow buttons; it fills lemon
+                          when you hover its row or the button itself (Akis, 2026-11-23). */}
+                      <a href={joinHref(market)} class="no-underline inline-flex min-h-12 items-center gap-2 rounded-sm border-2 border-line px-4 font-display text-button-sm text-black transition-colors group-hover:border-lemon group-hover:bg-lemon focus-visible:border-lemon focus-visible:bg-lemon" data-local-cta="grade">{r[0]} <span aria-hidden="true">→</span></a>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             ))}
           </table>
-
+      </div>
     </div>
   </section>
 )}
@@ -596,7 +633,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               {typeof p.photo === 'string' ? <Pending text={p.photo} /> : <img src={p.photo.src} alt={p.photo.alt} width="160" height="160" loading="lazy" class="size-full object-cover" />}
             </div>
             <div>
-              <p class="font-display text-title-sm"><Pending text={p.name} /> <span class="text-hl">· <Pending text={p.place} /></span></p>
+              <p class="font-display text-title-sm"><Pending text={p.name} />{' '}<span class="text-hl">· <Pending text={p.place} /></span></p>
               <p class="mt-2 text-body-lg"><Pending text={p.line} /></p>
             </div>
           </li>
@@ -620,7 +657,93 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
   </section>
 )}
 
-{section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} />}
+{section.kind === 'events' && <LocalEvents market={market} heading={section.heading} theme={theme} wide={wide} />}
+
+{section.kind === 'community' && (
+  /* Akis, 2026-11-23: one band under the group heading. Desktop: Toronto pods, then Toronto events
+     as compact photo-left cards (2/3) | our people (1/3, one compact card), so the two columns end
+     close together; bina in the world across the bottom.
+     Phones: the same order, stacked. Placeholder items drop one by one on production. */
+  <section class={theme ?? 'theme-base'} data-local-section="community">
+    <div class="mx-auto max-w-6xl px-5 pb-16 sm:pb-24">
+      <div class="grid gap-12 md:grid-cols-3 md:gap-10">
+        <div class="md:col-span-2">
+        {keepReady(section.local.pods?.features).length > 0 && (
+          <div class="mb-12">
+            <h3 class="mb-5 text-title-lg"><Pending text={section.local.pods.heading} /></h3>
+            {/* What a pod is (v2, Akis 2026-11-23): 5 mint tiles (deep ocean icon circle, short title,
+                the detail line) + a lemon tile that asks about a pod. 3 columns from lg, 2 from sm. */}
+            <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {keepReady(section.local.pods.features).map((f: { icon: string; title?: string; text: string }) => (
+                <li class="card-bina-mint flex flex-col gap-3 p-5">
+                  <span class="grid size-11 flex-none place-items-center rounded-full bg-deep-ocean text-mint" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={POD_ICONS[f.icon] ?? ''} />
+                  </span>
+                  <div>
+                    {f.title && <p class="font-display text-title-sm text-hl"><Pending text={f.title} /></p>}
+                    <p class="mt-1 text-body-lg"><Pending text={f.text} /></p>
+                  </div>
+                </li>
+              ))}
+              {section.local.pods.cta && (
+                <li class="flex">
+                  <a href={joinHref(market)} class="flex w-full flex-col justify-between gap-4 rounded-[24px] bg-lemon p-5 font-display text-title-sm text-black no-underline transition-colors hover:bg-dragon-fruit" data-local-cta="pod">
+                    <span><Pending text={section.local.pods.cta} /></span>
+                    <span aria-hidden="true" class="text-title-lg">→</span>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+        {section.local.events && <LocalEvents market={market} heading={section.local.events.heading} embedded />}
+        </div>
+        {keepReady(section.people?.people).length > 0 && (
+          /* Desktop: sticks under the page's sticky bars while the left column scrolls, and lets go
+             at the end of the two-column grid, just before "bina in the world" (Akis, 2026-11-23). */
+          <div class="local-people-sticky lg:sticky lg:self-start">
+            <h3 class="mb-5 text-title-lg"><Pending text={section.people.heading} /></h3>
+            {/* One mint card, one row per person (was a card each: too much air). */}
+            <ul class="card-bina-mint divide-y divide-black/10 px-5 py-1">
+              {keepReady(section.people.people).map((p: any) => (
+                <li class="flex items-center gap-4 py-3">
+                  <div class="grid size-12 flex-none place-items-center overflow-hidden rounded-full bg-black/10 text-center text-body-md leading-tight">
+                    {p.photo?.src ? <img src={p.photo.src} alt={p.photo.alt} width="96" height="96" loading="lazy" class="size-full object-cover" /> : typeof p.photo === 'string' ? <Pending text={p.photo} /> : <span class="font-display text-title-sm" aria-hidden="true">{p.name.charAt(0)}</span>}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-display text-title-sm leading-tight"><Pending text={p.name} />{p.place && <>{' '}<span class="text-hl">· <Pending text={p.place} /></span></>}</p>
+                    <p class="text-body-lg"><Pending text={p.line} /></p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      {(keepReady(section.world?.items).length > 0 || section.world?.map) && (
+        <div class="mt-12 sm:mt-14">
+          <h3 class="mb-5 text-title-lg"><Pending text={section.world.heading} /></h3>
+          {keepReady(section.world.items).length > 0 && <ul class="grid gap-4 sm:grid-cols-3">
+            {keepReady(section.world.items).map((it: any) => (
+              <li class="card-bina-mint p-6">
+                <p class="mb-2 font-display text-title-sm text-hl"><Pending text={it.title} /></p>
+                <p class="text-body-lg"><Pending text={it.text} /></p>
+              </li>
+            ))}
+          </ul>}
+          {/* The homepage families map (Akis, 2026-11-23), under the three cards, on its own dark panel: the component is
+              styled for the main site's primary base background, and stays a verbatim copy. */}
+          {section.world.map && (
+            <div class:list={['theme-base rounded-[24px] px-5 py-8 sm:px-10 sm:py-12', keepReady(section.world.items).length > 0 && 'mt-4']}>
+              {section.world.map.title && <p class="mx-auto mb-8 max-w-2xl text-center font-display text-title-lg text-hl sm:text-title-xl"><Pending text={section.world.map.title} /></p>}
+              <BinaFamiliesMap client:visible />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+)}
 
 {section.kind === 'reviews' && section.items && <LocalReviews section={section} theme={theme} />}
 
@@ -793,6 +916,13 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 </style>
 
 <style is:global>
+  /* "Our people in Canada" sticky offset: below the back bar + market navbar, plus a little air. */
+  .local-people-sticky { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px) + 1.5rem); }
+  /* "Find your child's level": the header row sits flush under the bars (its 2px rule drawn as an
+     inset shadow, since a row border doesn't travel with sticky cells); the heading lines up with
+     the header text (py-3 = 0.75rem). */
+  .local-grades-th { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px)); background: var(--t-bg); box-shadow: inset 0 -2px 0 var(--t-line); }
+  .local-grades-sticky { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px) + 0.75rem); }
   /* "Where does my child fit?": a black button bar that invites the click. */
   .local-fit { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .local-fit:not([open]):hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 0.25); }

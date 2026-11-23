@@ -1,63 +1,48 @@
 ---
 /*
- * Tuition with a currency switcher (USD ⇄ local). bina bills in USD only, so USD is the
- * default and local amounts read "≈ … · billed in USD". Both currencies are in the HTML
- * (crawlers read both); the switch only shows or hides them. One price list for every page:
- * priceList() in src/lib/local.js. No link to /tuition (brief).
+ * Tuition, after the thebinaschool.com/brochure "Flexible tuition plans" block (Akis, 2026-11-23):
+ * sky blue band, heading + sibling discount on the left, one black card per plan on the right.
+ * No currency toggle: prices show in the local currency only, no footnote (Akis, 2026-11-23).
+ * Markets without a local currency show USD. Prices from
+ * tuitionPlans() in src/lib/local.js (one source for every page).
  */
 import Pending from './Pending.astro';
-import { priceList } from '../../lib/local.js';
+import { tuitionPlans } from '../../lib/local.js';
 
 interface Props {
   heading: string;
   currency: string | null;
 }
 const { heading, currency } = Astro.props;
-const { rows, currency: local } = priceList(currency);
+const { plans, sibling } = tuitionPlans(currency);
 ---
-<section class="theme-base" data-local-section="tuition" data-local-tuition data-show="USD">
-  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
-    <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
-      <h2 class="text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
-      {local && (
-        <div class="flex gap-2" role="group" aria-label="Currency">
-          {['USD', local].map((c) => (
-            <button
-              type="button"
-              data-currency={c}
-              aria-pressed={c === 'USD' ? 'true' : 'false'}
-              class="rounded-full px-5 py-2 font-display text-button-sm aria-pressed:bg-lagoon aria-pressed:text-black"
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {rows.map((r) => (
-        <div class="card-bina-mint p-6">
-          <p class="mb-3 font-display text-title-sm">{r.plan}{r.note && <span class="text-hl"> · {r.note}</span>}</p>
-          <p class="font-display text-title-md" data-amount="USD">{r.usd}</p>
-          {local && (
-            <p class="font-display text-title-md" data-amount={local} hidden>
-              {r.local}<span class="mt-1 block font-sans text-body-md font-normal">billed in USD</span>
-            </p>
-          )}
-        </div>
-      ))}
+<section class="theme-sky-blue" data-local-section="tuition">
+  <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-14">
+      <div>
+        <h2 class="mb-6 text-title-3xl sm:text-display-sm"><Pending text={heading} /></h2>
+        <p class="max-w-md font-display text-title-sm">
+          Families with more than one child get a {sibling.big}{sibling.big !== sibling.usd && ` (USD ${sibling.usd})`} sibling discount a year for each additional student.
+        </p>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {plans.map((p) => (
+          <li class="card-bina-solid flex flex-col p-6 sm:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="font-display text-title-md">{p.name}</p>
+              {/* Lemon tag: makes the annual saving hard to miss (Akis, 2026-11-23). */}
+              {p.save && <span class="rounded-full bg-lemon px-3 py-1 font-display text-label uppercase text-black">Save {p.save}%</span>}
+            </div>
+            {/* Big: the local monthly amount. */}
+            <p class="mt-5 whitespace-nowrap font-display text-title-4xl text-lemon">{p.big}</p>
+            <p class="font-display text-title-sm">/ month</p>
+            {/* The USD amount bina actually bills (Akis, 2026-11-23). Hidden when USD is already the big number. */}
+            {p.big !== p.usd && <p class="mt-4 text-body-lg">Billed in USD: {p.usd}</p>}
+            <p class="mt-6 border-t border-current/30 pt-5 text-body-lg">{p.line}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>
-
-<script>
-  document.querySelectorAll<HTMLElement>('[data-local-tuition]').forEach((root) => {
-    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-currency]');
-    buttons.forEach((b) =>
-      b.addEventListener('click', () => {
-        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        root.querySelectorAll<HTMLElement>('[data-amount]').forEach((el) => (el.hidden = el.dataset.amount !== b.dataset.currency));
-      })
-    );
-  });
-</script>

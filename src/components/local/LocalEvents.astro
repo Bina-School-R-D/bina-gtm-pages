@@ -4,9 +4,11 @@
  * Upcoming = future dates, soonest first, each with an RSVP button. Past = newest first, a card
  * shows title · area · month + year · photo (never the exact day or time). With no upcoming
  * event, the section opens on Past. Data: src/data/local-events.json via marketEvents().
- * Both tabs are in the HTML; the script only switches which one shows.
+ * Both tabs are in the HTML; the script only switches which one shows. Embedded (community
+ * section): no tabs, Upcoming then Past under labels, compact cards (EventCard).
  */
 import Pending from './Pending.astro';
+import EventCard from './EventCard.astro';
 import { marketEvents } from '../../lib/local.js';
 
 interface Props {
@@ -14,16 +16,43 @@ interface Props {
   heading: string;
   /** The group's colour, when the section sits in one. */
   theme?: string;
+  /** In a `wide` group: max-w-6xl, the level cards' width. */
+  wide?: boolean;
+  /** Inside the community section: no band or padding of its own, an h3 heading. */
+  embedded?: boolean;
 }
-const { market, heading, theme } = Astro.props;
+const { market, heading, theme, wide, embedded } = Astro.props;
 const { upcoming, past } = marketEvents(market.id);
 const start = upcoming.length ? 'upcoming' : 'past';
+const Wrap = embedded ? 'div' : 'section';
 const fmtDate = (d: string) =>
   new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
-<section id="events" class:list={[theme ?? 'theme-base', 'scroll-mt-24']} data-local-section="events" data-local-events={start}>
-  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
-    <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
+<Wrap id="events" class:list={[!embedded && (theme ?? 'theme-base'), 'scroll-mt-24']} data-local-section={embedded ? undefined : 'events'} data-local-events={start}>
+  <div class:list={!embedded && ['mx-auto px-5 py-16 sm:py-24', wide ? 'max-w-6xl' : 'max-w-5xl']}>
+    {embedded ? (
+      <h3 class="mb-5 text-title-lg"><Pending text={heading} /></h3>
+    ) : (
+      <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
+    )}
+    {embedded ? (
+      /* Community section (Akis, 2026-11-23): no tabs, one list; a label separates Upcoming from Past. */
+      <div class="grid gap-6">
+        {upcoming.length > 0 && (
+          <div>
+            <p class="mb-3 text-label uppercase text-hl">Upcoming</p>
+            <ul class="grid gap-4">{upcoming.map((e: any) => <EventCard event={e} upcoming />)}</ul>
+          </div>
+        )}
+        {past.length > 0 && (
+          <div>
+            <p class="mb-3 text-label uppercase text-hl">Past</p>
+            <ul class="grid gap-4 sm:grid-cols-2">{past.map((e: any) => <EventCard event={e} />)}</ul>
+          </div>
+        )}
+      </div>
+    ) : (
+      <>
     <div class="mb-8 flex gap-2" role="tablist" aria-label={`${market.name} events`}>
       {['upcoming', 'past'].map((t) => (
         <button
@@ -58,23 +87,21 @@ const fmtDate = (d: string) =>
       <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {past.map((e: any) => (
           <li class="card-bina-mint overflow-hidden">
-            <div class="grid aspect-[4/3] place-items-center bg-black/10 p-4 text-center text-body-md">
-              {typeof e.photo === 'object' && e.photo ? (
-                <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" />
-              ) : (
-                <Pending text={e.photo ?? ''} />
-              )}
+            <div class:list={['grid aspect-[4/3] place-items-center bg-black/10 text-center text-body-md', !(typeof e.photo === 'object' && e.photo) && 'p-4']}>
+              {typeof e.photo === 'object' && e.photo ? <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" /> : e.photo && <Pending text={e.photo} />}
             </div>
             <div class="p-5">
               <p class="font-display text-title-sm"><Pending text={e.title} /></p>
-              <p class="mt-1 text-body-lg"><Pending text={e.area} /> · <Pending text={String(e.month)} /> {e.year}</p>
+              <p class="mt-1 text-body-lg"><Pending text={e.area} /> · {e.month && <><Pending text={String(e.month)} />{' '}</>}{e.year}</p>
             </div>
           </li>
         ))}
       </ul>
     </div>
+      </>
+    )}
   </div>
-</section>
+</Wrap>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-local-events]').forEach((root) => {

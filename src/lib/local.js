@@ -11,6 +11,7 @@
 import data from '../data/local-markets.json';
 import eventData from '../data/local-events.json';
 import landing from '../data/esa-landing.json';
+import survey from '../data/family-survey.json';
 import { CTA } from './esa-states.js';
 
 export const PREVIEW = import.meta.env.DEV || import.meta.env.PUBLIC_LOCAL_PREVIEW === '1';
@@ -37,11 +38,15 @@ export const hubShown = () => shownMarkets().length > 0;
 /**
  * The section list a page renders: on production, sections with a placeholder are dropped,
  * then any `group` band left with no section under it (up to the next group) is dropped too.
+ * A `community` section is the exception: it drops its placeholder items one by one (keepReady).
  */
 export const visibleSections = (m) => {
-  const kept = m.sections.filter((s) => PREVIEW || !hasPending(s));
+  const kept = m.sections.filter((s) => PREVIEW || s.kind === 'community' || !hasPending(s));
   return kept.filter((s, i) => s.kind !== 'group' || (kept[i + 1] && kept[i + 1].kind !== 'group'));
 };
+
+/** Production: the items of a list without the ones still holding a placeholder. */
+export const keepReady = (items) => (items ?? []).filter((x) => PREVIEW || !hasPending(x));
 
 /** The page's sub-navbar: every rendered section with an `anchor` and a `navLabel`, in page order. */
 export const navItems = (sections) => sections.filter((s) => s.anchor && s.navLabel).map((s) => ({ id: s.anchor, label: s.navLabel }));
@@ -84,29 +89,26 @@ const round10 = (n) => Math.round(n / 10) * 10;
 const fmt = (n) => n.toLocaleString('en-US');
 
 /**
- * One price list for every page: USD from esa-landing.json (copied from thebinaschool.com/tuition),
- * local amounts computed from it at the rate in local-markets.json. bina bills in USD only.
+ * One price list for every page (brochure style, Akis 2026-11-23): USD from esa-landing.json
+ * (copied from thebinaschool.com/tuition), local amounts computed from it at the rate in
+ * local-markets.json, rounded to the nearest 10. Pages show the local amount only. No local
+ * currency: USD.
  */
-export function priceList(currency) {
+export function tuitionPlans(currency) {
   const s = landing.school;
-  const usd = {
-    quarterly: `$${fmt(s.monthlyQuarterly)} / month`,
-    yearly: `$${fmt(s.monthlyYearly)} / month`,
-    sibling: `$${fmt(s.siblingDiscount)} off per year per extra child`,
-  };
-  const rows = [
-    { plan: 'Quarterly plan', usd: usd.quarterly, note: '' },
-    { plan: 'Yearly plan', usd: usd.yearly, note: `save ${Math.round((1 - s.monthlyYearly / s.monthlyQuarterly) * 100)}%` },
-    { plan: 'Sibling discount', usd: usd.sibling, note: '' },
-  ];
   const r = currency ? data.rates[currency] : null;
-  if (r) {
-    const local = (n) => `≈ ${r.prefix}${fmt(round10(n * r.rate))}`;
-    rows[0].local = `${local(s.monthlyQuarterly)} / month`;
-    rows[1].local = `${local(s.monthlyYearly)} / month`;
-    rows[2].local = `${local(s.siblingDiscount)} off per year per extra child`;
-  }
-  return { rows, currency: r ? currency : null, tuitionUrl: s.tuitionUrl };
+  const local = (n) => (r ? `${r.prefix}${fmt(round10(n * r.rate))}` : null);
+  const usd = (n) => `$${fmt(n)}`;
+  const save = Math.round((1 - s.monthlyYearly / s.monthlyQuarterly) * 100);
+  return {
+    currency: r ? currency : null,
+    rate: r ? r.rate : null,
+    plans: [
+      { name: 'Quarterly plan', big: local(s.monthlyQuarterly) ?? usd(s.monthlyQuarterly), usd: usd(s.monthlyQuarterly), billed: 'quarterly', line: 'Once a season, 4 times a year.' },
+      { name: 'Annual plan', big: local(s.monthlyYearly) ?? usd(s.monthlyYearly), usd: usd(s.monthlyYearly), billed: 'yearly', save, line: 'Pay upfront for the year.' },
+    ],
+    sibling: { big: local(s.siblingDiscount) ?? usd(s.siblingDiscount), usd: usd(s.siblingDiscount) },
+  };
 }
 
 /** "CA$1,280–1,380": the yearly-to-quarterly monthly range in a local currency. */
@@ -116,6 +118,17 @@ export function priceRange(currency) {
   const lo = fmt(round10(s.monthlyYearly * r.rate));
   const hi = fmt(round10(s.monthlyQuarterly * r.rate));
   return `${r.prefix}${lo}–${hi}`;
+}
+
+/**
+ * One FAQ answer as shown on the page and in the FAQ schema: the local price range for
+ * `priceRange` items, and survey numbers read from the data file, never retyped.
+ */
+export function faqAnswer(f) {
+  return String(f.a)
+    .replace('{range}', f.priceRange ? priceRange(f.priceRange) : '{range}')
+    .replaceAll('{recommendAvg}', String(survey.headline.recommendAvg))
+    .replaceAll('{surveyN}', String(survey.surveyA.n));
 }
 
 /* ------------------------------------------------------------------ events */
@@ -129,7 +142,8 @@ export function marketEvents(marketId, today = new Date().toISOString().slice(0,
     .map((e) => ({
       ...e,
       year: e.year ?? Number(e.date.slice(0, 4)),
-      month: e.month ?? new Date(e.date + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      // A hand-added past event may have no month yet: the card then shows the year only.
+      month: e.month ?? (e.date ? new Date(e.date + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }) : undefined),
     }))
     .sort((a, b) => (b.date ?? `${b.year}`).localeCompare(a.date ?? `${a.year}`));
   return { upcoming, past };

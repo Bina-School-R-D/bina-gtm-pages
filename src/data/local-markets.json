@@ -498,115 +498,100 @@
         ]
         },
         {
-          "kind": "education",
-          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features. 'Go back to a local school' answer: thebinaschool.com/middle-school (live 2026-11-20).",
-          "questions": [
-            {
-              "q": "Is bina a real school, or just another online course?",
-              "cards": [
-                {
-                  "title": "Accredited",
-                  "text": "Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS).",
-                  "link": {
-                    "label": "See the accreditations",
-                    "href": "#accreditation"
-                  }
-                },
-                {
-                  "title": "Rated by its families",
-                  "text": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families), and 5 stars on Niche.",
-                  "link": {
-                    "label": "Read the reviews",
-                    "href": "/reviews"
-                  }
-                },
-                {
-                  "title": "A team behind every family",
-                  "text": "A Family Success concierge for every family, plus educational psychology when you need it, included, not billed extra."
-                },
-                {
-                  "title": "A full timetable, not worksheets",
-                  "text": "5 hours a day, 5 days a week, with real teachers and real classmates."
-                }
-              ]
-            }
-          ],
-          "link": {
-            "label": "Our approach to learning",
-            "href": "https://thebinaschool.com/education"
-          },
-          "_note": "'What do they teach?' removed (Akis, 2026-11-20): subjects, biomes and life skills now live in the level cards' 'Learn more' toggles. 'Is it Canada-ready?' cards moved to the FAQ (Akis, 2026-11-20); only its grade table stays here. Grade table moved into the level cards' 'Where does my child fit?' toggles (Akis, 2026-11-20). Moved below the reviews, dark, level-card width (Akis, 2026-11-20).",
-          "theme": "theme-base",
-          "wide": true
-        },
-        {
           "kind": "group",
           "anchor": "community",
           "navLabel": "Community",
-          "title": "Friends in Toronto, classmates everywhere",
-          "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
-          "theme": "theme-grape"
+          "title": "Classmates in Toronto. Learn with the world.",
+          "_title": "Akis, 2026-11-23: the hero call-out's local/global logic, in plain words; was 'Friends in Toronto, classmates everywhere' (too marketing). No intro line (Akis, 2026-11-23).",
+          "theme": "theme-grape",
+          "wide": true
         },
         {
-          "kind": "who",
-          "heading": "bina in Toronto and Canada",
-          "text": "Our Toronto families learn together online every morning and meet in person through the year, from the Toronto Zoo to meetups in Brampton."
-        },
-        {
-          "kind": "what",
-          "heading": "What we do here",
-          "items": [
-            "A family meetup every month, date chosen by the families",
-            "A local pod: an after-school session at a library [PENDING: confirm + day]",
-            "Classmate intros by age"
-          ]
-        },
-        {
-          "kind": "families",
-          "heading": "Founding parents",
-          "people": [
-            {
-              "name": "Amanda",
-              "place": "Brampton",
-              "line": "Organises Toronto meetups.",
-              "photo": "[PENDING: photo, consent]"
+          "kind": "community",
+          "_layout": "Akis, 2026-11-23: one section under the group heading, no intro text. Desktop: 2/3 'What bina does in Toronto' (pods, then events) | 1/3 'Our people in Toronto' (founding families stacked: headshot, name, description); 'bina in the world' runs across the bottom. Replaces the separate who / what / families / quotes / events / world sections (the 'who' paragraph and the pending Amanda quote were dropped). Production drops each placeholder item on its own, not the whole section.",
+          "local": {
+            "_heading": "Removed (Akis, 2026-11-23): the pods and events headings carry Toronto themselves.",
+            "pods": {
+              "heading": "Toronto pods",
+              "_features": "Akis, 2026-11-23: what a Toronto pod is: 5 tiles (icon, short title, the line Akis wrote) + a lemon tile asking about a pod (v2, Akis 2026-11-23). Replaces the two pod cards ('A local pod: an after-school session at a library, unconfirmed', 'Classmate intros by age'). Icon keys are drawn in LocalSection (POD_ICONS).",
+              "features": [
+                {
+                  "icon": "pin",
+                  "title": "Close to home",
+                  "text": "Kids who live ~35 min from each other"
+                },
+                {
+                  "icon": "calendar",
+                  "title": "Your rhythm",
+                  "text": "Meet daily, weekly, or bi\u2011weekly"
+                },
+                {
+                  "icon": "laptop",
+                  "title": "Same school day",
+                  "text": "Each joins their class live online, 9am⁠–⁠2pm EST"
+                },
+                {
+                  "icon": "play",
+                  "title": "Real playtime",
+                  "text": "They play together at breaks between classes"
+                },
+                {
+                  "icon": "parents",
+                  "title": "Parents too",
+                  "text": "You connect with other parents near you"
+                }
+              ],
+              "cta": "Ask about a pod near you"
             },
-            {
-              "name": "Johanna",
-              "place": "Aurora",
-              "line": "Hosts a stay-and-play day this winter. [PENDING: confirm]",
-              "photo": "[PENDING: photo, consent]"
+            "events": {
+              "heading": "Toronto events"
             }
-          ]
-        },
-        {
-          "kind": "quotes",
-          "heading": "What parents say",
-          "quotes": [
-            {
-              "text": "[PENDING: Amanda's exact words, consent]",
-              "by": "Amanda",
-              "place": "Brampton",
-              "date": "[PENDING: month year]"
-            }
-          ]
-        },
-        {
-          "kind": "events",
-          "heading": "Events"
-        },
-        {
-          "kind": "what",
-          "heading": "bina in the world",
-          "items": [
-            "Classmates across the world [PENDING: 40+ countries (main site) or 50+ (hero)?]",
-            "40+ clubs, online",
-            "Families who meet up and travel together"
-          ]
+          },
+          "people": {
+            "heading": "Our people in Canada",
+            "_staff": "Akis, 2026-11-23: everyone the HR DB (Notion, A-Z) lists with country of residence Canada: Belle DeMont, Julia Malone, Yvonne Lamb (Teacher, Current), Heidi Fowler (Teacher Lead, On leave). The HR DB has country only, not city, so the heading says Canada and staff cards show no place (Akis, 2026-11-23). Heidi is shown; her on-leave status is not (Akis). Headshots: each person's Slack profile photo, 256px (Akis, 2026-11-23). Founding parents follow, without photos (initial shown) until they give a photo and consent. Placeholder markers removed from this section (Akis, 2026-11-23); still open: Johanna's stay-and-play date, 40+ vs 50+ countries, which cities have pods, Brampton meetup month + photo.",
+            "people": [
+              {
+                "name": "Belle DeMont",
+                                "line": "Teacher at bina",
+                "photo": { "src": "/images/local/people/belle.jpg", "alt": "Belle DeMont" }
+              },
+              {
+                "name": "Julia Malone",
+                                "line": "Teacher at bina",
+                "photo": { "src": "/images/local/people/julia.jpg", "alt": "Julia Malone" }
+              },
+              {
+                "name": "Yvonne Lamb",
+                                "line": "Teacher at bina",
+                "photo": { "src": "/images/local/people/yvonne.jpg", "alt": "Yvonne Lamb" }
+              },
+              {
+                "name": "Heidi Fowler",
+                                "line": "Teacher Lead at bina",
+                "photo": { "src": "/images/local/people/heidi.jpg", "alt": "Heidi Fowler" }
+              },
+              {
+                "name": "Amanda",
+                "place": "Brampton",
+                "line": "Organises Toronto meetups."
+              },
+              {
+                "name": "Johanna",
+                "place": "Aurora",
+                "line": "Hosts a stay-and-play day this winter."
+              }
+            ]
+          },
+          "world": {
+            "heading": "bina in the world",
+            "map": { "_note": "The thebinaschool.com homepage map (src/components/BinaFamiliesMap, verbatim copy; Akis, 2026-11-23). Change it on the main site first. The three cards (Global communities, Pods, Meetups) and the map title were removed (Akis, 2026-11-23)." }
+          }
         },
         {
           "kind": "tuition",
-          "heading": "Tuition",
+          "heading": "Flexible tuition plans",
+          "_heading": "Akis, 2026-11-23: brochure-style block (thebinaschool.com/brochure), big CAD, small USD, no toggle.",
           "anchor": "tuition",
           "navLabel": "Tuition"
         },
@@ -615,10 +600,8 @@
           "anchor": "grades",
           "navLabel": "Grades",
           "title": "Find your child's level",
+          "intro": "Match your child's age and Ontario grade to the bina level they would join.",
           "_note": "Akis, 2026-11-23: moved out of 'Our students' results' into its own section after tuition, before the FAQs. Rows come from the levels section's grades data."
-        },
-        {
-          "kind": "cta"
         },
         {
           "kind": "faq",
@@ -650,7 +633,19 @@
             },
             {
               "q": "Can we go back to a local school later?",
-              "a": "Yes. bina is Cognia accredited and a registered Cambridge International School, so your child leaves with a school record other schools recognise. Learners finish middle school with a Cambridge-accredited record and a capstone project, ready to walk into any high school and thrive. If you move back to a local school, our Family Success team helps with the paperwork, local requirements and next steps."
+              "a": "Yes. bina is Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS), so your child leaves with a school record other schools recognise. Learners finish middle school with a Cambridge-accredited record and a capstone project, ready to walk into any high school and thrive. If you move back to a local school, our Family Success team helps with the paperwork, local requirements and next steps."
+            },
+            {
+              "q": "What support does my family get?",
+              "a": "Every family gets a Family Success concierge, plus educational psychology when your child needs it. Both are included in tuition, not billed extra."
+            },
+            {
+              "q": "What do other bina parents say?",
+              "a": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families in our family survey), and bina has 5 stars on Niche. Read the reviews.",
+              "link": {
+                "text": "Read the reviews",
+                "url": "https://thebinaschool.com/reviews"
+              }
             },
             {
               "q": "How much is bina in Canadian dollars?",
@@ -665,6 +660,9 @@
           "anchor": "faq",
           "navLabel": "FAQs",
           "_note": "Ontario law, curriculum and return-to-school answers moved here from the Education section (Akis, 2026-11-20). Sources: Ontario guide + notes/guides-canada/legal-sources.md (PPM 131 wording and Sept 1 date still [VERIFY]); curriculum pack; thebinaschool.com/middle-school and /accreditation (Family Success transitions)."
+        },
+        {
+          "kind": "cta"
         }
       ],
       "subnavLabel": {
