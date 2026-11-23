@@ -1,0 +1,63 @@
+---
+/*
+ * Tuition with a currency switcher (USD ⇄ local). bina bills in USD only, so USD is the
+ * default and local amounts read "≈ … · billed in USD". Both currencies are in the HTML
+ * (crawlers read both); the switch only shows or hides them. One price list for every page:
+ * priceList() in src/lib/local.js. No link to /tuition (brief).
+ */
+import Pending from './Pending.astro';
+import { priceList } from '../../lib/local.js';
+
+interface Props {
+  heading: string;
+  currency: string | null;
+}
+const { heading, currency } = Astro.props;
+const { rows, currency: local } = priceList(currency);
+---
+<section class="theme-base" data-local-section="tuition" data-local-tuition data-show="USD">
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <h2 class="text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
+      {local && (
+        <div class="flex gap-2" role="group" aria-label="Currency">
+          {['USD', local].map((c) => (
+            <button
+              type="button"
+              data-currency={c}
+              aria-pressed={c === 'USD' ? 'true' : 'false'}
+              class="rounded-full px-5 py-2 font-display text-button-sm aria-pressed:bg-lagoon aria-pressed:text-black"
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {rows.map((r) => (
+        <div class="card-bina-mint p-6">
+          <p class="mb-3 font-display text-title-sm">{r.plan}{r.note && <span class="text-hl"> · {r.note}</span>}</p>
+          <p class="font-display text-title-md" data-amount="USD">{r.usd}</p>
+          {local && (
+            <p class="font-display text-title-md" data-amount={local} hidden>
+              {r.local}<span class="mt-1 block font-sans text-body-md font-normal">billed in USD</span>
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-local-tuition]').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-currency]');
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        root.querySelectorAll<HTMLElement>('[data-amount]').forEach((el) => (el.hidden = el.dataset.amount !== b.dataset.currency));
+      })
+    );
+  });
+</script>

@@ -1,0 +1,909 @@
+{
+  "_provenance": "The /local pages: one page per market where bina families meet in person, plus the /local hub. Brief: bina-gtm-markets notes/local-pages/prompt.md (2026-11-18), Toronto hero from Akis (2026-11-19). Built here on localhost first; when ready they move to thebinaschool.com staging and its publish agent. Market and state names, tags and section order live here; school facts (class cap, tuition) come from esa-landing.json, proof numbers from family-survey.json and student-results.json, reviews from reviews.json, accreditation copy from Akis (2026-11-19), logos from thebinaschool.com. Never re-typed here. Text marked [PENDING …] is not final: it shows highlighted on localhost and hides its whole section on a production build.",
+  "_openQuestions": [
+    "Pricing: thebinaschool.com shows tuition only on routes the operator (Ihor Kosse) approved. These pages show USD + local currency. Get his OK before the pages move to the main site.",
+    "Tally intake form says $898/month; thebinaschool.com/tuition says $897/month (yearly plan). One of them is wrong.",
+    "The Ontario homeschooling guide (/homeschooling-guides/ontario) is built on the main-site stage but not live yet. The Toronto guide link 404s until it is.",
+    "Toronto hero facts: '4–12 kids' (primary 4–8, middle 6–12; Akis 2026-11-20) vs 'average class of six to eight, never more than 12' (esa-landing.json). Both hold; keep them aligned if either changes.",
+    "Level cards, 'Learn more': '11 subjects at every grade' (curriculum-team pack) is not on thebinaschool.com (/education, /primary-school name no subjects, checked 2026-11-23). Confirm with the curriculum lead that all 11 run from age 4 (Pre-K/K) before the page goes live; if not, retitle.",
+    "Toronto results card '70% of families say their child learns in their own way' (family-survey.json fit.roundedPct, wording from the retired /family-survey page): the card says Survey A (whole school, 103 families; Akis, 2026-11-23). Confirm with Sophie that the 70% comes from Survey A, and the exact question.",
+    "Toronto hero callout: 'Toronto pods' (Akis, 2026-11-23) while the Community section still marks the pod as PENDING (library session, not yet confirmed). Confirm pods exist before the page goes live.",
+    "Cal.com events sync (team 243242, slugs local-{market}-…) is not wired here: events are hand-kept in local-events.json until the pages move to the main site, which has the sync script.",
+    "RESOLVED 2026-11-19 (Akis): accreditation wording matches the main site ('Accredited by Cognia and Cambridge, CIS member'). Body figures checked 2026-11-19 on each body's own site: cognia.org homepage (40,000 institutions, 17,000,000 students, 100 countries); cois.org/about-cis (1,635 schools and universities, 120 countries); cambridgeinternational.org/about-us (over 10 000 Cambridge schools, 160 countries; read via summary, not verbatim). Re-check yearly."
+  ],
+  "hub": {
+    "title": "bina Near You | Local Families and Events",
+    "description": "Where bina families meet: local events and communities in Toronto, Austin and Dubai.",
+    "h1": "Where bina families meet",
+    "intro": "bina is an online school for ages 4–15. In these places, our families also meet in person."
+  },
+  "accreditations": {
+    "_source": "Headline + note: Akis, 2026-11-19 (replaces the homepage copy). Logos from thebinaschool.com (public/images/landing/logos/*-v2.png, made for a dark background).",
+    "headline": "Globally accredited and recognized",
+    "items": [
+      {
+        "name": "Cognia",
+        "image": "/images/local/logos/accreditation-cognia-v2.png",
+        "width": 684,
+        "height": 684,
+        "variant": "badge"
+      },
+      {
+        "name": "CIS",
+        "image": "/images/local/logos/accreditation-cis-v2.png",
+        "width": 200,
+        "height": 200,
+        "variant": "badge"
+      },
+      {
+        "name": "Cambridge",
+        "image": "/images/local/logos/accreditation-cambridge-v2.png",
+        "width": 839,
+        "height": 365,
+        "variant": "wide"
+      }
+    ],
+    "note": "bina is Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS). Cognia works with 40,000 institutions and 17 million students in 100 countries; CIS brings together 1,635 schools and universities from 120 countries; and Cambridge International counts over 10,000 Cambridge schools in 160 countries."
+  },
+  "rates": {
+    "_source": "Bank of Canada USD/CAD 1.4291 (2026-11-17) · USD/AED 3.6725 (peg) · set 2026-11-18. Local amounts are rounded to the nearest 10 and shown as approximate: bina bills in USD only.",
+    "CAD": {
+      "rate": 1.4291,
+      "prefix": "CA$",
+      "name": "Canadian dollars"
+    },
+    "AED": {
+      "rate": 3.6725,
+      "prefix": "AED ",
+      "name": "UAE dirhams"
+    }
+  },
+  "markets": [
+    {
+      "id": "toronto",
+      "name": "Toronto",
+      "tags": {
+        "country": "canada",
+        "state": "ontario",
+        "market": "toronto"
+      },
+      "countryName": "Canada",
+      "stateName": "Ontario",
+      "live": false,
+      "title": "bina in Toronto | Online School in Ontario, Ages 4–15",
+      "description": "bina is an online school for ages 4–15 with families across the Greater Toronto Area. Classes run 9am–2pm Eastern. Meet our Toronto families.",
+      "cardLine": "Families across the Greater Toronto Area, meeting every month.",
+      "image": {
+        "src": "/images/landing/map/111_Toronto_Canada.webp",
+        "alt": "Toronto skyline and the CN Tower across Lake Ontario, autumn",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Toronto"
+        },
+        {
+          "type": "State",
+          "name": "Ontario"
+        },
+        {
+          "type": "Country",
+          "name": "Canada"
+        }
+      ],
+      "currency": "CAD",
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "Toronto’s accredited private school, live online",
+          "_facts": "Akis, 2026-11-23: 'Label: detail' — the label renders bold, the detail regular. Each line must fit one row on a 360px phone (≤284px at 18px). Class size 4–12 = primary 4–8 + middle 6–12 (the Education cards). Start dates: rolling admissions ended 2026-10-31; from November, biome starts + one mid-biome intake each (school-calendar.json), so 'every few weeks', never '2 a month'.",
+          "facts": [
+            "Primary & middle school: ages 4–15",
+            "Monday to Friday: 9am–2pm EST",
+            "Small classes: 4–12 kids",
+            "Full school year: Aug to Jul",
+            "Join mid-year: starts every few weeks"
+          ],
+          "_callout": "Akis, 2026-11-23: one experience with two halves, joined by a big 'and'. No icon.",
+          "callout": {
+            "joiner": "and",
+            "items": [
+              { "label": "Join local", "text": "Classmates at Toronto pods" },
+              { "label": "Learn global", "text": "Classmates from 50+ countries" }
+            ]
+          },
+          "rating": {
+            "_score": "recommendAvg from family-survey.json, never typed here",
+            "_faces": "Crops of five main-site homepage testimonial portraits (testimonials.json), Akis 2026-11-23.",
+            "faces": [
+              { "src": "/images/local/faces/amina.jpg", "alt": "Amina" },
+              { "src": "/images/local/faces/makeda-steve.jpg", "alt": "Makeda and Steve" },
+              { "src": "/images/local/faces/lorena.jpg", "alt": "Lorena" },
+              { "src": "/images/local/faces/amanda.jpg", "alt": "Amanda" },
+              { "src": "/images/local/faces/mo-ayo.jpg", "alt": "Mo and Ayo" }
+            ]
+          }
+        },
+        {
+          "kind": "accreditations",
+          "anchor": "accreditation",
+          "navLabel": "Accreditation"
+        },
+        {
+          "kind": "group",
+          "anchor": "education",
+          "navLabel": "Education",
+          "theme": "theme-base",
+          "_note": "Title only, no intro (Akis, 2026-11-20).",
+          "title": "Learning that fits your child",
+          "wide": true
+        },
+        {
+          "kind": "levels",
+          "_source": "Main site /education tracks (art), /primary-school and /middle-school (facts), staging.website.bina-dev.space 2026-11-20. Middle-school high-school claim also live on thebinaschool.com/middle-school. Card copy (what · how · class size; no quotes, no CTA) agreed with Akis 2026-11-20: standards per /education; finance + AI per /primary-school; mastery, research, capstone per /middle-school. ❓ 'Two teachers in the room' is from esa-landing.json, not yet found on the live main-site pages. Class sizes 4–8 / 6–12 from Akis 2026-11-20. 'Learn more' toggles: same curriculum-team pack as the education section below (subjects, biomes, standards, life-skills ages); CASEL per thebinaschool.com/education; 'covered before high school' per /education. Confirm with the curriculum lead before live. Grade toggles: curriculum pack reference-curricula/levels.md (the table that sat in the education section).",
+          "levels": [
+            {
+              "id": "primary",
+              "title": "Primary school",
+              "meta": "Ages 4 to 12 · Pre-K to Grade 5",
+              "tagline": "Live, joyful learning that builds the foundations for everything that follows.",
+              "color": "#06E1BD",
+              "art": {
+                "texture": "/images/local/education/track-primary-bg-texture-1024.webp",
+                "textureOpacity": 0.3,
+                "ground": "/images/local/education/track-primary-ground-desert-1024.webp",
+                "groundOpacity": 0.54,
+                "kids": "/images/local/education/track-primary-kids.webp",
+                "kidsWidth": "72%",
+                "kidsOffset": "-14%",
+                "alt": "Four children seen from behind, throwing paper planes over a desert lake"
+              },
+              "blocks": [
+                {
+                  "label": "Class size",
+                  "value": "4–8 kids"
+                },
+                {
+                  "label": "What they learn",
+                  "items": [
+                    "Reading, writing, math and science",
+                    "Art, music, drama and PE",
+                    "Ontario, British and US standards",
+                    "Finance and AI from the start",
+                    "Social-emotional skills every day"
+                  ],
+                  "more": {
+                    "label": "Learn more about the education",
+                    "groups": [
+                      {
+                        "title": "11 subjects at every grade",
+                        "items": [
+                          "Literacy (English)",
+                          "Mathematics",
+                          "Science",
+                          "Social Studies",
+                          "SEL & Life Skills",
+                          "Computing",
+                          "Design Technology",
+                          "Visual Arts",
+                          "Music",
+                          "Drama",
+                          "Physical Education"
+                        ],
+                        "note": "Social Studies covers history, geography, civics and economics."
+                      },
+                      {
+                        "title": "Taught by theme, not in silos",
+                        "items": [
+                          "The year runs through 8 themes, called biomes",
+                          "Every subject ties into the theme",
+                          "Each biome ends with a project that shows what your child has learned",
+                          "Skills come back deeper in the next biome"
+                        ],
+                        "note": "The 8 biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest."
+                      },
+                      {
+                        "title": "Ahead of the Ontario timeline",
+                        "items": [
+                          "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core",
+                          "Each topic comes at the earliest grade any of them teaches it",
+                          "So fractions, grammar and phonics often come earlier than in Ontario schools"
+                        ]
+                      },
+                      {
+                        "title": "Money and life skills, step by step",
+                        "items": [
+                          "At 7: plan a spend-save-share budget",
+                          "At 11: learn to spot scams"
+                        ]
+                      },
+                      {
+                        "title": "Feelings and friendships count too",
+                        "text": "Social and emotional skills are built into every day, using CASEL, the framework many North American schools use."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "How they learn",
+                  "items": [
+                    "Hands-on themes, called biomes",
+                    "Each ends with a project they present",
+                    "Learning by doing, not memorising",
+                    "Two teachers in the room",
+                    "A learning plan at their own level"
+                  ]
+                }
+              ],
+              "grades": {
+                "label": "How fast do kids grow here?",
+                "cols": [
+                  "Age",
+                  "Ontario",
+                  "bina"
+                ],
+                "rows": [
+                  [
+                    "3–5",
+                    "Pre-K + Junior Kindergarten",
+                    "Foundation"
+                  ],
+                  [
+                    "5–6",
+                    "Senior Kindergarten / Grade 1",
+                    "P1"
+                  ],
+                  [
+                    "6–7",
+                    "Grade 1 / Grade 2",
+                    "P2"
+                  ],
+                  [
+                    "7–8",
+                    "Grade 2 / Grade 3",
+                    "P3"
+                  ],
+                  [
+                    "8–9",
+                    "Grade 3",
+                    "P4"
+                  ],
+                  [
+                    "9–10",
+                    "Grade 4",
+                    "P5"
+                  ],
+                  [
+                    "10–11",
+                    "Grade 5",
+                    "P6"
+                  ]
+                ],
+                "callout": {
+                  "kind": "gaps",
+                  "eyebrow": "Closing gaps",
+                  "title": "No gaps left behind",
+                  "text": "Personal attention finds the gaps and fills them. In one school year at bina:",
+                  "_numbers": "All figures read from student-results.json (STAR, Oct '25 – May '26) in LocalSection, never typed here."
+                },
+                "sublabel": "Real results + your child's level"
+              }
+            },
+            {
+              "id": "middle",
+              "title": "Middle school",
+              "meta": "Ages 12 to 15 · Grades 6 to 8",
+              "tagline": "Rigorous, personalized, and built for the years that matter most.",
+              "color": "#E9C9FF",
+              "art": {
+                "texture": "/images/local/education/track-middle-bg-texture-1024.webp",
+                "textureOpacity": 0.2,
+                "ground": "/images/local/education/track-middle-meadow-1024.webp",
+                "groundOpacity": 0.46,
+                "kids": "/images/local/education/track-middle-kids.webp",
+                "kidsWidth": "62%",
+                "kidsOffset": "-22%",
+                "alt": "Two teenagers seen from behind, arms around each other, looking over a pink meadow",
+                "extras": [
+                  {
+                    "src": "/images/local/education/track-middle-dice.webp",
+                    "top": "48%",
+                    "left": "8%",
+                    "width": "14%"
+                  },
+                  {
+                    "src": "/images/local/education/track-middle-space-cat.webp",
+                    "top": "40%",
+                    "left": "77%",
+                    "width": "18%"
+                  }
+                ]
+              },
+              "blocks": [
+                {
+                  "label": "Class size",
+                  "value": "6–12 kids"
+                },
+                {
+                  "label": "What they learn",
+                  "items": [
+                    "Math, Science and Language Arts",
+                    "Taught live every morning",
+                    "Ontario, British and US standards",
+                    "Electives in the afternoon",
+                    "Research and presentation skills"
+                  ],
+                  "more": {
+                    "label": "Learn more about the education",
+                    "groups": [
+                      {
+                        "title": "11 subjects at every grade",
+                        "items": [
+                          "Literacy (English)",
+                          "Mathematics",
+                          "Science",
+                          "Social Studies",
+                          "SEL & Life Skills",
+                          "Computing",
+                          "Design Technology",
+                          "Visual Arts",
+                          "Music",
+                          "Drama",
+                          "Physical Education"
+                        ],
+                        "note": "Social Studies covers history, geography, civics and economics."
+                      },
+                      {
+                        "title": "Taught by theme, not in silos",
+                        "items": [
+                          "The year runs through 8 themes, called biomes",
+                          "Every subject ties into the theme",
+                          "Each biome ends with a project that shows what your child has learned",
+                          "Skills come back deeper in the next biome"
+                        ],
+                        "note": "The 8 biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest."
+                      },
+                      {
+                        "title": "Ahead of the Ontario timeline",
+                        "items": [
+                          "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core",
+                          "Each topic comes at the earliest grade any of them teaches it",
+                          "So fractions, grammar and phonics often come earlier than in Ontario schools",
+                          "By the end of Grade 8, students have covered what these systems expect before high school"
+                        ]
+                      },
+                      {
+                        "title": "Skills for high school and beyond",
+                        "items": [
+                          "Research and presentation skills from day one",
+                          "At 13: budget for independent living",
+                          "Grade 8 ends with a capstone project"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "How they learn",
+                  "items": [
+                    "Mastery-based learning",
+                    "They move on once they've mastered it",
+                    "Small groups at their level",
+                    "One-on-one time with a teacher",
+                    "A capstone project in Grade 8"
+                  ]
+                }
+              ],
+              "grades": {
+                "label": "How far ahead do they get?",
+                "cols": [
+                  "Age",
+                  "Ontario",
+                  "bina"
+                ],
+                "rows": [
+                  [
+                    "11–12",
+                    "Grade 6",
+                    "M1"
+                  ],
+                  [
+                    "12–13",
+                    "Grade 7",
+                    "M2"
+                  ],
+                  [
+                    "13–14",
+                    "Grade 8",
+                    "M3"
+                  ]
+                ],
+                "callout": {
+                  "kind": "ahead",
+                  "eyebrow": "Moving ahead",
+                  "title": "Free to move ahead",
+                  "text": "bina readers score above the US national average, and pull further ahead the longer they stay.",
+                  "_numbers": "Tenure curve + M1 figures read from student-results.json. STAR compares with US norms; there is no Ontario comparison, so the chart says 'US national average'."
+                },
+                "sublabel": "Real results + your child's level"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "results",
+          "anchor": "student-results",
+          "navLabel": "Student results",
+          "title": "Our students' results",
+          "_note": "Akis, 2026-11-23: ONE section (no per-level panels): whole-school STAR stats, reading by time at bina, P1/M1 spotlights, one merged 'find your child's level' table (rows from the levels section's grades). Replaces the level cards' 'How fast do kids grow here?' toggles and the mint 'The whole school moved forward' group + proof cards, which repeated the same headline numbers. Those per-level panels showed whole-school figures under 'Primary'/'Middle' labels; this layout labels them as whole school. Nav: Accreditation · Education · Student results · Reviews · Community · Tuition · FAQs."
+        },
+        {
+          "kind": "reviews",
+          "anchor": "reviews",
+          "navLabel": "Reviews",
+          "heading": "What parents say about bina",
+          "_wall": "Akis, 2026-11-23: a wall of reviews: the main-site homepage testimonials (tall photo cards, testimonials.json) mixed with the review cards. Uneven on purpose: the wall fills column by column (photo/text/text/photo · text/photo/text/photo · photo/text/photo/text) and photo heights vary.",
+          "scores": { "niche": "5/5", "trustpilot": "4.5/5", "world-schools": "5/5" },
+          "_scores": "Score tiles on this page (Akis, 2026-11-23). reviews.json has Trustpilot at 4.2; Akis gave 4.5/5. Confirm the current Trustpilot figure before go-live.",
+          "intro": "Reviews from bina families, copied word for word from Niche, Trustpilot, world-schools.com and the families who gave us permission to share them.",
+          "_source": "Picks from the main site's /reviews (staging 2026-11-20); names as initials like there. world-schools review copied verbatim from world-schools.com/schools/bina-school/ (2026-11-20); the same parent's text is niche-20, so niche-20 is not shown.",
+          "items": [
+          {
+            "testimonial": "amina"
+          },
+          {
+              "feature": "T-016"
+            },
+          {
+              "review": "niche-02"
+            },
+          {
+            "testimonial": "makeda-steve"
+          },
+          {
+              "review": "tp-01"
+            },
+          {
+            "testimonial": "lorena"
+          },
+          {
+              "feature": "T-015",
+              "who": "M. K.",
+              "title": "M. K. on what bina's clubs have meant for C."
+            },
+          {
+            "testimonial": "amanda"
+          },
+          {
+            "testimonial": "mo-ayo"
+          },
+          {
+              "review": "niche-09"
+            },
+          {
+            "testimonial": "mary-kate"
+          },
+          {
+              "inline": {
+                "id": "ws-01",
+                "source": "world-schools",
+                "title": "Excellent Global Learning Environment",
+                "date": "2024-07-01",
+                "rating": 5,
+                "body": "We could not be happier with bina school. Our 6 year old loves her teachers and classmates and is learning so much better than when she was in traditional school. It is great for her to have classmates and teachers from all over the world. The tools and resources they use make learning really fun for our daughter."
+              }
+            }
+        ]
+        },
+        {
+          "kind": "education",
+          "_source": "Curriculum team pack (Akis, 2026-11-19): reference-curricula/levels.md (Level ↔ Ontario grade), reference-curricula/framework-profiles.md (Ontario's role, conflict map), curriculum/standards-counts.md. Confirm wording with the curriculum lead before the page goes live. Delivery facts (class size, two teachers, 200 days, Family Success, STAR) are the main site's own copy: esa-landing.json school.features. 'Go back to a local school' answer: thebinaschool.com/middle-school (live 2026-11-20).",
+          "questions": [
+            {
+              "q": "Is bina a real school, or just another online course?",
+              "cards": [
+                {
+                  "title": "Accredited",
+                  "text": "Cognia accredited, a registered Cambridge International School and a member of the Council of International Schools (CIS).",
+                  "link": {
+                    "label": "See the accreditations",
+                    "href": "#accreditation"
+                  }
+                },
+                {
+                  "title": "Rated by its families",
+                  "text": "Parents rate bina {recommendAvg} out of 10 for recommending it to a friend ({surveyN} families), and 5 stars on Niche.",
+                  "link": {
+                    "label": "Read the reviews",
+                    "href": "/reviews"
+                  }
+                },
+                {
+                  "title": "A team behind every family",
+                  "text": "A Family Success concierge for every family, plus educational psychology when you need it, included, not billed extra."
+                },
+                {
+                  "title": "A full timetable, not worksheets",
+                  "text": "5 hours a day, 5 days a week, with real teachers and real classmates."
+                }
+              ]
+            }
+          ],
+          "link": {
+            "label": "Our approach to learning",
+            "href": "https://thebinaschool.com/education"
+          },
+          "_note": "'What do they teach?' removed (Akis, 2026-11-20): subjects, biomes and life skills now live in the level cards' 'Learn more' toggles. 'Is it Canada-ready?' cards moved to the FAQ (Akis, 2026-11-20); only its grade table stays here. Grade table moved into the level cards' 'Where does my child fit?' toggles (Akis, 2026-11-20). Moved below the reviews, dark, level-card width (Akis, 2026-11-20).",
+          "theme": "theme-base",
+          "wide": true
+        },
+        {
+          "kind": "group",
+          "anchor": "community",
+          "navLabel": "Community",
+          "title": "Friends in Toronto, classmates everywhere",
+          "intro": "Toronto families meet in person through the year. In class, your child learns alongside children from around the world.",
+          "theme": "theme-grape"
+        },
+        {
+          "kind": "who",
+          "heading": "bina in Toronto and Canada",
+          "text": "Our Toronto families learn together online every morning and meet in person through the year, from the Toronto Zoo to meetups in Brampton."
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "A family meetup every month, date chosen by the families",
+            "A local pod: an after-school session at a library [PENDING: confirm + day]",
+            "Classmate intros by age"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Founding parents",
+          "people": [
+            {
+              "name": "Amanda",
+              "place": "Brampton",
+              "line": "Organises Toronto meetups.",
+              "photo": "[PENDING: photo, consent]"
+            },
+            {
+              "name": "Johanna",
+              "place": "Aurora",
+              "line": "Hosts a stay-and-play day this winter. [PENDING: confirm]",
+              "photo": "[PENDING: photo, consent]"
+            }
+          ]
+        },
+        {
+          "kind": "quotes",
+          "heading": "What parents say",
+          "quotes": [
+            {
+              "text": "[PENDING: Amanda's exact words, consent]",
+              "by": "Amanda",
+              "place": "Brampton",
+              "date": "[PENDING: month year]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "what",
+          "heading": "bina in the world",
+          "items": [
+            "Classmates across the world [PENDING: 40+ countries (main site) or 50+ (hero)?]",
+            "40+ clubs, online",
+            "Families who meet up and travel together"
+          ]
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition",
+          "anchor": "tuition",
+          "navLabel": "Tuition"
+        },
+        {
+          "kind": "grades",
+          "anchor": "grades",
+          "navLabel": "Grades",
+          "title": "Find your child's level",
+          "_note": "Akis, 2026-11-23: moved out of 'Our students' results' into its own section after tuition, before the FAQs. Rows come from the levels section's grades data."
+        },
+        {
+          "kind": "cta"
+        },
+        {
+          "kind": "faq",
+          "heading": "FAQ",
+          "items": [
+            {
+              "q": "Do bina families in Toronto meet in person?",
+              "a": "Yes. Toronto families meet every month, and classmates are introduced by age."
+            },
+            {
+              "q": "What time are classes?",
+              "a": "9am–2pm Eastern time, live, 5 days a week."
+            },
+            {
+              "q": "Can my child study at bina in Ontario?",
+              "a": "Yes. Ontario's Education Act (section 21) lets a child learn at home or elsewhere instead of attending a local school, and families who choose bina homeschool under that law. bina provides the full school day: live teachers, classmates, curriculum and progress reports. You tell your school board in writing, using the letter of intent in Ontario's homeschooling policy (PPM 131), ideally before September 1 each year. [PENDING: verify against the Ontario guide] Every step is in our Ontario homeschooling guide.",
+              "link": {
+                "text": "our Ontario homeschooling guide",
+                "url": "https://thebinaschool.com/homeschooling-guides/ontario"
+              }
+            },
+            {
+              "q": "Does bina follow the Ontario curriculum?",
+              "a": "Yes, and goes further. bina uses the Ontario Curriculum as its Canadian reference, alongside England's National Curriculum and US Common Core. Each topic is taught at the earliest grade any of them teaches it, so fractions, grammar and phonics often come earlier than in Ontario schools. Levels follow age: open “Where does my child fit?” on the primary and middle school cards to see which bina level matches your child's Ontario grade.",
+              "link": {
+                "text": "primary and middle school cards",
+                "url": "#education"
+              }
+            },
+            {
+              "q": "Can we go back to a local school later?",
+              "a": "Yes. bina is Cognia accredited and a registered Cambridge International School, so your child leaves with a school record other schools recognise. Learners finish middle school with a Cambridge-accredited record and a capstone project, ready to walk into any high school and thrive. If you move back to a local school, our Family Success team helps with the paperwork, local requirements and next steps."
+            },
+            {
+              "q": "How much is bina in Canadian dollars?",
+              "a": "About {range} a month, billed in USD.",
+              "priceRange": "CAD"
+            },
+            {
+              "q": "Where are bina's Toronto families?",
+              "a": "Across the Greater Toronto Area: Mississauga, Brampton, Aurora and the city."
+            }
+          ],
+          "anchor": "faq",
+          "navLabel": "FAQs",
+          "_note": "Ontario law, curriculum and return-to-school answers moved here from the Education section (Akis, 2026-11-20). Sources: Ontario guide + notes/guides-canada/legal-sources.md (PPM 131 wording and Sept 1 date still [VERIFY]); curriculum pack; thebinaschool.com/middle-school and /accreditation (Family Success transitions)."
+        }
+      ],
+      "subnavLabel": {
+        "text": "bina Toronto",
+        "icon": "/images/local/maps/canada.svg",
+        "iconAlt": "Map of Canada"
+      }
+    },
+    {
+      "id": "austin",
+      "name": "Austin",
+      "tags": {
+        "country": "us",
+        "state": "texas",
+        "market": "austin"
+      },
+      "countryName": "United States",
+      "stateName": "Texas",
+      "live": false,
+      "title": "bina in Austin",
+      "description": "[PENDING CONTENT]",
+      "cardLine": "[PENDING: one line]",
+      "image": {
+        "src": "/images/landing/map/010_Austin_USA.webp",
+        "alt": "Austin skyline",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Austin"
+        },
+        {
+          "type": "State",
+          "name": "Texas"
+        },
+        {
+          "type": "Country",
+          "name": "United States"
+        }
+      ],
+      "currency": null,
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "bina in Austin",
+          "facts": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "accreditations"
+        },
+        {
+          "kind": "proof"
+        },
+        {
+          "kind": "features"
+        },
+        {
+          "kind": "schoolDay",
+          "heading": "Your Austin school day",
+          "items": [
+            {
+              "text": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "who",
+          "heading": "Who we are here",
+          "text": "[PENDING CONTENT]"
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Our families",
+          "people": [
+            {
+              "name": "[PENDING CONTENT]",
+              "place": "[PENDING CONTENT]",
+              "line": "[PENDING CONTENT]",
+              "photo": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "reviews"
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition"
+        },
+        {
+          "kind": "faq",
+          "heading": "Questions parents ask",
+          "items": [
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "guide",
+          "heading": "[PENDING CONTENT]",
+          "text": "[PENDING CONTENT]",
+          "link": {
+            "label": "[PENDING CONTENT]",
+            "href": "https://thebinaschool.com/homeschooling-guides/texas"
+          }
+        },
+        {
+          "kind": "cta"
+        }
+      ]
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "_rule": "Market and state are the same place: the URL drops the repeat (/local/uae/dubai). Never present bina as a physical school in Dubai; present it clearly as compliant with UAE law (legal answer D25 still open). Applies to every line added here.",
+      "tags": {
+        "country": "uae",
+        "state": "dubai",
+        "market": "dubai"
+      },
+      "countryName": "United Arab Emirates",
+      "stateName": "Dubai",
+      "live": false,
+      "title": "bina in Dubai",
+      "description": "[PENDING CONTENT]",
+      "cardLine": "[PENDING: one line]",
+      "image": {
+        "src": "/images/landing/map/024_Dubai_UAE.webp",
+        "alt": "Dubai skyline",
+        "width": 520,
+        "height": 322
+      },
+      "areaServed": [
+        {
+          "type": "City",
+          "name": "Dubai"
+        },
+        {
+          "type": "Country",
+          "name": "United Arab Emirates"
+        }
+      ],
+      "currency": "AED",
+      "sections": [
+        {
+          "kind": "hero",
+          "h1": "bina in Dubai",
+          "facts": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "accreditations"
+        },
+        {
+          "kind": "proof"
+        },
+        {
+          "kind": "features"
+        },
+        {
+          "kind": "schoolDay",
+          "heading": "Your Dubai school day",
+          "items": [
+            {
+              "text": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "who",
+          "heading": "Who we are here",
+          "text": "[PENDING CONTENT]"
+        },
+        {
+          "kind": "what",
+          "heading": "What we do here",
+          "items": [
+            "[PENDING CONTENT]"
+          ]
+        },
+        {
+          "kind": "families",
+          "heading": "Our families",
+          "people": [
+            {
+              "name": "[PENDING CONTENT]",
+              "place": "[PENDING CONTENT]",
+              "line": "[PENDING CONTENT]",
+              "photo": "[PENDING CONTENT]"
+            }
+          ]
+        },
+        {
+          "kind": "events",
+          "heading": "Events"
+        },
+        {
+          "kind": "reviews"
+        },
+        {
+          "kind": "tuition",
+          "heading": "Tuition"
+        },
+        {
+          "kind": "faq",
+          "heading": "Questions parents ask",
+          "items": [
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING CONTENT]"
+            },
+            {
+              "q": "[PENDING CONTENT]",
+              "a": "[PENDING: D25]"
+            }
+          ]
+        },
+        {
+          "kind": "cta"
+        }
+      ]
+    }
+  ]
+}

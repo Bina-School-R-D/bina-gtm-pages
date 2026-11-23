@@ -1,0 +1,153 @@
+---
+/*
+ * /local and everything under it — one route file, three kinds of page, all built from
+ * src/data/local-markets.json (URLs come from each market's tags, never from path segments):
+ *
+ * 1. /local                                   the hub, emitted only while ≥1 market is shown
+ * 2. /local/{country}/{state}/{market}[/{hub}] a market page: production = `live: true` only;
+ *                                             localhost (pnpm dev) = every market
+ * 3. known parent levels (/local/canada, /local/canada/ontario, …) → a noindex hand-off page to
+ *    the nearest shown /local page above (GitHub Pages can't send a 302)
+ *
+ * The hub carries the main site's navbar (MainSiteNavbar); market pages carry only a thin back bar +
+ * the market's own navbar (LocalSubnav). Both use BaseLayout `bare footer`.
+ *
+ * Anything else under /local/* is not emitted, so it gets the host's 404.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LocalSection from '../../components/local/LocalSection.astro';
+import Pending from '../../components/local/Pending.astro';
+import MainSiteNavbar from '../../components/local/MainSiteNavbar.astro';
+import LocalSubnav from '../../components/local/LocalSubnav.astro';
+import {
+  HUB_PATH,
+  cardLine,
+  hub,
+  hubShown,
+  marketJsonLd,
+  marketPath,
+  navItems,
+  parentRedirects,
+  priceRange,
+  shownMarkets,
+  visibleSections,
+} from '../../lib/local.js';
+
+export function getStaticPaths() {
+  const out = [];
+  if (hubShown()) out.push({ params: { path: undefined }, props: { kind: 'hub' } });
+  for (const market of shownMarkets()) {
+    out.push({ params: { path: marketPath(market).replace(/^\/local\//, '') }, props: { kind: 'market', market } });
+  }
+  for (const r of parentRedirects()) {
+    out.push({ params: { path: r.from.replace(/^\/local\//, '') }, props: { kind: 'redirect', to: r.to } });
+  }
+  return out;
+}
+
+const props = Astro.props as any;
+const market = props.kind === 'market' ? props.market : null;
+const sections = market ? visibleSections(market) : [];
+// A group's colour runs through every section under it, until the next anchored section.
+let groupTheme: string | undefined;
+const themed = sections.map((s: any) => {
+  if (s.kind === 'group') groupTheme = s.theme;
+  else if (s.anchor) groupTheme = undefined;
+  return { section: s, theme: groupTheme };
+});
+const faq = sections.find((s: any) => s.kind === 'faq');
+const faqForSchema = faq
+  ? faq.items.map((f: any) => ({ q: f.q, a: f.priceRange ? f.a.replace('{range}', priceRange(f.priceRange)) : f.a }))
+  : [];
+const jsonLd = market ? marketJsonLd(market, faqForSchema) : [];
+const anyLive = shownMarkets().some((m: any) => m.live);
+---
+
+{props.kind === 'redirect' && (
+  <BaseLayout title="bina near you" description="bina near you" noindex bare>
+    <script is:inline define:vars={{ to: props.to }}>location.replace(to);</script>
+    <p class="px-5 py-24 text-center"><a href={props.to}>bina near you</a></p>
+  </BaseLayout>
+)}
+
+{props.kind === 'hub' && (
+  <BaseLayout title={hub.title} description={hub.description} noindex={!anyLive} bare footer>
+    <MainSiteNavbar />
+    <header class="theme-lagoon">
+      <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
+        <h1 class="mb-6 text-title-3xl sm:text-display-sm"><Pending text={hub.h1} /></h1>
+        <p class="max-w-2xl text-body-xl"><Pending text={hub.intro} /></p>
+      </div>
+    </header>
+    <section class="theme-base">
+      <ul class="mx-auto grid max-w-5xl gap-4 px-5 py-14 sm:grid-cols-3">
+        {shownMarkets().map((m: any) => (
+          <li>
+            <a href={marketPath(m)} class="card-bina-mint flex h-full flex-col gap-3 p-6 no-underline">
+              {m.image && <img src={m.image.src} alt={m.image.alt} width={m.image.width} height={m.image.height} loading="lazy" class="h-auto w-full" />}
+              <span class="font-display text-title-lg text-hl">{m.name}</span>
+              {cardLine(m) && <span class="text-body-lg"><Pending text={cardLine(m)} /></span>}
+              <span class="mt-auto font-display text-title-sm" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </BaseLayout>
+)}
+
+{market && (
+  <BaseLayout title={market.title} description={market.description} noindex={!market.live} bare footer flushFooter>
+    {/* No main navbar on market pages (Akis, 2026-11-20): a thin "back" bar, then the market's own navbar. */}
+    <div class="local-backbar">
+      <a href="https://thebinaschool.com" class="local-backbar-link no-underline">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16 10H4M4 10L9 5M4 10L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <span>Back to <span class="normal-case">bina</span> global website</span>
+      </a>
+    </div>
+    <LocalSubnav items={navItems(sections)} label={market.subnavLabel} />
+    <div class="local-page" data-market={market.id}>
+      {themed.map(({ section, theme }: any) =>
+        section.anchor ? (
+          <div id={section.anchor} data-local-anchor>
+            <LocalSection market={market} section={section} theme={theme} />
+          </div>
+        ) : (
+          <LocalSection market={market} section={section} theme={theme} />
+        )
+      )}
+    </div>
+    {jsonLd.map((j: any) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+  </BaseLayout>
+)}
+
+<style is:global>
+  /* FAQ in the ESA pages' style (staging, 2026-11-20): big coloured questions, one colour each. */
+  .faq-title { font-family: var(--font-display); color: var(--color-mint); margin-bottom: 3rem; font-size: clamp(2.45rem, 3.24vw, 5.25rem); font-weight: 700; line-height: 1; }
+  .faq-item { color: var(--faq-c); }
+  .faq-q { font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 36px); font-weight: 500; line-height: 1.05; }
+  .faq-plus { font-family: var(--font-display); font-size: clamp(1.93rem, 2.55vw, 4.13rem); font-weight: 400; line-height: 1; }
+  .faq-a { color: var(--faq-c); font-size: clamp(18px, 2vw, 22px); line-height: 1.25; }
+  .faq-a a { color: inherit; }
+
+  /* Education level cards, after the main site's /education tracks. */
+  .local-level-title { font-family: var(--font-display); font-size: clamp(2.5rem, 4.2vw, 4rem); font-weight: 700; line-height: 1; }
+  .local-level-art { min-height: clamp(22rem, 34vw, 28rem); }
+  @media (min-width: 768px) { .local-level-art { height: clamp(26rem, 32vw, 28rem); } }
+
+  /* Sticky with the market navbar under it (Akis, 2026-11-23): never scrolls away. */
+  body:has(.local-backbar) { --local-backbar-h: calc(2rem + 6px); }
+  .local-backbar { position: sticky; top: 0; z-index: 1000; height: var(--local-backbar-h); box-sizing: border-box; background: #000; border-bottom: 1px solid rgb(255 255 255 / 0.08); padding: 5px clamp(1.05rem, 1.39vw, 2.25rem) 0; }
+  .local-backbar-link { display: inline-flex; align-items: center; gap: 0.45rem; height: 2rem; font-family: var(--font-display); font-size: 14px; font-weight: 500; color: rgb(255 255 255 / 0.75); transition: color 0.15s; }
+  .local-backbar-link:hover { color: var(--color-lagoon); text-decoration: none; }
+  .local-backbar-link svg { width: 15px; height: 15px; transition: transform 0.15s; }
+  .local-backbar-link:hover svg { transform: translateX(-3px); }
+
+  .local-pending {
+    background: #fe49c1;
+    color: #000;
+    padding: 0 0.25em;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+</style>

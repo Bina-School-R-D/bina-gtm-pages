@@ -1,0 +1,15 @@
+{
+  "_provenance": "Verbatim copy of the parent testimonials on the thebinaschool.com homepage (fetched 2026-11-23): quote, first names, 'bina parent(s)' label and portrait (public/images/local/testimonials/, copied from /images/landing/testimonials/). Change them on the main site first, then copy here. On the main site Mary Kate's portrait file is named portrait-amina-2; renamed here to portrait-mary-kate.",
+  "_openQuestions": [
+    "Main site: Mary Kate's card uses portrait-amina-2.png. Confirm the photo really is Mary Kate (it shows a different person from Amina's card) before go-live.",
+    "Hero face stack (public/images/local/faces/) reuses five of these portraits as small crops. Confirm the families' consent covers that use too."
+  ],
+  "items": [
+    { "id": "amina", "name": "Amina", "label": "bina parent", "image": "/images/local/testimonials/portrait-amina.webp", "width": 316, "height": 408, "quote": "bina has been a blessing for our family, it keeps me closely involved in my son's learning while giving him structure, confidence, and a nurturing school community that shares our values." },
+    { "id": "makeda-steve", "name": "Makeda & Steve", "label": "bina parents", "image": "/images/local/testimonials/portrait-makeda-steve.webp", "width": 787, "height": 1400, "quote": "We were exhausted and losing connection. Since joining bina, our daughter is calm, confident, and learning joyfully and no more after-school tantrums." },
+    { "id": "lorena", "name": "Lorena", "label": "bina parent", "image": "/images/local/testimonials/portrait-lorena.webp", "width": 900, "height": 1600, "quote": "My daughter’s passion for learning and friendships has grown tremendously. The teachers at bina nurture her independence, confidence, and emotional awareness beautifully." },
+    { "id": "amanda", "name": "Amanda", "label": "bina parent", "image": "/images/local/testimonials/portrait-amanda.webp", "width": 675, "height": 1200, "quote": "bina has been a bright spot for our family. The small, live classes and caring teachers helped our children grow in confidence, learning, and connection." },
+    { "id": "mo-ayo", "name": "Mo & Ayo", "label": "bina parents", "image": "/images/local/testimonials/portrait-mo-ayo.webp", "width": 787, "height": 1400, "quote": "Small classes, whole-child focus, and ability-based learning have helped our daughter’s confidence and curiosity blossom. With bina, she thrives and our family flourishes." },
+    { "id": "mary-kate", "name": "Mary Kate", "label": "bina parent", "image": "/images/local/testimonials/portrait-mary-kate.webp", "width": 1072, "height": 1400, "quote": "After years of searching for \"a better way\" in virtual education, I finally found it with bina, where my boys are seen, supported, and thriving every day." }
+  ]
+}

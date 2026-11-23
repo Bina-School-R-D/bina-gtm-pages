@@ -1,0 +1,89 @@
+---
+/*
+ * Events (#events): one section, two tabs, Upcoming | Past (like events on a Facebook page).
+ * Upcoming = future dates, soonest first, each with an RSVP button. Past = newest first, a card
+ * shows title · area · month + year · photo (never the exact day or time). With no upcoming
+ * event, the section opens on Past. Data: src/data/local-events.json via marketEvents().
+ * Both tabs are in the HTML; the script only switches which one shows.
+ */
+import Pending from './Pending.astro';
+import { marketEvents } from '../../lib/local.js';
+
+interface Props {
+  market: { id: string; name: string };
+  heading: string;
+  /** The group's colour, when the section sits in one. */
+  theme?: string;
+}
+const { market, heading, theme } = Astro.props;
+const { upcoming, past } = marketEvents(market.id);
+const start = upcoming.length ? 'upcoming' : 'past';
+const fmtDate = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+<section id="events" class:list={[theme ?? 'theme-base', 'scroll-mt-24']} data-local-section="events" data-local-events={start}>
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:py-24">
+    <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
+    <div class="mb-8 flex gap-2" role="tablist" aria-label={`${market.name} events`}>
+      {['upcoming', 'past'].map((t) => (
+        <button
+          type="button"
+          role="tab"
+          data-tab={t}
+          aria-selected={t === start ? 'true' : 'false'}
+          class="rounded-full px-5 py-2 font-display text-button-sm aria-selected:bg-lagoon aria-selected:text-black"
+        >
+          {t === 'upcoming' ? 'Upcoming' : 'Past'}
+        </button>
+      ))}
+    </div>
+
+    <div role="tabpanel" data-panel="upcoming" hidden={start !== 'upcoming'}>
+      {upcoming.length ? (
+        <ul class="grid gap-4 sm:grid-cols-2">
+          {upcoming.map((e: any) => (
+            <li class="card-bina-mint flex flex-col gap-2 p-6">
+              <p class="font-display text-title-sm"><Pending text={e.title} /></p>
+              <p class="text-body-lg">{fmtDate(e.date)} · <Pending text={e.area} /></p>
+              {e.rsvp && <a href={e.rsvp} class="btn-bina btn-sm mt-3 self-start" rel="noopener">RSVP</a>}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-body-xl">New dates are on the way. See what {market.name} families did so far under Past.</p>
+      )}
+    </div>
+
+    <div role="tabpanel" data-panel="past" hidden={start !== 'past'}>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {past.map((e: any) => (
+          <li class="card-bina-mint overflow-hidden">
+            <div class="grid aspect-[4/3] place-items-center bg-black/10 p-4 text-center text-body-md">
+              {typeof e.photo === 'object' && e.photo ? (
+                <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" />
+              ) : (
+                <Pending text={e.photo ?? ''} />
+              )}
+            </div>
+            <div class="p-5">
+              <p class="font-display text-title-sm"><Pending text={e.title} /></p>
+              <p class="mt-1 text-body-lg"><Pending text={e.area} /> · <Pending text={String(e.month)} /> {e.year}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-local-events]').forEach((root) => {
+    const tabs = root.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+        root.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== tab.dataset.tab));
+      })
+    );
+  });
+</script>

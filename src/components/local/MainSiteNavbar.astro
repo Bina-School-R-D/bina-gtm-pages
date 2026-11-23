@@ -1,0 +1,293 @@
+---
+/*
+ * The thebinaschool.com navbar, replicated for the /local pages (Akis, 2026-11-19) so they look
+ * like the main site they will move to. Markup, class names and CSS copied from the live site's
+ * SiteNavbar (thebinaschool.com, 2026-11-19); main-site links are absolute. Only /local uses it:
+ * the other go.bina.school pages keep BaseLayout's own nav.
+ *
+ * - No ratings bar above it (Akis, 2026-11-20: "3 navbars" was too many). Reviews is instead a
+ *   highlighted link after the dropdowns (★ Reviews → /reviews), and the first link in the burger menu.
+ * - ≥1280px: logo · 5 dropdowns (Education · Admissions · About · Community · Resources) · yellow CTA
+ * - <1280px: logo ("b" mark under 768px) · yellow CTA · purple burger → full-screen menu
+ *   (menu art: the main site's menu-bg + tiger)
+ */
+import { CTA, CTA_LABEL } from '../../lib/esa-states.js';
+
+const M = 'https://thebinaschool.com';
+// Navbar menus (Akis, 2026-11-19): 5 dropdowns. Open House lives in the footer only.
+// Main-site links are absolute; go.bina pages (/calendar, /events, /local) stay relative, like the footer.
+type Link = { label: string; href: string; external?: boolean };
+type Menu = { label: string; groups: { title?: string; links: Link[] }[] };
+const menus: Menu[] = [
+  {
+    label: 'Education',
+    groups: [{ title: 'Precision education', links: [
+      { label: 'Our approach', href: `${M}/education` },
+      { label: 'Teachers', href: `${M}/teachers` },
+      { label: 'Primary school', href: `${M}/primary-school` },
+      { label: 'Middle school', href: `${M}/middle-school` },
+    ] }],
+  },
+  {
+    label: 'Admissions',
+    groups: [{ title: 'Getting started', links: [
+      { label: 'Admissions process', href: `${M}/admissions` },
+      { label: 'School calendar', href: '/calendar' },
+      { label: 'Tuition', href: `${M}/tuition` },
+      { label: 'Financial aid (ESAs)', href: `${M}/esa` },
+      { label: 'Find your fit', href: `${M}/what-type-of-school-is-best` },
+    ] }],
+  },
+  {
+    label: 'About',
+    groups: [{ title: 'Learn more', links: [
+      { label: 'About bina', href: `${M}/about` },
+      // ❓ the About page has no id on that section yet: the main site must add id="the-people-behind-bina".
+      { label: 'The people behind bina', href: `${M}/about#the-people-behind-bina` },
+      { label: "bina's referral program", href: 'https://form.thebinaschool.com/new-partner', external: true },
+    ] }],
+  },
+  {
+    label: 'Community',
+    groups: [{ title: 'Meet in person', links: [
+      { label: 'Meetups & events', href: '/events' }, // ❓ page still to build
+      { label: 'Local communities', href: '/local' },
+    ] }],
+  },
+  {
+    label: 'Resources',
+    groups: [
+      { title: 'Homeschooling guides', links: [
+        { label: 'USA', href: `${M}/homeschooling-guides` },
+        { label: 'Canada', href: `${M}/homeschooling-guides-canada` }, // ❓ not live yet
+        { label: 'Europe', href: `${M}/homeschooling-guides-europe` },
+      ] },
+      { title: 'More', links: [
+        { label: 'Blog', href: `${M}/blog` },
+        { label: 'bina on YouTube', href: 'https://www.youtube.com/@thebinaschool3759', external: true },
+        { label: 'bina on Instagram', href: 'https://www.instagram.com/thebinaschool', external: true },
+      ] },
+    ],
+  },
+];
+// Uppercase group titles keep the brand lowercase: "JOIN bina".
+const parts = (t: string) => t.split(/(bina)/).filter(Boolean);
+const ext = (l: Link) => (l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {});
+const arrow = 'M4 10H16M16 10L11 5M16 10L11 15';
+---
+<nav class="site-nav" aria-label="Main">
+  <a class="site-nav-home no-underline" href={M}>
+    <img src="/images/local/nav/navbar-logo-b.svg" alt="bina" class="site-nav-mark md:hidden" fetchpriority="high" />
+    <img src="/images/local/nav/navbar-logo.svg" alt="bina" class="site-nav-logo hidden md:block" />
+  </a>
+  <ul class="nav-desktop-links">
+    {menus.map((m, i) => (
+      <li class="nav-dd">
+        <button type="button" class="site-nav-link nav-dd-btn" aria-expanded="false" aria-controls={`nav-dd-${i}`}>
+          {m.label}
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <div class="nav-dd-panel" id={`nav-dd-${i}`}>
+          <div class="nav-dd-box">
+            {m.groups.map((g) => (
+              <div>
+                {g.title && <p class="nav-dd-title">{parts(g.title).map((t) => (t === 'bina' ? <span class="brand-lc">bina</span> : t))}</p>}
+                <ul>
+                  {g.links.map((l) => <li><a class="nav-dd-link no-underline" href={l.href} {...ext(l)}><span class="normal-case">{l.label}</span></a></li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </li>
+    ))}
+    <li><a class="site-nav-link nav-reviews no-underline" href="/reviews"><span class="nav-reviews-stars" aria-hidden="true">★</span>Reviews</a></li>
+  </ul>
+  <div class="nav-desktop-cta">
+    <a href={CTA} target="_blank" rel="noopener noreferrer" class="nav-cta no-underline" aria-label={CTA_LABEL}>
+      <span class="cta-text">Start your <span class="normal-case">bina</span> journey</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d={arrow} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+  </div>
+  <div class="nav-mobile-cta">
+    <a href={CTA} target="_blank" rel="noopener noreferrer" class="nav-cta no-underline" aria-label={CTA_LABEL}>
+      <span class="cta-text">Start your <span class="normal-case">bina</span> journey</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d={arrow} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+    <button type="button" class="nav-burger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="site-menu">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true">
+        <path d="M4 7H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M4 12H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M4 17H20" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div id="site-menu" class="site-menu" hidden>
+  <img src="/images/local/nav/menu-bg.png" alt="" aria-hidden="true" class="site-menu-bg" loading="lazy" />
+  <img src="/images/local/nav/menu-tiger.png" alt="" aria-hidden="true" class="site-menu-tiger" loading="lazy" />
+  <button type="button" class="site-menu-close" aria-label="Close navigation menu">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#000" stroke-width="2.5" stroke-linecap="round" /></svg>
+  </button>
+  <div class="site-menu-body">
+    <div class="flex flex-col">
+      <a class="site-menu-link no-underline" href={M}>Home</a>
+      <a class="site-menu-link no-underline" href="/reviews">★ Reviews</a>
+      {menus.map((m) => (
+        <details class="site-menu-group">
+          <summary class="site-menu-link">{m.label}</summary>
+          <div class="site-menu-sub">
+            {m.groups.map((g) => (
+              <div>
+                {g.title && <p class="site-menu-subtitle">{parts(g.title).map((t) => (t === 'bina' ? <span class="brand-lc">bina</span> : t))}</p>}
+                {g.links.map((l) => <a class="site-menu-sublink no-underline" href={l.href} {...ext(l)}><span class="normal-case">{l.label}</span></a>)}
+              </div>
+            ))}
+          </div>
+        </details>
+      ))}
+    </div>
+    <a href={CTA} target="_blank" rel="noopener noreferrer" class="nav-cta no-underline self-start">
+      <span class="cta-text">Start your <span class="normal-case">bina</span> journey</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d={arrow} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+  const menu = document.getElementById('site-menu');
+  const burger = document.querySelector<HTMLButtonElement>('.nav-burger');
+  const close = document.querySelector<HTMLButtonElement>('.site-menu-close');
+  const set = (open: boolean) => {
+    if (!menu || !burger) return;
+    menu.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  burger?.addEventListener('click', () => set(burger.getAttribute('aria-expanded') !== 'true'));
+  close?.addEventListener('click', () => set(false));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && set(false));
+
+  // Desktop dropdowns: open on hover (CSS) and on click/keyboard (here); one open at a time.
+  const dds = [...document.querySelectorAll<HTMLElement>('.nav-dd')];
+  const closeAll = (except?: HTMLElement) =>
+    dds.forEach((d) => {
+      if (d === except) return;
+      d.classList.remove('is-open');
+      d.querySelector('.nav-dd-btn')?.setAttribute('aria-expanded', 'false');
+    });
+  dds.forEach((d) => {
+    const btn = d.querySelector<HTMLButtonElement>('.nav-dd-btn')!;
+    btn.addEventListener('click', () => {
+      const open = !d.classList.contains('is-open');
+      closeAll(d);
+      d.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', (e) => { if (!(e.target as Element).closest('.nav-dd')) closeAll(); });
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAll());
+</script>
+
+<style>
+  /* Reviews: the one highlighted link in the bar (yellow, with a star). */
+  .nav-reviews { display: inline-flex; align-items: center; gap: 0.35em; padding: 0.35em 0.9em; border: 1.5px solid #f7d928; border-radius: 999px; color: #f7d928; }
+  .nav-reviews:hover { background: #f7d928; color: #000; opacity: 1; }
+  .nav-reviews-stars { font-size: 0.9em; }
+
+  /* Copied from thebinaschool.com (SiteNavbar CSS, 2026-11-19). Sticky instead of fixed, so the
+     page needs no spacer under it; it looks the same. */
+  .site-nav {
+    z-index: 1000;
+    box-sizing: border-box;
+    background-color: #000;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: clamp(4.75rem, 4.4vw, 7.13rem);
+    padding: clamp(0.35rem, 0.46vw, 0.75rem) clamp(1.05rem, 1.39vw, 2.25rem);
+    display: flex;
+    position: sticky;
+    top: 0;
+  }
+  @media (min-width: 1280px) {
+    .site-nav { height: clamp(5.5rem, 5.09vw, 8.25rem); }
+  }
+  .site-nav-home { flex-shrink: 0; }
+  .site-nav-mark { aspect-ratio: 393/614; object-fit: contain; width: clamp(1.12rem, 1.48vw, 2.4rem); height: clamp(1.75rem, 2.31vw, 3.75rem); }
+  .site-nav-logo { aspect-ratio: 68/29; object-fit: contain; width: clamp(3.28rem, 4.34vw, 7.03rem); height: clamp(1.4rem, 1.85vw, 3rem); transform: translateY(-5px); }
+  .nav-desktop-links, .nav-desktop-cta { display: none; }
+  .nav-mobile-cta { display: flex; align-items: center; gap: clamp(0.35rem, 0.46vw, 0.75rem); min-width: 0; }
+  @media (min-width: 1280px) {
+    .nav-desktop-links { flex: auto; justify-content: flex-start; align-items: center; gap: clamp(1rem, 2.5vw, 3.5rem); min-width: 0; padding: 1rem clamp(1rem, 4vw, 5.125rem); display: flex; }
+    .nav-desktop-cta { flex-shrink: 0; display: block; }
+    .nav-mobile-cta { display: none; }
+  }
+  .site-nav-link { white-space: nowrap; color: #06e1bd; font-family: 'Rund Display', sans-serif; font-size: clamp(0.83rem, 1.1vw, 1.78rem); font-weight: 400; text-decoration: none; transition: opacity 0.2s; }
+  .site-nav-link:hover { opacity: 0.8; text-decoration: none; }
+
+  /* Dropdowns (desktop) */
+  .nav-desktop-links { list-style: none; margin: 0; }
+  .nav-dd { position: relative; }
+  .nav-dd-btn { display: inline-flex; align-items: center; gap: 0.3em; background: none; border: 0; padding: 0.5rem 0; cursor: pointer; }
+  .nav-dd-btn svg { width: 0.85em; height: 0.85em; transition: transform 0.2s; }
+  /* Panel styled after a light card dropdown (Akis's reference, 2026-11-19): caret, small
+     uppercase group titles, a divider between groups, calm links. */
+  .nav-dd-panel { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 1rem; z-index: 1001; }
+  .nav-dd:hover .nav-dd-panel, .nav-dd:focus-within .nav-dd-panel, .nav-dd.is-open .nav-dd-panel { display: block; animation: navDdIn 0.16s ease-out; }
+  @keyframes navDdIn { from { opacity: 0; transform: translate(-50%, -4px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .nav-dd:hover .nav-dd-btn svg, .nav-dd.is-open .nav-dd-btn svg { transform: rotate(180deg); }
+  .nav-dd-box { position: relative; min-width: 15.5rem; padding: 1.25rem 0.75rem; background: #fff; color: #000; border-radius: 1rem; box-shadow: 0 18px 40px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.08); }
+  .nav-dd-box::before { content: ''; position: absolute; top: -7px; left: 50%; width: 14px; height: 14px; background: #fff; border-radius: 2px; transform: translateX(-50%) rotate(45deg); }
+  .nav-dd-box > div + div { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgb(0 0 0 / 0.1); }
+  .nav-dd-box ul { list-style: none; margin: 0; padding: 0; }
+  .nav-dd-title { white-space: nowrap; margin: 0 0.75rem 0.5rem; color: rgb(0 0 0 / 0.5); font-family: 'Rund Display', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-dd-link { display: block; padding: 0.45rem 0.75rem; border-radius: 0.5rem; color: #000; font-family: 'Rund Display', sans-serif; font-size: 16px; font-weight: 500; white-space: nowrap; transition: background 0.15s; }
+  .brand-lc { text-transform: none; }
+  .nav-dd-link:hover { background: #e6fbd9; color: #000; text-decoration: none; }
+
+  .nav-cta {
+    display: inline-flex; align-items: center; justify-content: space-between;
+    gap: clamp(0.375rem, 0.46vw, 0.5rem);
+    min-height: clamp(2.45rem, 3.24vw, 5.25rem);
+    padding: clamp(0.5rem, 0.7vw, 0.75rem) clamp(1rem, 1.39vw, 1.5rem);
+    border: 2px solid #000; border-radius: clamp(0.625rem, 0.83vw, 1rem);
+    background: #f7d928; color: #000; text-decoration: none;
+    transition: background-color 0.3s ease-out;
+  }
+  .nav-cta:hover { background: #fe49c1; text-decoration: none; animation: subtleWiggle 0.5s; }
+  .nav-cta:active { background: #ff605b; }
+  .nav-cta svg { width: clamp(0.75rem, 1.04vw, 1.69rem); height: clamp(0.75rem, 1.04vw, 1.69rem); }
+  .cta-text { white-space: nowrap; font-family: 'Rund Display', sans-serif; font-weight: 400; font-size: clamp(0.92rem, 1.22vw, 1.97rem); }
+  @keyframes subtleWiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-1.5deg); }
+    75% { transform: rotate(1.5deg); }
+  }
+
+  .nav-burger { cursor: pointer; background: transparent; border: none; justify-content: center; align-items: center; width: clamp(1.97rem, 2.6vw, 4.22rem); height: clamp(1.97rem, 2.6vw, 4.22rem); display: flex; }
+  .nav-burger path { transform-box: view-box; transform-origin: 50%; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; }
+  .nav-burger[aria-expanded='true'] path:nth-child(1) { transform: rotate(45deg) translateY(5px); }
+  .nav-burger[aria-expanded='true'] path:nth-child(2) { opacity: 0; }
+  .nav-burger[aria-expanded='true'] path:nth-child(3) { transform: rotate(-45deg) translateY(-5px); }
+
+  .site-menu { position: fixed; inset: 0; z-index: 1100; overflow: hidden; background: #8ec0ff; }
+  .site-menu[hidden] { display: none; }
+  .site-menu-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; }
+  .site-menu-tiger { position: absolute; bottom: 0; left: 30%; z-index: 1; width: 40%; max-width: 15rem; height: auto; pointer-events: none; }
+  @media (min-width: 768px) { .site-menu-tiger { max-width: 22rem; } }
+  .site-menu-close { position: absolute; right: clamp(1.05rem, 1.39vw, 2.25rem); top: clamp(1.25rem, 1.6vw, 2.5rem); z-index: 3; width: clamp(1.75rem, 2.6vw, 3rem); height: clamp(1.75rem, 2.6vw, 3rem); display: flex; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; }
+  .site-menu-body { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(5.5rem, 16vw, 7rem) clamp(2rem, 9vw, 3.5rem) max(clamp(2.5rem, 8vw, 4rem), calc(env(safe-area-inset-bottom) + 1.5rem)); overflow-y: auto; }
+  .site-menu-link { padding: clamp(0.4rem, 1.4vw, 0.7rem) 0; color: #000; font-family: 'Rund Display', sans-serif; font-size: clamp(1.5rem, 6.5vw, 2.25rem); font-weight: 700; text-decoration: none; width: fit-content; }
+  .site-menu-link:hover { text-decoration: none; opacity: 0.8; }
+
+  /* Phone menu: one accordion per dropdown */
+  .site-menu-group summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0.4em; }
+  .site-menu-group summary::-webkit-details-marker { display: none; }
+  .site-menu-group summary::after { content: '+'; font-weight: 700; }
+  .site-menu-group[open] summary::after { content: '–'; }
+  .site-menu-sub { display: grid; gap: 0.75rem; padding: 0 0 0.75rem 0.25rem; }
+  .site-menu-subtitle { margin: 0.25rem 0 0.1rem; color: #000; opacity: 0.6; font-family: 'Rund Display', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .site-menu-sublink { display: block; padding: 0.2rem 0; color: #000; font-family: 'Rund Display', sans-serif; font-size: clamp(1.1rem, 4.6vw, 1.5rem); font-weight: 600; }
+</style>
