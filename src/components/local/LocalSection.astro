@@ -9,6 +9,7 @@
  * Each section uses exactly one theme (global.css "Section themes").
  */
 import Pending from './Pending.astro';
+import Stars from './Stars.astro';
 import LocalButtons from './LocalButtons.astro';
 import LocalEvents from './LocalEvents.astro';
 import LocalTuition from './LocalTuition.astro';
@@ -18,7 +19,7 @@ import landing from '../../data/esa-landing.json';
 import survey from '../../data/family-survey.json';
 import results from '../../data/student-results.json';
 import reviewData from '../../data/reviews.json';
-import { accreditations, priceRange } from '../../lib/local.js';
+import { accreditations, priceRange, PREVIEW } from '../../lib/local.js';
 
 interface Props {
   market: any;
@@ -70,6 +71,13 @@ const FAQ_COLORS = ['clover', 'tangerine', 'lagoon', 'sky-blue', 'mint', 'dragon
 
 // Section padding (Akis, 2026-11-23: was py-14, too compressed): 64px phones, 96px from 640px.
 const wrap = 'mx-auto max-w-5xl px-5 py-16 sm:py-24';
+// Hero rating: 5 stacked parent headshots instead of stars (Akis, 2026-11-23). Real, consented
+// photos only, from rating.faces in the market data. Until they exist: stars on production,
+// grey placeholder circles on localhost so the layout can be reviewed.
+const faces: { src: string; alt?: string }[] = section.rating?.faces ?? [];
+const facePlaceholders = !faces.length && PREVIEW;
+// The results section reads the level data (grades, callouts) from the market's levels section.
+const resultLevels = (market.sections ?? []).find((x: any) => x.kind === 'levels')?.levels?.filter((l: any) => l.grades) ?? [];
 const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 ---
 
@@ -125,8 +133,23 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
             </div>
             {section.rating && (
               <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
-                <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
-                <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+                {faces.length || facePlaceholders ? (
+                  <ul class="local-faces flex" aria-label="Parents at bina">
+                    {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (
+                      <li class="local-face">
+                        {f ? <img src={f.src} alt={f.alt ?? ''} width="44" height="44" loading="lazy" decoding="async" class="h-full w-full rounded-full object-cover" />
+                          : <span class="grid h-full w-full place-items-center rounded-full bg-black/15 text-black/40" title="Parent photo to come"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true"><circle cx="12" cy="9" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" /></svg></span>}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
+                )}
+                <div>
+                  <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+                  {/* 10 small, quiet stars (Akis, 2026-11-23): filled to the nearest half star. */}
+                  <span class="mt-1 block opacity-80"><Stars value={Math.round(survey.headline.recommendAvg * 2) / 2} count={10} tight class="h-4 w-4" label={`Rated ${survey.headline.recommendAvg} out of 10`} /></span>
+                </div>
                 {section.rating.line && <p class="text-body-lg"><Pending text={section.rating.line} /></p>}
               </div>
             )}
@@ -137,8 +160,23 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
         <LocalButtons market={market} />
         {!section.callout && section.rating && (
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1" data-local-rating>
-            <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
-            <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+            {faces.length || facePlaceholders ? (
+                  <ul class="local-faces flex" aria-label="Parents at bina">
+                    {(faces.length ? faces.slice(0, 5) : Array.from({ length: 5 }, () => null)).map((f: any) => (
+                      <li class="local-face">
+                        {f ? <img src={f.src} alt={f.alt ?? ''} width="44" height="44" loading="lazy" decoding="async" class="h-full w-full rounded-full object-cover" />
+                          : <span class="grid h-full w-full place-items-center rounded-full bg-black/15 text-black/40" title="Parent photo to come"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true"><circle cx="12" cy="9" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" /></svg></span>}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="text-title-md text-hl tracking-[0.08em]" role="img" aria-label="5 stars">★★★★★</p>
+                )}
+            <div>
+                  <p class="font-display text-title-sm">Rated {survey.headline.recommendAvg} out of 10</p>
+                  {/* 10 small, quiet stars (Akis, 2026-11-23): filled to the nearest half star. */}
+                  <span class="mt-1 block opacity-80"><Stars value={Math.round(survey.headline.recommendAvg * 2) / 2} count={10} tight class="h-4 w-4" label={`Rated ${survey.headline.recommendAvg} out of 10`} /></span>
+                </div>
             {section.rating.line && <p class="text-body-lg"><Pending text={section.rating.line} /></p>}
           </div>
         )}
@@ -152,7 +190,7 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
     {/* Deep ocean, not black (Akis, 2026-11-23): black is the navbar's and footer's color. Dark
         enough for the white Cambridge logo. */}
     <div class:list={[wrap, 'text-center']}>
-      <h2 class="mx-auto mb-10 max-w-3xl text-title-xl text-hl sm:text-title-3xl">{accreditations.headline}</h2>
+      <h2 class="mx-auto mb-10 max-w-3xl text-balance text-title-3xl text-hl">{accreditations.headline}</h2>
       <ul class="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
         {accreditations.items.map((a: any) => (
           <li>
@@ -337,137 +375,6 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
                 ))}
               </dl>
             )}
-            {l.grades && (
-              <div>
-              <details class="local-more local-fit group overflow-hidden rounded-2xl bg-black" style={`--lc:${l.color}`}>
-                <summary class="local-fit-btn flex cursor-pointer list-none items-center gap-4 px-5 py-4 text-left sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
-                  <span class="min-w-0 flex-1">
-                    <span class="block font-display text-title-sm font-bold leading-tight sm:text-title-md" style={`color:${l.color}`}>{l.grades.label}</span>
-                    {l.grades.sublabel && <span class="mt-1 block text-body-md" style="color:rgb(255 255 255 / 0.75)">{l.grades.sublabel}</span>}
-                  </span>
-                  <span class="local-fit-plus grid h-10 w-10 flex-none place-items-center rounded-full border-2 transition-transform duration-300 group-open:rotate-180" style={`border-color:${l.color};color:${l.color}`} aria-hidden="true">
-                    <svg viewBox="0 0 20 20" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5" /></svg>
-                  </span>
-                </summary>
-                <div class="local-fit-body px-5 pb-6 sm:px-6 sm:pb-7">
-              {l.grades.callout && (() => {
-                const c = l.grades.callout;
-                // Primary = gaps closed (share who grew + points gained); middle = moving ahead (reading vs the US average by time at bina). All numbers from student-results.json.
-                return (
-                  <div class="local-callout relative pt-6" style={`--lc:${l.color};color:${l.color}`} data-local-callout>
-                    <p class="label-bina mb-3" style="color:rgb(255 255 255 / 0.6)">{c.eyebrow}</p>
-                    <p class="font-display text-title-lg font-bold leading-tight sm:text-title-xl">{c.title}</p>
-                    <p class="mt-2 max-w-sm text-body-lg" style="color:rgb(255 255 255 / 0.85)"><Pending text={c.text} /></p>
-                    {c.kind === 'gaps' && (() => {
-                      // Whole-school STAR numbers (student-results.json): share who grew in reading, and points gained.
-                      const grew = rh.readGrewPct, R = 40, C = 2 * Math.PI * R;
-                      const bars = [
-                        { label: 'Reading', v: rh.readGrowthAvg },
-                        { label: 'Math', v: rh.mathGrowthAvg },
-                      ];
-                      const vmax = Math.max(...bars.map((x) => x.v));
-                      const p1 = results.levels.find((x: any) => x.level === 'P1');
-                      return (
-                        <div class="mt-6">
-                          <div class="flex items-center gap-5 sm:gap-6">
-                            <svg viewBox="0 0 100 100" class="h-28 w-28 flex-none -rotate-90 sm:h-32 sm:w-32" role="img" aria-label={`${grew}% grew in reading`}>
-                              <circle cx="50" cy="50" r={R} fill="none" stroke="currentColor" stroke-opacity="0.18" stroke-width="12" />
-                              <circle cx="50" cy="50" r={R} fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" class="lc-ring" style={`--lc-c:${C};--lc-off:${C * (1 - grew / 100)}`} stroke-dasharray={C} />
-                            </svg>
-                            <div>
-                              <p class="font-display text-display-sm font-bold leading-none">{grew}%</p>
-                              <p class="mt-1 text-body-lg" style="color:#fff">grew in reading</p>
-                            </div>
-                          </div>
-                          <div class="mt-6 grid gap-3">
-                            {bars.map((x, i) => (
-                              <div class="grid grid-cols-[4.5rem_1fr_auto] items-center gap-3">
-                                <span class="text-body-md" style="color:rgb(255 255 255 / 0.7)">{x.label}</span>
-                                <span class="h-3 overflow-hidden rounded-full" style="background:rgb(255 255 255 / 0.12)"><span class="lc-bar block h-full rounded-full" style={`background:${l.color};--lc-w:${(x.v / vmax) * 100}%;animation-delay:${0.4 + i * 0.2}s`}></span></span>
-                                <span class="font-display text-title-sm font-bold">+{x.v} pts</span>
-                              </div>
-                            ))}
-                          </div>
-                          {p1 && <p class="mt-5 rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="font-display" style={`color:${l.color}`}>{p1.readBenchPct}%</strong> of P1 children read at or above the US benchmark.</p>}
-                          <p class="mt-4 text-body-md" style="color:rgb(255 255 255 / 0.55)">STAR, {rh.pairedN} students, {results.year} · <a href="/student-results" style="color:rgb(255 255 255 / 0.75)">All results</a></p>
-                        </div>
-                      );
-                    })()}
-                    {c.kind === 'ahead' && (() => {
-                      // Reading NCE by time at bina (student-results.json tenure); 50 = US national average.
-                      const T = results.tenure, W = 300, H = 130, x0 = 14, x1 = W - 40, yTop = 18, yBot = 104;
-                      const lo = 48, hi = Math.ceil(Math.max(...T.map((t: any) => t.readNceMean)) + 1);
-                      const X = (i: number) => x0 + (i * (x1 - x0)) / (T.length - 1);
-                      const Y = (v: number) => yBot - ((v - lo) / (hi - lo)) * (yBot - yTop);
-                      const pts = T.map((t: any, i: number) => [X(i), Y(t.readNceMean)]);
-                      const line = 'M' + pts.map((q: number[]) => q.join(' ')).join(' L ');
-                      const area = `${line} L ${X(T.length - 1)} ${Y(50)} L ${x0} ${Y(50)} Z`;
-                      const short = (s: string) => s.replace(' months', ' mo').replace(' years', ' yrs');
-                      const m1 = results.levels.find((x: any) => x.level === 'M1');
-                      const nAll = T.reduce((a: number, t: any) => a + t.n, 0);
-                      return (
-                        <div class="mt-6">
-                          <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full overflow-visible" role="img" aria-label="Reading scores by time at bina, all above the US national average and rising">
-                            <defs>
-                              <linearGradient id={`lc-grad-${l.id}`} x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stop-color="currentColor" stop-opacity="0.35" />
-                                <stop offset="1" stop-color="currentColor" stop-opacity="0.02" />
-                              </linearGradient>
-                            </defs>
-                            <path d={area} fill={`url(#lc-grad-${l.id})`} class="lc-area" />
-                            <line x1={x0} y1={Y(50)} x2={x1} y2={Y(50)} stroke="#fff" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="5 5" />
-                            <text x={x1 + 6} y={Y(50) + 4} fill="#fff" fill-opacity="0.6" font-size="10" font-family="var(--font-display)">US avg</text>
-                            <path d={line} fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="lc-line" pathLength="1" />
-                            {pts.map((q: number[], i: number) => (
-                              <g class="lc-dot">
-                                <circle cx={q[0]} cy={q[1]} r={i === pts.length - 1 ? 6 : 4} fill="currentColor" />
-                                <text x={q[0]} y={q[1] - 10} text-anchor="middle" fill="currentColor" font-size="12" font-weight="700" font-family="var(--font-display)">+{Math.round(T[i].aboveNational)}</text>
-                              </g>
-                            ))}
-                            <text x={x1 + 12} y={pts[pts.length - 1][1] + 5} fill="currentColor" font-size="13" font-weight="700" font-family="var(--font-display)">bina</text>
-                            {T.map((t: any, i: number) => (
-                              <text x={X(i)} y={H - 4} text-anchor="middle" fill="#fff" fill-opacity="0.55" font-size="10" font-family="var(--font-display)">{short(t.label)}</text>
-                            ))}
-                          </svg>
-                          <p class="mt-2 text-body-md" style="color:rgb(255 255 255 / 0.6)">Reading points above the US national average, by time at bina</p>
-                          {m1 && (
-                            <div class="mt-5 grid grid-cols-2 gap-3">
-                              <p class="rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="block font-display text-title-md" style={`color:${l.color}`}>{m1.readGrewPct}%</strong>of M1 grew in reading</p>
-                              <p class="rounded-xl px-4 py-3 text-body-md" style="background:rgb(255 255 255 / 0.1);color:#fff"><strong class="block font-display text-title-md" style={`color:${l.color}`}>{m1.readBenchPct}%</strong>of M1 at or above benchmark</p>
-                            </div>
-                          )}
-                          <p class="mt-4 text-body-md" style="color:rgb(255 255 255 / 0.55)">STAR Reading, {nAll} students, {results.year} · <a href="/student-results" style="color:rgb(255 255 255 / 0.75)">All results</a></p>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                );
-              })()}
-                <p class="label-bina mb-3 mt-8 border-t pt-6" style="color:rgb(255 255 255 / 0.6);border-color:rgb(255 255 255 / 0.12)">Find your child's level</p>
-                <div class="overflow-hidden rounded-xl" style="background:rgb(255 255 255 / 0.06);color:#fff">
-                  <table class="w-full text-left text-body-lg">
-                    <thead>
-                      <tr class="border-b" style={`border-color:rgb(255 255 255 / 0.12);color:${l.color}`}>
-                        {l.grades.cols.map((c: string) => (
-                          <th class="whitespace-nowrap px-3 py-3 font-display sm:px-4">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {l.grades.rows.map((r: string[]) => (
-                        <tr class="border-b last:border-0" style="border-color:rgb(255 255 255 / 0.07)">
-                          <td class="whitespace-nowrap px-3 py-2.5 sm:px-4" style="color:rgb(255 255 255 / 0.7)">{r[0]}</td>
-                          <td class="px-3 py-2.5 sm:px-4">{r[1]}</td>
-                          <td class="whitespace-nowrap px-3 py-2.5 sm:px-4"><span class="inline-block rounded-full px-2.5 py-0.5 font-display text-body-md font-bold text-black" style={`background:${l.color}`}>{r[2]}</span></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                </div>
-              </details>
-              </div>
-            )}
             {l.chat && (
               <p class="local-chat relative self-start rounded-2xl rounded-bl-none bg-black px-5 py-4 font-display text-title-sm font-bold leading-snug" style={`color:${l.color}`}>
                 <span class="sr-only">What a parent might say: </span>“<Pending text={l.chat} />”
@@ -479,6 +386,126 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
           </div>
         </article>
       ))}
+    </div>
+  </section>
+)}
+
+{section.kind === 'results' && (
+  <section class="theme-mint" data-local-section="results">
+    {/* "Our students' results" (Akis, 2026-11-23): one section, not one panel per level. The
+        numbers were always whole-school (STAR headline + reading by time at bina), so they now
+        read that way: stat row → "the longer they stay" chart → level spotlights → one
+        "find your child's level" table. Mint band so it doesn't blend into the dark level cards
+        above. All figures from student-results.json; never typed here. */}
+    <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+      {/* Same heading style as the "Learning that fits your child" group title (Akis, 2026-11-23). */}
+      <h2 class="text-balance text-title-3xl sm:text-display-sm"><Pending text={section.title ?? "Our students' results"} /></h2>
+      {section.intro && <p class="mt-3 max-w-2xl text-body-xl"><Pending text={section.intro} /></p>}
+
+      {/* 1 · One school year, whole school */}
+      <p class="label-bina mt-10 text-hl">In one school year</p>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        {[
+          { v: `${rh.readGrewPct}%`, t: 'grew in reading', n: `STAR, ${rh.pairedN} students` },
+          { v: `+${rh.mathGrowthAvg}`, t: 'points of math growth', n: `STAR, ${rh.pairedN} students` },
+          { v: `${rh.readAtAbovePct}%`, t: 'at or above the US reading benchmark', n: `${rh.readAtAboveN} students, May 2026` },
+          // Family survey, not STAR (Akis, 2026-11-23): its own source line, never merged with the STAR cards.
+          { v: `${survey.fit.roundedPct}%`, t: 'of families say their child learns differently at bina', n: `bina family survey, ${survey.surveyA.n} families` },
+        ].map((x) => (
+          <li class="card-bina-solid flex items-center gap-4 p-4 sm:flex-col sm:items-start sm:gap-0 sm:p-6">
+            <p class="w-20 flex-none font-display text-title-3xl leading-none sm:w-auto sm:text-title-4xl">{x.v}</p>
+            <div class="flex flex-col sm:mt-2 sm:flex-1">
+              <p class="font-display text-title-sm leading-snug">{x.t}</p>
+              <p class="mt-1 text-body-lg opacity-80 sm:mt-auto sm:pt-3">{x.n}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {/* 2 · Reading by time at bina (tenure; 50 NCE = US national average). Same animated line
+          chart on every screen (Akis, 2026-11-23): a wide one from 1024px, a narrow one with short
+          labels below it, so no label drops under 14px. */}
+      {(() => {
+        const T = results.tenure;
+        const lo = 48, hi = Math.ceil(Math.max(...T.map((t: any) => t.readNceMean)) + 1);
+        const nAll = T.reduce((a: number, t: any) => a + t.n, 0);
+        const short = (s: string) => s.replace(' months', ' mo').replace(' years', ' yrs');
+        const chart = (o: { id: string; W: number; H: number; x0: number; x1: number; yTop: number; yBot: number; fs: number; fv: number; r: number; sw: number; label: (s: string) => string; cls: string }) => {
+          const X = (i: number) => o.x0 + (i * (o.x1 - o.x0)) / (T.length - 1);
+          const Y = (v: number) => o.yBot - ((v - lo) / (hi - lo)) * (o.yBot - o.yTop);
+          const pts = T.map((t: any, i: number) => [X(i), Y(t.readNceMean)]);
+          const line = 'M' + pts.map((q: number[]) => q.join(' ')).join(' L ');
+          const area = `${line} L ${X(T.length - 1)} ${Y(50)} L ${o.x0} ${Y(50)} Z`;
+          return (
+            <svg viewBox={`0 0 ${o.W} ${o.H}`} class:list={['block h-auto w-full overflow-visible', o.cls]} role="img" aria-label={`Reading above the US national average by time at bina: ${T.map((t: any) => `${t.label} +${Math.round(t.aboveNational)}`).join(', ')}`}>
+              <defs>
+                <linearGradient id={`rc-grad-${o.id}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="currentColor" stop-opacity="0.3" />
+                  <stop offset="1" stop-color="currentColor" stop-opacity="0.02" />
+                </linearGradient>
+              </defs>
+              <path d={area} fill={`url(#rc-grad-${o.id})`} class="rc-area" />
+              <line x1={o.x0} y1={Y(50)} x2={o.x1} y2={Y(50)} stroke="#000" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 6" />
+              <text x={o.x1 + 8} y={Y(50) + o.fs * 0.3} fill="#000" font-size={o.fs} font-family="var(--font-display)">US avg</text>
+              <path d={line} fill="none" stroke="currentColor" stroke-width={o.sw} stroke-linecap="round" stroke-linejoin="round" class="rc-line" pathLength="1" />
+              {pts.map((q: number[], i: number) => (
+                <g class="rc-dot" style={`--d:${0.15 + (i * 1.6) / (T.length - 1)}s`}>
+                  <circle cx={q[0]} cy={q[1]} r={i === pts.length - 1 ? o.r + 2 : o.r} fill="currentColor" />
+                  <text x={q[0]} y={q[1] - o.r - 8} text-anchor="middle" fill="currentColor" font-size={o.fv} font-weight="700" font-family="var(--font-display)">+{Math.round(T[i].aboveNational)}</text>
+                </g>
+              ))}
+              <text x={o.x1 + 12} y={pts[pts.length - 1][1] + o.fv * 0.3} fill="currentColor" font-size={o.fv} font-weight="700" font-family="var(--font-display)" class="rc-dot" style="--d:1.75s">bina</text>
+              {T.map((t: any, i: number) => (
+                <text x={X(i)} y={o.H - 6} text-anchor="middle" fill="#000" font-size={o.fs} font-family="var(--font-display)">{o.label(t.label)}</text>
+              ))}
+            </svg>
+          );
+        };
+        return (
+          <div class="local-callout mt-14 text-deep-ocean sm:mt-16" data-local-callout>
+            <h3 class="text-title-lg text-black sm:text-title-xl">The longer they stay, the further ahead</h3>
+            <p class="mt-2 text-pretty text-body-lg text-black">Reading points above the US national average (50) by time at <span class="normal-case">bina</span>, from STAR: {nAll} students, {results.year}. Measured twice a year with STAR assessments.</p>
+            <div class="mt-6">
+              {chart({ id: 'sm', W: 360, H: 230, x0: 30, x1: 300, yTop: 40, yBot: 175, fs: 15, fv: 18, r: 5, sw: 4, label: short, cls: 'lg:hidden' })}
+              {chart({ id: 'lg', W: 1160, H: 250, x0: 60, x1: 1060, yTop: 36, yBot: 190, fs: 17, fv: 21, r: 6, sw: 5, label: (x) => x, cls: 'max-lg:hidden' })}
+            </div>
+          </div>
+        );
+      })()}
+
+    </div>
+  </section>
+)}
+
+{section.kind === 'grades' && resultLevels.length > 0 && (
+  <section class={theme ?? 'theme-mint'} data-local-section="grades">
+    {/* "Find your child's level" (Akis, 2026-11-23): its own section after tuition, nav "Grades".
+        One table, Primary rows then Middle rows, from the levels section's grades data. */}
+    <div class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+      <h2 class={h2}><Pending text={section.title ?? "Find your child's level"} /></h2>
+      {section.intro && <p class="-mt-2 mb-6 max-w-3xl text-body-xl"><Pending text={section.intro} /></p>}
+          <table class="w-full text-left text-body-lg">
+            <thead>
+              <tr class="border-b-2 border-line">
+                {resultLevels[0].grades.cols.map((c: string) => (
+                  <th class="whitespace-nowrap py-3 pr-3 font-display text-hl">{c.split(/(bina)/).filter(Boolean).map((t) => (t === 'bina' ? <span class="normal-case">bina</span> : t))}</th>
+                ))}
+              </tr>
+            </thead>
+            {resultLevels.map((l: any) => (
+              <tbody>
+                <tr><th colspan="3" class="label-bina pb-2 pt-6 text-left">{l.title}</th></tr>
+                {l.grades.rows.map((r: string[]) => (
+                  <tr class="border-b border-line/30">
+                    <td class="whitespace-nowrap py-3 pr-3">{r[0]}</td>
+                    <td class="py-3 pr-3">{r[1]}</td>
+                    <td class="whitespace-nowrap py-3"><span class="inline-block rounded-full bg-deep-ocean px-3 py-0.5 font-display text-body-lg font-bold text-mint">{r[2]}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+
     </div>
   </section>
 )}
@@ -676,35 +703,41 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 </script>
 
 <script>
-  // Phones: level tabs (Primary / Middle). One card shows; switching while scrolled into the card
-  // brings the new card's top back under the tabs.
-  document.querySelectorAll<HTMLElement>('[data-local-levels]').forEach((sec) => {
-    const tabs = [...sec.querySelectorAll<HTMLButtonElement>('[data-level-tab]')];
-    const panels = [...sec.querySelectorAll<HTMLElement>('[data-level-panel]')];
-    const bar = sec.querySelector<HTMLElement>('.local-level-tabs')!;
-    const select = (id: string, focus = false) => {
-      tabs.forEach((t) => {
+  // Phones: level tabs (Primary / Middle) on the level cards and on the results section, kept in
+  // sync. One panel shows; switching while scrolled into a panel brings its top back under the tabs.
+  const levelSections = [...document.querySelectorAll<HTMLElement>('[data-local-levels]')].map((sec) => ({
+    sec,
+    tabs: [...sec.querySelectorAll<HTMLButtonElement>('[data-level-tab]')],
+    panels: [...sec.querySelectorAll<HTMLElement>('[data-level-panel]')],
+    bar: sec.querySelector<HTMLElement>('.local-level-tabs')!,
+  }));
+  const selectLevel = (id: string, from?: (typeof levelSections)[number], focus = false) => {
+    for (const ls of levelSections) {
+      ls.tabs.forEach((t) => {
         const on = t.dataset.levelTab === id;
         t.setAttribute('aria-selected', String(on));
         t.tabIndex = on ? 0 : -1;
-        if (on && focus) t.focus();
+        if (on && focus && ls === from) t.focus();
       });
-      panels.forEach((p) => p.classList.toggle('is-active', p.dataset.levelPanel === id));
-      const panel = panels.find((p) => p.dataset.levelPanel === id);
-      const barBottom = bar.getBoundingClientRect().bottom;
-      if (panel && panel.getBoundingClientRect().top < barBottom) {
-        scrollTo({ top: scrollY + panel.getBoundingClientRect().top - barBottom - 8, behavior: 'smooth' });
-      }
-    };
-    tabs.forEach((t, i) => {
-      t.addEventListener('click', () => select(t.dataset.levelTab!));
+      ls.panels.forEach((p) => p.classList.toggle('is-active', p.dataset.levelPanel === id));
+    }
+    if (!from) return;
+    const panel = from.panels.find((p) => p.dataset.levelPanel === id);
+    const barBottom = from.bar.getBoundingClientRect().bottom;
+    if (panel && panel.getBoundingClientRect().top < barBottom) {
+      scrollTo({ top: scrollY + panel.getBoundingClientRect().top - barBottom - 8, behavior: 'smooth' });
+    }
+  };
+  for (const ls of levelSections) {
+    ls.tabs.forEach((t, i) => {
+      t.addEventListener('click', () => selectLevel(t.dataset.levelTab!, ls));
       t.addEventListener('keydown', (e) => {
         if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        select(next.dataset.levelTab!, true);
+        const next = ls.tabs[(i + (e.key === 'ArrowRight' ? 1 : ls.tabs.length - 1)) % ls.tabs.length];
+        selectLevel(next.dataset.levelTab!, ls, true);
       });
     });
-  });
+  }
 </script>
 
 <style is:global>
@@ -715,6 +748,25 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
   .local-level-tab[aria-selected='true'] { background: var(--lc); color: #000; }
   @media (max-width: 767px) {
     [data-local-levels] .local-level:not(.is-active) { display: none; }
+  }
+
+  /* Hero rating faces: 44px circles, each overlapping the one before by 20% (the next one sits on
+     top), ringed in the section's background so the edges read. */
+  .local-faces { list-style: none; margin: 0; padding: 0; }
+  .local-face { width: 2.75rem; height: 2.75rem; border-radius: 999px; box-shadow: 0 0 0 3px var(--t-bg); background: var(--t-bg); }
+  .local-face + .local-face { margin-left: -0.55rem; }
+
+  /* Results line chart: line draws left to right, each point pops as the line reaches it. */
+  .local-callout .rc-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .local-callout.is-in .rc-line { animation: lcDraw 1.8s cubic-bezier(0.45, 0, 0.25, 1) 0.15s forwards; }
+  .local-callout .rc-area { opacity: 0; }
+  .local-callout.is-in .rc-area { animation: lcShow 0.9s ease-out 1.2s forwards; }
+  .local-callout .rc-dot { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.3); }
+  .local-callout.is-in .rc-dot { animation: rcPop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0s) forwards; }
+  @keyframes rcPop { to { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .local-callout .rc-line { stroke-dashoffset: 0; animation: none !important; }
+    .local-callout .rc-area, .local-callout .rc-dot { opacity: 1; transform: none; animation: none !important; }
   }
 
   .local-callout .lc-fill { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); }

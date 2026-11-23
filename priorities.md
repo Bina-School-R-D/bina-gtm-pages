@@ -1,5 +1,15 @@
 # priorities.md — bina-gtm-pages
 
+## /local — Toronto page (branch `claude/local-pages`, localhost only)
+
+Confirm before the page goes live (details in `_openQuestions` of `local-markets.json` / `testimonials.json`):
+- **Toronto pods**: the hero call-out names them, the Community section still marks the pod PENDING.
+- **"11 subjects at every grade"**: confirm with the curriculum lead that all 11 run from age 4.
+- **70% card**: which family survey (A, 103 families, is assumed) and the exact question; "learns differently at bina" overstates what the survey measured.
+- **Trustpilot score**: tile shows 4.5/5 (Akis); `reviews.json` says 4.2.
+- **Testimonial photos**: Mary Kate's portrait is `portrait-amina-2` on the main site; confirm it's her, and that consent covers the hero headshot crops.
+- Open: shorten the 3 level-card lines that wrap on phones; accreditation heading centred vs left on phones.
+
 ## /esa — open items
 
 - **Wyoming 2027–28 dates not published** — WDE has announced nothing. The page says so and points at

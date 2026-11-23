@@ -5,6 +5,8 @@
     "Tally intake form says $898/month; thebinaschool.com/tuition says $897/month (yearly plan). One of them is wrong.",
     "The Ontario homeschooling guide (/homeschooling-guides/ontario) is built on the main-site stage but not live yet. The Toronto guide link 404s until it is.",
     "Toronto hero facts: '4–12 kids' (primary 4–8, middle 6–12; Akis 2026-11-20) vs 'average class of six to eight, never more than 12' (esa-landing.json). Both hold; keep them aligned if either changes.",
+    "Level cards, 'Learn more': '11 subjects at every grade' (curriculum-team pack) is not on thebinaschool.com (/education, /primary-school name no subjects, checked 2026-11-23). Confirm with the curriculum lead that all 11 run from age 4 (Pre-K/K) before the page goes live; if not, retitle.",
+    "Toronto results card '70% of families say their child learns in their own way' (family-survey.json fit.roundedPct, wording from the retired /family-survey page): the card says Survey A (whole school, 103 families; Akis, 2026-11-23). Confirm with Sophie that the 70% comes from Survey A, and the exact question.",
     "Toronto hero callout: 'Toronto pods' (Akis, 2026-11-23) while the Community section still marks the pod as PENDING (library session, not yet confirmed). Confirm pods exist before the page goes live.",
     "Cal.com events sync (team 243242, slugs local-{market}-…) is not wired here: events are hand-kept in local-events.json until the pages move to the main site, which has the sync script.",
     "RESOLVED 2026-11-19 (Akis): accreditation wording matches the main site ('Accredited by Cognia and Cambridge, CIS member'). Body figures checked 2026-11-19 on each body's own site: cognia.org homepage (40,000 institutions, 17,000,000 students, 100 countries); cois.org/about-cis (1,635 schools and universities, 120 countries); cambridgeinternational.org/about-us (over 10 000 Cambridge schools, 160 countries; read via summary, not verbatim). Re-check yearly."
@@ -113,7 +115,15 @@
             ]
           },
           "rating": {
-            "_score": "recommendAvg from family-survey.json, never typed here"
+            "_score": "recommendAvg from family-survey.json, never typed here",
+            "_faces": "Crops of five main-site homepage testimonial portraits (testimonials.json), Akis 2026-11-23.",
+            "faces": [
+              { "src": "/images/local/faces/amina.jpg", "alt": "Amina" },
+              { "src": "/images/local/faces/makeda-steve.jpg", "alt": "Makeda and Steve" },
+              { "src": "/images/local/faces/lorena.jpg", "alt": "Lorena" },
+              { "src": "/images/local/faces/amanda.jpg", "alt": "Amanda" },
+              { "src": "/images/local/faces/mo-ayo.jpg", "alt": "Mo and Ayo" }
+            ]
           }
         },
         {
@@ -186,11 +196,21 @@
                       },
                       {
                         "title": "Taught by theme, not in silos",
-                        "text": "The year runs through 8 themes, called biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest. Every subject ties into the theme, each biome ends with a project that shows what your child has learned, and skills come back deeper in the next one."
+                        "items": [
+                          "The year runs through 8 themes, called biomes",
+                          "Every subject ties into the theme",
+                          "Each biome ends with a project that shows what your child has learned",
+                          "Skills come back deeper in the next biome"
+                        ],
+                        "note": "The 8 biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest."
                       },
                       {
                         "title": "Ahead of the Ontario timeline",
-                        "text": "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core. Each topic comes at the earliest grade any of them teaches it, so fractions, grammar and phonics often come earlier than in Ontario schools."
+                        "items": [
+                          "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core",
+                          "Each topic comes at the earliest grade any of them teaches it",
+                          "So fractions, grammar and phonics often come earlier than in Ontario schools"
+                        ]
                       },
                       {
                         "title": "Money and life skills, step by step",
@@ -337,11 +357,22 @@
                       },
                       {
                         "title": "Taught by theme, not in silos",
-                        "text": "The year runs through 8 themes, called biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest. Every subject ties into the theme, each biome ends with a project that shows what your child has learned, and skills come back deeper in the next one."
+                        "items": [
+                          "The year runs through 8 themes, called biomes",
+                          "Every subject ties into the theme",
+                          "Each biome ends with a project that shows what your child has learned",
+                          "Skills come back deeper in the next biome"
+                        ],
+                        "note": "The 8 biomes: Freshwater, Desert, Tundra, Grasslands, Rainforest, Marine, Microbiome and Forest."
                       },
                       {
                         "title": "Ahead of the Ontario timeline",
-                        "text": "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core. Each topic comes at the earliest grade any of them teaches it, so fractions, grammar and phonics often come earlier than in Ontario schools. By the end of Grade 8, students have covered what these systems expect before high school."
+                        "items": [
+                          "Ontario's curriculum is our Canadian reference, alongside England's National Curriculum and US Common Core",
+                          "Each topic comes at the earliest grade any of them teaches it",
+                          "So fractions, grammar and phonics often come earlier than in Ontario schools",
+                          "By the end of Grade 8, students have covered what these systems expect before high school"
+                        ]
                       },
                       {
                         "title": "Skills for high school and beyond",
@@ -402,28 +433,59 @@
           ]
         },
         {
+          "kind": "results",
+          "anchor": "student-results",
+          "navLabel": "Student results",
+          "title": "Our students' results",
+          "_note": "Akis, 2026-11-23: ONE section (no per-level panels): whole-school STAR stats, reading by time at bina, P1/M1 spotlights, one merged 'find your child's level' table (rows from the levels section's grades). Replaces the level cards' 'How fast do kids grow here?' toggles and the mint 'The whole school moved forward' group + proof cards, which repeated the same headline numbers. Those per-level panels showed whole-school figures under 'Primary'/'Middle' labels; this layout labels them as whole school. Nav: Accreditation · Education · Student results · Reviews · Community · Tuition · FAQs."
+        },
+        {
           "kind": "reviews",
           "anchor": "reviews",
           "navLabel": "Reviews",
           "heading": "What parents say about bina",
+          "_wall": "Akis, 2026-11-23: a wall of reviews: the main-site homepage testimonials (tall photo cards, testimonials.json) mixed with the review cards. Uneven on purpose: the wall fills column by column (photo/text/text/photo · text/photo/text/photo · photo/text/photo/text) and photo heights vary.",
+          "scores": { "niche": "5/5", "trustpilot": "4.5/5", "world-schools": "5/5" },
+          "_scores": "Score tiles on this page (Akis, 2026-11-23). reviews.json has Trustpilot at 4.2; Akis gave 4.5/5. Confirm the current Trustpilot figure before go-live.",
           "intro": "Reviews from bina families, copied word for word from Niche, Trustpilot, world-schools.com and the families who gave us permission to share them.",
           "_source": "Picks from the main site's /reviews (staging 2026-11-20); names as initials like there. world-schools review copied verbatim from world-schools.com/schools/bina-school/ (2026-11-20); the same parent's text is niche-20, so niche-20 is not shown.",
           "items": [
-            {
+          {
+            "testimonial": "amina"
+          },
+          {
               "feature": "T-016"
             },
-            {
+          {
               "review": "niche-02"
             },
-            {
+          {
+            "testimonial": "makeda-steve"
+          },
+          {
               "review": "tp-01"
             },
-            {
+          {
+            "testimonial": "lorena"
+          },
+          {
               "feature": "T-015",
               "who": "M. K.",
               "title": "M. K. on what bina's clubs have meant for C."
             },
-            {
+          {
+            "testimonial": "amanda"
+          },
+          {
+            "testimonial": "mo-ayo"
+          },
+          {
+              "review": "niche-09"
+            },
+          {
+            "testimonial": "mary-kate"
+          },
+          {
               "inline": {
                 "id": "ws-01",
                 "source": "world-schools",
@@ -432,11 +494,8 @@
                 "rating": 5,
                 "body": "We could not be happier with bina school. Our 6 year old loves her teachers and classmates and is learning so much better than when she was in traditional school. It is great for her to have classmates and teachers from all over the world. The tools and resources they use make learning really fun for our daughter."
               }
-            },
-            {
-              "review": "niche-09"
             }
-          ]
+        ]
         },
         {
           "kind": "education",
@@ -479,23 +538,6 @@
           "_note": "'What do they teach?' removed (Akis, 2026-11-20): subjects, biomes and life skills now live in the level cards' 'Learn more' toggles. 'Is it Canada-ready?' cards moved to the FAQ (Akis, 2026-11-20); only its grade table stays here. Grade table moved into the level cards' 'Where does my child fit?' toggles (Akis, 2026-11-20). Moved below the reviews, dark, level-card width (Akis, 2026-11-20).",
           "theme": "theme-base",
           "wide": true
-        },
-        {
-          "kind": "group",
-          "anchor": "student-results",
-          "navLabel": "Student results",
-          "theme": "theme-mint",
-          "title": "The whole school moved forward",
-          "intro": "Measured twice a year with STAR assessments, against US national benchmarks."
-        },
-        {
-          "kind": "proof",
-          "heading": "",
-          "cards": [
-            "readGrowth",
-            "mathGrowth",
-            "readAtAbove"
-          ]
         },
         {
           "kind": "group",
@@ -567,6 +609,13 @@
           "heading": "Tuition",
           "anchor": "tuition",
           "navLabel": "Tuition"
+        },
+        {
+          "kind": "grades",
+          "anchor": "grades",
+          "navLabel": "Grades",
+          "title": "Find your child's level",
+          "_note": "Akis, 2026-11-23: moved out of 'Our students' results' into its own section after tuition, before the FAQs. Rows come from the levels section's grades data."
         },
         {
           "kind": "cta"
