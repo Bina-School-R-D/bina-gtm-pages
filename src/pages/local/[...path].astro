@@ -61,7 +61,8 @@ const faqForSchema = faq
   ? faq.items.map((f: any) => ({ q: f.q, a: faqAnswer(f) }))
   : [];
 const jsonLd = market ? marketJsonLd(market, faqForSchema) : [];
-const anyLive = shownMarkets().some((m: any) => m.live);
+// The hub is indexable only once a live market is indexable (a market can be live but noindex, Akis 2026-11-23).
+const anyIndexable = shownMarkets().some((m: any) => m.live && !m.noindex);
 ---
 
 {props.kind === 'redirect' && (
@@ -72,7 +73,7 @@ const anyLive = shownMarkets().some((m: any) => m.live);
 )}
 
 {props.kind === 'hub' && (
-  <BaseLayout title={hub.title} description={hub.description} noindex={!anyLive} bare footer>
+  <BaseLayout title={hub.title} description={hub.description} noindex={!anyIndexable} bare footer>
     <MainSiteNavbar />
     <header class="theme-lagoon">
       <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
@@ -98,7 +99,7 @@ const anyLive = shownMarkets().some((m: any) => m.live);
 )}
 
 {market && (
-  <BaseLayout title={market.title} description={market.description} noindex={!market.live} bare footer flushFooter>
+  <BaseLayout title={market.title} description={market.description} noindex={!market.live || !!market.noindex} bare footer flushFooter>
     {/* No main navbar on market pages (Akis, 2026-11-20): a thin "back" bar, then the market's own navbar. */}
     <div class="local-backbar">
       <a href="https://thebinaschool.com" class="local-backbar-link no-underline">
