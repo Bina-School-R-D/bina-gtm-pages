@@ -41,7 +41,7 @@ const reviewDate = (d?: string) =>
 // FAQ answers: computed price / survey numbers (faqAnswer), then one optional link phrase inside the answer.
 const faqItems =
   section.kind === 'faq'
-    ? section.items.map((f: any) => ({ ...f, a: faqAnswer(f) }))
+    ? keepReady(section.items).map((f: any) => ({ ...f, a: faqAnswer(f) }))
     : [];
 const splitLink = (f: any) => {
   if (!f.link || !f.a.includes(f.link.text)) return [{ t: f.a }];
