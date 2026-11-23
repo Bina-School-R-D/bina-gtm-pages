@@ -9,6 +9,7 @@
  * Each section uses exactly one theme (global.css "Section themes").
  */
 import Pending from './Pending.astro';
+import BinaFamiliesMap from '../BinaFamiliesMap';
 import Stars from './Stars.astro';
 import LocalButtons from './LocalButtons.astro';
 import LocalEvents from './LocalEvents.astro';
@@ -676,7 +677,9 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
         {section.local.events && <LocalEvents market={market} heading={section.local.events.heading} embedded />}
         </div>
         {keepReady(section.people?.people).length > 0 && (
-          <div>
+          /* Desktop: sticks under the page's sticky bars while the left column scrolls, and lets go
+             at the end of the two-column grid, just before "bina in the world" (Akis, 2026-11-23). */
+          <div class="local-people-sticky lg:sticky lg:self-start">
             <h3 class="mb-5 text-title-lg"><Pending text={section.people.heading} /></h3>
             {/* One mint card, one row per person (was a card each: too much air). */}
             <ul class="card-bina-mint divide-y divide-black/10 px-5 py-1">
@@ -706,6 +709,14 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
               </li>
             ))}
           </ul>
+          {/* The homepage families map (Akis, 2026-11-23), under the three cards, on its own dark panel: the component is
+              styled for the main site's primary base background, and stays a verbatim copy. */}
+          {section.world.map && (
+            <div class="theme-base mt-4 rounded-[24px] px-5 py-8 sm:px-10 sm:py-12">
+              <p class="mx-auto mb-8 max-w-2xl text-center font-display text-title-lg text-hl sm:text-title-xl"><Pending text={section.world.map.title} /></p>
+              <BinaFamiliesMap client:visible />
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -883,6 +894,8 @@ const h2 = 'mb-6 text-title-xl sm:text-title-3xl';
 </style>
 
 <style is:global>
+  /* "Our people in Canada" sticky offset: below the back bar + market navbar, plus a little air. */
+  .local-people-sticky { top: calc(var(--local-backbar-h, 0px) + var(--local-nav-h, 0px) + 1.5rem); }
   /* "Where does my child fit?": a black button bar that invites the click. */
   .local-fit { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .local-fit:not([open]):hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(0 0 0 / 0.25); }

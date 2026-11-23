@@ -4,9 +4,11 @@
  * Upcoming = future dates, soonest first, each with an RSVP button. Past = newest first, a card
  * shows title · area · month + year · photo (never the exact day or time). With no upcoming
  * event, the section opens on Past. Data: src/data/local-events.json via marketEvents().
- * Both tabs are in the HTML; the script only switches which one shows.
+ * Both tabs are in the HTML; the script only switches which one shows. Embedded (community
+ * section): no tabs, Upcoming then Past under labels, compact cards (EventCard).
  */
 import Pending from './Pending.astro';
+import EventCard from './EventCard.astro';
 import { marketEvents } from '../../lib/local.js';
 
 interface Props {
@@ -33,7 +35,25 @@ const fmtDate = (d: string) =>
     ) : (
       <h2 class="mb-6 text-title-xl sm:text-title-3xl"><Pending text={heading} /></h2>
     )}
-    <div class:list={['flex gap-2', embedded ? 'mb-5' : 'mb-8']} role="tablist" aria-label={`${market.name} events`}>
+    {embedded ? (
+      /* Community section (Akis, 2026-11-23): no tabs, one list; a label separates Upcoming from Past. */
+      <div class="grid gap-6">
+        {upcoming.length > 0 && (
+          <div>
+            <p class="mb-3 text-label uppercase text-hl">Upcoming</p>
+            <ul class="grid gap-4">{upcoming.map((e: any) => <EventCard event={e} upcoming />)}</ul>
+          </div>
+        )}
+        {past.length > 0 && (
+          <div>
+            <p class="mb-3 text-label uppercase text-hl">Past</p>
+            <ul class="grid gap-4 sm:grid-cols-2">{past.map((e: any) => <EventCard event={e} />)}</ul>
+          </div>
+        )}
+      </div>
+    ) : (
+      <>
+    <div class="mb-8 flex gap-2" role="tablist" aria-label={`${market.name} events`}>
       {['upcoming', 'past'].map((t) => (
         <button
           type="button"
@@ -64,18 +84,13 @@ const fmtDate = (d: string) =>
     </div>
 
     <div role="tabpanel" data-panel="past" hidden={start !== 'past'}>
-      {/* Embedded (community section): compact cards, photo left, text right (Akis, 2026-11-23: fewer gaps). */}
-      <ul class:list={['grid gap-4 sm:grid-cols-2', !embedded && 'lg:grid-cols-3']}>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {past.map((e: any) => (
-          <li class:list={['card-bina-mint overflow-hidden', embedded && 'flex items-center']}>
-            <div class:list={['grid aspect-[4/3] place-items-center bg-black/10 text-center text-body-md', embedded && 'w-36 flex-none self-stretch sm:w-40', !(typeof e.photo === 'object' && e.photo) && 'p-2']}>
-              {typeof e.photo === 'object' && e.photo ? (
-                <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" />
-              ) : (
-                e.photo && <Pending text={e.photo} />
-              )}
+          <li class="card-bina-mint overflow-hidden">
+            <div class:list={['grid aspect-[4/3] place-items-center bg-black/10 text-center text-body-md', !(typeof e.photo === 'object' && e.photo) && 'p-4']}>
+              {typeof e.photo === 'object' && e.photo ? <img src={e.photo.src} alt={e.photo.alt} loading="lazy" class="size-full object-cover" /> : e.photo && <Pending text={e.photo} />}
             </div>
-            <div class={embedded ? 'p-4' : 'p-5'}>
+            <div class="p-5">
               <p class="font-display text-title-sm"><Pending text={e.title} /></p>
               <p class="mt-1 text-body-lg"><Pending text={e.area} /> · {e.month && <><Pending text={String(e.month)} />{' '}</>}{e.year}</p>
             </div>
@@ -83,6 +98,8 @@ const fmtDate = (d: string) =>
         ))}
       </ul>
     </div>
+      </>
+    )}
   </div>
 </Wrap>
 

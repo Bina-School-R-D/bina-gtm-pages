@@ -585,6 +585,7 @@
           },
           "world": {
             "heading": "bina in the world",
+            "map": { "title": "Where our families connect, play, and do bina together", "_note": "The thebinaschool.com homepage map (src/components/BinaFamiliesMap, verbatim copy; Akis, 2026-11-23). Change it on the main site first." },
             "items": [
               {
                 "title": "Global communities",
@@ -603,7 +604,8 @@
         },
         {
           "kind": "tuition",
-          "heading": "Tuition",
+          "heading": "Flexible tuition plans",
+          "_heading": "Akis, 2026-11-23: brochure-style block (thebinaschool.com/brochure), big CAD, small USD, no toggle.",
           "anchor": "tuition",
           "navLabel": "Tuition"
         },
