@@ -38,10 +38,11 @@ export const hubShown = () => shownMarkets().length > 0;
 /**
  * The section list a page renders: on production, sections with a placeholder are dropped,
  * then any `group` band left with no section under it (up to the next group) is dropped too.
- * A `community` section is the exception: it drops its placeholder items one by one (keepReady).
+ * `community` and `faq` sections are the exception: they drop their placeholder items one by one
+ * (keepReady), so one unverified answer never hides the whole FAQ (Akis, 2026-11-23).
  */
 export const visibleSections = (m) => {
-  const kept = m.sections.filter((s) => PREVIEW || s.kind === 'community' || !hasPending(s));
+  const kept = m.sections.filter((s) => PREVIEW || s.kind === 'community' || s.kind === 'faq' || !hasPending(s));
   return kept.filter((s, i) => s.kind !== 'group' || (kept[i + 1] && kept[i + 1].kind !== 'group'));
 };
 
