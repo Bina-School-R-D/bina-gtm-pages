@@ -19,6 +19,7 @@ import LocalSection from '../../components/local/LocalSection.astro';
 import Pending from '../../components/local/Pending.astro';
 import MainSiteNavbar from '../../components/local/MainSiteNavbar.astro';
 import LocalSubnav from '../../components/local/LocalSubnav.astro';
+import LocalVideoModal from '../../components/local/LocalVideoModal.astro';
 import {
   HUB_PATH,
   cardLine,
@@ -120,6 +121,7 @@ const anyIndexable = shownMarkets().some((m: any) => m.live && !m.noindex);
         )
       )}
     </div>
+    <LocalVideoModal />
     {jsonLd.map((j: any) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
   </BaseLayout>
 )}

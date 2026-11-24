@@ -100,6 +100,8 @@
         {
           "kind": "hero",
           "h1": "Toronto’s accredited private school, live online",
+          "_video": "Akis, 2026-11-24: stand-in clip (MDN CC0 sample) until the real video exists; placeholder videos show on localhost only. Real video: set youtube (the ID) or src (an .mp4), drop placeholder.",
+          "video": { "title": "A day at bina in Toronto", "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "placeholder": true },
           "_facts": "Akis, 2026-11-23: 'Label: detail' — the label renders bold, the detail regular. Each line must fit one row on a 360px phone (≤284px at 18px). Class size 4–12 = primary 4–8 + middle 6–12 (the Education cards). Start dates: rolling admissions ended 2026-10-31; from November, biome starts + one mid-biome intake each (school-calendar.json), so 'every few weeks', never '2 a month'.",
           "facts": [
             "Primary & middle school: ages 4–15",
@@ -151,6 +153,7 @@
               "title": "Primary school",
               "meta": "Ages 4 to 12 · Pre-K to Grade 5",
               "tagline": "Live, joyful learning that builds the foundations for everything that follows.",
+              "video": { "title": "Inside a primary school class", "label": "Watch our teachers", "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "placeholder": true },
               "color": "#06E1BD",
               "art": {
                 "texture": "/images/local/education/track-primary-bg-texture-1024.webp",
@@ -298,6 +301,7 @@
               "title": "Middle school",
               "meta": "Ages 12 to 15 · Grades 6 to 8",
               "tagline": "Rigorous, personalized, and built for the years that matter most.",
+              "video": { "title": "Inside a middle school class", "label": "Watch our teachers", "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "placeholder": true },
               "color": "#E9C9FF",
               "art": {
                 "texture": "/images/local/education/track-middle-bg-texture-1024.webp",
@@ -439,6 +443,7 @@
           "anchor": "student-results",
           "navLabel": "Student results",
           "title": "Our students' results",
+          "video": { "title": "How we measure your child's growth", "label": "How we measure growth", "poster": "/images/local/reviews/reviews-mom-kid.webp", "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "placeholder": true },
           "_note": "Akis, 2026-11-23: ONE section (no per-level panels): whole-school STAR stats, reading by time at bina, P1/M1 spotlights, one merged 'find your child's level' table (rows from the levels section's grades). Replaces the level cards' 'How fast do kids grow here?' toggles and the mint 'The whole school moved forward' group + proof cards, which repeated the same headline numbers. Those per-level panels showed whole-school figures under 'Primary'/'Middle' labels; this layout labels them as whole school. Nav: Accreditation · Education · Student results · Reviews · Community · Tuition · FAQs."
         },
         {
@@ -603,6 +608,7 @@
           "navLabel": "Grades",
           "title": "Find your child's level",
           "intro": "Match your child's age and Ontario grade to the bina level they would join.",
+          "video": { "title": "Which level fits your child?", "label": "Not sure which level fits? A teacher explains in a minute.", "poster": "/images/local/reviews/reviews-mom-kid.webp", "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "placeholder": true },
           "_note": "Akis, 2026-11-23: moved out of 'Our students' results' into its own section after tuition, before the FAQs. Rows come from the levels section's grades data."
         },
         {
