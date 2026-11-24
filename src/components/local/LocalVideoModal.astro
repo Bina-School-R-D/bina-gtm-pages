@@ -1,0 +1,95 @@
+---
+/*
+ * One video modal per /local page (Akis, 2026-11-24). Every video trigger on the page is a
+ * `<button data-local-video …>` (attrs from videoAttrs() in src/lib/local.js). Nothing loads
+ * until the click: the page ships posters only, then the modal builds the player
+ * (YouTube via youtube-nocookie.com, or a plain <video> for an .mp4) and empties it on close,
+ * which stops playback.
+ *
+ * Muted looping previews (`<video data-local-preview>`) start only while on screen, and
+ * `data-loop="1"` keeps them to their first second, like a GIF.
+ */
+---
+<dialog class="local-video-dialog" aria-label="Video">
+  <div class="local-video-shell">
+    <div class="mb-3 flex items-center justify-between gap-4">
+      <p class="local-video-title font-display text-title-sm text-mint"></p>
+      <button type="button" class="local-video-close" aria-label="Close video">
+        <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <div class="local-video-frame"></div>
+  </div>
+</dialog>
+
+<style is:global>
+  .local-video-dialog { margin: auto; width: min(64rem, calc(100vw - 2rem)); max-width: none; max-height: none; padding: 0; border: 0; background: transparent; overflow: visible; }
+  .local-video-dialog::backdrop { background: rgb(0 0 0 / 0.86); }
+  .local-video-dialog[open] { animation: localVideoIn 0.25s ease-out; }
+  @keyframes localVideoIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+  .local-video-frame { position: relative; aspect-ratio: var(--va, 16 / 9); max-height: 80vh; margin-inline: auto; overflow: hidden; border-radius: 16px; background: #000; }
+  .local-video-frame iframe, .local-video-frame video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .local-video-close { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; border-radius: 999px; background: var(--color-mint); color: #000; cursor: pointer; transition: background-color 0.2s; }
+  .local-video-close:hover { background: var(--color-dragon-fruit); }
+  .local-video-trigger { cursor: pointer; }
+  @media (prefers-reduced-motion: reduce) { .local-video-dialog[open] { animation: none; } }
+</style>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('.local-video-dialog');
+  if (dlg) {
+    const frame = dlg.querySelector<HTMLElement>('.local-video-frame')!;
+    const title = dlg.querySelector<HTMLElement>('.local-video-title')!;
+    const close = () => dlg.close();
+    dlg.addEventListener('close', () => { frame.replaceChildren(); });
+    dlg.querySelector('.local-video-close')!.addEventListener('click', close);
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+
+    document.addEventListener('click', (e) => {
+      const t = (e.target as Element).closest<HTMLElement>('[data-local-video]');
+      if (!t) return;
+      e.preventDefault();
+      const { youtube, src, title: name, aspect } = t.dataset;
+      frame.style.setProperty('--va', aspect || '16 / 9');
+      title.textContent = name || '';
+      dlg.setAttribute('aria-label', name || 'Video');
+      if (youtube) {
+        const f = document.createElement('iframe');
+        f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtube)}?autoplay=1&rel=0&playsinline=1`;
+        f.title = name || 'Video';
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        frame.replaceChildren(f);
+      } else if (src) {
+        const v = document.createElement('video');
+        v.src = src;
+        v.controls = true;
+        v.autoplay = true;
+        v.playsInline = true;
+        if (t.dataset.poster) v.poster = t.dataset.poster;
+        frame.replaceChildren(v);
+      } else return;
+      dlg.showModal();
+    });
+  }
+
+  // Muted previews: play only while visible; data-loop="1" loops the first second.
+  const previews = document.querySelectorAll<HTMLVideoElement>('video[data-local-preview]');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  previews.forEach((v) => {
+    const span = Number(v.dataset.loop || 0);
+    if (span) v.addEventListener('timeupdate', () => { if (v.currentTime >= span) v.currentTime = 0; });
+  });
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (!v.src && v.dataset.src) v.src = v.dataset.src;
+          v.play().catch(() => {});
+        } else v.pause();
+      }
+    }, { threshold: 0.25 });
+    previews.forEach((v) => io.observe(v));
+  }
+</script>

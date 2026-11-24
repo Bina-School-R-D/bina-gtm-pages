@@ -1,0 +1,31 @@
+---
+/*
+ * The pulsing play button (Akis, 2026-11-24): a lemon circle with two rings that ripple out, so
+ * it asks to be clicked. Decorative: the clickable element around it carries the label.
+ * Turns dragon fruit when its trigger (.local-video-trigger) is hovered, like every bina button.
+ */
+interface Props {
+  /** Diameter: sm 44px · md 56px · lg 80px. */
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+const { size = 'md', class: cls } = Astro.props;
+const dim = { sm: 'size-11', md: 'size-14', lg: 'size-16 sm:size-20' }[size];
+const icon = { sm: 'size-4', md: 'size-5', lg: 'size-6 sm:size-8' }[size];
+---
+<span class:list={['local-play', dim, cls]} aria-hidden="true">
+  <svg viewBox="0 0 24 24" class:list={[icon, 'translate-x-[8%]']} fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" /></svg>
+</span>
+
+<style is:global>
+  .local-play { position: relative; display: inline-grid; place-items: center; flex: none; border-radius: 999px; background: var(--color-lemon); color: #000; border: 2px solid #000; transition: background-color 0.2s ease-out, transform 0.2s ease-out; }
+  .local-play::before,
+  .local-play::after { content: ''; position: absolute; inset: -2px; border-radius: inherit; border: 3px solid var(--color-lemon); opacity: 0; pointer-events: none; animation: localPlayPulse 2.2s cubic-bezier(0.2, 0.6, 0.35, 1) infinite; }
+  .local-play::after { animation-delay: 1.1s; }
+  @keyframes localPlayPulse { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(1.9); opacity: 0; } }
+  .local-video-trigger:hover .local-play,
+  .local-video-trigger:focus-visible .local-play { background: var(--color-dragon-fruit); transform: scale(1.06); }
+  .local-video-trigger:hover .local-play::before,
+  .local-video-trigger:hover .local-play::after { border-color: var(--color-dragon-fruit); }
+  /* The pulse runs on every device, Reduce Motion included (Akis, 2026-11-24). */
+</style>

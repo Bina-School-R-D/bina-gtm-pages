@@ -185,3 +185,20 @@ export function marketJsonLd(m, faqItems) {
 }
 
 export const accreditations = data.accreditations;
+
+/**
+ * Videos (Akis, 2026-11-24): `{ youtube | src, title, poster?, preview?, aspect?, placeholder? }`.
+ * A video marked `placeholder: true` (a stand-in clip until the real one is filmed) shows on
+ * localhost only; production renders the plain image instead, never the stand-in.
+ */
+export const showVideo = (v) => !!v && !!(v.youtube || v.src) && (PREVIEW || !v.placeholder);
+
+/** The data-* attributes LocalVideoModal reads from a trigger button. */
+export const videoAttrs = (v) => ({
+  'data-local-video': '',
+  'data-youtube': v.youtube,
+  'data-src': v.src,
+  'data-title': v.title,
+  'data-poster': v.poster,
+  'data-aspect': v.aspect,
+});
